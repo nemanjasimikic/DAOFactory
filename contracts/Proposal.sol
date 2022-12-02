@@ -1,20 +1,20 @@
 pragma ton-solidity >= 0.39.0;
 
-import "IProposal.sol";
-import "IDaoRoot.sol";
-import "IUpgradableByRequest.sol";
+import "./Interfaces/IProposal.sol";
+import "./Interfaces/IDaoRoot.sol";
+import "./Interfaces/IUpgradableByRequest.sol";
 
-import "DaoErrors.sol";
-import "Gas.sol";
+import "./Libraries/DaoErrors.sol";
+import "./Libraries/Gas.sol";
 
-import "PlatformTypes.sol";
+import "./Libraries/PlatformTypes.sol";
 
-import "IUserData.sol";
-import {PlatformTypes as StakingPlatformTypes} from "PlatformTypes.sol";
+import "./Interfaces/IUserData.sol";
+import {PlatformTypes as StakingPlatformTypes} from "./Libraries/PlatformTypes.sol";
 
-import "MsgFlag.sol";
-import "Platform.sol";
-import "PlatformBase.sol";
+import "./Libraries/MsgFlag.sol";
+import "./Platform.sol";
+import "./PlatformBase.sol";
 
 contract Proposal is IProposal, IUpgradableByRequest, PlatformBase, DaoPlatformTypes {
     uint32 public /*static */ id;

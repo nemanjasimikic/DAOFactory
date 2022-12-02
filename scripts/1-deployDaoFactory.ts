@@ -14,7 +14,7 @@ const main = async () => {
   const signer = (await locklift.keystore.getSigner("0"))!;
   const _randomNonce = locklift.utils.getRandomNonce();
 
-  
+  const _newCode = await locklift.factory.getContractArtifacts("DaoFactory");
 
   const { contract } = await locklift.factory.deployContract({
     contract: "DaoFactory",
@@ -22,7 +22,9 @@ const main = async () => {
     initParams: {
     _nonce: _randomNonce,
     },
-    constructorParams: {},
+    constructorParams: {
+		newCode: _newCode.code
+	},
     value: locklift.utils.toNano(10),
 });
 daoFactoryDeployer = contract;
@@ -60,8 +62,8 @@ console.log(`Dao factory deployed at: ${daoFactoryDeployer.address.toString()}`)
     				}),
     		);
     		
-    	const daoAddr = await daoFactoryDeployer.methods.getDaoRoot({}).call();
-    	console.log(daoAddr);
+    	const daoAddr = await daoFactoryDeployer.methods.getDeployedDAOs({}).call();
+    	console.log(daoAddr.daoAddr[0]);
 }
 
 main()

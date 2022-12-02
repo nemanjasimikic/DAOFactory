@@ -1,22 +1,22 @@
 pragma ton-solidity >= 0.39.0;
 
-import "Proposal.sol";
+import "./Proposal.sol";
 
-import {PlatformTypes as StakingPlatformTypes} from "PlatformTypes.sol";
+import {PlatformTypes as StakingPlatformTypes} from "./Libraries/PlatformTypes.sol";
 
-import "Gas.sol";
-import "DaoErrors.sol";
+import "./Libraries/Gas.sol";
+import "./Libraries/DaoErrors.sol";
 
-import "IDaoRoot.sol";
-import "IStakingAccount.sol";
-import "IProposer.sol";
-import "IUpgradable.sol";
+import "./Interfaces/IDaoRoot.sol";
+import "./Interfaces/IStakingAccount.sol";
+import "./Interfaces/IProposer.sol";
+import "./Interfaces/IUpgradable.sol";
 
-import "MsgFlag.sol";
-import "Platform.sol";
-import "Delegate.sol";
-import "DaoCellEncoder.sol";
-import "IEverscaleEventConfiguration.sol";
+import "./Libraries/MsgFlag.sol";
+import "./Platform.sol";
+import "./Helpers/Delegate.sol";
+import "./Helpers/DaoCellEncoder.sol";
+import "./Interfaces/IEverscaleEventConfiguration.sol";
 
 contract DaoRoot is DaoCellEncoder, IDaoRoot, IUpgradable, Delegate {
 

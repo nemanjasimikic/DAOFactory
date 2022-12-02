@@ -9,8 +9,9 @@ IFREF {
 }
 GETGLOB 6
 THROWIF 51
+LDREF
 ENDS
-.loc ../contracts/DaoFactory.sol, 14
+.loc ../contracts/DaoFactory.sol, 16
 GETGLOB 2
 NEQINT 0
 GETGLOB 2
@@ -25,8 +26,10 @@ IF
 EQUAL
 AND
 THROWIFNOT 1001
-.loc ../contracts/DaoFactory.sol, 15
+.loc ../contracts/DaoFactory.sol, 17
 ACCEPT
+.loc ../contracts/DaoFactory.sol, 18
+SETCODE
 .loc ../contracts/DaoFactory.sol, 0
 CALLREF {
 	CALL $c7_to_c4$
@@ -42,7 +45,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/DaoFactory.sol, 18
+.loc ../contracts/DaoFactory.sol, 21
 OVER
 PUSHCONT {
 	LDREF
@@ -102,12 +105,9 @@ CALLREF {
 THROW 0
 
 .macro deploy_940a79a5_internal_macro
-.loc ../contracts/DaoFactory.sol, 19
+.loc ../contracts/DaoFactory.sol, 22
 ACCEPT
-.loc ../contracts/DaoFactory.sol, 20
-GETGLOB 11
-SETGLOB 10
-.loc ../contracts/DaoFactory.sol, 21
+.loc ../contracts/DaoFactory.sol, 24
 MYADDR
 XCPU S1, S2
 PUSHINT 0
@@ -191,11 +191,100 @@ STBREFR
 ENDC
 PUSHINT 0
 SENDRAWMSG
-.loc ../contracts/DaoFactory.sol, 29
-GETGLOB 11
+SETGLOB 13
+.loc ../contracts/DaoFactory.sol, 32
+GETGLOB 10
+GETGLOB 12
+DUP2
+PUSHINT 32
+DICTUGET
+PUSHCONT {
+	LDU 32
+	PLDDICT
+}
+PUSHCONT {
+	PUSHINT 0
+	NEWDICT
+}
+IFELSE
+PAIR
+GETGLOB 13
+SWAP
+UNPAIR
+OVER
+INC
+ROLLREV 3
+PUSHINT 32
+DICTUSET
+PAIR
+NEWC
+SWAP
+UNPAIR
+XCHG S2
+STU 32
+STDICT
+ROTREV
+PUSHINT 32
+DICTUSETB
+SETGLOB 12
+.loc ../contracts/DaoFactory.sol, 33
+GETGLOB 10
 INC
 UFITS 32
-SETGLOB 11
+SETGLOB 10
+.loc ../contracts/DaoFactory.sol, 35
+GETGLOB 13
+.loc ../contracts/DaoFactory.sol, 0
+
+.macro getDeployedDAOs
+DROP
+GETGLOB 6
+THROWIFNOT 76
+GETGLOB 2
+ISNULL
+IFREF {
+	CALL $c4_to_c7$
+}
+.loc ../contracts/DaoFactory.sol, 38
+ENDS
+.loc ../contracts/DaoFactory.sol, 0
+CALLREF {
+	CALL $getDeployedDAOs_c43965cf_internal_macro$
+}
+OVER
+PUSHCONT {
+	PUSH S3
+	CTOS
+	LDU 2
+	LDMSGADDR
+	DROP
+	NIP
+	NEWC
+	STSLICECONST xc
+	STSLICE
+	PUSHINT 2713814071
+	STUR 130
+	STDICT
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+PUSHCONT {
+	DROP
+}
+IFELSE
+IFREF {
+	CALL $upd_only_time_in_c4$
+}
+THROW 0
+
+.globl	getDeployedDAOs_c43965cf_internal
+.type	getDeployedDAOs_c43965cf_internal, @function
+CALL $getDeployedDAOs_c43965cf_internal_macro$
+
+.macro getDeployedDAOs_c43965cf_internal_macro
+.loc ../contracts/DaoFactory.sol, 40
+GETGLOB 12
 .loc ../contracts/DaoFactory.sol, 0
 
 .macro withdrawGas
@@ -207,7 +296,7 @@ ISNULL
 IFREF {
 	CALL $c4_to_c7$
 }
-.loc ../contracts/DaoFactory.sol, 33
+.loc ../contracts/DaoFactory.sol, 44
 OVER
 PUSHCONT {
 	LDREF
@@ -227,7 +316,7 @@ CALLREF {
 THROW 0
 
 .macro withdrawGas_b56f251b_internal_macro
-.loc ../contracts/DaoFactory.sol, 39
+.loc ../contracts/DaoFactory.sol, 50
 PUSHREF {
 	.blob x4f6e6c7920746865206f776e65722063616e206f70657261746521
 }
@@ -245,11 +334,11 @@ IF
 EQUAL
 AND
 THROWARGIFNOT 1001
-.loc ../contracts/DaoFactory.sol, 40
+.loc ../contracts/DaoFactory.sol, 51
 ACCEPT
-.loc ../contracts/DaoFactory.sol, 34
+.loc ../contracts/DaoFactory.sol, 45
 ACCEPT
-.loc ../contracts/DaoFactory.sol, 35
+.loc ../contracts/DaoFactory.sol, 46
 NEWC
 STSLICECONST x62_
 STSLICE
@@ -269,7 +358,11 @@ LDU 1 ; ctor flag
 NIP
 LDU 32
 LDU 32
+LDDICT
+LDMSGADDR
 ENDS
+SETGLOB 13
+SETGLOB 12
 SETGLOB 11
 SETGLOB 10
 SETGLOB 3
@@ -286,7 +379,19 @@ PUSHCONT {
 	CTOS
 	PLDDICT ; D
 	PUSHINT 0
-	DUP
+	PUSHINT 1
+	PUSH S2
+	PUSHINT 64
+	DICTUGET
+	ZEROSWAPIFNOT
+	PUSHCONT {
+		PLDU 32
+	}
+	IF
+	NEWDICT
+	PUSHSLICE x8000000000000000000000000000000000000000000000000000000000000000001_
+	SETGLOB 13
+	SETGLOB 12
 	SETGLOB 11
 	SETGLOB 10
 	PUSHINT 64
@@ -297,13 +402,15 @@ PUSHCONT {
 	PUSHINT 0 ; timestamp
 	SETGLOB 3
 	PUSHINT 0
-	SETGLOB 11
+	SETGLOB 10
 }
 IFREFELSE {
 	CALL $c4_to_c7$
 }
 
 .macro c7_to_c4
+GETGLOB 13
+GETGLOB 12
 GETGLOB 11
 GETGLOB 10
 GETGLOB 3
@@ -314,6 +421,8 @@ STU 64
 STONE
 STU 32
 STU 32
+STDICT
+STSLICE
 ENDC
 POPROOT
 
@@ -441,7 +550,7 @@ PUSHCONT {
 IF
 THROW 0
 
-.macro nonce
+.macro _nonce
 DROP
 ENDS
 CALLREF {
@@ -450,7 +559,7 @@ CALLREF {
 GETGLOB 11
 OVER
 PUSHCONT {
-	PUSHSLICE xc0000000000000000000000000de1be220
+	PUSHSLICE xc000000000000000000000000084c68ef5
 	NEWC
 	STSLICE
 	STU 32
@@ -461,17 +570,60 @@ PUSHCONT {
 IF
 THROW 0
 
+.macro deployedAccounts
+DROP
+ENDS
+CALLREF {
+	CALL $c4_to_c7$
+}
+GETGLOB 12
+OVER
+PUSHCONT {
+	PUSHSLICE xc0000000000000000000000000dfe846be
+	NEWC
+	STSLICE
+	STDICT
+	ENDC
+	PUSHINT 0
+	SENDRAWMSG
+}
+IF
+THROW 0
+
 .macro public_function_selector
 DUP
-PUSHINT 1578885664
+PUSHINT 566330423
 LEQ
 IFJMPREF {
+	DUP
+	PUSHINT 80121589
+	EQUAL
+	IFJMPREF {
+		CALL $_nonce$
+	}
 	DUP
 	PUSHINT 225770745
 	EQUAL
 	IFJMPREF {
 		CALL $deploy$
 	}
+	DUP
+	PUSHINT 478865691
+	EQUAL
+	IFJMPREF {
+		CALL $constructor$
+	}
+	DUP
+	PUSHINT 566330423
+	EQUAL
+	IFJMPREF {
+		CALL $getDeployedDAOs$
+	}
+}
+DUP
+PUSHINT 1609057982
+LEQ
+IFJMPREF {
 	DUP
 	PUSHINT 788171092
 	EQUAL
@@ -485,16 +637,10 @@ IFJMPREF {
 		CALL $randomNonce$
 	}
 	DUP
-	PUSHINT 1578885664
+	PUSHINT 1609057982
 	EQUAL
 	IFJMPREF {
-		CALL $nonce$
+		CALL $deployedAccounts$
 	}
-}
-DUP
-PUSHINT 1756716863
-EQUAL
-IFJMPREF {
-	CALL $constructor$
 }
 
