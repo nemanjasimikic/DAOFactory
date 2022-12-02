@@ -1,0 +1,48 @@
+@font-face {
+  font-family: "faktum";
+  font-weight: 500;
+  src: url("/static/fonts/Faktum-Regular.otf") format("otf");
+}
+@font-face {
+  font-family: "faktum";
+  font-weight: 600;
+  src: url("/static/fonts/Faktum-Bold.otf") format("otf");
+}
+@font-face {
+  font-family: "pt-root-ui";
+  font-weight: 500;
+  src: url("/static/fonts/PT Root UI_Regular.otf") format("otf");
+}
+@font-face {
+  font-family: "pt-root-ui";
+  font-weight: 700;
+  src: url("/static/fonts/PT Root UI_Bold.otf") format("otf");
+}
+@font-face {
+  font-family: "faktum";
+  font-weight: 500;
+  src: url("/static/fonts/Faktum-Regular.otf") format("otf");
+}
+@font-face {
+  font-family: "faktum";
+  font-weight: 600;
+  src: url("/static/fonts/Faktum-Bold.otf") format("otf");
+}
+@font-face {
+  font-family: "pt-root-ui";
+  font-weight: 500;
+  src: url("/static/fonts/PT Root UI_Regular.otf") format("otf");
+}
+@font-face {
+  font-family: "pt-root-ui";
+  font-weight: 700;
+  src: url("/static/fonts/PT Root UI_Bold.otf") format("otf");
+}
+*, *:before, *:after, body {
+  -webkit-box-sizing: border-box !important;
+  -moz-box-sizing: border-box !important;
+  -ms-box-sizing: border-box !important;
+  box-sizing: border-box !important;
+}
+
+/*# sourceMappingURL=theme.css.map */

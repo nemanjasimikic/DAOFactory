@@ -1,0 +1,64 @@
+@import 'src/sass/theme'
+.daoCard
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  background: rgba(255, 255, 255, 0.08)
+  height: 160px
+  max-width: 572px
+  min-width: 372px
+  width: 100%
+  padding: 20px
+  margin-bottom: 20px
+
+  .daoCardTopRow
+    display: flex
+    justify-content: space-between
+    align-items: flex-start
+
+  .daoInfoWrapper
+    display: flex
+    align-items: flex-start
+
+  .daoInfoColumn
+    margin-left: 10px
+
+    h3
+      margin: 0
+      +small-medium-white-text
+
+    p
+      margin: 0
+      +small-grey-text
+
+  .settings
+    display: flex
+
+    p
+      margin: 0 0 0 10px
+      +small-grey-text
+
+      &:hover
+        cursor: pointer
+
+  .daoCardBottomRow
+    display: flex
+    align-items: center
+
+    img
+      margin-left: 5px
+
+      &:hover
+        cursor: pointer
+
+    .link
+      +small-grey-text
+      &:hover
+        cursor: pointer
+
+    .buyDomain
+      +small-white-text
+      margin-left: 10px
+      &:hover
+        cursor: pointer
+

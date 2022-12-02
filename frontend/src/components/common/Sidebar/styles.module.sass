@@ -1,0 +1,30 @@
+@import 'src/sass/theme'
+
+.sidebar
+  height: 500px
+  background-color: transparent
+  width: 400px
+  display: flex
+  flex-direction: column
+  padding-left: 100px
+
+  .backButton
+    width: 100px
+    margin-bottom: 30px
+    margin-top: 30px
+
+  .navLink
+    +small-grey-text
+    width: 100%
+    padding: 5px 0
+    text-align: left
+    text-decoration: none
+    &:hover
+      cursor: pointer
+
+  .active
+    +small-white-text
+    text-decoration: none
+    font-size: 14px
+    text-align: left
+    padding: 5px 0

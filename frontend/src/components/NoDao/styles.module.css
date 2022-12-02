@@ -1,0 +1,112 @@
+@font-face {
+  font-family: "faktum";
+  font-weight: 500;
+  src: url("/static/fonts/Faktum-Regular.otf") format("otf");
+}
+@font-face {
+  font-family: "faktum";
+  font-weight: 600;
+  src: url("/static/fonts/Faktum-Bold.otf") format("otf");
+}
+@font-face {
+  font-family: "pt-root-ui";
+  font-weight: 500;
+  src: url("/static/fonts/PT Root UI_Regular.otf") format("otf");
+}
+@font-face {
+  font-family: "pt-root-ui";
+  font-weight: 700;
+  src: url("/static/fonts/PT Root UI_Bold.otf") format("otf");
+}
+@font-face {
+  font-family: "faktum";
+  font-weight: 500;
+  src: url("/static/fonts/Faktum-Regular.otf") format("otf");
+}
+@font-face {
+  font-family: "faktum";
+  font-weight: 600;
+  src: url("/static/fonts/Faktum-Bold.otf") format("otf");
+}
+@font-face {
+  font-family: "pt-root-ui";
+  font-weight: 500;
+  src: url("/static/fonts/PT Root UI_Regular.otf") format("otf");
+}
+@font-face {
+  font-family: "pt-root-ui";
+  font-weight: 700;
+  src: url("/static/fonts/PT Root UI_Bold.otf") format("otf");
+}
+*, *:before, *:after, body {
+  -webkit-box-sizing: border-box !important;
+  -moz-box-sizing: border-box !important;
+  -ms-box-sizing: border-box !important;
+  box-sizing: border-box !important;
+}
+
+.noDao {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #050B2E;
+}
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+  .noDao {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .noDao {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .noDao {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+.noDao h1 {
+  font-family: Faktum, "faktum", Avenir, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 44px;
+  line-height: 48px;
+  color: #fff;
+}
+.noDao .noDaosAvailable {
+  height: 168px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 200px;
+}
+.noDao .noDaosAvailable h3 {
+  font-family: Faktum, "faktum", Avenir, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  color: #fff;
+  text-align: center;
+}
+.noDao .noDaosAvailable p {
+  font-family: PT Root UI, "pt-root-ui", Avenir, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #fff;
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+}
+
+/*# sourceMappingURL=styles.module.css.map */

@@ -1,0 +1,32 @@
+$d-phone: 600px
+$d-tablet-portrait: 768px
+$d-tablet: 1024px
+$d-desktop: 1600px
+
+@mixin phone
+  @media only screen and (max-width: $d-phone)
+    @content
+
+@mixin phone-and-tablet
+  @media only screen and (max-width: $d-tablet)
+    @content
+
+@mixin tablet-portrait
+  @media only screen and (min-width: $d-phone + 1) and (max-width: $d-tablet-portrait)
+    @content
+
+@mixin tablet
+  @media only screen and (min-width: $d-phone + 1) and (max-width: $d-tablet)
+    @content
+
+@mixin desktop
+  @media only screen and (min-width: $d-tablet + 1) and (max-width: $d-desktop)
+    @content
+
+@mixin hd-desktop
+  @media only screen and (min-width: $d-desktop + 1)
+    @content
+
+@mixin phone-shorty
+  @media only screen and (max-width: $d-phone) and (max-height: 600px)
+    @content

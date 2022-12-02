@@ -1,0 +1,53 @@
+@import '/src/sass/theme.sass'
+
+.isLoggedOut
+  +container
+
+  h1
+    +large-white-text
+    +tablet
+    text-align: center
+
+  h3
+    +medium-white-text
+    +tablet
+    text-align: center
+
+    &:hover
+      cursor: pointer
+
+  .icons
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    margin-top: 100px
+    margin-bottom: 100px
+
+    .iconContainer
+      display: flex
+      flex: 1
+      min-width: 220px
+      justify-content: space-between
+      flex-direction: column
+      align-items: center
+      margin-bottom: 40px
+
+      .iconWrapper
+        height: 70px
+        width: 70px
+        margin-bottom: 20px
+
+      img
+        height: 100%
+        width: 100%
+
+      p
+        +small-white-text
+        text-align: center
+        +tablet
+          white-space: pre-wrap
+
+  .link
+    text-decoration: none

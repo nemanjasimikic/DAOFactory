@@ -1,0 +1,70 @@
+@import 'src/sass/theme'
+
+@mixin button
+  font-family: $pt-root-ui
+  font-weight: 700
+  height: 36px
+  font-size: 14px
+  line-height: 20px
+  padding: 8px 16px
+  cursor: pointer
+  white-space: nowrap
+  display: flex
+  align-items: center
+  justify-content: center
+
+.primaryBtn
+  background: rgba(197, 228, 243, 0.16)
+  border: none
+  color: $white
+  +button
+
+.secondaryBtn
+  background: transparent
+  border: 1px solid rgba(197, 228, 243, 0.16)
+  color: $white
+
+  +button
+
+.lightBlueBtn
+  background: $light-blue
+  border: none
+  color: $dark-blue
+  +button
+
+.bigLightBlueBtn
+  background: $light-blue
+  border: none
+  color: $dark-blue
+  width: 186px
+  height: 56px
+  font-family: $pt-root-ui
+  font-weight: 700
+  font-size: 20px
+  line-height: 24px
+  display: flex
+  align-items: center
+  justify-content: center
+
+  &:hover
+    cursor: pointer
+
+.transparentBtn
+  background: transparent
+  outline: none
+  border: none
+  display: flex
+  align-items: center
+  +small-grey-text
+  +button
+
+.leftArrow
+  margin-right: 10px
+.rightArrow
+  margin-left: 10px
+
+
+
+
+
+

@@ -1,0 +1,145 @@
+@import 'src/sass/theme.sass'
+.container
+  .footer
+    width: 100%
+    display: flex
+    flex-direction: column
+    background: rgba(0, 0, 0, 0.16)
+    +phone
+      display: none
+    +phone-and-tablet
+      display: none
+    +tablet-portrait
+      display: none
+
+  .topFooter
+    max-width: 1200px
+    width: 100%
+    display: flex
+    justify-content: space-between
+    padding-bottom: 30px
+    padding-top: 30px
+    margin: 0 auto
+    background-color: transparent
+    +phone-and-tablet
+      flex-direction: column
+
+  .logoButtonsWrapper
+    display: flex
+    align-items: center
+    justify-content: space-between
+    padding-right: 80px
+    +phone
+      flex-direction: column
+      align-items: flex-start
+      padding-right: 0
+
+  .topFooterLinksWrapper
+    display: flex
+    justify-content: space-between
+    width: 60%
+    align-items: flex-start
+    +phone-and-tablet
+      flex-direction: row
+      margin-left: 40px
+      margin-top: 45px
+
+  .topFooterLinks
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+
+  .footerLogo
+    +tablet
+      margin-left: 40px
+    +phone
+      margin-bottom: 20px
+      margin-left: 20px
+
+  .heading
+    +small-white-text
+    margin-bottom: 10px
+    font-weight: 700
+
+  .buttonWrapper
+    display: flex
+    flex-direction: column
+    align-items: center
+
+    +phone-and-tablet
+      flex-direction: row
+    +phone
+      flex-direction: column
+      width: 100%
+      padding-right: 20px
+      padding-left: 20px
+
+    a
+      +phone
+        width: 100%
+
+    button
+      width: 184px
+      margin-bottom: 18px
+      +tablet
+        margin-left: 10px
+        margin-bottom: 0
+      +phone
+        width: 100%
+
+  .bottomFooter
+    width: 100%
+    height: 80px
+    max-width: 1200px
+    margin: 0 auto
+    display: flex
+    align-items: center
+    justify-content: space-between
+    background-color: transparent
+    border-top: 0.5px solid rgba(255, 255, 255, 0.16)
+    +phone
+      flex-direction: column-reverse
+      align-items: flex-start
+      justify-content: space-around
+      height: inherit
+      padding-top: 16px
+      padding-bottom: 16px
+
+  .links
+    display: flex
+    align-items: center
+    justify-content: space-around
+    width: 50%
+    &:hover
+      cursor: pointer
+    +phone
+      width: 80%
+      justify-content: space-between
+      margin-left: 25px
+      margin-bottom: 20px
+
+  .copy
+    color: $white
+    margin: 0
+    +phone
+      margin-left: 25px
+
+  .footerLink
+    text-decoration: none
+    +small-grey-text
+    font-weight: 400
+    font-size: 14px
+    margin: 7px 0
+    white-space: nowrap
+
+  .mobileFooter
+    display: flex
+    flex-direction: column
+    background: rgba(0, 0, 0, 0.16)
+    +desktop
+      display: none
+    +hd-desktop
+      display: none
+
+
+

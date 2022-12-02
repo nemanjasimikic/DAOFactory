@@ -1,0 +1,17 @@
+@import 'src/sass/theme'
+
+.contentHeader
+  +container
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+  width: 100%
+  +phone
+    flex-direction: column
+    align-items: flex-start
+    padding-bottom: 20px
+
+  .contentTitle
+    +medium-white-text()
+    font-size: 28px

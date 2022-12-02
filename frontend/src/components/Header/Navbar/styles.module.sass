@@ -1,0 +1,25 @@
+@import 'src/sass/theme'
+
+.navbar
+  display: flex
+  align-items: center
+  justify-content: space-between
+  width: 40%
+  +phone
+    display: none
+  +phone-and-tablet
+    width: 70%
+  +tablet-portrait
+    width: 60%
+  +tablet
+    width: 50%
+
+  .navLink
+    +medium-grey-text
+    white-space: nowrap
+    text-decoration: none
+    &:hover
+      cursor: pointer
+.active
+  +small-white-text
+  text-decoration: none
