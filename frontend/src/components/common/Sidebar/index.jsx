@@ -1,5 +1,5 @@
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import Breadcrumbs from 'components/common/Breadcrumbs'
+import Breadcrumbs from 'components/Breadcrumbs'
 import Button from 'components/common/Button'
 
 import styles from './styles.module.sass'
