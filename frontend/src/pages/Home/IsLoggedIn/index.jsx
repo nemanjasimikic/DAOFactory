@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import ContentHeader from 'components/common/ContentHeader'
 import Button from 'components/common/Button'
-import NoDao from 'components/NoDao'
+import NoResults from 'components/NoResults'
 import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
 
@@ -81,7 +81,7 @@ const IsLoggedIn = () => {
           <Button type={'primaryBtn'} text={'Add existing DAO'} />
         </div>
       </ContentHeader>
-      {/*<NoDao />*/}
+      {/*<NoResults />*/}
       {renderTable ? (
         <Table columns={columns} data={data} />
       ) : (
