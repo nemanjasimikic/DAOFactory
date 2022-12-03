@@ -1,9 +1,11 @@
+import RouteBreadcrumbs from "components/RouteBreadcrumbs";
+
 import styles from './styles.module.sass'
 
 const Balance = () => {
   return (
     <div className={styles.container}>
-      <div></div>
+      <RouteBreadcrumbs />
     </div>
     )
 }
