@@ -1,9 +1,21 @@
+import { useEffect } from 'react'
+import { NavLink } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { login, reset } from 'store/features/walletSlice'
+import Button from 'components/common/Button'
 import styles from './styles.module.sass'
 
-import Button from 'components/common/Button'
-import { Link, NavLink } from 'react-router-dom'
-
 const Navbar = () => {
+  const dispatch = useDispatch()
+
+  const wallet = useSelector((state) => state.wallet)
+
+  console.log('WALLET', wallet.balance)
+  // console.log('WALLET Address', wallet.address)
+
+  useEffect(() => {
+    dispatch(reset())
+  }, [wallet, dispatch])
   return (
     <nav className={styles.navbar}>
       <NavLink
@@ -22,9 +34,20 @@ const Navbar = () => {
       >
         My DAOs
       </NavLink>
-      <Link to={'/connected'}>
-        <Button text={'Connect wallet'} type={'primaryBtn'} />
-      </Link>
+      {/*<Link to={'/connected'}>*/}
+      {wallet.wallet === null ? (
+        <Button
+          text={'Connect wallet'}
+          type={'primaryBtn'}
+          onClick={() => dispatch(login())}
+        />
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ color: 'white' }}>{wallet.wallet}</div>
+          <div style={{ color: 'red' }}>{wallet.balance}</div>
+        </div>
+      )}
+      {/*</Link>*/}
     </nav>
   )
 }

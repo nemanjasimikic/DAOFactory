@@ -4210,10 +4210,10 @@ events@^3.2.0:
   resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
 
-everscale-inpage-provider@^0.3.43:
-  version "0.3.43"
-  resolved "https://registry.yarnpkg.com/everscale-inpage-provider/-/everscale-inpage-provider-0.3.43.tgz#2f2c533a9b44237893b3f6f747b5b1c61e1523ee"
-  integrity sha512-AFqo6RAurwpnz7UvHu2O/3BK8nHElBQ7vfvUaDOJB8zzcd28pD26TflZbYRWzgoP7RNOM69h3WcmiWtlHl8pVw==
+everscale-inpage-provider@^0.3.45:
+  version "0.3.45"
+  resolved "https://registry.yarnpkg.com/everscale-inpage-provider/-/everscale-inpage-provider-0.3.45.tgz#7e5a55d07f1d496c7886d83c33887ec597d0dd1c"
+  integrity sha512-e28/9AyAOtpyz9xHa2eRJsPUNvM5jD/BVA8+GYk8bnLENczkbtZEf9Rp4m+1XTZblJedbY0Al8cMZV5IiKGa4g==
 
 execa@^5.0.0:
   version "5.1.1"
