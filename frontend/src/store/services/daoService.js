@@ -1,4 +1,4 @@
-import { ProviderRpcClient } from 'everscale-inpage-provider'
+import { ProviderRpcClient, Address } from 'everscale-inpage-provider'
 import {toNano} from '../../helpers/decimalParser'
 import {addressConverter} from '../../helpers/addressParser'
 const ever = new ProviderRpcClient()
@@ -18,86 +18,86 @@ console.log('daoAddr: ', daoContractAddress);
       
       const daoTvc = "te6ccgECHgEABJQAAgE0AwEBAcACAEPQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBCSK7VMg4wMgwP/jAiDA/uMC8gsbBQQdArztRNDXScMB+GYh2zzTAAGOHIMI1xgg+QEB0wABlNP/AwGTAvhC4iD4ZfkQ8qiV0wAB8nri0z8B+EMhufK0IPgjgQPoqIIIG3dAoLnytPhj0x8B+CO88rnTHwHbPPI8EgYDSu1E0NdJwwH4ZiLQ1wsDqTgA3CHHAOMCIdcNH/K8IeMDAds88jwaGgYCKCCCECHBhDe74wIgghBf6Ea+u+MCDQcDPCCCEC76iVS64wIgghAv81juuuMCIIIQX+hGvrrjAgoJCAFQMNHbPPhMIY4cjQRwAAAAAAAAAAAAAAAAN/oRr6DIzvQAyXD7AN7yABkBUDDR2zz4SiGOHI0EcAAAAAAAAAAAAAAAACv81jugyM7LH8lw+wDe8gAZAzQw+Eby4Ez4Qm7jACGT1NHQ3vpA0ds82zzyABkLFAFMiPhCwwD4QvhFIG6SMHDeurDy6+n4APgAyM+FiM6Ab89AyYMG+wAMADZPbmx5IHRoZSBvd25lciBjYW4gb3BlcmF0ZSEEUCCCEATGjvW64wIgghANdPz5uuMCIIIQHIrpG7rjAiCCECHBhDe64wIYExEOA2gw+Eby4Ez4Qm7jANHbPCGOHCPQ0wH6QDAxyM+HIM6CEKHBhDfPC4H0AMlw+wCRMOLjAPIAGRAPACjtRNDT/9M/MfhDWMjL/8s/zsntVAAE+EwCTjD4Qm7jAPhG8nPU0fhCwwD4QvhFIG6SMHDeurDy4+n4APsE2zzyABIUAbrtRNDXScIBjlJw7UTQ9AVwcSKAQPQOb5GT1wsf3m2NCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4bfhs+Gv4aoBA9A7yvdcL//hicPhjcPhq4w0ZA6ow+Eby4Ez4Qm7jACGY1NMf0x/U0dCV1NMf0x/i03/TH9N/0x9VUG8GAdHbPCGOHyPQ0wH6QDAxyM+HIM5xzwthAcjPkjXT8+bOzclw+wCRMOLbPPIAGRUUADr4TfhM+Ev4SvhD+ELIy//LP8+Dyx/LH/QAzsntVAL8+AD4KFEScMjL/3BtgED0Q/hKyMsfcViAQPRDyPQAyVUDyM+EgPQA9ADPgckg+QDIz4oAQMv/ydBVMCTIz4WIzoKAIdzWUAAAAAAAAAAAAAAAAAADzwuOIds8zM+DVSDIz5HTKxgyzAFvJl5Qyx/LH8t/yx/Lf8sfzs3JcPsAFxYAfPht+Er4TFyAIPQOlNMf9AWScG3ibwL4TQFvIiGkVSCAIPQWbwLIAW8iAssf9ABZgCD0Q/hs+EqktR/4avhNADTQ0gABk9IEMd7SAAGT0gEx3vQE9AT0BNFfAwFQMNHbPPhLIY4cjQRwAAAAAAAAAAAAAAAAITGjvWDIzssfyXD7AN7yABkAPu1E0NP/0z/TADHTH9Mf9AT6QNH4bfhs+Gv4avhj+GIACvhG8uBMAgr0pCD0oR0cABRzb2wgMC42My4wAAA=";
       const daoAbi = {
-        "ABI version": 2,
-	"version": "2.2",
-	"header": ["pubkey", "time", "expire"],
-	"functions": [
+        'ABI version': 2,
+	version: '2.2',
+	header: ['pubkey', 'time', 'expire'],
+	functions: [
 		{
-			"name": "constructor",
-			"inputs": [
-				{"name":"newCode","type":"cell"}
+			name: 'constructor',
+			inputs: [
+				{name:'newCode',type:'cell'}
 			],
-			"outputs": [
+			outputs: [
 			]
 		},
 		{
-			"name": "deploy",
-			"inputs": [
-				{"name":"platformCode_","type":"cell"},
-				{"components":[{"name":"votingDelay","type":"uint32"},{"name":"votingPeriod","type":"uint32"},{"name":"quorumVotes","type":"uint128"},{"name":"timeLock","type":"uint32"},{"name":"threshold","type":"uint128"},{"name":"gracePeriod","type":"uint32"}],"name":"proposalConfiguration_","type":"tuple"}
+			name: 'deploy',
+			inputs: [
+				{name:'platformCode_',type:'cell'},
+				{components:[{name:'votingDelay',type:'uint32'},{name:'votingPeriod',type:'uint32'},{name:'quorumVotes',type:'uint128'},{name:'timeLock',type:'uint32'},{name:'threshold',type:'uint128'},{name:'gracePeriod',type:'uint32'}],name:'proposalConfiguration_',type:'tuple'}
 			],
-			"outputs": [
-				{"name":"value0","type":"address"}
+			outputs: [
+				{name:'value0',type:'address'}
 			]
 		},
 		{
-			"name": "getDeployedDAOs",
-			"inputs": [
+			name: 'getDeployedDAOs',
+			inputs: [
 			],
-			"outputs": [
-				{"name":"daoAddr","type":"map(uint32,address[])"}
+			outputs: [
+				{name:'daoAddr',type:'map(uint32,address[])'}
 			]
 		},
 		{
-			"name": "withdrawGas",
-			"inputs": [
-				{"name":"gasTo","type":"address"}
+			name: 'withdrawGas',
+			inputs: [
+				{name:'gasTo',type:'address'}
 			],
-			"outputs": [
+			outputs: [
 			]
 		},
 		{
-			"name": "randomNonce",
-			"inputs": [
+			name: 'randomNonce',
+			inputs: [
 			],
-			"outputs": [
-				{"name":"randomNonce","type":"uint32"}
+			outputs: [
+				{name:'randomNonce',type:'uint32'}
 			]
 		},
 		{
-			"name": "_nonce",
-			"inputs": [
+			name: '_nonce',
+			inputs: [
 			],
-			"outputs": [
-				{"name":"_nonce","type":"uint32"}
+			outputs: [
+				{name:'_nonce',type:'uint32'}
 			]
 		},
 		{
-			"name": "deployedAccounts",
-			"inputs": [
+			name: 'deployedAccounts',
+			inputs: [
 			],
-			"outputs": [
-				{"name":"deployedAccounts","type":"map(uint32,address[])"}
+			outputs: [
+				{name:'deployedAccounts',type:'map(uint32,address[])'}
 			]
 		}
 	],
-	"data": [
-		{"key":1,"name":"_nonce","type":"uint32"}
+	data: [
+		{key:1,name:'_nonce',type:'uint32'}
 	],
-	"events": [
+	events: [
 	],
-	"fields": [
-		{"name":"_pubkey","type":"uint256"},
-		{"name":"_timestamp","type":"uint64"},
-		{"name":"_constructorFlag","type":"bool"},
-		{"name":"randomNonce","type":"uint32"},
-		{"name":"_nonce","type":"uint32"},
-		{"name":"deployedAccounts","type":"map(uint32,address[])"},
-		{"name":"daoRoot","type":"address"}
-	]
+	fields: [
+		{name:'_pubkey',type:'uint256'},
+		{name:'_timestamp',type:'uint64'},
+		{name:'_constructorFlag',type:'bool'},
+		{name:'randomNonce',type:'uint32'},
+		{name:'_nonce',type:'uint32'},
+		{name:'deployedAccounts',type:'map(uint32,address[])'},
+		{name:'daoRoot',type:'address'}
+	],
     }
 
-    const deployOptions = {initParams:{_nonce: 1254}, tvc: daoTvc}
+    const deployOptions = {initParams:{_nonce: 1554}, tvc: daoTvc}
 const getExpectedAddress = async() =>
 {
     
@@ -214,14 +214,17 @@ const deployFactory = async() =>
     console.log('state init: ', stateInit);
     const publicKey = providerState.permissions.accountInteraction.publicKey;
     console.log('public key: ', publicKey);
-    const daoFactoryContract = new ever.Contract(daoAbi, daoContractAddress);
+    const daoFactoryContract = new ever.Contract(daoAbi, new Address(daoContractAddress));
+    console.log('daoFactoryContract: ', daoFactoryContract);
     const code  = await ever.splitTvc(daoTvc);
-    console.log('code: ', code);
+    console.log('code: ', code.code);
+    const hash2 = await ever.setCodeSalt({code: code.code, salt: { structure: [{name:'ownerAddress', type: 'address'}], data: {ownerAddress: walletAddress}}});
+    console.log('hash2: ', hash2.code);
     const data={
-        newCode: code.code
+        newCode: hash2.code
     }
     const sendTransaction = await daoFactoryContract.methods
-          .constructor(data)
+          .constructor({ newCode: hash2.code/*"te6ccgECGwEABGcABCSK7VMg4wMgwP/jAiDA/uMC8gsYAgEaArztRNDXScMB+GYh2zzTAAGOHIMI1xgg+QEB0wABlNP/AwGTAvhC4iD4ZfkQ8qiV0wAB8nri0z8B+EMhufK0IPgjgQPoqIIIG3dAoLnytPhj0x8B+CO88rnTHwHbPPI8DwMDSu1E0NdJwwH4ZiLQ1wsDqTgA3CHHAOMCIdcNH/K8IeMDAds88jwXFwMCKCCCECHBhDe74wIgghBf6Ea+u+MCCgQDPCCCEC76iVS64wIgghAv81juuuMCIIIQX+hGvrrjAgcGBQFQMNHbPPhMIY4cjQRwAAAAAAAAAAAAAAAAN/oRr6DIzvQAyXD7AN7yABYBUDDR2zz4SiGOHI0EcAAAAAAAAAAAAAAAACv81jugyM7LH8lw+wDe8gAWAzQw+Eby4Ez4Qm7jACGT1NHQ3vpA0ds82zzyABYIEQFMiPhCwwD4QvhFIG6SMHDeurDy6+n4APgAyM+FiM6Ab89AyYMG+wAJADZPbmx5IHRoZSBvd25lciBjYW4gb3BlcmF0ZSEEUCCCEATGjvW64wIgghANdPz5uuMCIIIQHIrpG7rjAiCCECHBhDe64wIVEA4LA2gw+Eby4Ez4Qm7jANHbPCGOHCPQ0wH6QDAxyM+HIM6CEKHBhDfPC4H0AMlw+wCRMOLjAPIAFg0MACjtRNDT/9M/MfhDWMjL/8s/zsntVAAE+EwCTjD4Qm7jAPhG8nPU0fhCwwD4QvhFIG6SMHDeurDy4+n4APsE2zzyAA8RAbrtRNDXScIBjlJw7UTQ9AVwcSKAQPQOb5GT1wsf3m2NCGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT4bfhs+Gv4aoBA9A7yvdcL//hicPhjcPhq4w0WA6ow+Eby4Ez4Qm7jACGY1NMf0x/U0dCV1NMf0x/i03/TH9N/0x9VUG8GAdHbPCGOHyPQ0wH6QDAxyM+HIM5xzwthAcjPkjXT8+bOzclw+wCRMOLbPPIAFhIRADr4TfhM+Ev4SvhD+ELIy//LP8+Dyx/LH/QAzsntVAL8+AD4KFEScMjL/3BtgED0Q/hKyMsfcViAQPRDyPQAyVUDyM+EgPQA9ADPgckg+QDIz4oAQMv/ydBVMCTIz4WIzoKAIdzWUAAAAAAAAAAAAAAAAAADzwuOIds8zM+DVSDIz5HTKxgyzAFvJl5Qyx/LH8t/yx/Lf8sfzs3JcPsAFBMAfPht+Er4TFyAIPQOlNMf9AWScG3ibwL4TQFvIiGkVSCAIPQWbwLIAW8iAssf9ABZgCD0Q/hs+EqktR/4avhNADTQ0gABk9IEMd7SAAGT0gEx3vQE9AT0BNFfAwFQMNHbPPhLIY4cjQRwAAAAAAAAAAAAAAAAITGjvWDIzssfyXD7AN7yABYAPu1E0NP/0z/TADHTH9Mf9AT6QNH4bfhs+Gv4avhj+GIACvhG8uBMAgr0pCD0oRoZABRzb2wgMC42My4wAAA="*/})
           .sendExternal({
             stateInit: stateInit.stateInit,
             publicKey: publicKey,
