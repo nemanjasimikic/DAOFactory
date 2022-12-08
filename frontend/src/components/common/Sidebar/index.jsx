@@ -28,7 +28,7 @@ const Sidebar = ({ page, setPage }) => {
 
   return (
     <div className={styles.sidebar}>
-      <Link to={'/connected'} className={styles.backButton}>
+      <Link to={'/'} className={styles.backButton}>
         <Button type={'transparentBtn'} text={'Back'} leftArrow={leftArrow} />
       </Link>
       {location.pathname === '/create-dao' ? (

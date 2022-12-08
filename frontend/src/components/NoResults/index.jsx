@@ -23,7 +23,7 @@ const NoResults = () => {
   const location = useLocation()
   return (
     <div className={styles.render}>
-      {location.pathname === '/connected'
+      {location.pathname === '/'
         ? renderNoDao()
         : renderLoggedOutBalance()}
     </div>

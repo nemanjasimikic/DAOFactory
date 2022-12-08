@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { login, reset } from 'store/features/walletSlice'
+import { login, logout, reset } from 'store/features/walletSlice'
 import Button from 'components/common/Button'
+import { addressFormat } from 'helpers/addressFormat'
 import styles from './styles.module.sass'
+import walletLogout from 'static/svg/walletLogout.svg'
+import walletAvatar from 'static/svg/walletAvatar.svg'
 
 const Navbar = () => {
   const dispatch = useDispatch()
 
   const wallet = useSelector((state) => state.wallet)
-
-  console.log('WALLET', wallet.balance)
-  // console.log('WALLET Address', wallet.address)
 
   useEffect(() => {
     dispatch(reset())
@@ -27,14 +27,13 @@ const Navbar = () => {
         Create new DAO
       </NavLink>
       <NavLink
-        to={'/connected'}
+        to={'/'}
         className={({ isActive }) =>
           isActive ? styles.active : styles.navLink
         }
       >
         My DAOs
       </NavLink>
-      {/*<Link to={'/connected'}>*/}
       {wallet.wallet === null ? (
         <Button
           text={'Connect wallet'}
@@ -42,12 +41,20 @@ const Navbar = () => {
           onClick={() => dispatch(login())}
         />
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ color: 'white' }}>{wallet.wallet}</div>
-          <div style={{ color: 'red' }}>{wallet.balance}</div>
+        <div className={styles.walletInfoWrapper}>
+          <img src={walletAvatar} alt={'avatar'} />
+          <div className={styles.walletBalanceCol}>
+            <p className={styles.address}>{addressFormat(wallet.wallet)}</p>
+            <p className={styles.balance}>{wallet.balance}</p>
+          </div>
+          <img
+            className={styles.logout}
+            src={walletLogout}
+            onClick={() => dispatch(logout())}
+            alt={'logout'}
+          />
         </div>
       )}
-      {/*</Link>*/}
     </nav>
   )
 }

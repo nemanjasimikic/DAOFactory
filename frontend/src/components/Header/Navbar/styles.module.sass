@@ -18,8 +18,37 @@
     +medium-grey-text
     white-space: nowrap
     text-decoration: none
+
     &:hover
       cursor: pointer
+
 .active
   +small-white-text
   text-decoration: none
+
+
+.walletInfoWrapper
+  display: flex
+  align-items: center
+
+  .walletBalanceCol
+    display: flex
+    flex-direction: column
+    justify-content: center
+    margin-left: 15px
+
+
+  .address
+    +small-white-text
+    font-size: 14px
+  .balance
+    +small-grey-text
+    font-size: 14px
+
+  .logout
+    height: 40px
+    width: 40px
+    margin-left: 15px
+
+    &:hover
+      cursor: pointer

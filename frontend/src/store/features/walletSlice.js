@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import walletService from 'store/services/walletService'
+import { ProviderRpcClient } from 'everscale-inpage-provider'
+const ever = new ProviderRpcClient()
 
 const wallet = JSON.parse(localStorage.getItem('wallet'))
+// const balance = JSON.parse(localStorage.getItem('balance'))
 
 const initialState = {
   wallet: wallet ? wallet : null,
@@ -13,10 +16,36 @@ const initialState = {
 
 export const login = createAsyncThunk('login', async (wallet, thunkAPI) => {
   try {
-    return await walletService.walletConnect(wallet)
+    return await walletService.walletConnect()
   } catch (error) {
     return thunkAPI.rejectWithValue('')
   }
+})
+
+const getBalanceService = async () => {
+  await ever
+    .getBalance(wallet)
+    .then((result) => {})
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+console.log('SERVIS', getBalanceService())
+
+export const getBalance = createAsyncThunk(
+  'getBalance',
+  async (_, thunkAPI) => {
+    try {
+      return await getBalanceService(wallet)
+    } catch (error) {
+      return thunkAPI.rejectWithValue('')
+    }
+  }
+)
+
+export const logout = createAsyncThunk('logout', async () => {
+  await walletService.logout()
 })
 
 export const walletSlice = createSlice({
@@ -42,6 +71,23 @@ export const walletSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
+        state.wallet = null
+      })
+      .addCase(getBalance.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getBalance.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.balance = action.payload
+        console.log('PAyLOAD', action.payload)
+      })
+      .addCase(getBalance.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.balance = null
+      })
+      .addCase(logout.fulfilled, (state) => {
         state.wallet = null
       })
   },
