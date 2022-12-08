@@ -11,10 +11,18 @@ import CreateDaoInfo from 'components/CreateDaoInfo'
 import rightArrow from 'static/svg/rightArrow.svg'
 import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
+//import { getExpectedAddress } from 'store/features/daoSlice'
+import { useEffect } from 'react'
+import { getExpectedAddress, reset, topup, deployFactory } from 'store/features/daoSlice'
+import { useSelector, useDispatch } from 'react-redux'
 
 const CreateDao = () => {
+  const dispatch = useDispatch()
   const [page, setPage] = useState(0)
   const [formData, setFormData] = useState({})
+  const dao = useSelector((state) => state.dao)
+ useEffect(() => {
+  }, [dao, dispatch])
 
   const FormTitles = [
     'General information',
@@ -33,6 +41,7 @@ const CreateDao = () => {
         <VotingConfiguration formData={formData} setFormData={setFormData} />
       )
     } else if (page === 2) {
+      
       return <ProposalTimeline formData={formData} setFormData={setFormData} />
     } else {
       return <Treasury formData={formData} setFormData={setFormData} />
@@ -62,6 +71,10 @@ const CreateDao = () => {
           disabled={page === 3}
           onClick={() => {
             setPage((currentPage) => currentPage + 1)
+            //if(dao.dao === null)
+      //{
+      dispatch(deployFactory())
+      //}
           }}
           type={'bigLightBlueBtn'}
           rightArrow={page < 3 ? rightArrow : ''}
