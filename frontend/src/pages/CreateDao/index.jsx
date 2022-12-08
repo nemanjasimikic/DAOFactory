@@ -65,6 +65,7 @@ const CreateDao = () => {
           leftArrow={leftArrow}
           onClick={() => {
             setPage((currentPage) => currentPage - 1)
+            dispatch(getExpectedAddress())
           }}
         />
         <Button
