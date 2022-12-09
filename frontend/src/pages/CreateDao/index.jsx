@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import {useState, useEffect} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import {deployFactory} from 'store/features/daoSlice'
 import Sidebar from 'components/common/Sidebar'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
 import VotingConfiguration from 'pages/CreateDao/VotingConfiguration'
@@ -12,9 +14,14 @@ import rightArrow from 'static/svg/rightArrow.svg'
 import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
 
+
 const CreateDao = () => {
+  const dispatch = useDispatch()
   const [page, setPage] = useState(0)
   const [formData, setFormData] = useState({})
+  const dao = useSelector((state) => state.dao)
+  useEffect(() => {
+  }, [dao, dispatch])
 
   const FormTitles = [
     'General information',
@@ -26,28 +33,29 @@ const CreateDao = () => {
   const PageDisplay = () => {
     if (page === 0) {
       return (
-        <GeneralInformation formData={formData} setFormData={setFormData} />
+        <GeneralInformation formData={formData} setFormData={setFormData}/>
       )
     } else if (page === 1) {
       return (
-        <VotingConfiguration formData={formData} setFormData={setFormData} />
+        <VotingConfiguration formData={formData} setFormData={setFormData}/>
       )
     } else if (page === 2) {
-      return <ProposalTimeline formData={formData} setFormData={setFormData} />
+
+      return <ProposalTimeline formData={formData} setFormData={setFormData}/>
     } else {
-      return <Treasury formData={formData} setFormData={setFormData} />
+      return <Treasury formData={formData} setFormData={setFormData}/>
     }
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.createDao}>
-        <Sidebar page={page} setPage={setPage} />
+        <Sidebar page={page} setPage={setPage}/>
         <div className={styles.createDaoContent}>
-          <ContentHeader title={'Create new DAO'} />
+          <ContentHeader title={'Create new DAO'}/>
           <Form heading={FormTitles[page]}>{PageDisplay()}</Form>
         </div>
-        <CreateDaoInfo page={page} />
+        <CreateDaoInfo page={page}/>
       </div>
       <div className={styles.formNavigation}>
         <Button
@@ -62,6 +70,7 @@ const CreateDao = () => {
           disabled={page === 3}
           onClick={() => {
             setPage((currentPage) => currentPage + 1)
+            dispatch(deployFactory())
           }}
           type={'bigLightBlueBtn'}
           rightArrow={page < 3 ? rightArrow : ''}
