@@ -95,7 +95,7 @@ console.log('daoAddr: ', daoContractAddress);
 	],
     }
 
-    const deployOptions = {initParams:{_nonce: 184}, tvc: daoTvc}
+    const deployOptions = {initParams:{_nonce: (Math.random() * 64000) | 0}, tvc: daoTvc}
 const getExpectedAddress = async() =>
 {
     
@@ -116,7 +116,7 @@ const getExpectedAddress = async() =>
     return address._address;
 }
 
-const topup = async() =>
+const topup = async(addressDao) =>
 {
     const giver = {
         'ABI version': 2,
@@ -184,16 +184,17 @@ const topup = async() =>
 }
     
     
-    const giverContract = new ever.Contract(giver, daoContractAddress);
+    const giverContract = new ever.Contract(giver, addressDao);
     console.log('giver contract: ', giverContract);
     // console.log('this.topUpRequiredAmount + 0.5:', toNano(this.topUpRequiredAmount));
-    
+    const walletAddress =  addressConverter(localStorage.getItem('wallet'));
+    console.log('Wallet address u giveru: ', walletAddress)
     
      // console.log('Ever!!!!');
      const sendTransaction = await giverContract.methods
         .sendTransaction({
           value: toNano(1, 9),
-          dest: daoContractAddress,
+          dest: addressDao,
           bounce: false,
         })
         .send({
@@ -207,12 +208,24 @@ const topup = async() =>
 
 const deployFactory = async() =>
 {
+    const address = await getExpectedAddress();
+    if(address)
+    {
+      console.log('Adresa u deploju: ', address);
+    }
+
+    const topupVar = await topup(address)
+    if(topupVar)
+    {
+      console.log('Topup var: ', topupVar)
+    }
+    const walletAddress = addressConverter(localStorage.getItem('wallet'));
     const providerState = await ever.getProviderState();
     const stateInit = await ever.getStateInit(daoAbi, deployOptions);
     console.log('state init: ', stateInit);
     const publicKey = providerState.permissions.accountInteraction.publicKey;
     console.log('public key: ', publicKey);
-    const daoFactoryContract = new ever.Contract(daoAbi, new Address(daoContractAddress));
+    const daoFactoryContract = new ever.Contract(daoAbi, new Address(address));
     console.log('daoFactoryContract: ', daoFactoryContract);
     const state = await daoFactoryContract.getFullState();
     console.log('state: ', state)

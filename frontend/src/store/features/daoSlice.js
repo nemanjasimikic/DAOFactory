@@ -5,12 +5,13 @@ const ever = new ProviderRpcClient()
 
 const dao = JSON.parse(localStorage.getItem('daoAddr'))
 const topupV = JSON.parse(localStorage.getItem('topup'))
+const deployValue = JSON.parse(localStorage.getItem('topup'))
 // const balance = JSON.parse(localStorage.getItem('balance'))
 
 const initialState = {
   dao: dao ? dao : null,
- // topupV: topupV ? topupV : null,
- // balance: 0,
+  topupV: topupV ? topupV : null,
+  deployValue: deployValue ? deployValue : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -28,7 +29,7 @@ export const getExpectedAddress = createAsyncThunk('getExpectedAddress', async (
 export const topup = createAsyncThunk('topup', async (dao, thunkAPI) => {
     try {
         console.log('topup: ', dao);
-      return await daoService.topup()
+      return await daoService.topup(dao)
     } catch (error) {
         console.log('error: ', error);
       return thunkAPI.rejectWithValue('')
@@ -91,13 +92,13 @@ export const daoSlice = createSlice({
       .addCase(deployFactory.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.dao = action.payload
-        console.log('state.dao: ', state.dao);
+        state.deployValue = action.payload
+        console.log('state.dao: ', state.deployValue);
       })
       .addCase(deployFactory.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
-        state.dao = null
+        state.deployValue = null
         console.log('rejected state dao: ', state.dao);
       })
   },

@@ -65,7 +65,7 @@ const CreateDao = () => {
           leftArrow={leftArrow}
           onClick={() => {
             setPage((currentPage) => currentPage - 1)
-            dispatch(getExpectedAddress())
+            //dispatch(getExpectedAddress())
           }}
         />
         <Button
@@ -76,6 +76,7 @@ const CreateDao = () => {
       //{
       dispatch(deployFactory())
       //}
+     // dispatch(getExpectedAddress())
           }}
           type={'bigLightBlueBtn'}
           rightArrow={page < 3 ? rightArrow : ''}

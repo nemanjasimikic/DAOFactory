@@ -19,10 +19,16 @@ const walletConnect = async () => {
     'wallet',
     JSON.stringify(accountInteraction.address._address)
   )
-
-  // await getBalance()
-
-  return accountInteraction.address._address
+   const balance = await getBalance(accountInteraction.address._address)
+   if(balance)
+   {
+    console.log('Balance: ', balance)
+   }
+   const data = {
+    address: accountInteraction.address._address,
+    balance: balance
+   }
+  return data
 }
 
 const logout = async () => {
@@ -39,6 +45,7 @@ const logout = async () => {
 
 const getBalance = async (address) => {
   const response = await ever.getBalance(address)
+  console.log('response: ', response);
   if (response) {
     localStorage.setItem('balance', JSON.stringify(response))
   }

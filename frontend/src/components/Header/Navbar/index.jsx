@@ -12,7 +12,7 @@ const Navbar = () => {
   const dispatch = useDispatch()
 
   const wallet = useSelector((state) => state.wallet)
-
+  console.log('State wallet: ', wallet)
   useEffect(() => {
     dispatch(reset())
   }, [wallet, dispatch])
