@@ -4,10 +4,18 @@ import copy from 'static/svg/copy.svg'
 import reloadIcon from 'static/svg/reloadIcon.svg'
 import infoIcon from 'static/svg/infoIcon.svg'
 
-const GeneralInformation = () => {
+const GeneralInformation = ({ formData, setFormData }) => {
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
+
   return (
     <div className={styles.container}>
       <Input
+        id="daoAddress"
         label={'Dao Address'}
         placeholder={'DAO Address'}
         registerInput={'daoAddress'}
@@ -15,17 +23,20 @@ const GeneralInformation = () => {
         secondImage={copy}
       />
       <Input
+        id="name"
         label={'Project name'}
         placeholder={'Name'}
         registerInput={'name'}
       />
       <Input
+        id="daoSlug"
         label={'DAO slug'}
         value={'daobuilder.io/'}
         placeholder={'address'}
         registerInput={'daoSlug'}
       />
       <Input
+        id="governanceToken"
         label={'Governance token root address'}
         placeholder={'Token address'}
         className={styles.input}
@@ -33,6 +44,7 @@ const GeneralInformation = () => {
         labelIcon={infoIcon}
       />
       <Input
+        id="minStake"
         label={'Min stake for creating a proposal'}
         placeholder={'0'}
         registerInput={'minStake'}

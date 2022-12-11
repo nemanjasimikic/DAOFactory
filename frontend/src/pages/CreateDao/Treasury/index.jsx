@@ -1,6 +1,12 @@
 import styles from './styles.module.sass'
 
-const Treasury = () => {
+const Treasury = ({ formData, setFormData }) => {
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
   return (
     <div className={styles.container}>
       <p>
@@ -9,7 +15,7 @@ const Treasury = () => {
       </p>
       <label>
         Create DAO Treasury
-        <input type={'checkbox'} />
+        <input id="treasury" type={'checkbox'} onChange={onChange} />
         <span className={styles.checkmark} />
       </label>
     </div>

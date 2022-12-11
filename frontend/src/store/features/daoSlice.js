@@ -49,6 +49,33 @@ export const deployFactory = createAsyncThunk(
   }
 )
 
+export const deployDAOFromFactory = createAsyncThunk(
+  'deployDAOFromFactory',
+  async (dao, thunkAPI) => {
+    try {
+      const pending = localStorage.getItem('pending').replace(/[^\w\s]/gi, '')
+      const voting = localStorage.getItem('voting').replace(/[^\w\s]/gi, '')
+      const quorum = localStorage.getItem('quorum')
+      const queued = localStorage.getItem('queued').replace(/[^\w\s]/gi, '')
+      const threshold = localStorage.getItem('threshold')
+      const execution = localStorage
+        .getItem('execution')
+        .replace(/[^\w\s]/gi, '')
+      return await daoService.deployDAOFromFactory(
+        parseInt(pending),
+        parseInt(voting),
+        parseInt(quorum),
+        parseInt(queued),
+        parseInt(threshold),
+        parseInt(execution)
+      )
+    } catch (error) {
+      console.log('error: ', error)
+      return thunkAPI.rejectWithValue('')
+    }
+  }
+)
+
 export const daoSlice = createSlice({
   name: 'dao',
   initialState,
