@@ -23,6 +23,7 @@ const VotingConfiguration = ({ formData, setFormData }) => {
         className={styles.slider}
         onChange={onChange}
         registerInput="quorum"
+        value={formData.quorum}
       />
       <div className={styles.infoWrapper}>
         <span>Threshold</span>
@@ -33,6 +34,7 @@ const VotingConfiguration = ({ formData, setFormData }) => {
         defaultValue={0}
         registerInput={'threshold'}
         onChange={onChange}
+        value={formData.threshold}
       />
     </div>
   )

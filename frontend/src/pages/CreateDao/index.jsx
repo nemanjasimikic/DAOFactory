@@ -28,13 +28,17 @@ const CreateDao = () => {
     daoSlug: 'daoubilder.io/',
     governanceToken: '',
     minStake: 0,
-    description: '',
     quorum: 51,
     threshold: 100,
     pending: 0,
+    pendingTime: 'Hours',
     queued: 0,
+    queuedTime: 'Hours',
     voting: 0,
+    votingTime: 'Hours',
     execution: 0,
+    executionTime: 'Hours',
+    totalTime: 0,
     treasury: false,
   })
   const { dao, isError, isLoading } = useSelector((state) => state.dao)
@@ -85,7 +89,6 @@ const CreateDao = () => {
     JSON.stringify(formData.governanceToken)
   )
   localStorage.setItem('minStake', JSON.stringify(formData.minStake))
-  localStorage.setItem('description', JSON.stringify(formData.description))
   localStorage.setItem('treasury', JSON.stringify(formData.treasury))
   console.log('Form data: ', formData)
   return (
@@ -96,7 +99,7 @@ const CreateDao = () => {
           <ContentHeader title={'Create new DAO'} />
           <Form heading={FormTitles[page]}>{PageDisplay()}</Form>
         </div>
-        <CreateDaoInfo page={page} />
+        <CreateDaoInfo page={page} formData={formData} />
       </div>
       <div className={styles.formNavigation}>
         <Button
@@ -104,7 +107,11 @@ const CreateDao = () => {
           text={'Back'}
           leftArrow={leftArrow}
           onClick={() => {
-            setPage((currentPage) => currentPage - 1)
+            if (page !== 0) {
+              setPage((currentPage) => currentPage - 1)
+            } else {
+              // Add a "navigate to main page" here maybe?
+            }
           }}
         />
         <Button

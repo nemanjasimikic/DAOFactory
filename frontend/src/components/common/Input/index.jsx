@@ -29,6 +29,7 @@ const Input = ({
         className={styles.input}
         defaultValue={defaultValue}
         value={value}
+        defaultValue={defaultValue}
         type={type}
         placeholder={placeholder}
         {...register(registerInput)}

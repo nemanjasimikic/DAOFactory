@@ -36,14 +36,16 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         placeholder={'Name'}
         registerInput={'name'}
         onChange={onChange}
+        value={name}
       />
       <Input
         id="daoSlug"
         label={'DAO slug'}
-        defaultValue={'daobuilder.io/'}
         placeholder={'address'}
         registerInput={'daoSlug'}
         onChange={onChange}
+        defaultValue={'daobuilder.io/'}
+        value={formData.daoSlug}
       />
       <Input
         id="governanceToken"
@@ -53,6 +55,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         registerInput={'governanceToken'}
         labelIcon={infoIcon}
         onChange={onChange}
+        value={governanceToken}
       />
       <Input
         id="minStake"
@@ -60,6 +63,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         placeholder={'0'}
         registerInput={'minStake'}
         onChange={onChange}
+        value={minStake}
       />
       <label>Description(optional)</label>
       <textarea
