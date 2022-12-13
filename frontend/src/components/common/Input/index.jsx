@@ -10,6 +10,7 @@ const Input = ({
   firstImage,
   secondImage,
   labelIcon,
+  onChange,
 }) => {
   const { register } = useForm()
 
@@ -29,6 +30,7 @@ const Input = ({
         type={type}
         placeholder={placeholder}
         {...register(registerInput)}
+        onChange={onChange}
       />
       <img
         src={firstImage}

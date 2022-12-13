@@ -3,14 +3,17 @@ import styles from './styles.module.sass'
 import copy from 'static/svg/copy.svg'
 import reloadIcon from 'static/svg/reloadIcon.svg'
 import infoIcon from 'static/svg/infoIcon.svg'
+import { useState } from 'react'
 
-const GeneralInformation = ({ formData, setFormData }) => {
+const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
   }
+  const { daoAddress, name, daoSlug, governanceToken, minStake } = formData
+  console.log(daoAddress)
 
   return (
     <div className={styles.container}>
@@ -21,12 +24,15 @@ const GeneralInformation = ({ formData, setFormData }) => {
         registerInput={'daoAddress'}
         firstImage={reloadIcon}
         secondImage={copy}
+        onChange={onChange}
+        value={rootAddress}
       />
       <Input
         id="name"
         label={'Project name'}
         placeholder={'Name'}
         registerInput={'name'}
+        onChange={onChange}
       />
       <Input
         id="daoSlug"
@@ -34,6 +40,7 @@ const GeneralInformation = ({ formData, setFormData }) => {
         value={'daobuilder.io/'}
         placeholder={'address'}
         registerInput={'daoSlug'}
+        onChange={onChange}
       />
       <Input
         id="governanceToken"
@@ -42,15 +49,17 @@ const GeneralInformation = ({ formData, setFormData }) => {
         className={styles.input}
         registerInput={'governanceToken'}
         labelIcon={infoIcon}
+        onChange={onChange}
       />
       <Input
         id="minStake"
         label={'Min stake for creating a proposal'}
         placeholder={'0'}
         registerInput={'minStake'}
+        onChange={onChange}
       />
       <label>Description(optional)</label>
-      <textarea className={styles.textarea} />
+      <textarea className={styles.textarea} onChange={onChange} />
     </div>
   )
 }

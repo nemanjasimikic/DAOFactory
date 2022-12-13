@@ -15,7 +15,14 @@
 			"name": "deploy",
 			"inputs": [
 				{"name":"platformCode_","type":"cell"},
-				{"components":[{"name":"votingDelay","type":"uint32"},{"name":"votingPeriod","type":"uint32"},{"name":"quorumVotes","type":"uint128"},{"name":"timeLock","type":"uint32"},{"name":"threshold","type":"uint128"},{"name":"gracePeriod","type":"uint32"}],"name":"proposalConfiguration_","type":"tuple"}
+				{"components":[{"name":"votingDelay","type":"uint32"},{"name":"votingPeriod","type":"uint32"},{"name":"quorumVotes","type":"uint128"},{"name":"timeLock","type":"uint32"},{"name":"threshold","type":"uint128"},{"name":"gracePeriod","type":"uint32"}],"name":"proposalConfiguration_","type":"tuple"},
+				{"name":"name_","type":"string"},
+				{"name":"slug_","type":"string"},
+				{"name":"governanceToken_","type":"address"},
+				{"name":"minStake_","type":"uint256"},
+				{"name":"description_","type":"string"},
+				{"name":"treasury_","type":"bool"},
+				{"name":"nonce_","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"value0","type":"address"}

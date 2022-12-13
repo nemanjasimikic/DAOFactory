@@ -4,7 +4,7 @@ import daoCardLogo from 'static/svg/daoCardLogo.svg'
 import settings from 'static/svg/settings.svg'
 import linkIcon from 'static/svg/linkIcon.svg'
 
-const DaoCard = () => {
+const DaoCard = ({ daoName, description, link }) => {
   return (
     <Link className={styles.daoCardLink} to={'/balance'}>
       <div className={styles.daoCard}>
@@ -12,8 +12,8 @@ const DaoCard = () => {
           <div className={styles.daoInfoWrapper}>
             <img src={daoCardLogo} alt={'dao card logo'} />
             <div className={styles.daoInfoColumn}>
-              <h3>DAO Some Name</h3>
-              <p>ZXC</p>
+              <h3>{daoName}</h3>
+              <p>{description}</p>
             </div>
           </div>
           <Link to={'/dao-settings/general'} className={styles.settings}>
@@ -27,7 +27,7 @@ const DaoCard = () => {
             target="_blank"
             className={styles.link}
           >
-            http://daobuilder.io/productname
+            http://{link}
           </a>
           <img src={linkIcon} alt={'link icon'} />
           <p className={styles.buyDomain}>Buy domain</p>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-
+import { getAllDAOs, reset } from 'store/features/daoSlice'
+import { useSelector, useDispatch } from 'react-redux'
 import ContentHeader from 'components/common/ContentHeader'
 import Button from 'components/common/Button'
 import NoResults from 'components/NoResults'
@@ -10,6 +11,7 @@ import Table from 'components/common/Table'
 import styles from './styles.module.sass'
 
 const IsLoggedIn = () => {
+  const dispatch = useDispatch()
   const [renderTable, setRenderTable] = useState(true)
 
   const onLoadEffect = () => {
@@ -17,9 +19,20 @@ const IsLoggedIn = () => {
       setRenderTable(false)
     }, 1000)
   }
-
   useEffect(onLoadEffect, [])
 
+  const { dao, isError, isLoading } = useSelector((state) => state.dao)
+
+  useEffect(() => {
+    dispatch(getAllDAOs())
+    return () => {
+      reset()
+    }
+  }, [dao, dispatch])
+  const getAddr = JSON.parse(localStorage.getItem('daoAddresses'))
+  const getDaoList = JSON.parse(localStorage.getItem('rootData'))
+  console.log('getDaoList: ', getDaoList)
+  console.log('All DAOs in home: ', getAddr)
   const columns = [
     {
       key: 'id',
@@ -86,7 +99,13 @@ const IsLoggedIn = () => {
         <Table columns={columns} data={data} />
       ) : (
         <div className={styles.daoCardsWrapper}>
-          <DaoCard />
+          <DaoCard
+            daoName={getDaoList != null ? getDaoList[0].name : 'nema'}
+            description={
+              getDaoList != null ? getDaoList[0].description : 'nema'
+            }
+            link={getDaoList != null ? getDaoList[0].slug : 'nema'}
+          />
           <DaoCard />
           <DaoCard />
           <DaoCard />
