@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { deployFactory, deployDAOFromFactory } from 'store/features/daoSlice'
+import {
+  deployFactory,
+  deployDAOFromFactory,
+  getAllDAOs,
+  getAddressForRoot,
+} from 'store/features/daoSlice'
 import Sidebar from 'components/common/Sidebar'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
 import VotingConfiguration from 'pages/CreateDao/VotingConfiguration'
@@ -26,14 +31,24 @@ const CreateDao = () => {
     quorum: 51,
     threshold: 100,
     pending: 0,
+    pendingTime: 'Hours',
     queued: 0,
+    queuedTime: 'Hours',
     voting: 0,
+    votingTime: 'Hours',
     execution: 0,
+    executionTime: 'Hours',
+    totalTime: 0,
     treasury: false,
   })
-  const dao = useSelector((state) => state.dao)
-  useEffect(() => {}, [dao, dispatch])
-
+  const { dao, isError, isLoading } = useSelector((state) => state.dao)
+  useEffect(() => {
+    dispatch(getAddressForRoot())
+  }, [dao, dispatch])
+  const addressForRoot = JSON.parse(localStorage.getItem('daoRootAddress'))
+    ? JSON.parse(localStorage.getItem('daoRootAddress')).rootAddress
+    : ''
+  //console.log('addressForRoot: ', addressForRoot)
   const FormTitles = [
     'General information',
     'Voting configuration',
@@ -44,7 +59,11 @@ const CreateDao = () => {
   const PageDisplay = () => {
     if (page === 0) {
       return (
-        <GeneralInformation formData={formData} setFormData={setFormData} />
+        <GeneralInformation
+          formData={formData}
+          rootAddress={addressForRoot}
+          setFormData={setFormData}
+        />
       )
     } else if (page === 1) {
       return (
@@ -57,6 +76,45 @@ const CreateDao = () => {
     }
   }
 
+  formData.pendingTime === 'Hours'
+    ? localStorage.setItem('pending', JSON.stringify(formData.pending * 3600))
+    : localStorage.setItem(
+        'pending',
+        JSON.stringify(formData.pending * 3600 * 24)
+      )
+  formData.votingTime === 'Hours'
+    ? localStorage.setItem('voting', JSON.stringify(formData.voting * 3600))
+    : localStorage.setItem(
+        'voting',
+        JSON.stringify(formData.voting * 3600 * 24)
+      )
+  localStorage.setItem('quorum', JSON.stringify(formData.quorum))
+  formData.queuedTime === 'Hours'
+    ? localStorage.setItem('queued', JSON.stringify(formData.queued * 3600))
+    : localStorage.setItem(
+        'queued',
+        JSON.stringify(formData.queued * 3600 * 24)
+      )
+  localStorage.setItem('threshold', JSON.stringify(formData.threshold))
+  formData.executionTime === 'Hours'
+    ? localStorage.setItem(
+        'execution',
+        JSON.stringify(formData.execution * 3600)
+      )
+    : localStorage.setItem(
+        'execution',
+        JSON.stringify(formData.execution * 3600 * 24)
+      )
+  localStorage.setItem('daoAddress', JSON.stringify(formData.daoAddress))
+  localStorage.setItem('name', JSON.stringify(formData.name))
+  localStorage.setItem('daoSlug', JSON.stringify(formData.daoSlug))
+  localStorage.setItem(
+    'governanceToken',
+    JSON.stringify(formData.governanceToken)
+  )
+  localStorage.setItem('minStake', JSON.stringify(formData.minStake))
+  localStorage.setItem('treasury', JSON.stringify(formData.treasury))
+  //console.log('Form data: ', formData)
   return (
     <div className={styles.container}>
       <div className={styles.createDao}>
@@ -65,7 +123,7 @@ const CreateDao = () => {
           <ContentHeader title={'Create new DAO'} />
           <Form heading={FormTitles[page]}>{PageDisplay()}</Form>
         </div>
-        <CreateDaoInfo page={page} />
+        <CreateDaoInfo page={page} formData={formData} />
       </div>
       <div className={styles.formNavigation}>
         <Button
@@ -73,16 +131,27 @@ const CreateDao = () => {
           text={'Back'}
           leftArrow={leftArrow}
           onClick={() => {
-            setPage((currentPage) => currentPage - 1)
+            if (page !== 0) {
+              setPage((currentPage) => currentPage - 1)
+            } else {
+              // Add a "navigate to main page" here maybe?
+            }
           }}
         />
         <Button
-          disabled={page === 3}
+          disabled={page > 3}
           onClick={() => {
             if (page < 3) {
               setPage((currentPage) => currentPage + 1)
             } else if (page === 3) {
-              // dispatch(deployDAOFromFactory())
+              dispatch(deployFactory())
+              /*const flag = JSON.parse(localStorage.getItem('flag'))
+              console.log('flag: ', flag)
+              if (parseInt(flag) == 1) {
+                window.confirm(
+                  'Do you really want to leave? Airdrop contract will not be saved!'
+                )
+              }*/
             }
           }}
           type={'bigLightBlueBtn'}

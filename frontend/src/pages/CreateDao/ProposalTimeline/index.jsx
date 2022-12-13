@@ -1,7 +1,10 @@
 import Input from 'components/common/Input'
 import styles from './styles.module.sass'
+import { useForm } from 'react-hook-form'
 
 const ProposalTimeline = ({ formData, setFormData }) => {
+  const { register } = useForm()
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -17,8 +20,13 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           label={'Pending'}
           registerInput={'pending'}
           onChange={onChange}
+          value={formData.pending}
         />
-        <select>
+        <select
+          id="pendingTime"
+          {...register('pendingTime')}
+          onChange={onChange}
+        >
           <option>Hours</option>
           <option>Days</option>
         </select>
@@ -29,8 +37,9 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           label={'Queued'}
           registerInput={'queued'}
           onChange={onChange}
+          value={formData.queued}
         />
-        <select>
+        <select id="queuedTime" {...register('queuedTime')} onChange={onChange}>
           <option>Hours</option>
           <option>Days</option>
         </select>
@@ -41,8 +50,9 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           label={'Voting'}
           registerInput={'voting'}
           onChange={onChange}
+          value={formData.voting}
         />
-        <select>
+        <select id="votingTime" {...register('votingTime')} onChange={onChange}>
           <option>Hours</option>
           <option>Days</option>
         </select>
@@ -53,8 +63,13 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           label={'Execution'}
           registerInput={'execution'}
           onChange={onChange}
+          value={formData.execution}
         />
-        <select>
+        <select
+          id="executionTime"
+          {...register('executionTime')}
+          onChange={onChange}
+        >
           <option>Hours</option>
           <option>Days</option>
         </select>

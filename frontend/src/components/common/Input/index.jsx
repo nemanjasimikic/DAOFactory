@@ -10,6 +10,8 @@ const Input = ({
   firstImage,
   secondImage,
   labelIcon,
+  onChange,
+  defaultValue,
 }) => {
   const { register } = useForm()
 
@@ -25,10 +27,13 @@ const Input = ({
       </div>
       <input
         className={styles.input}
+        defaultValue={defaultValue}
         value={value}
+        defaultValue={defaultValue}
         type={type}
         placeholder={placeholder}
         {...register(registerInput)}
+        onChange={onChange}
       />
       <img
         src={firstImage}
