@@ -40,6 +40,7 @@ const CreateDao = () => {
     executionTime: 'Hours',
     totalTime: 0,
     treasury: false,
+    description: '',
   })
   const { dao, isError, isLoading } = useSelector((state) => state.dao)
   useEffect(() => {
@@ -114,6 +115,8 @@ const CreateDao = () => {
   )
   localStorage.setItem('minStake', JSON.stringify(formData.minStake))
   localStorage.setItem('treasury', JSON.stringify(formData.treasury))
+  localStorage.setItem('description', JSON.stringify(formData.description))
+
   //console.log('Form data: ', formData)
   return (
     <div className={styles.container}>

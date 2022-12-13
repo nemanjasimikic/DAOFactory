@@ -27,7 +27,6 @@ const Input = ({
       </div>
       <input
         className={styles.input}
-        defaultValue={defaultValue}
         value={value}
         defaultValue={defaultValue}
         type={type}

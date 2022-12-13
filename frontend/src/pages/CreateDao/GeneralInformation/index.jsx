@@ -45,7 +45,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         registerInput={'daoSlug'}
         onChange={onChange}
         defaultValue={'daobuilder.io/'}
-        value={formData.daoSlug}
+        value={daoSlug}
       />
       <Input
         id="governanceToken"
