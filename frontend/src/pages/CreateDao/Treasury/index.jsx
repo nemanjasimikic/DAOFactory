@@ -1,6 +1,8 @@
 import styles from './styles.module.sass'
+import { useForm } from 'react-hook-form'
 
 const Treasury = ({ formData, setFormData }) => {
+  const { register } = useForm()
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -15,7 +17,12 @@ const Treasury = ({ formData, setFormData }) => {
       </p>
       <label>
         Create DAO Treasury
-        <input id="treasury" type={'checkbox'} onChange={onChange} />
+        <input
+          id="treasury"
+          type={'checkbox'}
+          {...register('treasury')}
+          onChange={onChange}
+        />
         <span className={styles.checkmark} />
       </label>
     </div>

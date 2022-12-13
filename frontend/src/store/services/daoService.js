@@ -373,13 +373,16 @@ const getAllDAOs = async () => {
   console.log('Factory: ', factory)
   if (factory) {
     const daoFactoryContract = new ever.Contract(daoAbi, factory[0]._address)
+    console.log('Factory address: ', factory[0]._address)
     const daoAddresses = await daoFactoryContract.methods
       .getDeployedDAOs({})
       .call()
+    console.log('daoAddresses u getAllDAOs: ', daoAddresses)
+    console.log('duzina daoAddr: ', daoAddresses.daoAddr.length)
     for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
       const daoRootContract = new ever.Contract(
         daoRootAbi,
-        daoAddresses.daoAddr[i][1][i]._address
+        daoAddresses.daoAddr[i][1][0]._address
       )
       console.log('daoRootContract: ', daoRootContract)
       const name = await daoRootContract.methods.name({}).call()

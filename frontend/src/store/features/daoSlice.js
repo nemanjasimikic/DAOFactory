@@ -60,8 +60,9 @@ export const deployFactory = createAsyncThunk(
       )
 
       const minStake = localStorage.getItem('minStake').replace(/[^\w\s]/gi, '')
-      const description = 'lala'
-      const treasury = false
+      const description = JSON.parse(localStorage.getItem('description'))
+      const treasury =
+        JSON.parse(localStorage.getItem('treasury')) === 'on' ? true : false
 
       console.log('pending: ', pending)
       console.log('voting: ', voting)
@@ -117,8 +118,9 @@ export const deployDAOFromFactory = createAsyncThunk(
         .getItem('governanceToken')
         .replace(/[^\w\s]/gi, '')
       const minStake = localStorage.getItem('minStake').replace(/[^\w\s]/gi, '')
-      const description = 'lala'
-      const treasury = false
+      const description = JSON.parse(localStorage.getItem('description'))
+      const treasury =
+        JSON.parse(localStorage.getItem('treasury')) === 'on' ? true : false
       const address = JSON.parse(localStorage.getItem('daoAddr'))
       console.log('pending: ', pending)
       console.log('voting: ', voting)

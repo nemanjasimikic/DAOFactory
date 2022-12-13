@@ -28,6 +28,7 @@ const CreateDao = () => {
     daoSlug: 'daoubilder.io/',
     governanceToken: '',
     minStake: 0,
+    description: '',
     quorum: 51,
     threshold: 100,
     pending: 0,
@@ -84,6 +85,7 @@ const CreateDao = () => {
     JSON.stringify(formData.governanceToken)
   )
   localStorage.setItem('minStake', JSON.stringify(formData.minStake))
+  localStorage.setItem('description', JSON.stringify(formData.description))
   localStorage.setItem('treasury', JSON.stringify(formData.treasury))
   console.log('Form data: ', formData)
   return (

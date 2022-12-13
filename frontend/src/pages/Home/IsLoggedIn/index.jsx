@@ -82,6 +82,16 @@ const IsLoggedIn = () => {
       address: 'address4',
     },
   ]
+  let itemsList = []
+  getDaoList.forEach((item, index) => {
+    itemsList.push(
+      <DaoCard
+        daoName={getDaoList ? item.name : 'nema'}
+        description={getDaoList ? item.description : 'nema'}
+        link={getDaoList ? item.slug : 'nema'}
+      />
+    )
+  })
 
   return (
     <div className={styles.isLoggedIn}>
@@ -98,18 +108,7 @@ const IsLoggedIn = () => {
       {renderTable ? (
         <Table columns={columns} data={data} />
       ) : (
-        <div className={styles.daoCardsWrapper}>
-          <DaoCard
-            daoName={getDaoList != null ? getDaoList[0].name : 'nema'}
-            description={
-              getDaoList != null ? getDaoList[0].description : 'nema'
-            }
-            link={getDaoList != null ? getDaoList[0].slug : 'nema'}
-          />
-          <DaoCard />
-          <DaoCard />
-          <DaoCard />
-        </div>
+        <div className={styles.daoCardsWrapper}>{itemsList}</div>
       )}
     </div>
   )

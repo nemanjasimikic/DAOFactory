@@ -4,15 +4,18 @@ import copy from 'static/svg/copy.svg'
 import reloadIcon from 'static/svg/reloadIcon.svg'
 import infoIcon from 'static/svg/infoIcon.svg'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
+  const { register } = useForm()
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
   }
-  const { daoAddress, name, daoSlug, governanceToken, minStake } = formData
+  const { daoAddress, name, daoSlug, governanceToken, minStake, description } =
+    formData
   console.log(daoAddress)
 
   return (
@@ -37,7 +40,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
       <Input
         id="daoSlug"
         label={'DAO slug'}
-        value={'daobuilder.io/'}
+        defaultValue={'daobuilder.io/'}
         placeholder={'address'}
         registerInput={'daoSlug'}
         onChange={onChange}
@@ -59,7 +62,12 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         onChange={onChange}
       />
       <label>Description(optional)</label>
-      <textarea className={styles.textarea} onChange={onChange} />
+      <textarea
+        id="description"
+        className={styles.textarea}
+        {...register('description')}
+        onChange={onChange}
+      />
     </div>
   )
 }
