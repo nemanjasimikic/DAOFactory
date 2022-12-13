@@ -342,7 +342,7 @@ const deployDAOFromFactory = async (
     })
     .send({
       from: walletAddress,
-      amount: toNano(2, 9),
+      amount: toNano(1, 9),
       bounce: true,
     })
   return deployDao
