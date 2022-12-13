@@ -31,8 +31,8 @@ const IsLoggedIn = () => {
   }, [dao, dispatch])
   const getAddr = JSON.parse(localStorage.getItem('daoAddresses'))
   const getDaoList = JSON.parse(localStorage.getItem('rootData'))
-  console.log('getDaoList: ', getDaoList)
-  console.log('All DAOs in home: ', getAddr)
+  //console.log('getDaoList: ', getDaoList)
+  //console.log('All DAOs in home: ', getAddr)
   const columns = [
     {
       key: 'id',
@@ -83,15 +83,17 @@ const IsLoggedIn = () => {
     },
   ]
   let itemsList = []
-  getDaoList.forEach((item, index) => {
-    itemsList.push(
-      <DaoCard
-        daoName={getDaoList ? item.name : 'nema'}
-        description={getDaoList ? item.description : 'nema'}
-        link={getDaoList ? item.slug : 'nema'}
-      />
-    )
-  })
+  if (getDaoList != null) {
+    getDaoList.forEach((item, index) => {
+      itemsList.push(
+        <DaoCard
+          daoName={getDaoList ? item.name : 'nema'}
+          description={getDaoList ? item.description : 'nema'}
+          link={getDaoList ? item.slug : 'nema'}
+        />
+      )
+    })
+  }
 
   return (
     <div className={styles.isLoggedIn}>

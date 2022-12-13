@@ -48,7 +48,7 @@ const CreateDao = () => {
   const addressForRoot = JSON.parse(localStorage.getItem('daoRootAddress'))
     ? JSON.parse(localStorage.getItem('daoRootAddress')).rootAddress
     : ''
-  console.log('addressForRoot: ', addressForRoot)
+  //console.log('addressForRoot: ', addressForRoot)
   const FormTitles = [
     'General information',
     'Voting configuration',
@@ -75,12 +75,36 @@ const CreateDao = () => {
       return <Treasury formData={formData} setFormData={setFormData} />
     }
   }
-  localStorage.setItem('pending', JSON.stringify(formData.pending))
-  localStorage.setItem('voting', JSON.stringify(formData.voting))
+
+  formData.pendingTime === 'Hours'
+    ? localStorage.setItem('pending', JSON.stringify(formData.pending * 3600))
+    : localStorage.setItem(
+        'pending',
+        JSON.stringify(formData.pending * 3600 * 24)
+      )
+  formData.votingTime === 'Hours'
+    ? localStorage.setItem('voting', JSON.stringify(formData.voting * 3600))
+    : localStorage.setItem(
+        'voting',
+        JSON.stringify(formData.voting * 3600 * 24)
+      )
   localStorage.setItem('quorum', JSON.stringify(formData.quorum))
-  localStorage.setItem('queued', JSON.stringify(formData.queued))
+  formData.queuedTime === 'Hours'
+    ? localStorage.setItem('queued', JSON.stringify(formData.queued * 3600))
+    : localStorage.setItem(
+        'queued',
+        JSON.stringify(formData.queued * 3600 * 24)
+      )
   localStorage.setItem('threshold', JSON.stringify(formData.threshold))
-  localStorage.setItem('execution', JSON.stringify(formData.execution))
+  formData.executionTime === 'Hours'
+    ? localStorage.setItem(
+        'execution',
+        JSON.stringify(formData.execution * 3600)
+      )
+    : localStorage.setItem(
+        'execution',
+        JSON.stringify(formData.execution * 3600 * 24)
+      )
   localStorage.setItem('daoAddress', JSON.stringify(formData.daoAddress))
   localStorage.setItem('name', JSON.stringify(formData.name))
   localStorage.setItem('daoSlug', JSON.stringify(formData.daoSlug))
@@ -90,7 +114,7 @@ const CreateDao = () => {
   )
   localStorage.setItem('minStake', JSON.stringify(formData.minStake))
   localStorage.setItem('treasury', JSON.stringify(formData.treasury))
-  console.log('Form data: ', formData)
+  //console.log('Form data: ', formData)
   return (
     <div className={styles.container}>
       <div className={styles.createDao}>
@@ -121,6 +145,13 @@ const CreateDao = () => {
               setPage((currentPage) => currentPage + 1)
             } else if (page === 3) {
               dispatch(deployFactory())
+              /*const flag = JSON.parse(localStorage.getItem('flag'))
+              console.log('flag: ', flag)
+              if (parseInt(flag) == 1) {
+                window.confirm(
+                  'Do you really want to leave? Airdrop contract will not be saved!'
+                )
+              }*/
             }
           }}
           type={'bigLightBlueBtn'}

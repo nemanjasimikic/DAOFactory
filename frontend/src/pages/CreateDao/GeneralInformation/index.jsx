@@ -16,7 +16,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
   }
   const { daoAddress, name, daoSlug, governanceToken, minStake, description } =
     formData
-  console.log(daoAddress)
+  // console.log(daoAddress)
 
   return (
     <div className={styles.container}>
