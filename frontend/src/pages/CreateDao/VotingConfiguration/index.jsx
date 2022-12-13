@@ -15,7 +15,7 @@ const VotingConfiguration = ({ formData, setFormData }) => {
         <span>Quorum</span>
         <img src={infoIcon} alt={'info'} />
       </div>
-      <Input
+      <input
         id="quorum"
         type={'range'}
         min={1}

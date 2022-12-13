@@ -1,6 +1,17 @@
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.sass'
 
 const CreateDaoInfo = ({ page }) => {
+  const wallet = useSelector((state) => state.wallet)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (wallet.wallet === null) {
+      navigate('/')
+    }
+  }, [wallet, navigate])
   return (
     <div className={styles.container}>
       <div className={styles.infoContainer}>

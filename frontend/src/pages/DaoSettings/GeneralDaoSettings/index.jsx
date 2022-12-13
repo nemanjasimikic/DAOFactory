@@ -1,3 +1,6 @@
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import Sidebar from 'components/common/Sidebar'
 import ContentHeader from 'components/common/ContentHeader'
 import Form from 'components/common/Form'
@@ -7,6 +10,14 @@ import styles from '../styles.module.sass'
 import copy from 'static/svg/copy.svg'
 
 const GeneralDaoSettings = () => {
+  const wallet = useSelector((state) => state.wallet)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (wallet.wallet === null) {
+      navigate('/')
+    }
+  }, [wallet, navigate])
   return (
     <div className={styles.container}>
       <div className={styles.daoSettings}>
