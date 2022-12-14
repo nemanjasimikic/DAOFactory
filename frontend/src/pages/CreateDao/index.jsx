@@ -5,6 +5,7 @@ import {
   deployDAOFromFactory,
   getAllDAOs,
   getAddressForRoot,
+  validator,
 } from 'store/features/daoSlice'
 import Sidebar from 'components/common/Sidebar'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
@@ -144,17 +145,20 @@ const CreateDao = () => {
         <Button
           disabled={page > 3}
           onClick={() => {
-            if (page < 3) {
-              setPage((currentPage) => currentPage + 1)
-            } else if (page === 3) {
-              dispatch(deployFactory())
-              /*const flag = JSON.parse(localStorage.getItem('flag'))
-              console.log('flag: ', flag)
-              if (parseInt(flag) == 1) {
-                window.confirm(
-                  'Do you really want to leave? Airdrop contract will not be saved!'
-                )
-              }*/
+            if (validator(formData.governanceToken) == true) {
+              if (page < 3) {
+                setPage((currentPage) => currentPage + 1)
+              } else if (page === 3) {
+                dispatch(deployFactory())
+                /*const flag = JSON.parse(localStorage.getItem('flag'))
+                console.log('flag: ', flag)
+                if (parseInt(flag) == 1) {
+                  window.confirm(
+                    'Do you really want to leave? Airdrop contract will not be saved!'
+                  )
+                }*/
+              }
+            } else {
             }
           }}
           type={'bigLightBlueBtn'}
