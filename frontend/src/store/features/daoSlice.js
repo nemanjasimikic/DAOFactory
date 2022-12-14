@@ -15,6 +15,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   isLoading: false,
+  isDeployed: false,
 }
 
 export const getExpectedAddress = createAsyncThunk(
@@ -212,6 +213,7 @@ export const daoSlice = createSlice({
       state.isLoading = false
       state.isSuccess = false
       state.isError = false
+      state.isDeployed = false
     },
   },
   extraReducers: (builder) => {
@@ -246,30 +248,36 @@ export const daoSlice = createSlice({
       })
       .addCase(deployFactory.pending, (state) => {
         state.isLoading = true
+        state.isDeployed = false
       })
       .addCase(deployFactory.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.isDeployed = true
         state.deployValue = action.payload
         // console.log('state.dao: ', state.deployValue)
         localStorage.setItem('flag', JSON.stringify(1))
       })
       .addCase(deployFactory.rejected, (state, action) => {
         state.isLoading = false
+        state.isDeployed = false
         state.isError = true
         state.deployValue = null
       })
       .addCase(getAllDAOs.pending, (state) => {
         state.isLoading = true
+        state.isDeployed = false
       })
       .addCase(getAllDAOs.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
+        state.isDeployed = false
         state.allDAOs = action.payload
         //  console.log('state.dao: ', state.allDAOs)
       })
       .addCase(getAllDAOs.rejected, (state, action) => {
         state.isLoading = false
+        state.isDeployed = false
         state.isError = true
         state.allDAOs = null
       })

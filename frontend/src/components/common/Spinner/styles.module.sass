@@ -1,0 +1,26 @@
+.loadingSpinnerContainer
+  background-color: rgba(0, 0, 0, 0.5)
+  z-index: 5000
+  display: flex
+  justify-content: center
+  align-items: center
+  position: fixed
+  height: 100%
+  width: 100%
+
+.loadingSpinner
+  width: 64px
+  height: 64px
+  border: 8px solid
+  border-color: #000 transparent #555 transparent
+  border-radius: 50%
+  animation-name: spin
+  animation-duration: 1000ms
+  animation-iteration-count: infinite
+  animation-timing-function: linear
+
+@keyframes spin
+  from
+    transform: rotate(0deg)
+  to
+    transform: rotate(360deg)

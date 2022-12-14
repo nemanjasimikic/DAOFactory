@@ -7,6 +7,7 @@ import {
   getAllDAOs,
   getAddressForRoot,
   validator,
+  reset,
 } from 'store/features/daoSlice'
 import Sidebar from 'components/common/Sidebar'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
@@ -20,16 +21,27 @@ import CreateDaoInfo from 'components/CreateDaoInfo'
 import rightArrow from 'static/svg/rightArrow.svg'
 import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
+import Spinner from '../../components/common/Spinner'
 
 const CreateDao = () => {
   const wallet = useSelector((state) => state.wallet)
+  const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
   const navigate = useNavigate()
 
   useEffect(() => {
     if (wallet.wallet === null) {
       navigate('/')
     }
+
+    return () => {
+      reset()
+    }
   }, [wallet, navigate])
+
+  if (isDeployed) {
+    navigate('/')
+  }
+
   const dispatch = useDispatch()
   const [page, setPage] = useState(0)
   const [formData, setFormData] = useState({
@@ -52,10 +64,10 @@ const CreateDao = () => {
     treasury: false,
     description: '',
   })
-  const { dao, isError, isLoading } = useSelector((state) => state.dao)
   useEffect(() => {
     dispatch(getAddressForRoot())
   }, [dao, dispatch])
+
   const addressForRoot = JSON.parse(localStorage.getItem('daoRootAddress'))
     ? JSON.parse(localStorage.getItem('daoRootAddress')).rootAddress
     : ''
@@ -128,8 +140,10 @@ const CreateDao = () => {
   localStorage.setItem('description', JSON.stringify(formData.description))
 
   //console.log('Form data: ', formData)
+
   return (
     <div className={styles.container}>
+      {isLoading && <Spinner />}
       <div className={styles.createDao}>
         <Sidebar page={page} setPage={setPage} />
         <div className={styles.createDaoContent}>
@@ -172,7 +186,7 @@ const CreateDao = () => {
           }}
           type={'bigLightBlueBtn'}
           rightArrow={page < 3 ? rightArrow : ''}
-          text={page < 3 ? 'Next' : 'Create DAO'}
+          text={page < 3 ? 'Next' : 'Create Dao'}
         />
       </div>
     </div>

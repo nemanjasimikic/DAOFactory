@@ -17,7 +17,7 @@ const IsLoggedIn = () => {
   const onLoadEffect = () => {
     setTimeout(() => {
       setRenderTable(false)
-    }, 1000)
+    }, 3000)
   }
   useEffect(onLoadEffect, [])
 
