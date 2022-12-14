@@ -154,20 +154,60 @@ const CreateDao = () => {
         <Button
           disabled={page > 3}
           onClick={() => {
-            if (validator(formData.governanceToken) == true) {
-              if (page < 3) {
-                setPage((currentPage) => currentPage + 1)
-              } else if (page === 3) {
-                dispatch(deployFactory())
-                /*const flag = JSON.parse(localStorage.getItem('flag'))
+            if (page < 3) {
+              if (page === 0) {
+                let valid1 = validator(
+                  formData.governanceToken,
+                  page,
+                  'governanceToken'
+                )
+                let valid2 = validator(formData.name, page, 'name')
+                let valid3 = validator(formData.minStake, page, 'minStake')
+                // console.log(valid1, valid2, valid3)
+                if (valid1 && valid2 && valid3) {
+                  setPage((currentPage) => currentPage + 1)
+                }
+              } else if (page === 1) {
+                let valid1 = validator(formData.threshold, page, 'threshold')
+                if (valid1) {
+                  setPage((currentPage) => currentPage + 1)
+                }
+              } else if (page === 2) {
+                let valid1 = validator(
+                  formData.pending,
+                  page,
+                  formData.pendingTime
+                )
+                let valid2 = validator(
+                  formData.queued,
+                  page,
+                  formData.queuedTime
+                )
+                let valid3 = validator(
+                  formData.voting,
+                  page,
+                  formData.votingTime
+                )
+                let valid4 = validator(
+                  formData.execution,
+                  page,
+                  formData.executionTime
+                )
+                if (valid1 && valid2 && valid3 && valid4) {
+                  setPage((currentPage) => currentPage + 1)
+                }
+              }
+
+              // setPage((currentPage) => currentPage + 1)
+            } else if (page === 3) {
+              dispatch(deployFactory())
+              /*const flag = JSON.parse(localStorage.getItem('flag'))
                 console.log('flag: ', flag)
                 if (parseInt(flag) == 1) {
                   window.confirm(
                     'Do you really want to leave? Airdrop contract will not be saved!'
                   )
                 }*/
-              }
-            } else {
             }
           }}
           type={'bigLightBlueBtn'}

@@ -7,16 +7,17 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
-  const { register } = useForm()
+  const { register, handleSubmit } = useForm()
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
+    // console.log('logged')
   }
+
   const { daoAddress, name, daoSlug, governanceToken, minStake, description } =
     formData
-  // console.log(daoAddress)
 
   return (
     <div className={styles.container}>

@@ -1,5 +1,6 @@
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
+import { validator } from 'store/features/daoSlice'
 
 const Input = ({
   label,
@@ -12,8 +13,27 @@ const Input = ({
   labelIcon,
   onChange,
   defaultValue,
+  onSubmit,
 }) => {
   const { register } = useForm()
+
+  // console.log(registerInput)
+
+  let color = 'red'
+
+  const validatorMain = () => {
+    // return value ? null : 'This is a required field *'
+    if (!value) {
+      return 'This is a required field *'
+    } else if (registerInput == 'governanceToken') {
+      if (validator(value) == true) {
+        return null
+      } else {
+        // color = 'red'
+        return validator(value)
+      }
+    }
+  }
 
   return (
     <div className={styles.inputWrapper}>
@@ -44,6 +64,10 @@ const Input = ({
         onError={(event) => (event.target.src = '')}
         className={styles.inputIconTwo}
       />
+
+      {/* <p style={{ marginTop: '-0.75rem', color: color, fontSize: '14px' }}>
+        {validatorMain()}
+      </p> */}
     </div>
   )
 }
