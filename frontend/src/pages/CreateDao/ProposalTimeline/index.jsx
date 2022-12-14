@@ -23,7 +23,6 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           value={formData.pending}
         />
         <select
-          // style={{ marginTop: '-0.9rem' }}
           id="pendingTime"
           {...register('pendingTime')}
           onChange={onChange}
@@ -40,12 +39,7 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           onChange={onChange}
           value={formData.queued}
         />
-        <select
-          // style={{ marginTop: '-0.8rem' }}
-          id="queuedTime"
-          {...register('queuedTime')}
-          onChange={onChange}
-        >
+        <select id="queuedTime" {...register('queuedTime')} onChange={onChange}>
           <option>Hours</option>
           <option>Days</option>
         </select>
@@ -58,12 +52,7 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           onChange={onChange}
           value={formData.voting}
         />
-        <select
-          // style={{ marginTop: '-0.9rem' }}
-          id="votingTime"
-          {...register('votingTime')}
-          onChange={onChange}
-        >
+        <select id="votingTime" {...register('votingTime')} onChange={onChange}>
           <option>Hours</option>
           <option>Days</option>
         </select>
@@ -77,7 +66,6 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           value={formData.execution}
         />
         <select
-          // style={{ marginTop: '-0.8rem' }}
           id="executionTime"
           {...register('executionTime')}
           onChange={onChange}
