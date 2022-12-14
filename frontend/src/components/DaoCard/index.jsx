@@ -4,7 +4,7 @@ import daoCardLogo from 'static/svg/daoCardLogo.svg'
 import settings from 'static/svg/settings.svg'
 import linkIcon from 'static/svg/linkIcon.svg'
 
-const DaoCard = ({ daoName, description, link }) => {
+const DaoCard = ({ daoName, description, link, id }) => {
   return (
     <Link className={styles.daoCardLink} to={'/balance'}>
       <div className={styles.daoCard}>
@@ -16,7 +16,7 @@ const DaoCard = ({ daoName, description, link }) => {
               <p>{description}</p>
             </div>
           </div>
-          <Link to={'/dao-settings/general'} className={styles.settings}>
+          <Link to={`/dao-settings/general/${id}`} className={styles.settings}>
             <img src={settings} alt={'settings'} />
             <p>Settings</p>
           </Link>

@@ -87,6 +87,7 @@ const IsLoggedIn = () => {
     getDaoList.forEach((item, index) => {
       itemsList.push(
         <DaoCard
+          id={getDaoList ? index : 'nema'}
           daoName={getDaoList ? item.name : 'nema'}
           description={getDaoList ? item.description : 'nema'}
           link={getDaoList ? item.slug : 'nema'}

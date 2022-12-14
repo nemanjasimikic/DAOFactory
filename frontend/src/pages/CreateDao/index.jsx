@@ -64,10 +64,10 @@ const CreateDao = () => {
     treasury: false,
     description: '',
   })
+
   useEffect(() => {
     dispatch(getAddressForRoot())
   }, [dao, dispatch])
-
   const addressForRoot = JSON.parse(localStorage.getItem('daoRootAddress'))
     ? JSON.parse(localStorage.getItem('daoRootAddress')).rootAddress
     : ''
@@ -84,7 +84,7 @@ const CreateDao = () => {
       return (
         <GeneralInformation
           formData={formData}
-          rootAddress={addressForRoot}
+          rootAddress={dao.addressForRoot}
           setFormData={setFormData}
         />
       )

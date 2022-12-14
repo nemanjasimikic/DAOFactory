@@ -6,12 +6,14 @@ const topupV = JSON.parse(localStorage.getItem('topup'))
 const deployValue = JSON.parse(localStorage.getItem('topup'))
 const allDAOs = JSON.parse(localStorage.getItem('daoAddresses'))
 const addressForRoot = JSON.parse(localStorage.getItem('daoRootAddress'))
+const setUpdate = ''
 const initialState = {
   dao: dao ? dao : null,
   topupV: topupV ? topupV : null,
   deployValue: deployValue ? deployValue : null,
   allDAOs: allDAOs ? allDAOs : null,
   addressForRoot: addressForRoot ? addressForRoot.rootAddress : null,
+  setUpdate: setUpdate ? setUpdate : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -205,6 +207,18 @@ export const getAddressForRoot = createAsyncThunk(
     }
   }
 )
+
+export const setSettingsChanges = createAsyncThunk(
+  'setSettingsChanges',
+  async (dao, thunkAPI) => {
+    try {
+      return await daoService.setSettingsChanges()
+    } catch (error) {
+      console.log('setSettingsChanges error: ', error)
+      return thunkAPI.rejectWithValue('')
+    }
+  }
+)
 export const daoSlice = createSlice({
   name: 'dao',
   initialState,
@@ -294,6 +308,20 @@ export const daoSlice = createSlice({
         state.isLoading = false
         state.isError = true
         state.addressForRoot = null
+      })
+      .addCase(setSettingsChanges.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(setSettingsChanges.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.setUpdate = action.payload
+        console.log('state.setUpdate: ', state.setUpdate)
+      })
+      .addCase(setSettingsChanges.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.setUpdate = null
       })
   },
 })

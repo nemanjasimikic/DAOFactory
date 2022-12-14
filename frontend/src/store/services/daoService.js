@@ -408,6 +408,20 @@ const getAllDAOs = async () => {
   }
 }
 
+const setSettingsChanges = async (name, slug, description, id) => {
+  const factory = getFactory()
+  const daoFactoryContract = new ever.Contract(daoAbi, factory[0]._address)
+  // console.log('Factory address: ', factory[0]._address)
+  const daoAddresses = await daoFactoryContract.methods
+    .getDeployedDAOs({})
+    .call()
+  const daoRootAddress = daoAddresses.daoAddr.find(
+    (address) => id == daoAddresses.daoAddr.indexOf()
+  )
+  console.log(daoRootAddress)
+  return daoRootAddress
+}
+
 const daoService = {
   getExpectedAddress,
   topup,
@@ -416,6 +430,7 @@ const daoService = {
   getFactory,
   getAllDAOs,
   getAddressForRoot,
+  setSettingsChanges,
 }
 
 export default daoService
