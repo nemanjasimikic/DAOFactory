@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import {
   deployFactory,
   deployDAOFromFactory,
@@ -21,6 +22,14 @@ import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
 
 const CreateDao = () => {
+  const wallet = useSelector((state) => state.wallet)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (wallet.wallet === null) {
+      navigate('/')
+    }
+  }, [wallet, navigate])
   const dispatch = useDispatch()
   const [page, setPage] = useState(0)
   const [formData, setFormData] = useState({
