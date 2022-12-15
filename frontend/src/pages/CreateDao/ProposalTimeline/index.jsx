@@ -12,6 +12,21 @@ const ProposalTimeline = ({ formData, setFormData }) => {
     }))
   }
 
+  const onReset = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      pending: 0,
+      pendingTime: 'Hours',
+      queued: 0,
+      queuedTime: 'Hours',
+      voting: 0,
+      votingTime: 'Hours',
+      execution: 0,
+      executionTime: 'Hours',
+      totalTime: 0,
+    }))
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.selectWrapper}>
@@ -25,6 +40,7 @@ const ProposalTimeline = ({ formData, setFormData }) => {
         <select
           id="pendingTime"
           {...register('pendingTime')}
+          value={formData.pendingTime}
           onChange={onChange}
         >
           <option>Hours</option>
@@ -39,7 +55,12 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           onChange={onChange}
           value={formData.queued}
         />
-        <select id="queuedTime" {...register('queuedTime')} onChange={onChange}>
+        <select 
+          id="queuedTime" 
+          {...register('queuedTime')} 
+          value={formData.queuedTime}
+          onChange={onChange}
+          >
           <option>Hours</option>
           <option>Days</option>
         </select>
@@ -52,7 +73,11 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           onChange={onChange}
           value={formData.voting}
         />
-        <select id="votingTime" {...register('votingTime')} onChange={onChange}>
+        <select 
+          id="votingTime" 
+          {...register('votingTime')}
+          value={formData.votingTime}
+          onChange={onChange}>
           <option>Hours</option>
           <option>Days</option>
         </select>
@@ -68,13 +93,14 @@ const ProposalTimeline = ({ formData, setFormData }) => {
         <select
           id="executionTime"
           {...register('executionTime')}
+          value={formData.executionTime}
           onChange={onChange}
         >
           <option>Hours</option>
           <option>Days</option>
         </select>
       </div>
-      <label>Reset timeline</label>
+      <label onClick={onReset}>Reset timeline</label>
     </div>
   )
 }

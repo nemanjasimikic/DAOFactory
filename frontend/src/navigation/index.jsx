@@ -8,10 +8,12 @@ import Balance from 'pages/Balance'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import MobileFooter from 'components/Footer/MobileFooter'
+import ScrollToTop from 'components/ScrollToTop'
 
 const Navigation = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
