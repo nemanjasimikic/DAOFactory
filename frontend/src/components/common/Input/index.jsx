@@ -24,34 +24,6 @@ const Input = ({
     shouldUseNativeValidation: true,
   })
 
-  // To be moved to new file, and edited
-  let color = 'red'
-  function styling(what, param) {
-    if (
-      what == 'queued' ||
-      what == 'pending' ||
-      what == 'voting' ||
-      what == 'execution'
-    ) {
-      if (param == 'position') {
-        return 'absolute'
-      } else {
-        return '0'
-      }
-    } else {
-      if (param == 'position') {
-        return 'relative'
-      } else if (param == 'bottom') {
-        return null
-      } else if (param == 'marginT') {
-        return '-0.80rem'
-      } else if (param == 'marginB') {
-        return '0.80rem'
-      }
-      return 'relative'
-    }
-  }
-
   const validatorMain = () => {
     // return value ? null : 'This is a required field *'
     if (!value) {
@@ -98,19 +70,7 @@ const Input = ({
         onError={(event) => (event.target.src = '')}
         className={styles.inputIconTwo}
       />
-
-      <span
-        style={{
-          position: styling(registerInput, 'position'),
-          bottom: styling(registerInput, 'bottom'),
-          marginTop: styling(registerInput, 'marginT'),
-          marginBottom: styling(registerInput, 'marginB'),
-          color: color,
-          fontSize: '14px',
-        }}
-      >
-        {validatorMain()}
-      </span>
+      <span>{validatorMain()}</span>
     </div>
   )
 }

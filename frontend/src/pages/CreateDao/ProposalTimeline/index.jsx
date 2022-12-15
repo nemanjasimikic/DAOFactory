@@ -91,6 +91,7 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           value={formData.execution}
         />
         <select
+          className={styles.selectOption}
           id="executionTime"
           {...register('executionTime')}
           value={formData.executionTime}
