@@ -7,12 +7,14 @@ const deployValue = JSON.parse(localStorage.getItem('topup'))
 const allDAOs = JSON.parse(localStorage.getItem('daoAddresses'))
 const addressForRoot = JSON.parse(localStorage.getItem('daoRootAddress'))
 const setUpdate = ''
+const factoryAddress = ''
 const initialState = {
   dao: dao ? dao : null,
   topupV: topupV ? topupV : null,
   deployValue: deployValue ? deployValue : null,
   allDAOs: allDAOs ? allDAOs : null,
   addressForRoot: addressForRoot ? addressForRoot.rootAddress : null,
+  factoryAddress: factoryAddress ? factoryAddress : null,
   setUpdate: setUpdate ? setUpdate : null,
   isError: false,
   isSuccess: false,
@@ -180,6 +182,20 @@ export const deployDAOFromFactory = createAsyncThunk(
   }
 )
 
+export const getFactory = createAsyncThunk(
+  'getFactory',
+  async (dao, thunkAPI) => {
+    try {
+      const getDao = await daoService.getFactory()
+      //  console.log('get dao: ', getDao)
+      return getDao
+    } catch (error) {
+      console.log('getFactory error: ', error)
+      return thunkAPI.rejectWithValue('')
+    }
+  }
+)
+
 export const getAllDAOs = createAsyncThunk(
   'getAllDAOs',
   async (dao, thunkAPI) => {
@@ -278,6 +294,20 @@ export const daoSlice = createSlice({
         state.isError = true
         state.deployValue = null
       })
+      .addCase(getFactory.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getFactory.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.factoryAddress = action.payload
+        console.log('state.dao: ', state.factoryAddress)
+      })
+      .addCase(getFactory.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.deployValue = null
+      })
       .addCase(getAllDAOs.pending, (state) => {
         state.isLoading = true
         state.isDeployed = false
@@ -309,7 +339,7 @@ export const daoSlice = createSlice({
         state.isError = true
         state.addressForRoot = null
       })
-      .addCase(setSettingsChanges.pending, (state) => {
+    /*.addCase(setSettingsChanges.pending, (state) => {
         state.isLoading = true
       })
       .addCase(setSettingsChanges.fulfilled, (state, action) => {
@@ -322,7 +352,7 @@ export const daoSlice = createSlice({
         state.isLoading = false
         state.isError = true
         state.setUpdate = null
-      })
+      })*/
   },
 })
 

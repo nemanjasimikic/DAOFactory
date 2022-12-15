@@ -259,6 +259,16 @@
 			]
 		},
 		{
+			"name": "updateDetails",
+			"inputs": [
+				{"name":"name_","type":"string"},
+				{"name":"slug_","type":"string"},
+				{"name":"description_","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "encodeDaoEthereumActionData",
 			"inputs": [
 				{"name":"gasBackWid","type":"int8"},
