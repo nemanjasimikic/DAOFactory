@@ -16,7 +16,6 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
   }
   const { daoAddress, name, daoSlug, governanceToken, minStake, description } =
     formData
-  // console.log(daoAddress)
 
   return (
     <div className={styles.container}>
@@ -35,8 +34,10 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         label={'Project name'}
         placeholder={'Name'}
         registerInput={'name'}
+        defaultValue={'DAO name'}
         onChange={onChange}
         value={name}
+        required={true}
       />
       <Input
         id="daoSlug"
@@ -53,17 +54,21 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         placeholder={'Token address'}
         className={styles.input}
         registerInput={'governanceToken'}
+        defaultValue={'0:000..'}
         labelIcon={infoIcon}
         onChange={onChange}
         value={governanceToken}
+        required={true}
       />
       <Input
         id="minStake"
         label={'Min stake for creating a proposal'}
         placeholder={'0'}
+        defaultValue={'1'}
         registerInput={'minStake'}
         onChange={onChange}
         value={minStake}
+        required={true}
       />
       <label>Description(optional)</label>
       <textarea

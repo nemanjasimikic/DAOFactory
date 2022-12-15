@@ -103,20 +103,58 @@ export const deployFactory = createAsyncThunk(
   }
 )
 
-export const validator = (tokenAddress) => {
-  // console.log(tokenAddress)
-  // console.log(tokenAddress.length)
+export const validator = (data, page, what) => {
   let error = false
-  if (tokenAddress.length < 66) {
-    console.log('Error: Address too short')
-    error = true
-    alert('Governance token is not valid. Address too short!')
-    return 'Error: Address too short'
-  } else if (!tokenAddress.includes(':')) {
-    console.log('Error: Address missing colon')
-    error = true
-    alert('Governance token is not valid. Address missing colon!')
-    return 'Error: Address missing colon'
+
+  // Page 1
+  if (page == 0) {
+    // Check to see if name is filled
+    if (what === 'name') {
+      if (!data || !data.replace(/\s/g, '').length) {
+        error = true
+      } else {
+        error = false
+      }
+    } else if (what === 'governanceToken') {
+      if (data.length < 66) {
+        console.log('Error: Address too short')
+        error = true
+        // alert('Governance token is not valid. Address too short!')
+        return 'Error: Address too short'
+      } else if (!data.includes(':')) {
+        console.log('Error: Address missing colon')
+        error = true
+        // alert('Governance token is not valid. Address missing colon!')
+        return 'Error: Address missing colon'
+      }
+    } else if (what === 'minStake') {
+      if (data && data != 0 && !isNaN(data)) {
+        error = false
+      } else {
+        error = true
+      }
+    }
+
+    // Page 2
+  } else if (page == 1) {
+    if (
+      what === 'threshold' &&
+      parseInt(data) > 9999 &&
+      parseInt(data) < 7000001
+    ) {
+      error = false
+    } else {
+      error = true
+    }
+
+    // Page 3
+  } else if (page == 2) {
+    var multiplier = what == 'Hours' ? 1 : 24
+    if (data * multiplier >= 24 && data * multiplier <= 720 && !isNaN(data)) {
+      error = false
+    } else {
+      error = true
+    }
   }
 
   if (!error) {

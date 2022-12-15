@@ -22,11 +22,15 @@ import rightArrow from 'static/svg/rightArrow.svg'
 import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
 import Spinner from '../../components/common/Spinner'
+import { useForm } from 'react-hook-form'
 
 const CreateDao = () => {
   const wallet = useSelector((state) => state.wallet)
   const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
   const navigate = useNavigate()
+
+  const { handleSubmit } = useForm()
+  // const onSubmit = (data, e) => console.log(data, e)
 
   useEffect(() => {
     if (wallet.wallet === null) {
@@ -149,7 +153,10 @@ const CreateDao = () => {
         <Sidebar page={page} setPage={setPage} />
         <div className={styles.createDaoContent}>
           <ContentHeader title={'Create new DAO'} />
-          <Form heading={FormTitles[page]}>{PageDisplay()}</Form>
+          {/* // TODO: */}
+          <Form handleSubmit={handleSubmit} heading={FormTitles[page]}>
+            {PageDisplay()}
+          </Form>
         </div>
         <CreateDaoInfo page={page} formData={formData} />
       </div>
@@ -176,15 +183,6 @@ const CreateDao = () => {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {
                 dispatch(deployFactory())
-                /*const flag = JSON.parse(localStorage.getItem('flag'))
-                console.log('flag: ', flag)
-                if (parseInt(flag) == 1) {
-                  window.confirm(
-                    'Do you really want to leave? Airdrop contract will not be saved!'
-                  )
-                }*/
-              }
-            } else {
             }
           }}
           style={'bigLightBlueBtn'}
