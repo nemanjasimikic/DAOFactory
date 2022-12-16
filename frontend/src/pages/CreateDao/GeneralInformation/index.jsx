@@ -22,7 +22,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
     <div className={styles.container}>
       <Input
         id="daoAddress"
-        label={'Dao Address'}
+        label={'DAO Address'}
         placeholder={'DAO Address'}
         registerInput={'daoAddress'}
         firstImage={reloadIcon}

@@ -23,14 +23,18 @@ const DaoCard = ({ daoName, description, link }) => {
         </div>
         <div className={styles.daoCardBottomRow}>
           <a
-            href="https://daobuilder.io/productname"
+            href={`http://${link}`}
             target="_blank"
             className={styles.link}
           >
             http://{link}
           </a>
           <img src={linkIcon} alt={'link icon'} />
-          <p className={styles.buyDomain}>Buy domain</p>
+          <a 
+            href="#"
+            target="_blank"
+            className={styles.buyDomain}>Buy domain
+          </a>
         </div>
       </div>
     </Link>

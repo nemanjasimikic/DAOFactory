@@ -26,7 +26,7 @@ const GeneralDaoSettings = () => {
           <ContentHeader title={'DAO settings'} />
           <Form heading={'General'}>
             <Input
-              label={'Dao Address'}
+              label={'DAO Address'}
               placeholder={'DAO Address'}
               registerInput={'daoAddress'}
               firstImage={copy}
