@@ -20,7 +20,7 @@ const IsLoggedOut = ({ wallet }) => {
       <h1>The simplest way to manage your own DAO</h1>
       <h3>Connect your wallet to create a DAO or manage existing one</h3>
       <Button
-        type={'bigLightBlueBtn'}
+        style={'bigLightBlueBtn'}
         text={'Connect wallet'}
         onClick={() => dispatch(login())}
       />

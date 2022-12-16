@@ -154,11 +154,11 @@ const CreateDao = () => {
       </div>
       <div className={styles.formNavigation}>
         <Button
-          type={'transparentBtn'}
+          style={'transparentBtn'}
           text={'Back'}
           leftArrow={leftArrow}
           onClick={() => {
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0)
             if (page !== 0) {
               setPage((currentPage) => currentPage - 1)
             } else {
@@ -169,7 +169,7 @@ const CreateDao = () => {
         <Button
           disabled={page > 3}
           onClick={() => {
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0)
             if (validator(formData.governanceToken) == true) {
               if (page < 3) {
                 setPage((currentPage) => currentPage + 1)
@@ -186,7 +186,7 @@ const CreateDao = () => {
             } else {
             }
           }}
-          type={'bigLightBlueBtn'}
+          style={'bigLightBlueBtn'}
           rightArrow={page < 3 ? rightArrow : ''}
           text={page < 3 ? 'Next' : 'Create Dao'}
         />

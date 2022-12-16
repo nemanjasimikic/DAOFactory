@@ -31,10 +31,10 @@ const OwnershipDaoSettings = () => {
             registerInput={'ownerAddress'}
             type={'email'}
           />
-          <Button type={'primaryBtn'} text={'Transfer'} />
+          <Button style={'primaryBtn'} text={'Transfer'} />
           <div className={styles.line} />
 
-          <Button type={'primaryBtn'} text={'Transfer to Black Hole'} />
+          <Button style={'primaryBtn'} text={'Transfer to Black Hole'} />
         </div>
       </div>
     </div>

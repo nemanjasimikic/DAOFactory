@@ -37,7 +37,7 @@ const Navbar = () => {
       {wallet.wallet === null ? (
         <Button
           text={'Connect wallet'}
-          type={'primaryBtn'}
+          style={'primaryBtn'}
           onClick={() => dispatch(login())}
         />
       ) : (

@@ -101,9 +101,9 @@ const IsLoggedIn = () => {
       <ContentHeader title={'Your DAOs'}>
         <div className={styles.buttonWrapper}>
           <Link to={'/create-dao'}>
-            <Button type={'lightBlueBtn'} text={'Create new DAO'} />
+            <Button style={'lightBlueBtn'} text={'Create new DAO'} />
           </Link>
-          <Button type={'primaryBtn'} text={'Add existing DAO'} />
+          <Button style={'primaryBtn'} text={'Add existing DAO'} />
         </div>
       </ContentHeader>
       {/*<NoResults />*/}

@@ -29,7 +29,7 @@ const Sidebar = ({ page, setPage }) => {
   return (
     <div className={styles.sidebar}>
       <Link to={'/'} className={styles.backButton}>
-        <Button type={'transparentBtn'} text={'Back'} leftArrow={leftArrow} />
+        <Button style={'transparentBtn'} text={'Back'} leftArrow={leftArrow} />
       </Link>
       {location.pathname === '/create-dao' ? (
         <Breadcrumbs page={page} setPage={setPage} />

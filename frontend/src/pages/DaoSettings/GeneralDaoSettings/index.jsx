@@ -43,7 +43,7 @@ const GeneralDaoSettings = () => {
             />
             <label>Description(optional)</label>
             <textarea />
-            <Button type={'bigLightBlueBtn'} text={'Save changes'} />
+            <Button style={'bigLightBlueBtn'} text={'Save changes'} />
           </Form>
         </div>
       </div>

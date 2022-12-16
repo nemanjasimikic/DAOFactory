@@ -18,7 +18,7 @@ const MobileFooter = () => {
             <div className={styles.buttonWrapper}>
               <Link>
                 <Button
-                  type={'primaryBtn'}
+                  style={'primaryBtn'}
                   text={'Install Crystal Wallet'}
                   width={'184px'}
                   marginLeft={'12px'}
@@ -26,7 +26,7 @@ const MobileFooter = () => {
               </Link>
               <Link>
                 <Button
-                  type={'secondaryBtn'}
+                  style={'secondaryBtn'}
                   text={'Source code on Github'}
                   width={'184px'}
                   marginLeft={'12px'}

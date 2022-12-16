@@ -55,10 +55,10 @@ const Footer = () => {
           </div>
           <div className={styles.buttonWrapper}>
             <Link>
-              <Button type={'primaryBtn'} text={'Install Crystal Wallet'} />
+              <Button style={'primaryBtn'} text={'Install Crystal Wallet'} />
             </Link>
             <Link>
-              <Button type={'secondaryBtn'} text={'Source code on Github'} />
+              <Button style={'secondaryBtn'} text={'Source code on Github'} />
             </Link>
           </div>
         </div>

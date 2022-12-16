@@ -15,7 +15,7 @@ const renderLoggedOutBalance = () => {
     <div className={styles.noResultsContainer}>
       <h3>Connect EVER Wallet Extension </h3>
       <p>It is necessary to access your veQUBE balance</p>
-      <Button type={'lightBlueBtn'} text={'Connect EVER Wallet'} />
+      <Button style={'lightBlueBtn'} text={'Connect EVER Wallet'} />
     </div>
   )
 }
@@ -23,9 +23,7 @@ const NoResults = () => {
   const location = useLocation()
   return (
     <div className={styles.render}>
-      {location.pathname === '/'
-        ? renderNoDao()
-        : renderLoggedOutBalance()}
+      {location.pathname === '/' ? renderNoDao() : renderLoggedOutBalance()}
     </div>
   )
 }
