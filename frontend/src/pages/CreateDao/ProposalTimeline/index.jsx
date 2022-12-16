@@ -15,15 +15,15 @@ const ProposalTimeline = ({ formData, setFormData }) => {
   const onReset = () => {
     setFormData((prevState) => ({
       ...prevState,
-      pending: 0,
+      pending: 24,
       pendingTime: 'Hours',
-      queued: 0,
+      queued: 24,
       queuedTime: 'Hours',
-      voting: 0,
+      voting: 24,
       votingTime: 'Hours',
-      execution: 0,
+      execution: 24,
       executionTime: 'Hours',
-      totalTime: 0,
+      totalTime: 96,
     }))
   }
 
@@ -55,12 +55,12 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           onChange={onChange}
           value={formData.queued}
         />
-        <select 
-          id="queuedTime" 
-          {...register('queuedTime')} 
+        <select
+          id="queuedTime"
+          {...register('queuedTime')}
           value={formData.queuedTime}
           onChange={onChange}
-          >
+        >
           <option>Hours</option>
           <option>Days</option>
         </select>
@@ -73,11 +73,12 @@ const ProposalTimeline = ({ formData, setFormData }) => {
           onChange={onChange}
           value={formData.voting}
         />
-        <select 
-          id="votingTime" 
+        <select
+          id="votingTime"
           {...register('votingTime')}
           value={formData.votingTime}
-          onChange={onChange}>
+          onChange={onChange}
+        >
           <option>Hours</option>
           <option>Days</option>
         </select>

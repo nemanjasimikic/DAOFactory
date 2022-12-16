@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { validator } from 'helpers/formValidator'
 
 const Input = ({
+  buttons,
   label,
   placeholder,
   value,
@@ -66,6 +67,9 @@ const Input = ({
     }
   }
 
+  console.log('firstimage', firstImage)
+  console.log('secondimage', secondImage)
+
   return (
     <div className={styles.inputWrapper}>
       <div className={styles.labelWrapper}>
@@ -87,7 +91,7 @@ const Input = ({
         onChange={onChange}
         disabled={disabled}
       />
-      <img
+      {/* <img
         src={firstImage}
         onError={(event) => (event.target.src = '')}
         className={styles.inputIconOne}
@@ -96,7 +100,8 @@ const Input = ({
         src={secondImage}
         onError={(event) => (event.target.src = '')}
         className={styles.inputIconTwo}
-      />
+      /> */}
+      {buttons}
       <span
         style={{
           position: styling(registerInput, 'position'),

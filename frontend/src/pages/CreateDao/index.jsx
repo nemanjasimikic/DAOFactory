@@ -64,7 +64,7 @@ const CreateDao = () => {
     votingTime: 'Hours',
     execution: 24,
     executionTime: 'Hours',
-    totalTime: 0,
+    totalTime: 96,
     treasury: false,
     description: '',
   })
