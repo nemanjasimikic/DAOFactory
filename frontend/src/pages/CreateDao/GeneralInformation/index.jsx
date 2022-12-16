@@ -54,7 +54,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         placeholder={'Token address'}
         className={styles.input}
         registerInput={'governanceToken'}
-        defaultValue={'0:000..'}
+        // defaultValue={'0:000..'}
         labelIcon={infoIcon}
         onChange={onChange}
         value={governanceToken}
@@ -64,7 +64,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         id="minStake"
         label={'Min stake for creating a proposal'}
         placeholder={'0'}
-        defaultValue={'1'}
+        // defaultValue={'1'}
         registerInput={'minStake'}
         onChange={onChange}
         value={minStake}

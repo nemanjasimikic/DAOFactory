@@ -6,7 +6,6 @@ import {
   deployDAOFromFactory,
   getAllDAOs,
   getAddressForRoot,
-  validator,
   reset,
 } from 'store/features/daoSlice'
 import Sidebar from 'components/common/Sidebar'
@@ -23,6 +22,7 @@ import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
 import Spinner from '../../components/common/Spinner'
 import { useForm } from 'react-hook-form'
+import { validator } from 'helpers/formValidator'
 
 const CreateDao = () => {
   const wallet = useSelector((state) => state.wallet)
@@ -50,19 +50,19 @@ const CreateDao = () => {
   const [page, setPage] = useState(0)
   const [formData, setFormData] = useState({
     daoAddress: '',
-    name: '',
+    name: 'DAO name',
     daoSlug: 'daoubilder.io/',
     governanceToken: '',
-    minStake: 0,
+    minStake: 1,
     quorum: 51,
-    threshold: 100,
-    pending: 0,
+    threshold: 10000,
+    pending: 24,
     pendingTime: 'Hours',
-    queued: 0,
+    queued: 24,
     queuedTime: 'Hours',
-    voting: 0,
+    voting: 24,
     votingTime: 'Hours',
-    execution: 0,
+    execution: 24,
     executionTime: 'Hours',
     totalTime: 0,
     treasury: false,
