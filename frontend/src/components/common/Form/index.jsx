@@ -4,8 +4,6 @@ import styles from './styles.module.sass'
 const Form = ({ children, heading, handleSubmit }) => {
   const onSubmit = () => {
     // async request which may result error
-    console.log('AAAAAAA!')
-    throw new Error('Something is wrong')
   }
   const onError = (errors, e) => console.log(errors, e)
 
