@@ -43,12 +43,19 @@ const GeneralDaoSettings = () => {
     dispatch(getFactory())
   }, [])
 
-  /*useEffect(() => {
-    //dispatch(getAddressForRoot())
-  }, [])*/
   console.log('dao: ', dao)
   console.log('formData: ', formData)
   console.log('id: ', id)
+
+  let daoRootAddr
+  for (let i = 0; i < dao.allDAOs.length; i++) {
+    if (i == id) {
+      daoRootAddr = dao.allDAOs[i][1][0]
+    }
+  }
+
+  console.log('daoRootAddr: ', daoRootAddr)
+
   async function setSettingsChanges(name, slug, description, id) {
     //const factory = getFactory()
     const daoFactoryContract = new ever.Contract(
@@ -68,17 +75,16 @@ const GeneralDaoSettings = () => {
       }
     }
     try {
+      const providerState = await ever.getProviderState()
+      const publicKey = providerState.permissions.accountInteraction.publicKey
       const daoRoot = new ever.Contract(daoAbi, daoRootAddress)
       const trx = await daoRoot.methods
         .updateDetails({ name_: name, slug_: slug, description_: description })
         .sendExternal({
-          publicKey:
-            '31bef135705c120185b04b700105c6814eb8e3264c0202f071e36755e0a1fd1a',
+          publicKey: publicKey,
           withoutSignature: true,
         })
-      //const daoRootAddress = daoAddresses.daoAddr.find(
-      //  (id) => id == daoAddresses.daoAddr.indexOf()
-      //)
+
       console.log(daoRootAddress)
       console.log('trx: ', trx)
       return Promise.resolve(trx)
@@ -88,11 +94,6 @@ const GeneralDaoSettings = () => {
     }
   }
 
-  //  setSettingsChanges('Visnja', 'dobuilder.io', 'Visnja TEST', id)
-
-  // dispatch(func())
-  //console.log('poziv: ', poziv)
-  //console.log('rezultat: ', rezultat)
   return (
     <div className={styles.container}>
       <div className={styles.daoSettings}>
@@ -105,8 +106,9 @@ const GeneralDaoSettings = () => {
               label={'Dao Address'}
               placeholder={'DAO Address'}
               registerInput={'daoAddress'}
+              value={daoRootAddr}
               firstImage={copy}
-              onChange={onChange}
+              disabled={true}
             />
             <Input
               id="name"

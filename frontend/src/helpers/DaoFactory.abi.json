@@ -48,7 +48,7 @@
 		{
 			"name": "removeDao",
 			"inputs": [
-				{"name":"removedDao","type":"address"}
+				{"name":"nonce","type":"uint32"}
 			],
 			"outputs": [
 				{"name":"daoAddr","type":"map(uint32,address[])"}

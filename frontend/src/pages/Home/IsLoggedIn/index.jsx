@@ -7,7 +7,7 @@ import Button from 'components/common/Button'
 import NoResults from 'components/NoResults'
 import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
-
+import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
 
 const IsLoggedIn = () => {
@@ -21,14 +21,15 @@ const IsLoggedIn = () => {
   }
   useEffect(onLoadEffect, [])
 
-  const { dao, isError, isLoading } = useSelector((state) => state.dao)
+  //const { dao, isError, isLoading } = useSelector((state) => state.dao)
 
-  useEffect(() => {
+  /*useEffect(() => {
     dispatch(getAllDAOs())
     return () => {
       reset()
     }
-  }, [dao, dispatch])
+  }, [dao, dispatch])*/
+  daoService.getAllDAOs()
   const getAddr = JSON.parse(localStorage.getItem('daoAddresses'))
   const getDaoList = JSON.parse(localStorage.getItem('rootData'))
   //console.log('getDaoList: ', getDaoList)
