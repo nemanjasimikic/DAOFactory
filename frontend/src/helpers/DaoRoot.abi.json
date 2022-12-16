@@ -162,6 +162,14 @@
 			]
 		},
 		{
+			"name": "getCode",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"code","type":"cell"}
+			]
+		},
+		{
 			"name": "acceptAdmin",
 			"inputs": [
 			],
@@ -264,6 +272,13 @@
 				{"name":"name_","type":"string"},
 				{"name":"slug_","type":"string"},
 				{"name":"description_","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "destroy",
+			"inputs": [
 			],
 			"outputs": [
 			]

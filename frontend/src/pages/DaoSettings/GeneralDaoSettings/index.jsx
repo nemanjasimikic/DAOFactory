@@ -48,12 +48,13 @@ const GeneralDaoSettings = () => {
   console.log('id: ', id)
 
   let daoRootAddr
-  for (let i = 0; i < dao.allDAOs.length; i++) {
-    if (i == id) {
-      daoRootAddr = dao.allDAOs[i][1][0]
+  if (dao) {
+    for (let i = 0; i < dao.allDAOs.length; i++) {
+      if (i == id) {
+        daoRootAddr = dao.allDAOs[i].address
+      }
     }
   }
-
   console.log('daoRootAddr: ', daoRootAddr)
 
   async function setSettingsChanges(name, slug, description, id) {

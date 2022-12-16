@@ -55,10 +55,14 @@ const OwnershipDaoSettings = () => {
               await daoService.transferOwnership(formData.ownerAddress, id)
             }}
           />
-
-          <Button style={'primaryBtn'} text={'Transfer'} />
-          <div className={styles.line} />
-          <Button style={'primaryBtn'} text={'Transfer to Black Hole'} />
+          <Button
+            type={'primaryBtn'}
+            text={'Transfer to Black Hole'}
+            onClick={async (e) => {
+              e.preventDefault()
+              await daoService.destroy(id)
+            }}
+          />
         </div>
       </div>
     </div>
