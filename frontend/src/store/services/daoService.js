@@ -294,7 +294,6 @@ const getFactory = async () => {
       codeHash: bocHashEver,
       limit: 10,
     })
-    //  console.log('accounts: ', accounts)
     return Promise.resolve(accounts.accounts)
   } catch (e) {
     console.log('error: ', e)
@@ -334,19 +333,14 @@ const getAllDAOs = async () => {
         factory[0]._address
       )
       let daoAddresses = await getDeployedDaos(daoFactoryContract)
-      console.log('daoAddresses u getAllDAOs: ', daoAddresses)
       for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
         const daoRootContract = new ever.Contract(
           daoRootAbi,
           daoAddresses.daoAddr[i][1][0]._address
         )
-        console.log('daoRootContract: ', daoRootContract)
         const name = await daoRootContract.methods.name({}).call()
-        console.log('Name: ', name)
         const description = await daoRootContract.methods.description({}).call()
-        console.log('description: ', description)
         const slug = await daoRootContract.methods.slug({}).call()
-        console.log('slug: ', slug)
         rootData.push({
           name: name.name,
           description: description.description,
@@ -360,12 +354,28 @@ const getAllDAOs = async () => {
       const walletAddress = addressConverter(localStorage.getItem('wallet'))
 
       const bocHashEver = await ever.getBocHash(code.code)
-      console.log('bocHash: ', bocHashEver)
       const accounts = await ever.getAccountsByCodeHash({
         codeHash: bocHashEver,
         limit: 50,
       })
-      console.log('accounts: ', accounts)
+      daoAddresses = await getDeployedDaos(daoFactoryContract)
+      console.log('daoAddresses posle prvog push-a: ', daoAddresses)
+      if (rootData.length < daoAddresses.daoAddr.length) {
+        const idx = daoAddresses.daoAddr.length - 1
+        const daoRootContract = new ever.Contract(
+          daoRootAbi,
+          daoAddresses.daoAddr[idx][1][0]._address
+        )
+        const name = await daoRootContract.methods.name({}).call()
+        const description = await daoRootContract.methods.description({}).call()
+        const slug = await daoRootContract.methods.slug({}).call()
+        rootData.push({
+          name: name.name,
+          description: description.description,
+          slug: slug.slug,
+          address: daoAddresses.daoAddr[idx][1][0]._address,
+        })
+      }
       if (accounts.accounts.length > 0) {
         for (let i = 0; i < accounts.accounts.length; i++) {
           let flag = 0
@@ -374,7 +384,6 @@ const getAllDAOs = async () => {
               accounts.accounts[i]._address ===
               daoAddresses.daoAddr[j][1][0]._address
             ) {
-              console.log(`adresa: ${accounts.accounts[i]._address} postoji`)
               flag = 1
             }
           }
@@ -386,19 +395,12 @@ const getAllDAOs = async () => {
             const admin = await daoRootContract.methods
               .getAdmin({ answerId: 0 })
               .call()
-            console.log('admin u proveri: ', admin.value0)
             if (admin.value0._address === walletAddress) {
-              console.log('admin.value0._address: ', admin.value0._address)
-              console.log('walletAddress: ', walletAddress)
-              console.log('Jednaki su!')
               const name = await daoRootContract.methods.name({}).call()
-              console.log('Name: ', name)
               const description = await daoRootContract.methods
                 .description({})
                 .call()
-              console.log('description: ', description)
               const slug = await daoRootContract.methods.slug({}).call()
-              console.log('slug: ', slug)
               const providerState = await ever.getProviderState()
               const publicKey =
                 providerState.permissions.accountInteraction.publicKey
@@ -408,7 +410,6 @@ const getAllDAOs = async () => {
                 publicKey
               )
               daoAddresses = await getDeployedDaos(daoFactoryContract)
-              console.log('novi: ', novi)
               rootData.push({
                 name: name.name,
                 description: description.description,
@@ -420,11 +421,6 @@ const getAllDAOs = async () => {
           }
         }
 
-        //localStorage.setItem('rootData', JSON.stringify(rootData))
-        /*localStorage.setItem(
-          'daoAddresses',
-          JSON.stringify(daoAddresses.daoAddr)
-        )*/
         console.log('rootData: ', rootData)
       }
       return Promise.resolve(rootData)
@@ -433,32 +429,25 @@ const getAllDAOs = async () => {
       const walletAddress = addressConverter(localStorage.getItem('wallet'))
 
       const bocHashEver = await ever.getBocHash(code.code)
-      console.log('bocHash: ', bocHashEver)
       const accounts = await ever.getAccountsByCodeHash({
         codeHash: bocHashEver,
         limit: 50,
       })
-      console.log('accounts: ', accounts)
       if (accounts.accounts.length > 0) {
         for (let i = 0; i < accounts.accounts.length; i++) {
           const daoRootContract = new ever.Contract(
             daoRootAbi,
             accounts.accounts[i]._address
           )
-          // console.log('daoRootContract: ', daoRootContract)
           const admin = await daoRootContract.methods
             .getAdmin({ answerId: 0 })
             .call()
-          console.log('admin: ', admin)
           if (admin.value0._address === walletAddress) {
             const name = await daoRootContract.methods.name({}).call()
-            console.log('Name: ', name)
             const description = await daoRootContract.methods
               .description({})
               .call()
-            console.log('description: ', description)
             const slug = await daoRootContract.methods.slug({}).call()
-            console.log('slug: ', slug)
             rootData.push({
               name: name.name,
               description: description.description,
@@ -466,7 +455,6 @@ const getAllDAOs = async () => {
               address: accounts.accounts[i]._address,
             })
             console.log(rootData)
-            //localStorage.setItem('rootData', JSON.stringify(rootData))
           }
         }
         return Promise.resolve(rootData)
@@ -497,15 +485,7 @@ const transferOwnership = async (newOwnerAddress, id) => {
     factory[0]._address
   )
   const daoAddresses = await getDeployedDaos(daoFactoryContract)
-  /*const daoFactoryContract = new ever.Contract(
-    daoFactoryAbi,
-    factory[0]._address
-  )
-  console.log('Factory address: ', factory[0]._address)
-  const daoAddresses = await daoFactoryContract.methods
-    .getDeployedDAOs({})
-    .call()
-*/
+
   let daoRootAddress
   let nonce
   console.log('daoAddresses: ', daoAddresses)
@@ -513,7 +493,6 @@ const transferOwnership = async (newOwnerAddress, id) => {
     if (i == id) {
       console.log('usao sam')
       daoRootAddress = daoAddresses.daoAddr[i][1][0]._address
-      //console.log()
       nonce = daoAddresses.daoAddr[i][0]
     }
   }
@@ -522,8 +501,7 @@ const transferOwnership = async (newOwnerAddress, id) => {
     const walletAddress = addressConverter(localStorage.getItem('wallet'))
 
     const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
-    console.log('daoRootAddress: ', daoRootAddress)
-    console.log('new owner: ', newOwnerAddress)
+
     const trx = await daoRoot.methods
       .transferAdmin({ newAdmin: newOwnerAddress })
       .send({ from: walletAddress, amount: toNano(1, 9), bounce: false })
