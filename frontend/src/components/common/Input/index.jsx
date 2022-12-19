@@ -12,6 +12,7 @@ const Input = ({
   labelIcon,
   onChange,
   defaultValue,
+  disabled,
 }) => {
   const { register } = useForm()
 
@@ -33,6 +34,7 @@ const Input = ({
         placeholder={placeholder}
         {...register(registerInput)}
         onChange={onChange}
+        disabled={disabled}
       />
       <img
         src={firstImage}

@@ -1,0 +1,104 @@
+{
+	"ABI version": 2,
+	"version": "2.2",
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"newCode","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deploy",
+			"inputs": [
+				{"name":"platformCode_","type":"cell"},
+				{"components":[{"name":"votingDelay","type":"uint32"},{"name":"votingPeriod","type":"uint32"},{"name":"quorumVotes","type":"uint128"},{"name":"timeLock","type":"uint32"},{"name":"threshold","type":"uint128"},{"name":"gracePeriod","type":"uint32"}],"name":"proposalConfiguration_","type":"tuple"},
+				{"name":"name_","type":"string"},
+				{"name":"slug_","type":"string"},
+				{"name":"governanceToken_","type":"address"},
+				{"name":"minStake_","type":"uint256"},
+				{"name":"description_","type":"string"},
+				{"name":"treasury_","type":"bool"},
+				{"name":"nonce_","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "getDeployedDAOs",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"daoAddr","type":"map(uint32,address[])"}
+			]
+		},
+		{
+			"name": "addNewDao",
+			"inputs": [
+				{"name":"newDao","type":"address"}
+			],
+			"outputs": [
+				{"name":"daoAddr","type":"map(uint32,address[])"}
+			]
+		},
+		{
+			"name": "removeDao",
+			"inputs": [
+				{"name":"nonce","type":"uint32"}
+			],
+			"outputs": [
+				{"name":"daoAddr","type":"map(uint32,address[])"}
+			]
+		},
+		{
+			"name": "withdrawGas",
+			"inputs": [
+				{"name":"gasTo","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "randomNonce",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"randomNonce","type":"uint32"}
+			]
+		},
+		{
+			"name": "_nonce",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"_nonce","type":"uint32"}
+			]
+		},
+		{
+			"name": "deployedAccounts",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"deployedAccounts","type":"map(uint32,address[])"}
+			]
+		}
+	],
+	"data": [
+		{"key":1,"name":"_nonce","type":"uint32"}
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"randomNonce","type":"uint32"},
+		{"name":"_nonce","type":"uint32"},
+		{"name":"deployedAccounts","type":"map(uint32,address[])"},
+		{"name":"daoRoot","type":"address"}
+	]
+}

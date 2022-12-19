@@ -5,16 +5,16 @@ import Button from 'components/common/Button'
 import styles from './styles.module.sass'
 import leftArrow from 'static/svg/leftArrow.svg'
 
-const RenderDaoSettings = () => (
+const RenderDaoSettings = ({ id }) => (
   <>
     <NavLink
-      to={'/dao-settings/general'}
+      to={`/dao-settings/general/${id}`}
       className={({ isActive }) => (isActive ? styles.active : styles.navLink)}
     >
       General
     </NavLink>
     <NavLink
-      to={'/dao-settings/ownership'}
+      to={`/dao-settings/ownership/${id}`}
       className={({ isActive }) => (isActive ? styles.active : styles.navLink)}
     >
       Ownership
@@ -23,7 +23,7 @@ const RenderDaoSettings = () => (
   </>
 )
 
-const Sidebar = ({ page, setPage }) => {
+const Sidebar = ({ page, setPage, id }) => {
   const location = useLocation()
 
   return (
@@ -34,7 +34,7 @@ const Sidebar = ({ page, setPage }) => {
       {location.pathname === '/create-dao' ? (
         <Breadcrumbs page={page} setPage={setPage} />
       ) : (
-        <RenderDaoSettings />
+        <RenderDaoSettings id={id} />
       )}
     </div>
   )

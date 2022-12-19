@@ -17,9 +17,12 @@ const Navigation = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="dao-settings/general" element={<GeneralDaoSettings />} />
         <Route
-          path="dao-settings/ownership"
+          path="dao-settings/general/:id"
+          element={<GeneralDaoSettings />}
+        />
+        <Route
+          path="dao-settings/ownership/:id"
           element={<OwnershipDaoSettings />}
         />
         <Route path="create-dao" element={<CreateDao />} />

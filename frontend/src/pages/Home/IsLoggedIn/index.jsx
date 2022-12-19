@@ -7,7 +7,7 @@ import Button from 'components/common/Button'
 import NoResults from 'components/NoResults'
 import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
-
+import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
 
 const IsLoggedIn = () => {
@@ -21,16 +21,16 @@ const IsLoggedIn = () => {
   }
   useEffect(onLoadEffect, [])
 
-  const { dao, isError, isLoading } = useSelector((state) => state.dao)
-
+  //const { dao, isError, isLoading } = useSelector((state) => state.dao)
+  const dao = useSelector((state) => state.dao)
   useEffect(() => {
     dispatch(getAllDAOs())
-    return () => {
-      reset()
-    }
-  }, [dao, dispatch])
+  }, [])
+  //const getDaoList = daoService.getAllDAOs()
+  //console.log(getDaoList)
+  console.log('dao: ', dao)
   const getAddr = JSON.parse(localStorage.getItem('daoAddresses'))
-  const getDaoList = JSON.parse(localStorage.getItem('rootData'))
+  const getDaoList = dao.allDAOs
   //console.log('getDaoList: ', getDaoList)
   //console.log('All DAOs in home: ', getAddr)
   const columns = [
@@ -83,10 +83,12 @@ const IsLoggedIn = () => {
     },
   ]
   let itemsList = []
+
   if (getDaoList != null) {
     getDaoList.forEach((item, index) => {
       itemsList.push(
         <DaoCard
+          id={getDaoList ? index : 'nema'}
           daoName={getDaoList ? item.name : 'nema'}
           description={getDaoList ? item.description : 'nema'}
           link={getDaoList ? item.slug : 'nema'}

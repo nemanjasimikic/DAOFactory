@@ -64,6 +64,7 @@ const CreateDao = () => {
     treasury: false,
     description: '',
   })
+
   useEffect(() => {
     dispatch(getAddressForRoot())
   }, [dao, dispatch])

@@ -6,12 +6,16 @@ const topupV = JSON.parse(localStorage.getItem('topup'))
 const deployValue = JSON.parse(localStorage.getItem('topup'))
 const allDAOs = JSON.parse(localStorage.getItem('daoAddresses'))
 const addressForRoot = JSON.parse(localStorage.getItem('daoRootAddress'))
+const setUpdate = ''
+const factoryAddress = ''
 const initialState = {
   dao: dao ? dao : null,
   topupV: topupV ? topupV : null,
   deployValue: deployValue ? deployValue : null,
   allDAOs: allDAOs ? allDAOs : null,
   addressForRoot: addressForRoot ? addressForRoot.rootAddress : null,
+  factoryAddress: factoryAddress ? factoryAddress : null,
+  setUpdate: setUpdate ? setUpdate : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -178,6 +182,20 @@ export const deployDAOFromFactory = createAsyncThunk(
   }
 )
 
+export const getFactory = createAsyncThunk(
+  'getFactory',
+  async (dao, thunkAPI) => {
+    try {
+      const getDao = await daoService.getFactory()
+      //  console.log('get dao: ', getDao)
+      return getDao
+    } catch (error) {
+      console.log('getFactory error: ', error)
+      return thunkAPI.rejectWithValue('')
+    }
+  }
+)
+
 export const getAllDAOs = createAsyncThunk(
   'getAllDAOs',
   async (dao, thunkAPI) => {
@@ -201,6 +219,18 @@ export const getAddressForRoot = createAsyncThunk(
       return address
     } catch (error) {
       console.log('getAddressForRoot error: ', error)
+      return thunkAPI.rejectWithValue('')
+    }
+  }
+)
+
+export const setSettingsChanges = createAsyncThunk(
+  'setSettingsChanges',
+  async (dao, thunkAPI) => {
+    try {
+      return await daoService.setSettingsChanges()
+    } catch (error) {
+      console.log('setSettingsChanges error: ', error)
       return thunkAPI.rejectWithValue('')
     }
   }
@@ -264,6 +294,20 @@ export const daoSlice = createSlice({
         state.isError = true
         state.deployValue = null
       })
+      .addCase(getFactory.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getFactory.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.factoryAddress = action.payload
+        console.log('state.dao: ', state.factoryAddress)
+      })
+      .addCase(getFactory.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.deployValue = null
+      })
       .addCase(getAllDAOs.pending, (state) => {
         state.isLoading = true
         state.isDeployed = false
@@ -295,6 +339,20 @@ export const daoSlice = createSlice({
         state.isError = true
         state.addressForRoot = null
       })
+    /*.addCase(setSettingsChanges.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(setSettingsChanges.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.setUpdate = action.payload
+        console.log('state.setUpdate: ', state.setUpdate)
+      })
+      .addCase(setSettingsChanges.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.setUpdate = null
+      })*/
   },
 })
 
