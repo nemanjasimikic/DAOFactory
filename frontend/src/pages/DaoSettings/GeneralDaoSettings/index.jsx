@@ -24,6 +24,7 @@ const GeneralDaoSettings = () => {
     daoSlug: 'daoubilder.io/',
     description: '',
   })
+  const { handleSubmit } = useForm()
   const ever = new ProviderRpcClient()
   useEffect(() => {
     if (wallet.wallet === null) {
@@ -101,7 +102,7 @@ const GeneralDaoSettings = () => {
         <Sidebar id={id} />
         <div className={styles.contentWrapper}>
           <ContentHeader title={'DAO settings'} />
-          <Form heading={'General'}>
+          <Form handleSubmit={handleSubmit} heading={'General'}>
             <Input
               id="daoAddress"
               label={'Dao Address'}

@@ -491,7 +491,6 @@ const transferOwnership = async (newOwnerAddress, id) => {
   console.log('daoAddresses: ', daoAddresses)
   for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
     if (i == id) {
-      console.log('usao sam')
       daoRootAddress = daoAddresses.daoAddr[i][1][0]._address
       nonce = daoAddresses.daoAddr[i][0]
     }

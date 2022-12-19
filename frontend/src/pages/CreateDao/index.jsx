@@ -183,6 +183,7 @@ const CreateDao = () => {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {
                 dispatch(deployFactory())
+              }
             }
           }}
           style={'bigLightBlueBtn'}
