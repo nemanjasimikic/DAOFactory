@@ -1,7 +1,9 @@
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
+import { validator } from 'helpers/formValidator'
 
 const Input = ({
+  buttons,
   label,
   placeholder,
   value,
@@ -13,8 +15,60 @@ const Input = ({
   onChange,
   defaultValue,
   disabled,
+  required,
 }) => {
-  const { register } = useForm()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    shouldUseNativeValidation: true,
+  })
+
+  const validateInput = () => {
+    // return value ? null : 'This is a required field *'
+    if (!value) {
+      console.log(typeof value)
+      return 'This is a required field *'
+    } else if (registerInput == 'governanceToken') {
+      if (validator(value, 0, 'governanceToken') === true) {
+        return null
+      } else {
+        return validator(value, 0, registerInput)
+      }
+    }
+  }
+
+  // To be moved to new file, and edited
+  let color = 'red'
+  function styling(what, param) {
+    if (
+      what == 'queued' ||
+      what == 'pending' ||
+      what == 'voting' ||
+      what == 'execution'
+    ) {
+      if (param == 'position') {
+        return 'absolute'
+      } else {
+        return '0'
+      }
+    } else {
+      if (param == 'position') {
+        return 'relative'
+      } else if (param == 'bottom') {
+        return null
+      } else if (param == 'marginT') {
+        return '-0.80rem'
+      } else if (param == 'marginB') {
+        return '0.80rem'
+      }
+      return 'relative'
+    }
+  }
+
+  console.log('firstimage', firstImage)
+  console.log('secondimage', secondImage)
 
   return (
     <div className={styles.inputWrapper}>
@@ -27,6 +81,7 @@ const Input = ({
         />
       </div>
       <input
+        required={required}
         className={styles.input}
         value={value}
         defaultValue={defaultValue}
@@ -36,7 +91,7 @@ const Input = ({
         onChange={onChange}
         disabled={disabled}
       />
-      <img
+      {/* <img
         src={firstImage}
         onError={(event) => (event.target.src = '')}
         className={styles.inputIconOne}
@@ -45,7 +100,20 @@ const Input = ({
         src={secondImage}
         onError={(event) => (event.target.src = '')}
         className={styles.inputIconTwo}
-      />
+      /> */}
+      {buttons}
+      <span
+        style={{
+          position: styling(registerInput, 'position'),
+          bottom: styling(registerInput, 'bottom'),
+          marginTop: styling(registerInput, 'marginT'),
+          marginBottom: styling(registerInput, 'marginB'),
+          color: color,
+          fontSize: '14px',
+        }}
+      >
+        {validateInput()}
+      </span>
     </div>
   )
 }

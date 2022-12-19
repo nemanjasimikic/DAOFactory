@@ -6,7 +6,6 @@ import {
   deployDAOFromFactory,
   getAllDAOs,
   getAddressForRoot,
-  validator,
   reset,
 } from 'store/features/daoSlice'
 import Sidebar from 'components/common/Sidebar'
@@ -22,11 +21,16 @@ import rightArrow from 'static/svg/rightArrow.svg'
 import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
 import Spinner from '../../components/common/Spinner'
+import { useForm } from 'react-hook-form'
+import { validator } from 'helpers/formValidator'
 
 const CreateDao = () => {
   const wallet = useSelector((state) => state.wallet)
   const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
   const navigate = useNavigate()
+
+  const { handleSubmit } = useForm()
+  // const onSubmit = (data, e) => console.log(data, e)
 
   useEffect(() => {
     if (wallet.wallet === null) {
@@ -46,21 +50,21 @@ const CreateDao = () => {
   const [page, setPage] = useState(0)
   const [formData, setFormData] = useState({
     daoAddress: '',
-    name: '',
+    name: 'DAO name',
     daoSlug: 'daoubilder.io/',
     governanceToken: '',
-    minStake: 0,
+    minStake: 1,
     quorum: 51,
-    threshold: 100,
-    pending: 0,
+    threshold: 10000,
+    pending: 24,
     pendingTime: 'Hours',
-    queued: 0,
+    queued: 24,
     queuedTime: 'Hours',
-    voting: 0,
+    voting: 24,
     votingTime: 'Hours',
-    execution: 0,
+    execution: 24,
     executionTime: 'Hours',
-    totalTime: 0,
+    totalTime: 96,
     treasury: false,
     description: '',
   })
@@ -149,7 +153,10 @@ const CreateDao = () => {
         <Sidebar page={page} setPage={setPage} />
         <div className={styles.createDaoContent}>
           <ContentHeader title={'Create new DAO'} />
-          <Form heading={FormTitles[page]}>{PageDisplay()}</Form>
+          {/* // TODO: */}
+          <Form handleSubmit={handleSubmit} heading={FormTitles[page]}>
+            {PageDisplay()}
+          </Form>
         </div>
         <CreateDaoInfo page={page} formData={formData} />
       </div>
@@ -176,15 +183,6 @@ const CreateDao = () => {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {
                 dispatch(deployFactory())
-                /*const flag = JSON.parse(localStorage.getItem('flag'))
-                console.log('flag: ', flag)
-                if (parseInt(flag) == 1) {
-                  window.confirm(
-                    'Do you really want to leave? Airdrop contract will not be saved!'
-                  )
-                }*/
-              }
-            } else {
             }
           }}
           style={'bigLightBlueBtn'}

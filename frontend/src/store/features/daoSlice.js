@@ -103,27 +103,6 @@ export const deployFactory = createAsyncThunk(
   }
 )
 
-export const validator = (tokenAddress) => {
-  // console.log(tokenAddress)
-  // console.log(tokenAddress.length)
-  let error = false
-  if (tokenAddress.length < 66) {
-    console.log('Error: Address too short')
-    error = true
-    alert('Governance token is not valid. Address too short!')
-    return 'Error: Address too short'
-  } else if (!tokenAddress.includes(':')) {
-    console.log('Error: Address missing colon')
-    error = true
-    alert('Governance token is not valid. Address missing colon!')
-    return 'Error: Address missing colon'
-  }
-
-  if (!error) {
-    return true
-  }
-}
-
 export const deployDAOFromFactory = createAsyncThunk(
   'deployDAOFromFactory',
   async (dao, thunkAPI) => {
