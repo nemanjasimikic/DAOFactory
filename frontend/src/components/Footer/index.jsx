@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import Socials from 'components/Footer/Socials'
 import Button from 'components/common/Button'
+import Logo from 'components/Header/Logo'
 import styles from './styles.module.sass'
-import footerLogo from 'static/svg/footerLogo.svg'
 
 const Footer = () => {
   return (
@@ -10,11 +10,7 @@ const Footer = () => {
       <footer className={styles.footer}>
         <div className={styles.topFooter}>
           <div className={styles.topFooterLinksWrapper}>
-            <img
-              className={styles.footerLogo}
-              src={footerLogo}
-              alt={'footer-logo'}
-            />
+            <Logo />
             <div className={styles.topFooterLinks}>
               <p className={styles.heading}>Product</p>
 

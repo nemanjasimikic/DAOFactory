@@ -1,10 +1,10 @@
 import styles from './styles.module.sass'
 
-const BalanceInfoCard = () => {
+const BalanceInfoCard = ({ name, value }) => {
   return (
     <div className={styles.balanceCardInfo}>
-      <div></div>
-      <div></div>
+      <p className={styles.name}>{name}</p>
+      <p className={styles.value}>{value}</p>
     </div>
   )
 }

@@ -1,6 +1,5 @@
 import Logo from 'components/Header/Logo'
 import Navbar from 'components/Header/Navbar'
-// import HamburgerMenu from 'components/Header/HamburgerMenu'
 import hamburgerClosed from 'static/svg/hamburgerClosed.svg'
 
 import styles from './styles.module.sass'

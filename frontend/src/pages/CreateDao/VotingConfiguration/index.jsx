@@ -24,6 +24,7 @@ const VotingConfiguration = ({ formData, setFormData }) => {
         onChange={onChange}
         registerInput="quorum"
         value={formData.quorum}
+        defaultValue={51}
       />
       <div className={styles.infoWrapper}>
         <span>Threshold</span>
