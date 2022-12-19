@@ -133,7 +133,7 @@ const GeneralDaoSettings = () => {
               onChange={onChange}
             />
             <Button
-              type={'bigLightBlueBtn'}
+              style={'bigLightBlueBtn'}
               text={'Save changes'}
               onClick={async (e) => {
                 e.preventDefault()

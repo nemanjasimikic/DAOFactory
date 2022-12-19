@@ -48,7 +48,7 @@ const OwnershipDaoSettings = () => {
             onChange={onChange}
           />
           <Button
-            type={'primaryBtn'}
+            style={'primaryBtn'}
             text={'Transfer'}
             onClick={async (e) => {
               e.preventDefault()
@@ -56,7 +56,7 @@ const OwnershipDaoSettings = () => {
             }}
           />
           <Button
-            type={'primaryBtn'}
+            style={'primaryBtn'}
             text={'Transfer to Black Hole'}
             onClick={async (e) => {
               e.preventDefault()
