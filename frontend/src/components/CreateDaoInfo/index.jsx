@@ -46,6 +46,16 @@ const CreateDaoInfo = ({ page, formData }) => {
     return toReturn
   }
 
+  //TODO:
+  const iconLogo =
+    formData.token !== '' ? (
+      <img
+        src="/5.svg"
+        width="20"
+        height="20"
+        style={{ marginBottom: '-4px' }}
+      />
+    ) : null
   function calculateTimelineWidth(line, format) {
     let total = formData.totalTime
     let modifier = format == 'Days' ? 24 : 1
@@ -71,8 +81,7 @@ const CreateDaoInfo = ({ page, formData }) => {
           <div className={styles.sectionRow}>
             <p className={styles.name}>Governance token</p>
             <p className={styles.value}>
-              <img src="/5.svg" width="20" height="20" />{' '}
-              {formData.token == '' ? 'LOL' : formData.token}
+              {iconLogo} {formData.token}
             </p>
           </div>
           <div className={styles.sectionRow}>
@@ -80,8 +89,7 @@ const CreateDaoInfo = ({ page, formData }) => {
               Required amount for creating <br /> a proposal
             </p>
             <p className={styles.value}>
-              {formData.minStake == 0 ? 0 : formData.minStake}{' '}
-              {formData.token == '' ? 'LOL' : formData.token}
+              {formData.minStake == 0 ? 0 : formData.minStake} {formData.token}
             </p>
           </div>
         </div>
