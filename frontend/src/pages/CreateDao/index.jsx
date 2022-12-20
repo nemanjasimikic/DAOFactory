@@ -67,6 +67,7 @@ const CreateDao = () => {
     totalTime: 96,
     treasury: false,
     description: '',
+    token: '',
   })
 
   useEffect(() => {
@@ -103,6 +104,7 @@ const CreateDao = () => {
       return <Treasury formData={formData} setFormData={setFormData} />
     }
   }
+  console.log('formData: ', formData)
 
   formData.pendingTime === 'Hours'
     ? localStorage.setItem('pending', JSON.stringify(formData.pending * 3600))
@@ -135,7 +137,9 @@ const CreateDao = () => {
       )
   localStorage.setItem('daoAddress', JSON.stringify(formData.daoAddress))
   localStorage.setItem('name', JSON.stringify(formData.name))
-  localStorage.setItem('daoSlug', JSON.stringify(formData.daoSlug))
+  const slug = formData.daoSlug.split('/')
+  console.log('slug splitted: ', slug[1])
+  localStorage.setItem('daoSlug', JSON.stringify(slug[1]))
   localStorage.setItem(
     'governanceToken',
     JSON.stringify(formData.governanceToken)
