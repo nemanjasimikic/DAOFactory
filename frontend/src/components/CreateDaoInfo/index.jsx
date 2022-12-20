@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.sass'
 
 const CreateDaoInfo = ({ page, formData }) => {
+  // Calculate days and hours funk
   function calculateDays(what) {
     let pending = parseInt(
       formData.pending
@@ -43,6 +44,20 @@ const CreateDaoInfo = ({ page, formData }) => {
         ? Math.floor(sum / 24)
         : Math.ceil(sum - Math.floor(sum / 24) * 24)
     return toReturn
+  }
+
+  function calculateTimelineWidth(line, format) {
+    let total = formData.totalTime
+    let modifier = format == 'Days' ? 24 : 1
+    if (line == 1) {
+      return ((formData.pending * modifier) / total) * 100 + '%'
+    } else if (line == 2) {
+      return ((formData.queued * modifier) / total) * 100 + '%'
+    } else if (line == 3) {
+      return ((formData.voting * modifier) / total) * 100 + '%'
+    } else {
+      return ((formData.execution * modifier) / total) * 100 + '%'
+    }
   }
 
   return (
@@ -88,7 +103,52 @@ const CreateDaoInfo = ({ page, formData }) => {
               </p>
             </div>
             <div className={styles.graphic}>
-              <div className={styles.time}></div>
+              <div className={styles.time}>
+                <div
+                  style={{
+                    width: calculateTimelineWidth(1, formData.pendingTime),
+                  }}
+                >
+                  <p>
+                    {formData.pending}{' '}
+                    {formData.pendingTime === 'Days' ? 'd' : 'h'}
+                  </p>
+                  <hr className={styles.line1} />
+                </div>
+                <div
+                  style={{
+                    width: calculateTimelineWidth(2, formData.queuedTime),
+                  }}
+                >
+                  <p>
+                    {formData.queued}{' '}
+                    {formData.queuedTime === 'Days' ? 'd' : 'h'}
+                  </p>
+                  <hr className={styles.line2} />
+                </div>
+                <div
+                  style={{
+                    width: calculateTimelineWidth(3, formData.votingTime),
+                  }}
+                >
+                  <p>
+                    {formData.voting}{' '}
+                    {formData.votingTime === 'Days' ? 'd' : 'h'}
+                  </p>
+                  <hr className={styles.line3} />
+                </div>
+                <div
+                  style={{
+                    width: calculateTimelineWidth(4, formData.executionTime),
+                  }}
+                >
+                  <p>
+                    {formData.execution}{' '}
+                    {formData.executionTime === 'Days' ? 'd' : 'h'}
+                  </p>
+                  <hr className={styles.line4} />
+                </div>
+              </div>
             </div>
           </div>
         )}

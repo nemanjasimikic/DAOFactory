@@ -67,8 +67,8 @@ const Input = ({
     }
   }
 
-  console.log('firstimage', firstImage)
-  console.log('secondimage', secondImage)
+  // console.log('firstimage', firstImage)
+  // console.log('secondimage', secondImage)
 
   return (
     <div className={styles.inputWrapper}>

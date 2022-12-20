@@ -15,15 +15,15 @@ const ProposalTimeline = ({ formData, setFormData }) => {
   const onReset = () => {
     setFormData((prevState) => ({
       ...prevState,
-      pending: 24,
+      pending: 48,
       pendingTime: 'Hours',
-      queued: 24,
+      queued: 48,
       queuedTime: 'Hours',
-      voting: 24,
+      voting: 72,
       votingTime: 'Hours',
-      execution: 24,
+      execution: 48,
       executionTime: 'Hours',
-      totalTime: 96,
+      totalTime: 216,
     }))
   }
 
