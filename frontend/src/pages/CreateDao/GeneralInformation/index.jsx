@@ -24,8 +24,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
     }))
 
     const token = await daoService.getToken(e.target.value)
-    //formData.token = token.value0
-    console.log('token: ', formData.token)
+
     setFormData((prevState) => ({
       ...prevState,
       token: token.value0,
@@ -36,12 +35,8 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
     formData
 
   // proslediti funkcije koje trebaju da se dese na klik ikonica
-  function onClickFunctionInImage1() {
-    console.log('Image 1 clicked')
-  }
-  function onClickFunctionInImage2() {
-    console.log('Image 2 clicked')
-  }
+  function onClickFunctionInImage1() {}
+  function onClickFunctionInImage2() {}
 
   const imageButtons = [
     <ImageButton
@@ -56,7 +51,6 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
     />,
   ]
 
-  console.log('Form data: ', formData)
   return (
     <div className={styles.container}>
       <Input
