@@ -68,14 +68,18 @@ const CreateDaoInfo = ({ page, formData }) => {
         <div className={styles.section}>
           <div className={styles.sectionRow}>
             <p className={styles.name}>Governance token</p>
-            <p className={styles.value}>LOL</p>
+            <p className={styles.value}>
+              <img src="/5.svg" width="20" height="20" />{' '}
+              {formData.token == '' ? 'LOL' : formData.token}
+            </p>
           </div>
           <div className={styles.sectionRow}>
             <p className={styles.name}>
               Required amount for creating <br /> a proposal
             </p>
             <p className={styles.value}>
-              {formData.minStake == 0 ? 0 : formData.minStake} LOL
+              {formData.minStake == 0 ? 0 : formData.minStake}{' '}
+              {formData.token == '' ? 'LOL' : formData.token}
             </p>
           </div>
         </div>
@@ -87,7 +91,9 @@ const CreateDaoInfo = ({ page, formData }) => {
             </div>
             <div className={styles.sectionRow}>
               <p className={styles.name}>Threshold</p>
-              <p className={styles.value}>{formData.threshold} LOL</p>
+              <p className={styles.value}>
+                {formData.threshold} {formData.token}
+              </p>
             </div>
           </div>
         )}

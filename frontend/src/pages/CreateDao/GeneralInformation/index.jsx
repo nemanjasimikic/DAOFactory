@@ -6,6 +6,7 @@ import infoIcon from 'static/svg/infoIcon.svg'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import ImageButton from 'components/common/ImageButton'
+import daoService from 'store/services/daoService'
 
 const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
   const { register } = useForm()
@@ -15,6 +16,22 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
       [e.target.name]: e.target.value,
     }))
   }
+
+  const onAddressChange = async (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+
+    const token = await daoService.getToken(e.target.value)
+    //formData.token = token.value0
+    console.log('token: ', formData.token)
+    setFormData((prevState) => ({
+      ...prevState,
+      token: token.value0,
+    }))
+  }
+
   const { daoAddress, name, daoSlug, governanceToken, minStake, description } =
     formData
 
@@ -39,6 +56,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
     />,
   ]
 
+  console.log('Form data: ', formData)
   return (
     <div className={styles.container}>
       <Input
@@ -78,7 +96,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         className={styles.input}
         registerInput={'governanceToken'}
         labelIcon={infoIcon}
-        onChange={onChange}
+        onChange={onAddressChange}
         value={governanceToken}
         required={true}
       />

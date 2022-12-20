@@ -96,6 +96,17 @@ const GeneralDaoSettings = () => {
     }
   }
 
+  async function handleClick(event, name, daoSlug, description, id) {
+    event.preventDefault()
+    const tx = await setSettingsChanges(name, daoSlug, description, id)
+    if (tx) {
+      alert(
+        'A form was submitted: ' + this.state.name + ' // ' + this.state.email
+      )
+    }
+    return tx
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.daoSettings}>
@@ -144,6 +155,7 @@ const GeneralDaoSettings = () => {
                   formData.description,
                   id
                 )
+                alert('Changes are saved!')
               }}
             />
           </Form>
