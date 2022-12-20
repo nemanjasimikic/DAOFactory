@@ -103,7 +103,7 @@ const IsLoggedIn = () => {
           <Button style={'primaryBtn'} text={'Add existing DAO'} />
         </div>
       </ContentHeader>
-      {getDaoList.length < 1 ? (
+      {getDaoList?.length < 1 ? (
         <NoResults />
       ) : renderTable ? (
         <Table columns={columns} data={data} />

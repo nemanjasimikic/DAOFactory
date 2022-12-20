@@ -22,7 +22,7 @@ import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
 import Spinner from '../../components/common/Spinner'
 import { useForm } from 'react-hook-form'
-import { validator } from 'helpers/formValidator'
+import { validator, checkValidity } from 'helpers/formValidator'
 
 const CreateDao = () => {
   const wallet = useSelector((state) => state.wallet)
@@ -182,7 +182,61 @@ const CreateDao = () => {
           disabled={page > 3}
           onClick={() => {
             window.scrollTo(0, 0)
-            if (validator(formData.governanceToken) == true) {
+
+            let pageValidity = []
+
+            if (page === 0) {
+              pageValidity = [
+                validator(formData.name, page, 'name', false, null),
+                validator(
+                  formData.governanceToken,
+                  page,
+                  'governanceToken',
+                  false,
+                  null
+                ),
+                validator(formData.minStake, page, 'minStake', false, null),
+              ]
+            } else if (page == 1) {
+              pageValidity = [
+                validator(formData.threshold, page, 'threshold', false, null),
+              ]
+            } else if (page == 2) {
+              pageValidity = [
+                validator(
+                  formData.pending,
+                  page,
+                  formData.pendingTime,
+                  false,
+                  null
+                ),
+                validator(
+                  formData.queued,
+                  page,
+                  formData.queuedTime,
+                  false,
+                  null
+                ),
+                validator(
+                  formData.voting,
+                  page,
+                  formData.votingTime,
+                  false,
+                  true
+                ),
+                validator(
+                  formData.execution,
+                  page,
+                  formData.executionTime,
+                  false,
+                  null
+                ),
+              ]
+            }
+
+            console.log(pageValidity)
+
+            if (checkValidity(pageValidity) === true) {
               if (page < 3) {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {

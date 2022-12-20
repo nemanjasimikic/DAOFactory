@@ -1,6 +1,6 @@
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
-import { validator } from 'helpers/formValidator'
+import { validator, whatPage } from 'helpers/formValidator'
 
 const Input = ({
   buttons,
@@ -16,6 +16,7 @@ const Input = ({
   defaultValue,
   disabled,
   required,
+  hourOrDay,
 }) => {
   const {
     register,
@@ -25,17 +26,17 @@ const Input = ({
     shouldUseNativeValidation: true,
   })
 
-  const validateInput = () => {
-    // return value ? null : 'This is a required field *'
-    if (!value) {
-      console.log(typeof value)
+  function validateInput() {
+    let page = whatPage(registerInput)
+    if (registerInput === 'daoAddress' || registerInput === 'daoSlug') {
+      return
+    } else if (!value) {
       return 'This is a required field *'
-    } else if (registerInput == 'governanceToken') {
-      if (validator(value, 0, 'governanceToken') === true) {
-        return null
-      } else {
-        return validator(value, 0, registerInput)
-      }
+    } else if (page === 2) {
+      let voting = registerInput === 'voting' ? true : false
+      return validator(value, page, hourOrDay, false, voting)
+    } else {
+      return validator(value, page, registerInput, false)
     }
   }
 
