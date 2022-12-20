@@ -6,6 +6,7 @@ import infoIcon from 'static/svg/infoIcon.svg'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import ImageButton from 'components/common/ImageButton'
+import daoService from 'store/services/daoService'
 
 const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
   const { register } = useForm()
@@ -15,16 +16,27 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
       [e.target.name]: e.target.value,
     }))
   }
+
+  const onAddressChange = async (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+
+    const token = await daoService.getToken(e.target.value)
+
+    setFormData((prevState) => ({
+      ...prevState,
+      token: token.value0,
+    }))
+  }
+
   const { daoAddress, name, daoSlug, governanceToken, minStake, description } =
     formData
 
   // proslediti funkcije koje trebaju da se dese na klik ikonica
-  function onClickFunctionInImage1() {
-    console.log('Image 1 clicked')
-  }
-  function onClickFunctionInImage2() {
-    console.log('Image 2 clicked')
-  }
+  function onClickFunctionInImage1() {}
+  function onClickFunctionInImage2() {}
 
   const imageButtons = [
     <ImageButton
@@ -78,7 +90,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
         className={styles.input}
         registerInput={'governanceToken'}
         labelIcon={infoIcon}
-        onChange={onChange}
+        onChange={onAddressChange}
         value={governanceToken}
         required={true}
       />

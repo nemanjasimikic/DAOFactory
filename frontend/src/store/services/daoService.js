@@ -3,6 +3,9 @@ import { toNano } from '../../helpers/decimalParser'
 import { addressConverter } from '../../helpers/addressParser'
 import daoRootAbi from '../../helpers/DaoRoot.abi.json'
 import daoFactoryAbi from '../../helpers/DaoFactory.abi.json'
+import axios from 'axios'
+
+const API_URL = 'https://tokens.everscan.io/v1/balances'
 const ever = new ProviderRpcClient()
 
 const daoTvc =
@@ -344,7 +347,7 @@ const getAllDAOs = async () => {
         rootData.push({
           name: name.name,
           description: description.description,
-          slug: slug.slug,
+          slug: 'daobuilder.io/' + slug.slug,
           address: daoAddresses.daoAddr[i][1][0]._address,
         })
         console.log('Returned DAOs: ', daoAddresses.daoAddr[i][1])
@@ -372,7 +375,7 @@ const getAllDAOs = async () => {
         rootData.push({
           name: name.name,
           description: description.description,
-          slug: slug.slug,
+          slug: 'daobuilder.io/' + slug.slug,
           address: daoAddresses.daoAddr[idx][1][0]._address,
         })
       }
@@ -413,7 +416,7 @@ const getAllDAOs = async () => {
               rootData.push({
                 name: name.name,
                 description: description.description,
-                slug: slug.slug,
+                slug: 'daobuilder.io/' + slug.slug,
                 address: accounts.accounts[i]._address,
               })
               console.log(rootData)
@@ -563,6 +566,89 @@ const destroy = async (id) => {
   }
 }
 
+/*const getToken = async() => {
+
+  const walletAddress = addressConverter(localStorage.getItem('wallet'))
+  var data = JSON.stringify({
+    "ownerAddress": walletAddress,
+    "limit": 100,
+    "offset": 0,
+    "ordering": "amountdescending"
+  });
+
+  const config = {
+    method: 'post',
+    url: 'https://tokens.everscan.io/v1/balances',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: data
+  };
+  //const response = await axios.post(API_URL, goalData, config)
+
+  return axios(config)
+    .then(function (response) {
+      //responseVar = response.data.balances;
+      //console.log('Response: ', response.data);
+      //console.log(JSON.stringify(response.data));
+      tokenAddr = response.data;
+      //console.log(tokenAddr);
+      //for(let i=0;i<response.data.balances.length;i++)
+      //{
+      // tokenAddr.push(response.data.balances[i].rootAddress);
+      //const rootAcc = new ever.Contract(rootAbi, response.data.balances[i].rootAddress);
+      //const decimal = rootAcc.methods.decimals({answerId: 1}).call();
+      //console.log("decimals: ", decimal);
+      //}
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}*/
+
+const getToken = async (address) => {
+  const rootAbi = {
+    'ABI version': 2,
+    version: '2.2',
+    header: ['pubkey', 'time', 'expire'],
+    functions: [
+      {
+        name: 'walletOf',
+        inputs: [
+          { name: 'answerId', type: 'uint32' },
+          { name: 'walletOwner', type: 'address' },
+        ],
+        outputs: [{ name: 'value0', type: 'address' }],
+      },
+      {
+        name: 'symbol',
+        inputs: [{ name: 'answerId', type: 'uint32' }],
+        outputs: [{ name: 'value0', type: 'string' }],
+      },
+      {
+        name: 'decimals',
+        inputs: [{ name: 'answerId', type: 'uint32' }],
+        outputs: [{ name: 'value0', type: 'uint8' }],
+      },
+    ],
+    data: [],
+    events: [],
+  }
+
+  const root = new ever.Contract(rootAbi, address)
+  try {
+    const decimal = await root.methods.decimals({ answerId: 1 }).call()
+    //console.log(decimal);
+    const label = await root.methods.symbol({ answerId: 1 }).call()
+    //console.log(label);
+    //tokensList.push({label: label.value0, decimals: decimal.value0*1, address: tokenAddr, icon:`/avatar/5.svg`});
+    return Promise.resolve(label)
+  } catch (e) {
+    console.log(e)
+    return Promise.reject(e)
+  }
+}
+
 const daoService = {
   getExpectedAddress,
   topup,
@@ -573,6 +659,7 @@ const daoService = {
   getAddressForRoot,
   transferOwnership,
   destroy,
+  getToken,
   //setSettingsChanges,
 }
 

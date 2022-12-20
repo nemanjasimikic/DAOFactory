@@ -44,10 +44,6 @@ const GeneralDaoSettings = () => {
     dispatch(getFactory())
   }, [])
 
-  console.log('dao: ', dao)
-  console.log('formData: ', formData)
-  console.log('id: ', id)
-
   let daoRootAddr
   if (dao) {
     for (let i = 0; i < dao.allDAOs.length; i++) {
@@ -56,7 +52,6 @@ const GeneralDaoSettings = () => {
       }
     }
   }
-  console.log('daoRootAddr: ', daoRootAddr)
 
   async function setSettingsChanges(name, slug, description, id) {
     //const factory = getFactory()
@@ -64,13 +59,11 @@ const GeneralDaoSettings = () => {
       daoFactoryAbi,
       dao.factoryAddress[0]._address
     )
-    console.log('Factory address: ', dao.factoryAddress[0]._address)
     const daoAddresses = await daoFactoryContract.methods
       .getDeployedDAOs({})
       .call()
 
     let daoRootAddress
-    console.log('daoAddresses: ', daoAddresses)
     for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
       if (i == id) {
         daoRootAddress = daoAddresses.daoAddr[i][1][0]._address
@@ -87,13 +80,23 @@ const GeneralDaoSettings = () => {
           withoutSignature: true,
         })
 
-      console.log(daoRootAddress)
       console.log('trx: ', trx)
       return Promise.resolve(trx)
     } catch (e) {
       console.log('error: ', e)
       return Promise.reject(e)
     }
+  }
+
+  async function handleClick(event, name, daoSlug, description, id) {
+    event.preventDefault()
+    const tx = await setSettingsChanges(name, daoSlug, description, id)
+    if (tx) {
+      alert(
+        'A form was submitted: ' + this.state.name + ' // ' + this.state.email
+      )
+    }
+    return tx
   }
 
   return (
@@ -144,6 +147,7 @@ const GeneralDaoSettings = () => {
                   formData.description,
                   id
                 )
+                alert('Changes are saved!')
               }}
             />
           </Form>

@@ -53,14 +53,17 @@ const OwnershipDaoSettings = () => {
             onClick={async (e) => {
               e.preventDefault()
               await daoService.transferOwnership(formData.ownerAddress, id)
+              alert('Ownership is transferred!')
             }}
           />
+          <p>Transfer ownership to Black Hole</p>
           <Button
             style={'primaryBtn'}
             text={'Transfer to Black Hole'}
             onClick={async (e) => {
               e.preventDefault()
               await daoService.destroy(id)
+              alert('Contract is destroyed!')
             }}
           />
         </div>

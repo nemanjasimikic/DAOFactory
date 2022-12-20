@@ -26,7 +26,6 @@ export const getExpectedAddress = createAsyncThunk(
   'getExpectedAddress',
   async (dao, thunkAPI) => {
     try {
-      //  console.log('Dao: ', dao)
       return await daoService.getExpectedAddress()
     } catch (error) {
       return thunkAPI.rejectWithValue('')
@@ -36,7 +35,6 @@ export const getExpectedAddress = createAsyncThunk(
 
 export const topup = createAsyncThunk('topup', async (dao, thunkAPI) => {
   try {
-    // console.log('topup: ', dao)
     return await daoService.topup(dao)
   } catch (error) {
     console.log('error: ', error)
@@ -69,18 +67,6 @@ export const deployFactory = createAsyncThunk(
       const treasury =
         JSON.parse(localStorage.getItem('treasury')) === 'on' ? true : false
 
-      // console.log('pending: ', pending)
-      // console.log('voting: ', voting)
-      // console.log('quorum: ', quorum)
-      // console.log('queued: ', queued)
-      // console.log('threshold: ', threshold)
-      // console.log('execution: ', execution)
-      // console.log('name: ', name)
-      // console.log('slug: ', slug)
-      // console.log('governanceToken: ', governanceToken)
-      // console.log('minStake: ', minStake)
-      // console.log('description: ', description)
-      // console.log('treasury: ', treasury)
       return await daoService.deployFactory(
         parseInt(pending),
         parseInt(voting),
@@ -127,18 +113,7 @@ export const deployDAOFromFactory = createAsyncThunk(
       const treasury =
         JSON.parse(localStorage.getItem('treasury')) === 'on' ? true : false
       const address = JSON.parse(localStorage.getItem('daoAddr'))
-      // console.log('pending: ', pending)
-      // console.log('voting: ', voting)
-      // console.log('quorum: ', quorum)
-      // console.log('queued: ', queued)
-      // console.log('threshold: ', threshold)
-      // console.log('execution: ', execution)
-      // console.log('name: ', name)
-      // console.log('slug: ', slug)
-      // console.log('governanceToken: ', governanceToken)
-      // console.log('minStake: ', minStake)
-      // console.log('description: ', description)
-      // console.log('treasury: ', treasury)
+
       return await daoService.deployDAOFromFactory(
         parseInt(pending),
         parseInt(voting),
@@ -166,7 +141,7 @@ export const getFactory = createAsyncThunk(
   async (dao, thunkAPI) => {
     try {
       const getDao = await daoService.getFactory()
-      //  console.log('get dao: ', getDao)
+
       return getDao
     } catch (error) {
       console.log('getFactory error: ', error)
@@ -180,7 +155,7 @@ export const getAllDAOs = createAsyncThunk(
   async (dao, thunkAPI) => {
     try {
       const getDao = await daoService.getAllDAOs()
-      //  console.log('get dao: ', getDao)
+
       return getDao
     } catch (error) {
       console.log('getAllDAOs error: ', error)
@@ -194,7 +169,7 @@ export const getAddressForRoot = createAsyncThunk(
   async (dao, thunkAPI) => {
     try {
       const address = await daoService.getAddressForRoot()
-      // console.log('address for root: ', address)
+
       return address
     } catch (error) {
       console.log('getAddressForRoot error: ', error)
@@ -318,20 +293,6 @@ export const daoSlice = createSlice({
         state.isError = true
         state.addressForRoot = null
       })
-    /*.addCase(setSettingsChanges.pending, (state) => {
-        state.isLoading = true
-      })
-      .addCase(setSettingsChanges.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.setUpdate = action.payload
-        console.log('state.setUpdate: ', state.setUpdate)
-      })
-      .addCase(setSettingsChanges.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.setUpdate = null
-      })*/
   },
 })
 

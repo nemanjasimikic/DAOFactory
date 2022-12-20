@@ -9,6 +9,7 @@ import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
+//import NoResults from 'components/NoResults'
 
 const IsLoggedIn = () => {
   const dispatch = useDispatch()
@@ -21,18 +22,12 @@ const IsLoggedIn = () => {
   }
   useEffect(onLoadEffect, [])
 
-  //const { dao, isError, isLoading } = useSelector((state) => state.dao)
   const dao = useSelector((state) => state.dao)
   useEffect(() => {
     dispatch(getAllDAOs())
   }, [])
-  //const getDaoList = daoService.getAllDAOs()
-  //console.log(getDaoList)
-  console.log('dao: ', dao)
-  const getAddr = JSON.parse(localStorage.getItem('daoAddresses'))
+
   const getDaoList = dao.allDAOs
-  //console.log('getDaoList: ', getDaoList)
-  //console.log('All DAOs in home: ', getAddr)
   const columns = [
     {
       key: 'id',
@@ -108,8 +103,9 @@ const IsLoggedIn = () => {
           <Button style={'primaryBtn'} text={'Add existing DAO'} />
         </div>
       </ContentHeader>
-      {/*<NoResults />*/}
-      {renderTable ? (
+      {getDaoList?.length < 1 ? (
+        <NoResults />
+      ) : renderTable ? (
         <Table columns={columns} data={data} />
       ) : (
         <div className={styles.daoCardsWrapper}>{itemsList}</div>
