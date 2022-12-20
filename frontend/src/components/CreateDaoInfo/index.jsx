@@ -37,8 +37,6 @@ const CreateDaoInfo = ({ page, formData }) => {
     let sum = pending + queued + voting + execution
     // Save the total amount of hours in the form for later use in deploying the contract
     formData.totalTime = sum
-    // console.log('TOTAL in FORM: ', formData.totalTime)
-
     let toReturn =
       what == 'days'
         ? Math.floor(sum / 24)
