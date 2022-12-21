@@ -22,7 +22,7 @@ const DaoCard = ({ daoName, description, link, id }) => {
           </Link>
         </div>
         <div className={styles.daoCardBottomRow}>
-          <a href={`http://${link}`} target="_blank" className={styles.link}>
+          <a href={`http://${link}`} onClick={(e) => {e.stopPropagation()}} target="_blank" className={styles.link}>
             http://{link}
           </a>
           <img src={linkIcon} alt={'link icon'} />
