@@ -1,8 +1,21 @@
 import styles from './styles.module.sass'
 
-const Button = ({ onClick, text, leftArrow, rightArrow, disabled, style }) => {
+const Button = ({
+  onClick,
+  text,
+  leftArrow,
+  rightArrow,
+  disabled,
+  style,
+  formId,
+}) => {
   return (
-    <button disabled={disabled} onClick={onClick} className={styles[style]}>
+    <button
+      form={formId}
+      disabled={disabled}
+      onClick={onClick}
+      className={styles[style]}
+    >
       <img
         src={leftArrow}
         className={styles.leftArrow}

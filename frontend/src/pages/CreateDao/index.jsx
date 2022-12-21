@@ -29,7 +29,10 @@ const CreateDao = () => {
   const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
   const navigate = useNavigate()
 
-  const { handleSubmit } = useForm()
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
   // const onSubmit = (data, e) => console.log(data, e)
 
   useEffect(() => {
@@ -89,9 +92,11 @@ const CreateDao = () => {
     if (page === 0) {
       return (
         <GeneralInformation
+          formId={'myForm'}
           formData={formData}
           rootAddress={addressForRoot}
           setFormData={setFormData}
+          handleSubmit={handleSubmit}
         />
       )
     } else if (page === 1) {
@@ -158,7 +163,13 @@ const CreateDao = () => {
         <div className={styles.createDaoContent}>
           <ContentHeader title={'Create new DAO'} />
           {/* // TODO: */}
-          <Form handleSubmit={handleSubmit} heading={FormTitles[page]}>
+          <Form
+            formData={formData}
+            id={'myForm'}
+            handleSubmit={handleSubmit}
+            heading={FormTitles[page]}
+            errors={errors}
+          >
             {PageDisplay()}
           </Form>
         </div>
@@ -179,8 +190,13 @@ const CreateDao = () => {
           }}
         />
         <Button
+          formId={'myForm'}
           disabled={page > 3}
-          onClick={() => {
+          onClick={(e) => {
+            // try and validate form
+            handleSubmit(e)
+            console.log('Btn ckicked to validate form')
+            // scroll to top
             window.scrollTo(0, 0)
 
             let pageValidity = []

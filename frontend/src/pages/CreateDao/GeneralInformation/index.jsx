@@ -8,7 +8,13 @@ import { useForm } from 'react-hook-form'
 import ImageButton from 'components/common/ImageButton'
 import daoService from 'store/services/daoService'
 
-const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
+const GeneralInformation = ({
+  formId,
+  formData,
+  setFormData,
+  rootAddress,
+  handleSubmit,
+}) => {
   const { register } = useForm()
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -54,6 +60,7 @@ const GeneralInformation = ({ formData, setFormData, rootAddress }) => {
   return (
     <div className={styles.container}>
       <Input
+        formId={formId}
         id="daoAddress"
         label={'DAO Address'}
         placeholder={'DAO Address'}

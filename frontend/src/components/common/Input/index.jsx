@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { validator, whatPage } from 'helpers/formValidator'
 
 const Input = ({
+  formId,
   buttons,
   label,
   placeholder,
@@ -31,7 +32,8 @@ const Input = ({
     if (registerInput === 'daoAddress' || registerInput === 'daoSlug') {
       return
     } else if (!value) {
-      return 'This is a required field *'
+      // return 'This is a required field *'
+      return
     } else if (page === 2) {
       let voting = registerInput === 'voting' ? true : false
       return validator(value, page, hourOrDay, false, voting)
@@ -44,24 +46,24 @@ const Input = ({
   let color = 'red'
   function styling(what, param) {
     if (
-      what == 'queued' ||
-      what == 'pending' ||
-      what == 'voting' ||
-      what == 'execution'
+      what === 'queued' ||
+      what === 'pending' ||
+      what === 'voting' ||
+      what === 'execution'
     ) {
-      if (param == 'position') {
+      if (param === 'position') {
         return 'absolute'
       } else {
         return '0'
       }
     } else {
-      if (param == 'position') {
+      if (param === 'position') {
         return 'relative'
-      } else if (param == 'bottom') {
+      } else if (param === 'bottom') {
         return null
-      } else if (param == 'marginT') {
+      } else if (param === 'marginT') {
         return '-0.80rem'
-      } else if (param == 'marginB') {
+      } else if (param === 'marginB') {
         return '0.80rem'
       }
       return 'relative'
@@ -82,13 +84,15 @@ const Input = ({
         />
       </div>
       <input
+        id={registerInput}
+        form={formId}
         required={required}
         className={styles.input}
         value={value}
         defaultValue={defaultValue}
         type={type}
         placeholder={placeholder}
-        {...register(registerInput)}
+        {...register(registerInput, { required: 'This is required' })}
         onChange={onChange}
         disabled={disabled}
       />

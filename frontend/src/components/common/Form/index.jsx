@@ -1,14 +1,16 @@
 import FormHeading from './FormHeading'
 import styles from './styles.module.sass'
 
-const Form = ({ children, heading, handleSubmit }) => {
-  const onSubmit = () => {
-    // async request which may result error
-  }
-  const onError = (errors, e) => console.log(errors, e)
-
+const Form = ({ id, children, heading, handleSubmit, formData, errors }) => {
   return (
-    <form onSubmit={handleSubmit(onSubmit, onError)} className={styles.form}>
+    <form
+      id={id}
+      onSubmit={handleSubmit((data) => {
+        console.log('form submitted data: ', formData)
+        console.log('form submitted errors: ', errors)
+      })}
+      className={styles.form}
+    >
       <FormHeading heading={heading} />
       {children}
     </form>
