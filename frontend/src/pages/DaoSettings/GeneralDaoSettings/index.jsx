@@ -108,7 +108,11 @@ const GeneralDaoSettings = () => {
         <Sidebar id={id} />
         <div className={styles.contentWrapper}>
           <ContentHeader title={'DAO settings'} />
-          <Form handleSubmit={handleSubmit} heading={'General'}>
+          <Form
+            id="settingsForm"
+            handleSubmit={handleSubmit}
+            heading={'General'}
+          >
             <Input
               id="daoAddress"
               label={'Dao Address'}
@@ -143,9 +147,11 @@ const GeneralDaoSettings = () => {
               onChange={onChange}
             />
             <Button
+              formId={'settingsForm'}
               style={'bigLightBlueBtn'}
               text={'Save changes'}
               onClick={async (e) => {
+                // handleSubmit(e)
                 e.preventDefault()
                 await setSettingsChanges(
                   formData.name !== '' ? formData.name : name,
@@ -156,6 +162,7 @@ const GeneralDaoSettings = () => {
                   id
                 )
                 alert('Changes are saved!')
+                navigate('/')
               }}
             />
           </Form>

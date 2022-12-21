@@ -195,7 +195,7 @@ const CreateDao = () => {
           onClick={(e) => {
             // try and validate form
             handleSubmit(e)
-            console.log('Btn ckicked to validate form')
+            // console.log('Btn ckicked to validate form')
             // scroll to top
             window.scrollTo(0, 0)
 

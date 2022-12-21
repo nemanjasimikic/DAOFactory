@@ -8,6 +8,8 @@ import FormHeading from '../../../components/common/Form/FormHeading'
 import Button from '../../../components/common/Button'
 import styles from '../styles.module.sass'
 import daoService from 'store/services/daoService'
+import Form from 'components/common/Form'
+import { useForm } from 'react-hook-form'
 
 const OwnershipDaoSettings = () => {
   const wallet = useSelector((state) => state.wallet)
@@ -30,42 +32,57 @@ const OwnershipDaoSettings = () => {
     }))
   }
 
-  console.log('Form data: ', formData)
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
+
+  console.log('Settings button pressed, errors?', errors)
   return (
     <div className={styles.container}>
       <div className={styles.daoSettings}>
         <Sidebar id={id} />
         <div className={styles.contentWrapper}>
           <ContentHeader title={'DAO settings'} />
-          <FormHeading heading={'Ownership'} />
-          <p>Transfer ownership to another address</p>
-          <Input
-            id="ownerAddress"
-            label={'New owner address'}
-            placeholder={'Enter address'}
-            registerInput={'ownerAddress'}
-            type={'email'}
-            onChange={onChange}
-          />
-          <Button
-            style={'primaryBtn'}
-            text={'Transfer'}
-            onClick={async (e) => {
-              e.preventDefault()
-              await daoService.transferOwnership(formData.ownerAddress, id)
-              alert('Ownership is transferred!')
-            }}
-          />
-          <p>Transfer ownership to Black Hole</p>
-          <Button
-            style={'primaryBtn'}
-            text={'Transfer to Black Hole'}
-            onClick={async (e) => {
-              e.preventDefault()
-              await daoService.destroy(id)
-              alert('Contract is destroyed!')
-            }}
-          />
+          <Form
+            id={'ownershipForm'}
+            handleSubmit={handleSubmit}
+            errors={errors}
+            formData={formData}
+          >
+            <FormHeading heading={'Ownership'} />
+            <p>Transfer ownership to another address</p>
+            <Input
+              formId={'ownershipForm'}
+              id="ownerAddress"
+              label={'New owner address'}
+              placeholder={'Enter address'}
+              registerInput={'ownerAddress'}
+              onChange={onChange}
+            />
+            <Button
+              style={'primaryBtn'}
+              text={'Transfer'}
+              onClick={async (e) => {
+                handleSubmit(e)
+                // console.log('handle', handleSubmit(e))
+                await daoService.transferOwnership(formData.ownerAddress, id)
+                alert('Ownership is transferred!')
+                navigate('/')
+                // e.preventDefault()
+              }}
+            />
+            <p>Transfer ownership to Black Hole</p>
+            <Button
+              style={'primaryBtn'}
+              text={'Transfer to Black Hole'}
+              onClick={async (e) => {
+                e.preventDefault()
+                await daoService.destroy(id)
+                alert('Contract is destroyed!')
+              }}
+            />
+          </Form>
         </div>
       </div>
     </div>

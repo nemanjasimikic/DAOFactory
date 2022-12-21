@@ -6,8 +6,8 @@ const Form = ({ id, children, heading, handleSubmit, formData, errors }) => {
     <form
       id={id}
       onSubmit={handleSubmit((data) => {
-        console.log('form submitted data: ', formData)
-        console.log('form submitted errors: ', errors)
+        // console.log('form submitted data: ', formData)
+        // console.log('form submitted errors: ', errors)
       })}
       className={styles.form}
     >
