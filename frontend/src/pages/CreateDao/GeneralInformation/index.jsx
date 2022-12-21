@@ -33,7 +33,7 @@ const GeneralInformation = ({
 
     setFormData((prevState) => ({
       ...prevState,
-      token: token.value0,
+      token: token ? token.value0 : '',
     }))
   }
 
@@ -41,8 +41,18 @@ const GeneralInformation = ({
     formData
 
   // proslediti funkcije koje trebaju da se dese na klik ikonica
-  function onClickFunctionInImage1() {}
-  function onClickFunctionInImage2() {}
+  async function onClickFunctionInImage1() {
+    const address = await daoService.getAddressForRoot()
+    setFormData((prevState) => ({
+      ...prevState,
+      rootAddress: address,
+    }))
+  }
+  function onClickFunctionInImage2() {
+    navigator.clipboard.writeText(
+      document.getElementsByName('daoAddress')[0].value
+    )
+  }
 
   const imageButtons = [
     <ImageButton

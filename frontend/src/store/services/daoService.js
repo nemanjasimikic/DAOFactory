@@ -18,6 +18,99 @@ const deployOptions = {
   initParams: { _nonce: (Math.random() * 64000) | 0 },
   tvc: daoTvc,
 }
+
+const rootAbi = {
+  'ABI version': 2,
+  version: '2.2',
+  header: ['pubkey', 'time', 'expire'],
+  functions: [
+    {
+      name: 'walletOf',
+      inputs: [
+        { name: 'answerId', type: 'uint32' },
+        { name: 'walletOwner', type: 'address' },
+      ],
+      outputs: [{ name: 'value0', type: 'address' }],
+    },
+    {
+      name: 'symbol',
+      inputs: [{ name: 'answerId', type: 'uint32' }],
+      outputs: [{ name: 'value0', type: 'string' }],
+    },
+    {
+      name: 'decimals',
+      inputs: [{ name: 'answerId', type: 'uint32' }],
+      outputs: [{ name: 'value0', type: 'uint8' }],
+    },
+  ],
+  data: [],
+  events: [],
+}
+
+const giver = {
+  'ABI version': 2,
+  version: '2.2',
+  header: ['time', 'expire'],
+  functions: [
+    {
+      name: 'sendTransaction',
+      inputs: [
+        { name: 'dest', type: 'address' },
+        { name: 'value', type: 'uint128' },
+        { name: 'bounce', type: 'bool' },
+      ],
+      outputs: [],
+    },
+    {
+      name: 'transfer',
+      inputs: [
+        { name: 'amount', type: 'uint128' },
+        { name: 'recipient', type: 'address' },
+        { name: 'deployWalletValue', type: 'uint128' },
+        { name: 'remainingGasTo', type: 'address' },
+        { name: 'notify', type: 'bool' },
+        { name: 'payload', type: 'cell' },
+      ],
+      outputs: [],
+    },
+    {
+      name: 'getMessages',
+      inputs: [],
+      outputs: [
+        {
+          components: [
+            { name: 'hash', type: 'uint256' },
+            { name: 'expireAt', type: 'uint64' },
+          ],
+          name: 'messages',
+          type: 'tuple[]',
+        },
+      ],
+    },
+    {
+      name: 'upgrade',
+      inputs: [{ name: 'newcode', type: 'cell' }],
+      outputs: [],
+    },
+    {
+      name: 'constructor',
+      inputs: [],
+      outputs: [],
+    },
+    {
+      name: 'balance',
+      inputs: [{ name: 'answerId', type: 'uint32' }],
+      outputs: [{ name: 'value0', type: 'uint128' }],
+    },
+  ],
+  data: [],
+  events: [],
+  fields: [
+    { name: '_pubkey', type: 'uint256' },
+    { name: '_constructorFlag', type: 'bool' },
+    { name: 'm_messages', type: 'map(uint256,uint64)' },
+  ],
+}
 const getExpectedAddress = async () => {
   const address = await ever.getExpectedAddress(daoFactoryAbi, deployOptions)
   if (!address) {
@@ -50,71 +143,6 @@ const getAddressForRoot = async () => {
 }
 
 const topup = async (addressDao) => {
-  const giver = {
-    'ABI version': 2,
-    version: '2.2',
-    header: ['time', 'expire'],
-    functions: [
-      {
-        name: 'sendTransaction',
-        inputs: [
-          { name: 'dest', type: 'address' },
-          { name: 'value', type: 'uint128' },
-          { name: 'bounce', type: 'bool' },
-        ],
-        outputs: [],
-      },
-      {
-        name: 'transfer',
-        inputs: [
-          { name: 'amount', type: 'uint128' },
-          { name: 'recipient', type: 'address' },
-          { name: 'deployWalletValue', type: 'uint128' },
-          { name: 'remainingGasTo', type: 'address' },
-          { name: 'notify', type: 'bool' },
-          { name: 'payload', type: 'cell' },
-        ],
-        outputs: [],
-      },
-      {
-        name: 'getMessages',
-        inputs: [],
-        outputs: [
-          {
-            components: [
-              { name: 'hash', type: 'uint256' },
-              { name: 'expireAt', type: 'uint64' },
-            ],
-            name: 'messages',
-            type: 'tuple[]',
-          },
-        ],
-      },
-      {
-        name: 'upgrade',
-        inputs: [{ name: 'newcode', type: 'cell' }],
-        outputs: [],
-      },
-      {
-        name: 'constructor',
-        inputs: [],
-        outputs: [],
-      },
-      {
-        name: 'balance',
-        inputs: [{ name: 'answerId', type: 'uint32' }],
-        outputs: [{ name: 'value0', type: 'uint128' }],
-      },
-    ],
-    data: [],
-    events: [],
-    fields: [
-      { name: '_pubkey', type: 'uint256' },
-      { name: '_constructorFlag', type: 'bool' },
-      { name: 'm_messages', type: 'map(uint256,uint64)' },
-    ],
-  }
-
   const giverContract = new ever.Contract(giver, addressDao)
   const walletAddress = addressConverter(localStorage.getItem('wallet'))
 
@@ -565,25 +593,24 @@ const destroy = async (id) => {
     return Promise.reject(e)
   }
 }
-
-/*const getToken = async() => {
-
-  const walletAddress = addressConverter(localStorage.getItem('wallet'))
+let tokenAddr
+const getBalances = async (address) => {
+  const walletAddress = address
   var data = JSON.stringify({
-    "ownerAddress": walletAddress,
-    "limit": 100,
-    "offset": 0,
-    "ordering": "amountdescending"
-  });
+    ownerAddress: walletAddress,
+    limit: 100,
+    offset: 0,
+    ordering: 'amountdescending',
+  })
 
   const config = {
     method: 'post',
     url: 'https://tokens.everscan.io/v1/balances',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    data: data
-  };
+    data: data,
+  }
   //const response = await axios.post(API_URL, goalData, config)
 
   return axios(config)
@@ -591,7 +618,7 @@ const destroy = async (id) => {
       //responseVar = response.data.balances;
       //console.log('Response: ', response.data);
       //console.log(JSON.stringify(response.data));
-      tokenAddr = response.data;
+      tokenAddr = response.data
       //console.log(tokenAddr);
       //for(let i=0;i<response.data.balances.length;i++)
       //{
@@ -602,39 +629,11 @@ const destroy = async (id) => {
       //}
     })
     .catch(function (error) {
-      console.log(error);
-    });
-}*/
+      console.log(error)
+    })
+}
 
 const getToken = async (address) => {
-  const rootAbi = {
-    'ABI version': 2,
-    version: '2.2',
-    header: ['pubkey', 'time', 'expire'],
-    functions: [
-      {
-        name: 'walletOf',
-        inputs: [
-          { name: 'answerId', type: 'uint32' },
-          { name: 'walletOwner', type: 'address' },
-        ],
-        outputs: [{ name: 'value0', type: 'address' }],
-      },
-      {
-        name: 'symbol',
-        inputs: [{ name: 'answerId', type: 'uint32' }],
-        outputs: [{ name: 'value0', type: 'string' }],
-      },
-      {
-        name: 'decimals',
-        inputs: [{ name: 'answerId', type: 'uint32' }],
-        outputs: [{ name: 'value0', type: 'uint8' }],
-      },
-    ],
-    data: [],
-    events: [],
-  }
-
   const root = new ever.Contract(rootAbi, address)
   try {
     const decimal = await root.methods.decimals({ answerId: 1 }).call()
@@ -645,8 +644,98 @@ const getToken = async (address) => {
     return Promise.resolve(label)
   } catch (e) {
     console.log(e)
-    return Promise.reject(e)
+    return null
   }
+}
+
+const getTokenBalance = async (accAddr, govToken) => {
+  const rootAcc = new ever.Contract(rootAbi, govToken)
+  let response
+  try {
+    response = await rootAcc.methods
+      .walletOf({
+        answerId: 1,
+        walletOwner: accAddr,
+      })
+      .call()
+    const userTokenWalletAddress = response.value0._address
+    const tokenWalletAddress = new Address(userTokenWalletAddress)
+    console.log('token wallet: ', tokenWalletAddress)
+    const blabla = await getBalances(accAddr)
+    console.log('blabla: ', tokenAddr)
+    const balance = tokenAddr.balances.find(
+      (token) => token.rootAddress === govToken
+    )
+    console.log('Token balance: ', balance)
+    response = balance.amount * 1
+    return Promise.resolve(response)
+  } catch (e) {
+    console.log('e: ', e)
+    return null
+  }
+}
+
+const getDaoInfo = async (id) => {
+  const factory = await getFactory()
+  console.log(factory)
+  let rootData = {}
+
+  if (factory.length > 0) {
+    const daoFactoryContract = new ever.Contract(
+      daoFactoryAbi,
+      factory[0]._address
+    )
+    let daoAddresses = await getDeployedDaos(daoFactoryContract)
+
+    const daoRootContract = new ever.Contract(
+      daoRootAbi,
+      daoAddresses.daoAddr[id][1][0]._address
+    )
+
+    const name = await daoRootContract.methods.name({}).call()
+    const slug = await daoRootContract.methods.slug({}).call()
+    const description = await daoRootContract.methods.description({}).call()
+    const tokenAddress = await daoRootContract.methods
+      .governanceToken({})
+      .call()
+    const balance = await getTokenBalance(
+      daoAddresses.daoAddr[id][1][0]._address,
+      tokenAddress.governanceToken._address
+    )
+    console.log('dao balance: ', balance)
+    const walletAddress = addressConverter(localStorage.getItem('wallet'))
+    const userBalance = await getTokenBalance(
+      walletAddress,
+      tokenAddress.governanceToken._address
+    )
+    console.log('userBalance: ', userBalance)
+    //console.log('rootAcc response:', response.value0._address)
+
+    const tokenSymbol = await getToken(tokenAddress.governanceToken._address)
+
+    const proposalConfiguration = await daoRootContract.methods
+      .proposalConfiguration({})
+      .call()
+    // const balance = await ever.getBalance(address)
+    const nrOfProposals = await daoRootContract.methods.proposalCount({}).call()
+
+    rootData = {
+      name: name.name,
+      slug: slug.slug,
+      description: description.description,
+      token: tokenSymbol ? tokenSymbol : null,
+      proposalConfiguration: proposalConfiguration.proposalConfiguration,
+      nrOfProposals: nrOfProposals.proposalCount,
+      daoBalance: balance,
+      userBalance: userBalance,
+    }
+  }
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(rootData)
+    })
+  })
 }
 
 const daoService = {
@@ -660,6 +749,7 @@ const daoService = {
   transferOwnership,
   destroy,
   getToken,
+  getDaoInfo,
   //setSettingsChanges,
 }
 

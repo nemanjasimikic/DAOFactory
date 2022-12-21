@@ -21,7 +21,7 @@ const GeneralDaoSettings = () => {
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
-    daoSlug: 'daoubilder.io/',
+    daoSlug: 'daobuilder.io/',
     description: '',
   })
   const { handleSubmit } = useForm()
@@ -45,10 +45,17 @@ const GeneralDaoSettings = () => {
   }, [])
 
   let daoRootAddr
+  let name
+  let slug
+  let description
+
   if (dao) {
     for (let i = 0; i < dao.allDAOs.length; i++) {
       if (i == id) {
         daoRootAddr = dao.allDAOs[i].address
+        name = dao.allDAOs[i].name
+        slug = dao.allDAOs[i].slug
+        description = dao.allDAOs[i].description
       }
     }
   }
@@ -87,17 +94,13 @@ const GeneralDaoSettings = () => {
       return Promise.reject(e)
     }
   }
-
-  async function handleClick(event, name, daoSlug, description, id) {
-    event.preventDefault()
-    const tx = await setSettingsChanges(name, daoSlug, description, id)
-    if (tx) {
-      alert(
-        'A form was submitted: ' + this.state.name + ' // ' + this.state.email
-      )
-    }
-    return tx
-  }
+  console.log('fd: ', formData.daoSlug)
+  const slugArray =
+    formData.daoSlug !== 'daobuilder.io/' ? formData.daoSlug.split('/') : null
+  console.log('slugArray: ', slugArray)
+  console.log('slug: ', slug)
+  const slugChange = slugArray ? slugArray[1] : slug.split('/')[1]
+  console.log('slugChange: ', slugChange)
 
   return (
     <div className={styles.container}>
@@ -120,6 +123,7 @@ const GeneralDaoSettings = () => {
               label={'Project name'}
               placeholder={'Name'}
               registerInput={'name'}
+              defaultValue={name}
               onChange={onChange}
             />
             <Input
@@ -127,6 +131,7 @@ const GeneralDaoSettings = () => {
               label={'DAO slug'}
               placeholder={'address'}
               registerInput={'daoSlug'}
+              defaultValue={slug}
               onChange={onChange}
             />
 
@@ -134,6 +139,7 @@ const GeneralDaoSettings = () => {
             <textarea
               id="description"
               {...register('description')}
+              defaultValue={description}
               onChange={onChange}
             />
             <Button
@@ -142,9 +148,11 @@ const GeneralDaoSettings = () => {
               onClick={async (e) => {
                 e.preventDefault()
                 await setSettingsChanges(
-                  formData.name,
-                  formData.daoSlug,
-                  formData.description,
+                  formData.name !== '' ? formData.name : name,
+                  slugChange,
+                  formData.description !== ''
+                    ? formData.description
+                    : description,
                   id
                 )
                 alert('Changes are saved!')

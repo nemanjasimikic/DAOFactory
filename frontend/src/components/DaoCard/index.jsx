@@ -6,7 +6,7 @@ import linkIcon from 'static/svg/linkIcon.svg'
 
 const DaoCard = ({ daoName, description, link, id }) => {
   return (
-    <Link className={styles.daoCardLink} to={'/balance'}>
+    <Link className={styles.daoCardLink} to={`/balance/${id}`}>
       <div className={styles.daoCard}>
         <div className={styles.daoCardTopRow}>
           <div className={styles.daoInfoWrapper}>
