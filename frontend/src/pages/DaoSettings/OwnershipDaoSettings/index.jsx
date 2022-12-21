@@ -80,6 +80,7 @@ const OwnershipDaoSettings = () => {
                 e.preventDefault()
                 await daoService.destroy(id)
                 alert('Contract is destroyed!')
+                navigate('/')
               }}
             />
           </Form>
