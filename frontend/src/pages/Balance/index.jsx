@@ -1,11 +1,12 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import BalanceInfoCard from 'components/BalanceInfoCard'
 import Button from 'components/common/Button'
 import daoCardLogo from 'static/svg/daoCardLogo.svg'
 import linkIcon from 'static/svg/linkIcon.svg'
 import styles from './styles.module.sass'
+import daoService from 'store/services/daoService'
 
 const Balance = () => {
   const wallet = useSelector((state) => state.wallet)
@@ -17,14 +18,21 @@ const Balance = () => {
     }
   }, [wallet, navigate])
 
+  const { id } = useParams()
+  const [daoInformation, setDaoInformation] = useState({})
+  useEffect(() => {
+    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
+  }, [])
+
+  console.log('daoInformation: ', daoInformation)
   return (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
         <div className={styles.daoNameWrapper}>
           <img src={daoCardLogo} alt={'dao card logo'} />
           <div className={styles.nameWrapper}>
-            <h3>DAO name</h3>
-            <p>projectsite.ever</p>
+            <h3>{daoInformation.name}</h3>
+            <p>daobuilder.io/{daoInformation.slug}</p>
           </div>
         </div>
         <div className={styles.rightSideWrapper}>
@@ -36,50 +44,51 @@ const Balance = () => {
       <div className={styles.balanceGrid}>
         <BalanceInfoCard
           name={'Governance token'}
-          value={'XZC'}
+          value={daoInformation.token ? daoInformation.token.value0 : '-'}
           className={styles.bic1}
         />
-        <BalanceInfoCard
-          name={'Members'}
-          value={'888 888'}
-          className={styles.bic2}
-        />
+        <BalanceInfoCard name={'Members'} value={'-'} className={styles.bic2} />
         <BalanceInfoCard
           name={'Quorum'}
-          value={'51%'}
+          value={`${
+            daoInformation.proposalConfiguration
+              ? daoInformation.proposalConfiguration.quorumVotes
+              : 0
+          }%`}
           className={styles.bic3}
         />
         <BalanceInfoCard
-          name={'Token amount, ZXC'}
-          value={'888 888 888'}
+          name={`Token amount, ${
+            daoInformation.token ? daoInformation.token.value0 : ''
+          }`}
+          value={daoInformation.daoBalance ? daoInformation.daoBalance : '-'}
           className={styles.bic4}
         />
         <BalanceInfoCard
           name={'Proposals'}
-          value={'888 888'}
+          value={daoInformation.nrOfProposals}
           className={styles.bic5}
         />
         <BalanceInfoCard
-          name={'Threshold, ZXC'}
-          value={'888 888 888'}
+          name={`Threshold, ${
+            daoInformation.token ? daoInformation.token.value0 : ''
+          }`}
+          value={
+            daoInformation.proposalConfiguration
+              ? daoInformation.proposalConfiguration.threshold
+              : 0
+          }
           className={styles.bic6}
         />
-        <div className={styles.bic7}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </div>
+        <div className={styles.bic7}>{daoInformation.description}</div>
         <div className={styles.bic8}>
           <div className={styles.infoWrapper}>
             <p className={styles.yourBalance}>Your balance</p>
-            <h3 className={styles.balanceValue}>888 888 888 XZC</h3>
-            <p className={styles.voting}>10% voting weight</p>
+            <h3 className={styles.balanceValue}>
+              {daoInformation.userBalance ? daoInformation.userBalance : '-'}{' '}
+              {daoInformation.token ? daoInformation.token.value0 : ''}
+            </h3>
+            <p className={styles.voting}>0% voting weight</p>
           </div>
           <Button style={'primaryBtn'} text={'Balance management'} />
         </div>
