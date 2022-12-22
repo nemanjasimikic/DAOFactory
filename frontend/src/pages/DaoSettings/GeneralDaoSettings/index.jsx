@@ -156,5 +156,4 @@ const GeneralDaoSettings = () => {
     <div>{<Spinner />}</div>
   )
 }
-
 export default GeneralDaoSettings

@@ -234,8 +234,6 @@ const deployFactory = async (
       return Promise.resolve(accounts)
     } else {
       const address = await getExpectedAddress()
-      if (address) {
-      }
 
       const topupVar = await topup(address, ownerAddress)
       if (topupVar) {
@@ -549,7 +547,6 @@ const addDaoRootToFactory = async (
 const getAllDAOs = async (address) => {
   const factory = await getFactory(address)
   const state = await ever.getProviderState()
-  // console.log('provider: ', state)
   let rootData = []
   try {
     if (factory.accounts && factory.accounts.length > 0) {
@@ -757,7 +754,6 @@ const destroy = async (id, address) => {
   const nonce = daoAddresses.daoAddr.find(
     (address) => address[1][0]._address == daoRootContract.address
   )
-
   const walletAddress = addressConverter(localStorage.getItem('wallet'))
   try {
     const trx = await daoRootContract.methods
@@ -859,7 +855,6 @@ const findDaoBySlug = async (factory, slug) => {
     }
     return Promise.resolve(daoRoot)
   } catch (e) {
-    // console.log('error: ', e)
     return null
   }
 }
@@ -1302,6 +1297,28 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
     return Promise.resolve(proposals)
   } catch (e) {
     return null
+  }
+}
+
+async function setSettingsChanges(name, slug, description, daoAddress) {
+  let daoRootAddress = daoAddress
+
+  try {
+    const providerState = await ever.getProviderState()
+    const publicKey = providerState.permissions.accountInteraction.publicKey
+    const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
+    const trx = await daoRoot.methods
+      .updateDetails({ name_: name, slug_: slug, description_: description })
+      .sendExternal({
+        publicKey: publicKey,
+        withoutSignature: true,
+      })
+
+    console.log('trx: ', trx)
+    return Promise.resolve(trx)
+  } catch (e) {
+    console.log('error: ', e)
+    return Promise.reject(e)
   }
 }
 
