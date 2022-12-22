@@ -12,7 +12,7 @@ import styles from './styles.module.sass'
 //import NoResults from 'components/NoResults'
 
 const IsLoggedIn = () => {
-  const dispatch = useDispatch()
+  //const dispatch = useDispatch()
   const [renderTable, setRenderTable] = useState(true)
 
   const onLoadEffect = () => {
@@ -22,12 +22,14 @@ const IsLoggedIn = () => {
   }
   useEffect(onLoadEffect, [])
 
-  const dao = useSelector((state) => state.dao)
+  //const dao = useSelector((state) => state.dao)
+  const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
-    dispatch(getAllDAOs())
+    daoService.getAllDAOs().then((data) => setDaoInformation(data))
   }, [])
 
-  const getDaoList = dao.allDAOs
+  console.log('daoInformation: ', daoInformation)
+  const getDaoList = daoInformation
   const columns = [
     {
       key: 'id',
@@ -79,7 +81,7 @@ const IsLoggedIn = () => {
   ]
   let itemsList = []
 
-  if (getDaoList != null) {
+  if (getDaoList != null && getDaoList.length > 0) {
     getDaoList.forEach((item, index) => {
       itemsList.push(
         <DaoCard

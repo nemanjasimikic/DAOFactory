@@ -5,8 +5,9 @@ import settings from 'static/svg/settings.svg'
 import linkIcon from 'static/svg/linkIcon.svg'
 
 const DaoCard = ({ daoName, description, link, id }) => {
+  const linkTo = link.split('/')
   return (
-    <Link className={styles.daoCardLink} to={`/balance/${id}`}>
+    <Link className={styles.daoCardLink} to={`${linkTo[1]}`}>
       <div className={styles.daoCard}>
         <div className={styles.daoCardTopRow}>
           <div className={styles.daoInfoWrapper}>
@@ -16,13 +17,23 @@ const DaoCard = ({ daoName, description, link, id }) => {
               <p>{description}</p>
             </div>
           </div>
-          <Link to={`/dao-settings/general/${id}`} className={styles.settings}>
+          <Link
+            to={`/dao-settings/general/${linkTo[1]}`}
+            className={styles.settings}
+          >
             <img src={settings} alt={'settings'} />
             <p>Settings</p>
           </Link>
         </div>
         <div className={styles.daoCardBottomRow}>
-          <a href={`http://${link}`} target="_blank" className={styles.link}>
+          <a
+            href={`http://${link}`}
+            target="_blank"
+            className={styles.link}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+          >
             http://{link}
           </a>
           <img src={linkIcon} alt={'link icon'} />
