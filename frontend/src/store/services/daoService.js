@@ -4,6 +4,7 @@ import { addressConverter } from '../../helpers/addressParser'
 import daoRootAbi from '../../helpers/DaoRoot.abi.json'
 import daoFactoryAbi from '../../helpers/DaoFactory.abi.json'
 import axios from 'axios'
+import tokensList from 'utils/tokens-list'
 
 const API_URL = 'https://tokens.everscan.io/v1/balances'
 const ever = new ProviderRpcClient()
@@ -375,7 +376,7 @@ const getAllDAOs = async () => {
         rootData.push({
           name: name.name,
           description: description.description,
-          slug: 'daobuilder.io/' + slug.slug,
+          slug: 'daobuilder.nswebdevelopment.com/' + slug.slug,
           address: daoAddresses.daoAddr[i][1][0]._address,
         })
       }
@@ -401,7 +402,7 @@ const getAllDAOs = async () => {
         rootData.push({
           name: name.name,
           description: description.description,
-          slug: 'daobuilder.io/' + slug.slug,
+          slug: 'daobuilder.nswebdevelopment.com/' + slug.slug,
           address: daoAddresses.daoAddr[idx][1][0]._address,
         })
       }
@@ -442,7 +443,7 @@ const getAllDAOs = async () => {
               rootData.push({
                 name: name.name,
                 description: description.description,
-                slug: 'daobuilder.io/' + slug.slug,
+                slug: 'daobuilder.nswebdevelopment.com/' + slug.slug,
                 address: accounts.accounts[i]._address,
               })
             }
@@ -610,9 +611,15 @@ const getBalances = async (address) => {
 const getToken = async (address) => {
   const root = new ever.Contract(rootAbi, address)
   try {
-    const decimal = await root.methods.decimals({ answerId: 1 }).call()
     const label = await root.methods.symbol({ answerId: 1 }).call()
-    return Promise.resolve(label)
+    const token = tokensList.find((token) => token.label === label.value0)
+    console.log('token: ', token)
+    const tokenData = {
+      label: label,
+      icon: token ? token.icon : '',
+    }
+    console.log('tokenData: ', tokenData)
+    return Promise.resolve(tokenData)
   } catch (e) {
     console.log(e)
     return null
@@ -622,6 +629,7 @@ const getToken = async (address) => {
 const getTokenBalance = async (accAddr, govToken) => {
   const rootAcc = new ever.Contract(rootAbi, govToken)
   let response
+  await getBalances(accAddr)
   try {
     response = await rootAcc.methods
       .walletOf({
@@ -697,7 +705,7 @@ const getDaoInfo = async (id) => {
       name: name.name,
       slug: slug.slug,
       description: description.description,
-      token: tokenSymbol ? tokenSymbol : null,
+      token: tokenSymbol ? tokenSymbol.label : null,
       proposalConfiguration: proposalConfiguration.proposalConfiguration,
       nrOfProposals: nrOfProposals.proposalCount,
       daoBalance: balance,
@@ -707,9 +715,9 @@ const getDaoInfo = async (id) => {
   }
 
   return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(rootData)
-    })
+    //setTimeout(() => {
+    resolve(rootData)
+    //})
   })
 }
 

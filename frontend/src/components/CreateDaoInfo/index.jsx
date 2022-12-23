@@ -1,6 +1,3 @@
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import styles from './styles.module.sass'
 
 const CreateDaoInfo = ({ page, formData }) => {
@@ -45,15 +42,15 @@ const CreateDaoInfo = ({ page, formData }) => {
   }
 
   //TODO:
-  const iconLogo =
-    formData.token !== '' ? (
-      <img
-        src="/5.svg"
-        width="20"
-        height="20"
-        style={{ marginBottom: '-4px' }}
-      />
-    ) : null
+  const iconLogo = formData.token ? (
+    <img
+      src={formData.icon !== '' ? formData.icon : '/5.svg'}
+      width="20"
+      height="20"
+      style={{ marginBottom: '-4px' }}
+    />
+  ) : null
+  console.log('icon logo: ', iconLogo)
   function calculateTimelineWidth(line, format) {
     let total = formData.totalTime
     let modifier = format == 'Days' ? 24 : 1

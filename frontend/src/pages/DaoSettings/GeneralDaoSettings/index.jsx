@@ -28,12 +28,16 @@ const GeneralDaoSettings = () => {
     }
   }, [wallet, navigate])
 
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
+  const [daoInformation, setDaoInformation] = useState({})
+  /*useEffect(() => {
+    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
+  }, [])*/
+
+  const onLoadEffect = () => {
+    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
   }
+  useEffect(onLoadEffect, [])
+
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
@@ -41,10 +45,13 @@ const GeneralDaoSettings = () => {
     description: '',
   })
 
-  const [daoInformation, setDaoInformation] = useState({})
-  useEffect(() => {
-    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
-  }, [])
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
+
   if (daoInformation.name) {
     let daoRootAddr = daoInformation.daoAddress ? daoInformation.daoAddress : ''
     let name = daoInformation.name ? daoInformation.name : ''
@@ -56,10 +63,11 @@ const GeneralDaoSettings = () => {
     const slugArray =
       formData.daoSlug == 'daobuilder.nswebdevelopment.com/'
         ? slug
-        : formData.daoSlug.split('/')[1]
+        : formData.daoSlug
 
+    console.log('slugArray: ', slugArray)
     const slugChange = slugArray && slug != '' ? slugArray : daoInformation.slug
-
+    console.log('slug: ', slug)
     return (
       <div className={styles.container}>
         <div className={styles.daoSettings}>

@@ -33,7 +33,8 @@ const GeneralInformation = ({
 
     setFormData((prevState) => ({
       ...prevState,
-      token: token ? token.value0 : '',
+      token: token ? token.label.value0 : '',
+      icon: token ? token.icon : '',
     }))
   }
 

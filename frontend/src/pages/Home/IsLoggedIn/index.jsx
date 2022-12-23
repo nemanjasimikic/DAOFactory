@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getAllDAOs, reset } from 'store/features/daoSlice'
-import { useSelector, useDispatch } from 'react-redux'
 import ContentHeader from 'components/common/ContentHeader'
 import Button from 'components/common/Button'
 import NoResults from 'components/NoResults'
@@ -9,7 +7,6 @@ import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
-//import NoResults from 'components/NoResults'
 
 const IsLoggedIn = () => {
   //const dispatch = useDispatch()
@@ -18,7 +15,7 @@ const IsLoggedIn = () => {
   const onLoadEffect = () => {
     setTimeout(() => {
       setRenderTable(false)
-    }, 3000)
+    }, 6000)
   }
   useEffect(onLoadEffect, [])
 

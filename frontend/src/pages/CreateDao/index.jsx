@@ -46,7 +46,7 @@ const CreateDao = () => {
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
-    daoSlug: 'daoubilder.io/',
+    daoSlug: 'daobuilder.nswebdevelopment.com/',
     governanceToken: '',
     minStake: '',
     quorum: 51,
@@ -63,6 +63,7 @@ const CreateDao = () => {
     treasury: false,
     description: '',
     token: '',
+    icon: '',
   })
 
   const [daoInformation, setDaoInformation] = useState({})
