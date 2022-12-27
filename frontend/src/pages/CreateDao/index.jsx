@@ -247,7 +247,7 @@ const CreateDao = () => {
           }}
           style={'bigLightBlueBtn'}
           rightArrow={page < 3 ? rightArrow : ''}
-          text={page < 3 ? 'Next' : 'Create Dao'}
+          text={page < 3 ? 'Next' : 'Create DAO'}
         />
       </div>
     </div>
