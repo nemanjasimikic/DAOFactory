@@ -6,6 +6,7 @@ import infoIcon from 'static/svg/infoIcon.svg'
 import { useForm } from 'react-hook-form'
 import ImageButton from 'components/common/ImageButton'
 import daoService from 'store/services/daoService'
+import { add } from 'lodash'
 
 const GeneralInformation = ({
   formId,
@@ -44,12 +45,16 @@ const GeneralInformation = ({
   async function onClickFunctionInImage1(e) {
     e.preventDefault()
     const address = await daoService.getAddressForRoot()
-    console.log("adresa", address)
+    console.log('adresa', address)
+    rootAddress = address.rootAddress
     setFormData((prevState) => ({
       ...prevState,
-      rootAddress: address,
+      daoAddress: address.rootAddress,
+      nonce: address.nonce,
     }))
   }
+
+  console.log('form data: ', formData)
   function onClickFunctionInImage2(e) {
     e.preventDefault()
     navigator.clipboard.writeText(
@@ -82,7 +87,7 @@ const GeneralInformation = ({
         // secondImage={copy}
         buttons={imageButtons}
         onChange={onChange}
-        value={rootAddress}
+        value={daoAddress !== '' ? daoAddress : rootAddress}
       />
       <Input
         id="name"

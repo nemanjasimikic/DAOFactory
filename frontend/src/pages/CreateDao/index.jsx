@@ -65,6 +65,7 @@ const CreateDao = () => {
     description: '',
     token: '',
     icon: '',
+    nonce: 0,
   })
 
   const [daoInformation, setDaoInformation] = useState({})
@@ -72,7 +73,7 @@ const CreateDao = () => {
     daoService.getAddressForRoot().then((data) => setDaoInformation(data))
   }, [])
   // daoInformationLog1
-  // console.log('daoInformation: ', daoInformation)
+  console.log('daoInformation: ', daoInformation)
 
   const FormTitles = [
     'General information',
@@ -80,7 +81,8 @@ const CreateDao = () => {
     'Proposal timeline ',
     'Treasury',
   ]
-
+  let { daoAddress } = formData
+  daoAddress = daoInformation.rootAddress
   let pressed = false
 
   const PageDisplay = () => {
@@ -90,7 +92,8 @@ const CreateDao = () => {
           formId={'myForm'}
           formData={formData}
           rootAddress={
-            daoInformation.rootAddress ? daoInformation.rootAddress : ''
+            //daoInformation.rootAddress ? daoInformation.rootAddress : formData
+            daoAddress
           }
           setFormData={setFormData}
           handleSubmit={handleSubmit}
@@ -250,7 +253,7 @@ const CreateDao = () => {
                     formData.minStake * 1,
                     formData.description,
                     formData.treasury,
-                    daoInformation.nonce
+                    formData.nonce == 0 ? daoInformation.nonce : formData.nonce
                   )
                   .catch((e) => {
                     console.log(e)
