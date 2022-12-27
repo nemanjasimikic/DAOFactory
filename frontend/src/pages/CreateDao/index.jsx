@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { reset } from 'store/features/daoSlice'
 import Sidebar from 'components/common/Sidebar'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
 import VotingConfiguration from 'pages/CreateDao/VotingConfiguration'
@@ -19,8 +17,8 @@ import { useForm } from 'react-hook-form'
 import { validator, checkValidity } from 'helpers/formValidator'
 import daoService from 'store/services/daoService'
 const CreateDao = () => {
-  const wallet = useSelector((state) => state.wallet)
-  const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
+  // const wallet = useSelector((state) => state.wallet)
+  // const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
   const navigate = useNavigate()
 
   const {
@@ -28,19 +26,19 @@ const CreateDao = () => {
     formState: { errors },
   } = useForm()
 
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
+  // useEffect(() => {
+  //   if (wallet.wallet === null) {
+  //     navigate('/')
+  //   }
+  //
+  //   return () => {
+  //     reset()
+  //   }
+  // }, [wallet, navigate])
 
-    return () => {
-      reset()
-    }
-  }, [wallet, navigate])
-
-  if (isDeployed) {
-    navigate('/')
-  }
+  // if (isDeployed) {
+  //   navigate('/')
+  // }
 
   const [page, setPage] = useState(0)
   let [loading, setLoading] = useState(false)
@@ -131,7 +129,7 @@ const CreateDao = () => {
 
   return (
     <div className={styles.container}>
-      {loading && <Spinner />}
+      {/*{isLoading && <Spinner />}*/}
       <div className={styles.createDao}>
         <Sidebar page={page} setPage={setPage} />
         <div className={styles.createDaoContent}>

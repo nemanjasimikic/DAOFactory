@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import Sidebar from '../../../components/common/Sidebar'
 import ContentHeader from '../../../components/common/ContentHeader'
@@ -13,14 +12,14 @@ import { useForm } from 'react-hook-form'
 import Spinner from 'components/common/Spinner'
 
 const OwnershipDaoSettings = () => {
-  const wallet = useSelector((state) => state.wallet)
+  // const wallet = useSelector((state) => state.wallet)
   const navigate = useNavigate()
   const { id } = useParams()
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
-  }, [wallet, navigate])
+  // useEffect(() => {
+  //   if (wallet.wallet === null) {
+  //     navigate('/')
+  //   }
+  // }, [wallet, navigate])
   let [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     ownerAddress: '',

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+
 import { useNavigate, Link, useParams } from 'react-router-dom'
+
 import BalanceInfoCard from 'components/BalanceInfoCard'
 import Button from 'components/common/Button'
 import daoCardLogo from 'static/svg/daoCardLogo.svg'
@@ -19,15 +20,6 @@ import {
 } from './mocks'
 
 const Balance = () => {
-  const wallet = useSelector((state) => state.wallet)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
-  }, [wallet, navigate])
-
   const { id } = useParams()
   const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {

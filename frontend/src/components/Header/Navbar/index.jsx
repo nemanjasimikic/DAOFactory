@@ -1,20 +1,14 @@
-import { useEffect } from 'react'
+import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { login, logout, reset } from 'store/features/walletSlice'
 import Button from 'components/common/Button'
 import { addressFormat } from 'helpers/addressFormat'
 import styles from './styles.module.sass'
 import walletLogout from 'static/svg/walletLogout.svg'
 import walletAvatar from 'static/svg/walletAvatar.svg'
+import WalletContext from '../../../context/walletContext'
 
 const Navbar = () => {
-  const wallet = useSelector((state) => state.wallet)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(reset())
-  }, [wallet, dispatch])
+  const wallet = useContext(WalletContext)
 
   return (
     <nav className={styles.navbar}>
@@ -38,19 +32,19 @@ const Navbar = () => {
         <Button
           text={'Connect wallet'}
           style={'primaryBtn'}
-          onClick={() => dispatch(login())}
+          // onClick={() => dispatch(login())}
         />
       ) : (
         <div className={styles.walletInfoWrapper}>
           <img src={walletAvatar} alt={'avatar'} />
           <div className={styles.walletBalanceCol}>
-            <p className={styles.address}>{addressFormat(wallet.wallet)}</p>
+            <p className={styles.address}>{addressFormat(wallet.address)}</p>
             <p className={styles.balance}>{wallet.balance}</p>
           </div>
           <img
             className={styles.logout}
             src={walletLogout}
-            onClick={() => dispatch(logout())}
+            // onClick={() => dispatch(logout())}
             alt={'logout'}
           />
         </div>

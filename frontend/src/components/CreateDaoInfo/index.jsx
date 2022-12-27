@@ -1,32 +1,31 @@
 import styles from './styles.module.sass'
 
 const CreateDaoInfo = ({ page, formData }) => {
-  // Calculate days and hours funk
   function calculateDays(what) {
     let pending = parseInt(
       formData.pending
-        ? formData.pendingTime == 'Days'
+        ? formData.pendingTime === 'Days'
           ? formData.pending * 24
           : formData.pending
         : '0'
     )
     let queued = parseInt(
       formData.queued
-        ? formData.queuedTime == 'Days'
+        ? formData.queuedTime === 'Days'
           ? formData.queued * 24
           : formData.queued
         : '0'
     )
     let voting = parseInt(
       formData.voting
-        ? formData.votingTime == 'Days'
+        ? formData.votingTime === 'Days'
           ? formData.voting * 24
           : formData.voting
         : '0'
     )
     let execution = parseInt(
       formData.execution
-        ? formData.executionTime == 'Days'
+        ? formData.executionTime === 'Days'
           ? formData.execution * 24
           : formData.execution
         : '0'
@@ -35,7 +34,7 @@ const CreateDaoInfo = ({ page, formData }) => {
     // Save the total amount of hours in the form for later use in deploying the contract
     formData.totalTime = sum
     let toReturn =
-      what == 'days'
+      what === 'days'
         ? Math.floor(sum / 24)
         : Math.ceil(sum - Math.floor(sum / 24) * 24)
     return toReturn
