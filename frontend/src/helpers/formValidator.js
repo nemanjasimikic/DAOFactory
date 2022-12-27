@@ -54,13 +54,13 @@ export const validator = (data, page, what, toAlert, isVoting) => {
     // Page 2
   } else if (page == 1) {
     if (what === 'threshold') {
-      if (parseInt(data) < 9999) {
+      if (parseInt(data) < 10000) {
         error = true
         if (toAlert) {
           alert("Threshold value can't be lower than 10 000")
         }
         return 'Error: Threshold value too low'
-      } else if (parseInt(data) > 7000001) {
+      } else if (parseInt(data) > 7000000) {
         error = true
         if (toAlert) {
           alert('Threshold value cannot be more than 7 000 000')
