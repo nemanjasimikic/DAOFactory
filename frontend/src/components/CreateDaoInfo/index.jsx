@@ -50,7 +50,6 @@ const CreateDaoInfo = ({ page, formData }) => {
       style={{ marginBottom: '-4px' }}
     />
   ) : null
-  console.log('icon logo: ', iconLogo)
   function calculateTimelineWidth(line, format) {
     let total = formData.totalTime
     let modifier = format == 'Days' ? 24 : 1

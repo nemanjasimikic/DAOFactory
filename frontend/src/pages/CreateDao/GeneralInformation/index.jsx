@@ -102,6 +102,7 @@ const GeneralInformation = ({
         onChange={onChange}
         defaultValue={''}
         value={daoSlug}
+        required={true}
       />
       <Input
         id="governanceToken"

@@ -24,8 +24,8 @@ const IsLoggedIn = () => {
   useEffect(() => {
     daoService.getAllDAOs().then((data) => setDaoInformation(data))
   }, [])
-
-  console.log('daoInformation: ', daoInformation)
+  // daoInformationLog2
+  // console.log('daoInformation: ', daoInformation)
   const getDaoList = daoInformation
   const columns = [
     {

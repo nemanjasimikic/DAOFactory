@@ -71,8 +71,8 @@ const CreateDao = () => {
   useEffect(() => {
     daoService.getAddressForRoot().then((data) => setDaoInformation(data))
   }, [])
-
-  console.log('daoInformation: ', daoInformation)
+  // daoInformationLog1
+  // console.log('daoInformation: ', daoInformation)
 
   const FormTitles = [
     'General information',
@@ -225,23 +225,40 @@ const CreateDao = () => {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {
                 setLoading(true)
-                await daoService.deployFactory(
-                  pendingTime,
-                  votingTime,
-                  formData.quorum,
-                  queuedTime,
-                  formData.threshold,
-                  executionTime,
-                  formData.name,
-                  formData.daoSlug,
-                  formData.governanceToken,
-                  formData.minStake * 1,
-                  formData.description,
-                  formData.treasury,
-                  daoInformation.nonce
-                )
-                setLoading(false)
-                navigate('/')
+
+                let canNavigate = true
+                function navigateOff(canNavigate) {
+                  setLoading(false)
+                  if (canNavigate) {
+                    console.log('Resolved: true')
+                    navigate('/')
+                  }
+                  console.log('Resolved: false')
+                }
+
+                await daoService
+                  .deployFactory(
+                    pendingTime,
+                    votingTime,
+                    formData.quorum,
+                    queuedTime,
+                    formData.threshold,
+                    executionTime,
+                    formData.name,
+                    formData.daoSlug,
+                    formData.governanceToken,
+                    formData.minStake * 1,
+                    formData.description,
+                    formData.treasury,
+                    daoInformation.nonce
+                  )
+                  .catch((e) => {
+                    console.log(e)
+                    setLoading(false)
+                    canNavigate = false
+                    return
+                  })
+                navigateOff(canNavigate)
               }
             }
           }}
