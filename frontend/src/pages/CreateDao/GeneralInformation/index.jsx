@@ -41,14 +41,17 @@ const GeneralInformation = ({
     formData
 
   // proslediti funkcije koje trebaju da se dese na klik ikonica
-  async function onClickFunctionInImage1() {
+  async function onClickFunctionInImage1(e) {
+    e.preventDefault()
     const address = await daoService.getAddressForRoot()
+    console.log("adresa", address)
     setFormData((prevState) => ({
       ...prevState,
       rootAddress: address,
     }))
   }
-  function onClickFunctionInImage2() {
+  function onClickFunctionInImage2(e) {
+    e.preventDefault()
     navigator.clipboard.writeText(
       document.getElementsByName('daoAddress')[0].value
     )
@@ -57,12 +60,12 @@ const GeneralInformation = ({
   const imageButtons = [
     <ImageButton
       image={reloadIcon}
-      onClickFunction={onClickFunctionInImage1}
+      onClickFunction={(e) => onClickFunctionInImage1(e)}
       style={'image1'}
     />,
     <ImageButton
       image={copy}
-      onClickFunction={onClickFunctionInImage2}
+      onClickFunction={(e) => onClickFunctionInImage2(e)}
       style={'image2'}
     />,
   ]
