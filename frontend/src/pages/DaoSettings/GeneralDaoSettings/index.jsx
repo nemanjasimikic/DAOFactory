@@ -9,17 +9,15 @@ import Input from 'components/common/Input'
 import Button from 'components/common/Button'
 import styles from '../styles.module.sass'
 import copy from 'static/svg/copy.svg'
-import { getFactory } from 'store/features/daoSlice'
-import daoAbi from '../../../helpers/DaoRoot.abi.json'
-import daoFactoryAbi from '../../../helpers/DaoFactory.abi.json'
 import { ProviderRpcClient } from 'everscale-inpage-provider'
 import daoService from 'store/services/daoService'
 const GeneralDaoSettings = () => {
   const { register } = useForm()
   const wallet = useSelector((state) => state.wallet)
   const navigate = useNavigate()
-  const { id } = useParams()
+  let { id } = useParams()
 
+  console.log('id: ', id)
   const { handleSubmit } = useForm()
   const ever = new ProviderRpcClient()
   useEffect(() => {

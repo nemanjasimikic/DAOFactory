@@ -183,7 +183,7 @@ const deployFactory = async (
   try {
     if (accounts.accounts && accounts.accounts.length > 0) {
       const address = accounts.accounts[0]._address
-      const parsedSlug = slug.split('/')
+      //const parsedSlug = slug.split('/')
       const daoDeployer = await deployDAOFromFactory(
         pendingPeriod,
         voting,
@@ -192,7 +192,7 @@ const deployFactory = async (
         threshold,
         execution,
         name,
-        parsedSlug[1],
+        slug,
         governanceToken,
         minStake,
         description,
@@ -244,7 +244,7 @@ const deployFactory = async (
         threshold,
         execution,
         name,
-        parsedSlug[1],
+        slug,
         governanceToken,
         minStake,
         description,
@@ -364,23 +364,26 @@ const getAllDAOs = async () => {
         daoFactoryAbi,
         factory.accounts[0]._address
       )
+      console.log('daoFactory:', daoFactoryContract)
       let daoAddresses = await getDeployedDaos(daoFactoryContract)
+      console.log('daoAddresses: ', daoAddresses)
       for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
         const daoRootContract = new ever.Contract(
           daoRootAbi,
           daoAddresses.daoAddr[i][1][0]._address
         )
+        console.log('daoRootContract: ', daoRootContract)
         const name = await daoRootContract.methods.name({}).call()
         const description = await daoRootContract.methods.description({}).call()
         const slug = await daoRootContract.methods.slug({}).call()
         rootData.push({
           name: name.name,
           description: description.description,
-          slug: 'daobuilder.nswebdevelopment.com/' + slug.slug,
+          slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
           address: daoAddresses.daoAddr[i][1][0]._address,
         })
       }
-
+      console.log('root data: ', rootData)
       const code = await ever.splitTvc(daoRootTvc)
       const walletAddress = addressConverter(localStorage.getItem('wallet'))
 
@@ -402,7 +405,7 @@ const getAllDAOs = async () => {
         rootData.push({
           name: name.name,
           description: description.description,
-          slug: 'daobuilder.nswebdevelopment.com/' + slug.slug,
+          slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
           address: daoAddresses.daoAddr[idx][1][0]._address,
         })
       }
@@ -440,10 +443,11 @@ const getAllDAOs = async () => {
                 publicKey
               )
               daoAddresses = await getDeployedDaos(daoFactoryContract)
+              console.log('daoAddresses: ', daoAddresses)
               rootData.push({
                 name: name.name,
                 description: description.description,
-                slug: 'daobuilder.nswebdevelopment.com/' + slug.slug,
+                slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
                 address: accounts.accounts[i]._address,
               })
             }
@@ -478,7 +482,7 @@ const getAllDAOs = async () => {
             rootData.push({
               name: name.name,
               description: description.description,
-              slug: slug.slug,
+              slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
               address: accounts.accounts[i]._address,
             })
           }
@@ -676,8 +680,11 @@ const getDaoInfo = async (id) => {
       daoFactoryAbi,
       factory.accounts[0]._address
     )
-    const daoRootContract = await findDaoBySlug(daoFactoryContract, id)
-
+    const daoRootContract =
+      id.length > 60
+        ? await getDaoByAddress(id)
+        : await findDaoBySlug(daoFactoryContract, id)
+    console.log(daoRootContract)
     const name = await daoRootContract.methods.name({}).call()
     const slug = await daoRootContract.methods.slug({}).call()
     const description = await daoRootContract.methods.description({}).call()
@@ -743,6 +750,17 @@ async function setSettingsChanges(name, slug, description, daoAddress) {
   }
 }
 
+const getDaoByAddress = async (address) => {
+  const daoRootContract = new ever.Contract(daoRootAbi, address)
+  try {
+    //const slug = await daoRootContract.methods.slug({}).call()
+    return Promise.resolve(daoRootContract)
+  } catch (e) {
+    console.log(e)
+    return Promise.reject(e)
+  }
+}
+
 const daoService = {
   getExpectedAddress,
   topup,
@@ -757,6 +775,7 @@ const daoService = {
   getDaoInfo,
   findDaoBySlug,
   setSettingsChanges,
+  getDaoByAddress,
 }
 
 export default daoService

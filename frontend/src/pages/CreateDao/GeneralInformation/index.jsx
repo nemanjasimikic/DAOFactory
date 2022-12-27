@@ -3,7 +3,6 @@ import styles from './styles.module.sass'
 import copy from 'static/svg/copy.svg'
 import reloadIcon from 'static/svg/reloadIcon.svg'
 import infoIcon from 'static/svg/infoIcon.svg'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import ImageButton from 'components/common/ImageButton'
 import daoService from 'store/services/daoService'
@@ -95,10 +94,10 @@ const GeneralInformation = ({
       <Input
         id="daoSlug"
         label={'DAO slug'}
-        placeholder={'address'}
+        placeholder={'slug'}
         registerInput={'daoSlug'}
         onChange={onChange}
-        defaultValue={'daobuilder.io/'}
+        defaultValue={''}
         value={daoSlug}
       />
       <Input
