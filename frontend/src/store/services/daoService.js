@@ -556,13 +556,11 @@ const getAllDAOs = async (address) => {
       )
 
       let daoAddresses = await getDeployedDaos(daoFactoryContract)
-
       for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
         const daoRootContract = new ever.Contract(
           daoRootAbi,
           daoAddresses.daoAddr[i][1][0]._address
         )
-
         const name = await daoRootContract.methods.name({}).call()
         const description = await daoRootContract.methods.description({}).call()
         const slug = await daoRootContract.methods.slug({}).call()
@@ -573,7 +571,7 @@ const getAllDAOs = async (address) => {
           address: daoAddresses.daoAddr[i][1][0]._address,
         })
       }
-
+      console.log('root data: ', rootData)
       const code = await ever.splitTvc(daoRootTvc)
       const walletAddress = addressConverter(localStorage.getItem('wallet'))
 
@@ -637,6 +635,7 @@ const getAllDAOs = async (address) => {
                 )
               }
               daoAddresses = await getDeployedDaos(daoFactoryContract)
+              console.log('daoAddresses: ', daoAddresses)
               rootData.push({
                 name: name.name,
                 description: description.description,
@@ -871,7 +870,6 @@ const getDaoInfo = async (id, address) => {
       id.length > 60
         ? await getDaoByAddress(id)
         : await findDaoBySlug(daoFactoryContract, id)
-
     const name = await daoRootContract.methods.name({}).call()
     const slug = await daoRootContract.methods.slug({}).call()
     const description = await daoRootContract.methods.description({}).call()
@@ -1318,6 +1316,17 @@ async function setSettingsChanges(name, slug, description, daoAddress) {
     return Promise.resolve(trx)
   } catch (e) {
     console.log('error: ', e)
+    return Promise.reject(e)
+  }
+}
+
+const getDaoByAddress = async (address) => {
+  const daoRootContract = new ever.Contract(daoRootAbi, address)
+  try {
+    //const slug = await daoRootContract.methods.slug({}).call()
+    return Promise.resolve(daoRootContract)
+  } catch (e) {
+    console.log(e)
     return Promise.reject(e)
   }
 }
