@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import BalanceInfoCard from 'components/BalanceInfoCard'
 import Button from 'components/common/Button'
@@ -9,14 +8,14 @@ import styles from './styles.module.sass'
 import daoService from 'store/services/daoService'
 
 const Balance = () => {
-  const wallet = useSelector((state) => state.wallet)
+  // const wallet = useSelector((state) => state.wallet)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
-  }, [wallet, navigate])
+  // useEffect(() => {
+  //   if (wallet.wallet === null) {
+  //     navigate('/')
+  //   }
+  // }, [wallet, navigate])
 
   const { id } = useParams()
   const [daoInformation, setDaoInformation] = useState({})

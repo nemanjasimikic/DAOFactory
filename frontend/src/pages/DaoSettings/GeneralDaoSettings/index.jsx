@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import Sidebar from 'components/common/Sidebar'
@@ -15,18 +14,18 @@ import Spinner from 'components/common/Spinner'
 import Table from 'components/common/Table'
 const GeneralDaoSettings = () => {
   const { register } = useForm()
-  const wallet = useSelector((state) => state.wallet)
+  // const wallet = useSelector((state) => state.wallet)
   const navigate = useNavigate()
   let { id } = useParams()
 
   console.log('id: ', id)
   const { handleSubmit } = useForm()
   const ever = new ProviderRpcClient()
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
-  }, [wallet, navigate])
+  // useEffect(() => {
+  //   if (wallet.wallet === null) {
+  //     navigate('/')
+  //   }
+  // }, [wallet, navigate])
   let [loading, setLoading] = useState(false)
   const [daoInformation, setDaoInformation] = useState({})
   /*useEffect(() => {
