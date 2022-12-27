@@ -7,7 +7,7 @@ import linkIcon from 'static/svg/linkIcon.svg'
 const DaoCard = ({ daoName, description, link, id }) => {
   const linkTo = link.split('/')
   return (
-    <Link className={styles.daoCardLink} to={`${linkTo[1]}`}>
+    <Link className={styles.daoCardLink} to={`dao/${linkTo[2]}`}>
       <div className={styles.daoCard}>
         <div className={styles.daoCardTopRow}>
           <div className={styles.daoInfoWrapper}>
@@ -18,7 +18,7 @@ const DaoCard = ({ daoName, description, link, id }) => {
             </div>
           </div>
           <Link
-            to={`/dao-settings/general/${linkTo[1]}`}
+            to={`/dao-settings/general/${linkTo[2]}`}
             className={styles.settings}
           >
             <img src={settings} alt={'settings'} />

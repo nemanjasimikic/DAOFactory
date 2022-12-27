@@ -43,10 +43,11 @@ const CreateDao = () => {
   }
 
   const [page, setPage] = useState(0)
+  let [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
-    daoSlug: 'daobuilder.nswebdevelopment.com/',
+    daoSlug: '',
     governanceToken: '',
     minStake: '',
     quorum: 51,
@@ -127,7 +128,7 @@ const CreateDao = () => {
 
   return (
     <div className={styles.container}>
-      {isLoading && <Spinner />}
+      {loading && <Spinner />}
       <div className={styles.createDao}>
         <Sidebar page={page} setPage={setPage} />
         <div className={styles.createDaoContent}>
@@ -223,6 +224,7 @@ const CreateDao = () => {
               if (page < 3) {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {
+                setLoading(true)
                 await daoService.deployFactory(
                   pendingTime,
                   votingTime,
@@ -238,6 +240,7 @@ const CreateDao = () => {
                   formData.treasury,
                   daoInformation.nonce
                 )
+                setLoading(false)
                 navigate('/')
               }
             }
