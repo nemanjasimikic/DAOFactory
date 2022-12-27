@@ -32,7 +32,7 @@ const Balance = () => {
           <img src={daoCardLogo} alt={'dao card logo'} />
           <div className={styles.nameWrapper}>
             <h3>{daoInformation.name}</h3>
-            <p>daobuilder.io/{daoInformation.slug}</p>
+            <p>daobuilder.nswebdevelopment.com/dao/{daoInformation.slug}</p>
           </div>
         </div>
         <div className={styles.rightSideWrapper}>

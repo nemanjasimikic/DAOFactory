@@ -26,7 +26,7 @@ const Navigation = () => {
           element={<OwnershipDaoSettings />}
         />
         <Route path="create-dao" element={<CreateDao />} />
-        <Route path=":id" element={<Balance />} />
+        <Route path="dao/:id" element={<Balance />} />
       </Routes>
       <Footer />
       <MobileFooter />

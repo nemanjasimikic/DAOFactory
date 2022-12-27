@@ -43,10 +43,11 @@ const CreateDao = () => {
   }
 
   const [page, setPage] = useState(0)
+  let [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
-    daoSlug: 'daoubilder.io/',
+    daoSlug: '',
     governanceToken: '',
     minStake: '',
     quorum: 51,
@@ -63,13 +64,15 @@ const CreateDao = () => {
     treasury: false,
     description: '',
     token: '',
+    icon: '',
+    nonce: 0,
   })
 
   const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
     daoService.getAddressForRoot().then((data) => setDaoInformation(data))
   }, [])
-
+  // daoInformationLog1
   console.log('daoInformation: ', daoInformation)
 
   const FormTitles = [
@@ -78,7 +81,8 @@ const CreateDao = () => {
     'Proposal timeline ',
     'Treasury',
   ]
-
+  let { daoAddress } = formData
+  daoAddress = daoInformation.rootAddress
   let pressed = false
 
   const PageDisplay = () => {
@@ -88,7 +92,8 @@ const CreateDao = () => {
           formId={'myForm'}
           formData={formData}
           rootAddress={
-            daoInformation.rootAddress ? daoInformation.rootAddress : ''
+            //daoInformation.rootAddress ? daoInformation.rootAddress : formData
+            daoAddress
           }
           setFormData={setFormData}
           handleSubmit={handleSubmit}
@@ -126,7 +131,7 @@ const CreateDao = () => {
 
   return (
     <div className={styles.container}>
-      {isLoading && <Spinner />}
+      {loading && <Spinner />}
       <div className={styles.createDao}>
         <Sidebar page={page} setPage={setPage} />
         <div className={styles.createDaoContent}>
@@ -222,28 +227,47 @@ const CreateDao = () => {
               if (page < 3) {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {
-                await daoService.deployFactory(
-                  pendingTime,
-                  votingTime,
-                  formData.quorum,
-                  queuedTime,
-                  formData.threshold,
-                  executionTime,
-                  formData.name,
-                  formData.daoSlug,
-                  formData.governanceToken,
-                  formData.minStake * 1,
-                  formData.description,
-                  formData.treasury,
-                  daoInformation.nonce
-                )
-                navigate('/')
+                setLoading(true)
+
+                let canNavigate = true
+                function navigateOff(canNavigate) {
+                  setLoading(false)
+                  if (canNavigate) {
+                    console.log('Resolved: true')
+                    navigate('/')
+                  }
+                  console.log('Resolved: false')
+                }
+
+                await daoService
+                  .deployFactory(
+                    pendingTime,
+                    votingTime,
+                    formData.quorum,
+                    queuedTime,
+                    formData.threshold,
+                    executionTime,
+                    formData.name,
+                    formData.daoSlug,
+                    formData.governanceToken,
+                    formData.minStake * 1,
+                    formData.description,
+                    formData.treasury,
+                    formData.nonce == 0 ? daoInformation.nonce : formData.nonce
+                  )
+                  .catch((e) => {
+                    console.log(e)
+                    setLoading(false)
+                    canNavigate = false
+                    return
+                  })
+                navigateOff(canNavigate)
               }
             }
           }}
           style={'bigLightBlueBtn'}
           rightArrow={page < 3 ? rightArrow : ''}
-          text={page < 3 ? 'Next' : 'Create Dao'}
+          text={page < 3 ? 'Next' : 'Create DAO'}
         />
       </div>
     </div>

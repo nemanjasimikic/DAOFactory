@@ -9,17 +9,15 @@ import Input from 'components/common/Input'
 import Button from 'components/common/Button'
 import styles from '../styles.module.sass'
 import copy from 'static/svg/copy.svg'
-import { getFactory } from 'store/features/daoSlice'
-import daoAbi from '../../../helpers/DaoRoot.abi.json'
-import daoFactoryAbi from '../../../helpers/DaoFactory.abi.json'
 import { ProviderRpcClient } from 'everscale-inpage-provider'
 import daoService from 'store/services/daoService'
 const GeneralDaoSettings = () => {
   const { register } = useForm()
   const wallet = useSelector((state) => state.wallet)
   const navigate = useNavigate()
-  const { id } = useParams()
+  let { id } = useParams()
 
+  console.log('id: ', id)
   const { handleSubmit } = useForm()
   const ever = new ProviderRpcClient()
   useEffect(() => {
@@ -28,12 +26,16 @@ const GeneralDaoSettings = () => {
     }
   }, [wallet, navigate])
 
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
+  const [daoInformation, setDaoInformation] = useState({})
+  /*useEffect(() => {
+    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
+  }, [])*/
+
+  const onLoadEffect = () => {
+    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
   }
+  useEffect(onLoadEffect, [])
+
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
@@ -41,10 +43,13 @@ const GeneralDaoSettings = () => {
     description: '',
   })
 
-  const [daoInformation, setDaoInformation] = useState({})
-  useEffect(() => {
-    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
-  }, [])
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
+
   if (daoInformation.name) {
     let daoRootAddr = daoInformation.daoAddress ? daoInformation.daoAddress : ''
     let name = daoInformation.name ? daoInformation.name : ''
@@ -56,10 +61,11 @@ const GeneralDaoSettings = () => {
     const slugArray =
       formData.daoSlug == 'daobuilder.nswebdevelopment.com/'
         ? slug
-        : formData.daoSlug.split('/')[1]
+        : formData.daoSlug
 
+    console.log('slugArray: ', slugArray)
     const slugChange = slugArray && slug != '' ? slugArray : daoInformation.slug
-
+    console.log('slug: ', slug)
     return (
       <div className={styles.container}>
         <div className={styles.daoSettings}>

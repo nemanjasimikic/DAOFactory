@@ -3,10 +3,10 @@ import styles from './styles.module.sass'
 import copy from 'static/svg/copy.svg'
 import reloadIcon from 'static/svg/reloadIcon.svg'
 import infoIcon from 'static/svg/infoIcon.svg'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import ImageButton from 'components/common/ImageButton'
 import daoService from 'store/services/daoService'
+import { add } from 'lodash'
 
 const GeneralInformation = ({
   formId,
@@ -33,7 +33,8 @@ const GeneralInformation = ({
 
     setFormData((prevState) => ({
       ...prevState,
-      token: token ? token.value0 : '',
+      token: token ? token.label.value0 : '',
+      icon: token ? token.icon : '',
     }))
   }
 
@@ -41,14 +42,21 @@ const GeneralInformation = ({
     formData
 
   // proslediti funkcije koje trebaju da se dese na klik ikonica
-  async function onClickFunctionInImage1() {
+  async function onClickFunctionInImage1(e) {
+    e.preventDefault()
     const address = await daoService.getAddressForRoot()
+    console.log('adresa', address)
+    rootAddress = address.rootAddress
     setFormData((prevState) => ({
       ...prevState,
-      rootAddress: address,
+      daoAddress: address.rootAddress,
+      nonce: address.nonce,
     }))
   }
-  function onClickFunctionInImage2() {
+
+  console.log('form data: ', formData)
+  function onClickFunctionInImage2(e) {
+    e.preventDefault()
     navigator.clipboard.writeText(
       document.getElementsByName('daoAddress')[0].value
     )
@@ -57,12 +65,12 @@ const GeneralInformation = ({
   const imageButtons = [
     <ImageButton
       image={reloadIcon}
-      onClickFunction={onClickFunctionInImage1}
+      onClickFunction={(e) => onClickFunctionInImage1(e)}
       style={'image1'}
     />,
     <ImageButton
       image={copy}
-      onClickFunction={onClickFunctionInImage2}
+      onClickFunction={(e) => onClickFunctionInImage2(e)}
       style={'image2'}
     />,
   ]
@@ -79,7 +87,7 @@ const GeneralInformation = ({
         // secondImage={copy}
         buttons={imageButtons}
         onChange={onChange}
-        value={rootAddress}
+        value={daoAddress !== '' ? daoAddress : rootAddress}
       />
       <Input
         id="name"
@@ -94,11 +102,12 @@ const GeneralInformation = ({
       <Input
         id="daoSlug"
         label={'DAO slug'}
-        placeholder={'address'}
+        placeholder={'slug'}
         registerInput={'daoSlug'}
         onChange={onChange}
-        defaultValue={'daobuilder.io/'}
+        defaultValue={''}
         value={daoSlug}
+        required={true}
       />
       <Input
         id="governanceToken"
