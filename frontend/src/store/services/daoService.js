@@ -512,36 +512,33 @@ const transferOwnership = async (newOwnerAddress, id) => {
   const factory = await getFactory()
   const daoFactoryContract = new ever.Contract(
     daoFactoryAbi,
-    factory[0]._address
+    factory.accounts[0]._address
   )
+  const daoRootContract =
+    id.length > 60
+      ? await getDaoByAddress(id)
+      : await findDaoBySlug(daoFactoryContract, id)
   const daoAddresses = await getDeployedDaos(daoFactoryContract)
 
-  let daoRootAddress
-  let nonce
-  for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
-    if (i == id) {
-      daoRootAddress = daoAddresses.daoAddr[i][1][0]._address
-      nonce = daoAddresses.daoAddr[i][0]
-    }
-  }
+  const nonce = daoAddresses.daoAddr.find(
+    (address) => address[1][0]._address == daoRootContract.address
+  )
 
   try {
     const walletAddress = addressConverter(localStorage.getItem('wallet'))
 
-    const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
-
-    const trx = await daoRoot.methods
+    const trx = await daoRootContract.methods
       .transferAdmin({ newAdmin: newOwnerAddress })
       .send({ from: walletAddress, amount: toNano(1, 9), bounce: false })
     const providerState = await ever.getProviderState()
     const publicKey = providerState.permissions.accountInteraction.publicKey
     const deleteOld = await daoFactoryContract.methods
-      .removeDao({ nonce: nonce })
+      .removeDao({ nonce: nonce[0] * 1 })
       .sendExternal({
         publicKey: publicKey,
         withoutSignature: true,
       })
-    return Promise.resolve(trx)
+    return Promise.resolve(deleteOld)
   } catch (e) {
     console.log('error: ', e)
     return Promise.reject(e)
@@ -552,27 +549,38 @@ const destroy = async (id) => {
   const factory = await getFactory()
   const daoFactoryContract = new ever.Contract(
     daoFactoryAbi,
-    factory[0]._address
+    factory.accounts[0]._address
   )
+  const daoRootContract =
+    id.length > 60
+      ? await getDaoByAddress(id)
+      : await findDaoBySlug(daoFactoryContract, id)
   const daoAddresses = await getDeployedDaos(daoFactoryContract)
   let daoRootAddress
-  let nonce
-  for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
+  //let nonce
+  console.log('daoRootContract: ', daoRootContract.address)
+  console.log(daoAddresses.daoAddr[0])
+  const nonce = daoAddresses.daoAddr.find(
+    (address) => address[1][0]._address == daoRootContract.address
+  )
+  console.log('nonce: ', nonce)
+  /*for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
     if (i == id) {
       daoRootAddress = daoAddresses.daoAddr[i][1][0]._address
       nonce = daoAddresses.daoAddr[i][0]
     }
-  }
-  const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
+  }*/
+
   const walletAddress = addressConverter(localStorage.getItem('wallet'))
   try {
-    const trx = await daoRoot.methods
+    const trx = await daoRootContract.methods
       .destroy({})
       .send({ from: walletAddress, amount: toNano(1, 9), bounce: false })
     const providerState = await ever.getProviderState()
     const publicKey = providerState.permissions.accountInteraction.publicKey
+    console.log('nonce: ', nonce[0] * 1)
     const deleteOld = await daoFactoryContract.methods
-      .removeDao({ nonce: nonce })
+      .removeDao({ nonce: nonce[0] * 1 })
       .sendExternal({
         publicKey: publicKey,
         withoutSignature: true,

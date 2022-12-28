@@ -89,8 +89,8 @@ const Input = ({
         form={formId}
         required={required}
         className={styles.input}
-        value={value}
         defaultValue={defaultValue}
+        value={value}
         type={type}
         placeholder={placeholder}
         {...register(registerInput, { required: 'This is required' })}
