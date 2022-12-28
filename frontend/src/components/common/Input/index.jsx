@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { validator, whatPage } from 'helpers/formValidator'
 
 const Input = ({
+  id,
   formId,
   buttons,
   label,
@@ -75,6 +76,30 @@ const Input = ({
   // console.log('firstimage', firstImage)
   // console.log('secondimage', buttons?.length)
 
+  let domainRoot = 'daobuilder.nswebdevelopment.com/dao/'
+  function nonRepeat(value) { 
+
+    console.log('DefaultSlug:', defaultValue)
+    console.log('SlugValue:', value)
+
+    if (id != 'daoSlug1' && !value) {
+      console.log('Triggered value to def value')
+      value = defaultValue
+      return value
+    } 
+
+
+    if (id === 'daoSlug') {
+      if (!value) {
+        return domainRoot
+      } else if (value.includes(domainRoot)) {
+        return value
+      } else {
+        return domainRoot
+      }
+    }
+  }
+
   return (
     <div className={styles.inputWrapper}>
       <div className={styles.labelWrapper}>
@@ -95,7 +120,8 @@ const Input = ({
         required={required}
         className={styles.input}
         defaultValue={defaultValue}
-        value={value}
+        value={registerInput === 'daoSlug' ? nonRepeat(value) : value}
+        // value={value}
         type={type}
         placeholder={placeholder}
         {...register(registerInput, { required: 'This is required' })}

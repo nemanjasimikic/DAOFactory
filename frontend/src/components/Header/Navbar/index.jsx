@@ -31,10 +31,18 @@ const Navbar = () => {
     checkWallet()
   }, [])
 
+//   handleClick = (e) => {
+//     const { linkDisabled } = wallet.wallet === null ? true : false
+//     if(linkDisabled) e.preventDefault()
+// }
+
+// to={wallet.wallet === null ? '/' : '/create-dao'}
+
   return (
     <nav className={styles.navbar}>
       <NavLink
-        to={'/create-dao'}
+        // onClick={this.handleClick}
+        to={wallet.wallet === null ? '/' : '/create-dao'}
         className={({ isActive }) =>
           isActive ? styles.active : styles.navLink
         }

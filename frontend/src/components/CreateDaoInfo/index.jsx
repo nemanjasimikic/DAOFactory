@@ -69,7 +69,7 @@ const CreateDaoInfo = ({ page, formData }) => {
         <div className={styles.section}>
           <h3>{formData.name == '' ? 'DAO Name' : formData.name}</h3>
           <p className={styles.link}>
-            daobuilder.nswebdevelopment.com/dao/{formData.daoSlug}
+            {formData.daoSlug}
           </p>
         </div>
         <div className={styles.section}>
