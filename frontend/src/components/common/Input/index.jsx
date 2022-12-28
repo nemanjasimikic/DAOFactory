@@ -32,10 +32,14 @@ const Input = ({
     } else if (!value) {
       // return 'This is a required field *'
       return
-    } else if (page === 2) {
+    } else if (registerInput === 'ownerAddress') {
+      return validator(value, 0, registerInput, false, null)
+    }
+    else if (page === 2) {
       let voting = registerInput === 'voting' ? true : false
       return validator(value, page, hourOrDay, false, voting)
     } else {
+      // let page0 = registerInput === 'ownerAddress' ? 0 : page
       return validator(value, page, registerInput, false)
     }
   }

@@ -11,6 +11,7 @@ import Form from 'components/common/Form'
 import { useForm } from 'react-hook-form'
 import Spinner from 'components/common/Spinner'
 import { WalletContext } from 'context/walletContext'
+import { validator, checkValidity } from 'helpers/formValidator'
 
 const OwnershipDaoSettings = () => {
   const { state: ContextState } = useContext(WalletContext)
@@ -58,12 +59,14 @@ const OwnershipDaoSettings = () => {
                 placeholder={'Enter address'}
                 registerInput={'ownerAddress'}
                 onChange={onChange}
+                value={formData.ownerAddress}
               />
               <Button
                 style={'primaryBtn'}
                 text={'Transfer'}
                 onClick={async (e) => {
                   setLoading(true)
+
                   let canNavigate = true
                   function navigateOff(canNavigate) {
                     setLoading(false)
@@ -73,19 +76,35 @@ const OwnershipDaoSettings = () => {
                     }
                   }
                   handleSubmit(e)
-                  await daoService
-                    .transferOwnership(
+                  await daoService.transferOwnership(
+                    formData.ownerAddress,
+                    id,
+                    addressContext
+                  )
+
+                  let pageValidity = [
+                    validator(
                       formData.ownerAddress,
-                      id,
-                      addressContext
-                    )
-                    .catch((e) => {
-                      console.log(e)
-                      setLoading(false)
-                      canNavigate = false
-                      return
-                    })
-                  navigateOff(canNavigate)
+                      0,
+                      'ownerAddress',
+                      false,
+                      null
+                    ),
+                  ]
+
+                  if (checkValidity(pageValidity) === true) {
+                    console.log('DID PASS CHECK!')
+                    await daoService
+                      .transferOwnership(formData.ownerAddress, id)
+                      .catch((e) => {
+                        console.log(e)
+                        setLoading(false)
+                        canNavigate = false
+                        return
+                      })
+                    navigateOff(canNavigate)
+                  }
+                  setLoading(false)
                 }}
               />
               <p>Transfer ownership to Black Hole</p>

@@ -17,6 +17,11 @@
   }
 }
 
+/*To be removed later BODYBG*/
+body {
+  background-color: rgb(4, 8, 40);
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
