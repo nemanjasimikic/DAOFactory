@@ -16,7 +16,7 @@ export const validator = (data, page, what, toAlert, isVoting) => {
       } else {
         error = false
       }
-    } else if (what === 'governanceToken') {
+    } else if (what === 'governanceToken' || what === 'ownerAddress') {
       if (data.length < 66) {
         error = true
         if (toAlert) {
