@@ -1,21 +1,33 @@
 @import 'src/sass/theme'
 
 .container
+
+  .infoContainer::-webkit-scrollbar
+    width: 10px
+  .infoContainer::-webkit-scrollbar-track
+    background: #f1f1f100
+  .infoContainer::-webkit-scrollbar-thumb
+    background: #999
+  .infoContainer::-webkit-scrollbar-thumb:hover
+    background: #ffffff
+
   .infoContainer
     width: 400px
     border: 1px solid rgba(255, 255, 255, 0.16)
     margin-left: 100px
     margin-top: 100px
     padding: 24px
+    overflow-x: scroll
 
     .section
       margin-bottom: 24px
 
       h3
-        margin: 0
+        width: auto
+        margin: 0 0 0 0
         +small-medium-white-text
       .link
-        margin: 0
+        margin: 0 0 0 0
         +small-grey-text
 
       .sectionRow
