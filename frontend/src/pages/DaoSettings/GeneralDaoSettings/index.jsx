@@ -38,7 +38,6 @@ const GeneralDaoSettings = () => {
     daoSlug: 'daobuilder.nswebdevelopment.com/',
     description: '',
   })
-
   const [daoInformation, setDaoInformation] = useState({})
   /*useEffect(() => {
     daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
@@ -158,4 +157,5 @@ const GeneralDaoSettings = () => {
     <div>{<Spinner />}</div>
   )
 }
+
 export default GeneralDaoSettings

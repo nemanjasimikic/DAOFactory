@@ -760,7 +760,6 @@ const destroy = async (id, address) => {
       .send({ from: walletAddress, amount: toNano(1, 9), bounce: false })
     const providerState = await ever.getProviderState()
     const publicKey = providerState.permissions.accountInteraction.publicKey
-
     const deleteOld = await daoFactoryContract.methods
       .removeDao({ nonce: nonce[0] * 1 })
       .sendExternal({
