@@ -51,10 +51,12 @@ const GeneralDaoSettings = () => {
       [e.target.name]: e.target.value,
     }))
   }
+
   let name
   let slug
   let description
   let slugChange
+
   if (daoInformation.name) {
     //loading = false
     let daoRootAddr = daoInformation.daoAddress ? daoInformation.daoAddress : ''
@@ -68,6 +70,7 @@ const GeneralDaoSettings = () => {
         : formData.daoSlug
 
     console.log('slugArray: ', slugArray)
+
     slugChange = slugArray && slug != '' ? slugArray : daoInformation.slug
     console.log('slug: ', slug)
   }

@@ -71,7 +71,7 @@ const Input = ({
   }
 
   // console.log('firstimage', firstImage)
-  // console.log('secondimage', secondImage)
+  // console.log('secondimage', buttons?.length)
 
   return (
     <div className={styles.inputWrapper}>
@@ -84,6 +84,7 @@ const Input = ({
         />
       </div>
       <input
+        style={{paddingRight: `${buttons?.length * 31}px`, paddingLeft: '10px'}}
         id={registerInput}
         form={formId}
         required={required}
