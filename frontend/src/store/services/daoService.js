@@ -231,6 +231,8 @@ const deployFactory = async (
         nonce,
         ownerAddress
       )
+      console.log('treasury: ', treasury)
+      console.log('daoDeployer: ', daoDeployer)
       return Promise.resolve(accounts)
     } else {
       const address = await getExpectedAddress()
