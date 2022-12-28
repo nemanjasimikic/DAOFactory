@@ -91,7 +91,7 @@ const GeneralDaoSettings = () => {
             >
               <Input
                 id="daoAddress"
-                label={'Dao Address'}
+                label={'DAO Address'}
                 placeholder={'DAO Address'}
                 registerInput={'daoAddress'}
                 value={
@@ -106,10 +106,13 @@ const GeneralDaoSettings = () => {
                 placeholder={'Name'}
                 registerInput={'name'}
                 defaultValue={name}
+                // value={
+                //   daoInformation.name ? daoInformation.name : ''
+                // }
                 onChange={onChange}
               />
               <Input
-                id="daoSlug"
+                id="daoSlug1"
                 label={'DAO slug'}
                 placeholder={'slug'}
                 registerInput={'daoSlug'}
@@ -129,7 +132,13 @@ const GeneralDaoSettings = () => {
                 style={'bigLightBlueBtn'}
                 text={'Save changes'}
                 onClick={async (e) => {
+
+                  console.log(formData.name)
+                  console.log(formData.slug)
+                  console.log(formData.description)
+
                   // handleSubmit(e)
+
                   setLoading(true)
                   let canNavigate = true
                   function navigateOff(canNavigate) {
@@ -160,10 +169,9 @@ const GeneralDaoSettings = () => {
                     })
                   e.preventDefault()
                   navigateOff(canNavigate)
-                  //  setLoading(false)
-                  //alert('Changes are saved!')
-                  //navigate('/')
+                // comment till here
                 }}
+                // and the disabled too
                 disabled={loading}
               />
             </Form>

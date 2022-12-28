@@ -47,7 +47,7 @@ const CreateDao = () => {
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
-    daoSlug: '',
+    daoSlug: 'daobuilder.nswebdevelopment.com/dao/',
     governanceToken: '',
     minStake: '',
     quorum: 51,
@@ -248,7 +248,7 @@ const CreateDao = () => {
                     formData.threshold,
                     executionTime,
                     formData.name,
-                    formData.daoSlug,
+                    formData.daoSlug.split('/')[2],
                     formData.governanceToken,
                     formData.minStake * 1,
                     formData.description,
