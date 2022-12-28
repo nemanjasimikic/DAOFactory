@@ -180,6 +180,9 @@ const deployFactory = async (
   nonce
 ) => {
   const accounts = await getFactory()
+  console.log('treasury: ', treasury)
+  const treasure = treasury === 'on' ? true : treasury
+  console.log('treasure: ', treasure)
   try {
     if (accounts.accounts && accounts.accounts.length > 0) {
       const address = accounts.accounts[0]._address
@@ -196,10 +199,12 @@ const deployFactory = async (
         governanceToken,
         minStake,
         description,
-        treasury,
+        treasure,
         address,
         nonce
       )
+      console.log('treasury: ', treasury)
+      console.log('daoDeployer: ', daoDeployer)
       return Promise.resolve(accounts)
     } else {
       const address = await getExpectedAddress()
@@ -248,7 +253,7 @@ const deployFactory = async (
         governanceToken,
         minStake,
         description,
-        treasury,
+        treasure,
         address,
         nonce
       )
@@ -428,6 +433,7 @@ const getAllDAOs = async () => {
             const admin = await daoRootContract.methods
               .getAdmin({ answerId: 0 })
               .call()
+            let counter = 0
             if (admin.value0._address === walletAddress) {
               const name = await daoRootContract.methods.name({}).call()
               const description = await daoRootContract.methods
@@ -437,11 +443,16 @@ const getAllDAOs = async () => {
               const providerState = await ever.getProviderState()
               const publicKey =
                 providerState.permissions.accountInteraction.publicKey
-              const novi = await addDaoRootToFactory(
-                daoFactoryContract,
-                accounts.accounts[i]._address,
-                publicKey
-              )
+              console.log('account za dodati: ', accounts.accounts[i]._address)
+              console.log('dao factory: ', daoFactoryContract)
+              counter = counter + 1
+              if (counter == 1) {
+                const novi = await addDaoRootToFactory(
+                  daoFactoryContract,
+                  accounts.accounts[i]._address,
+                  publicKey
+                )
+              }
               daoAddresses = await getDeployedDaos(daoFactoryContract)
               console.log('daoAddresses: ', daoAddresses)
               rootData.push({
