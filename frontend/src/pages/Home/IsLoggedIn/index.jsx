@@ -104,7 +104,7 @@ const IsLoggedIn = () => {
       </ContentHeader>
       {getDaoList?.length < 1 ? (
         <NoResults />
-      ) : renderTable ? (
+      ) : itemsList.length < 1 /*renderTable*/ ? (
         <Table columns={columns} data={data} />
       ) : (
         <div className={styles.daoCardsWrapper}>{itemsList}</div>

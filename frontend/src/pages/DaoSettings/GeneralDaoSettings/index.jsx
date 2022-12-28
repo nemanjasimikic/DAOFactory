@@ -11,6 +11,8 @@ import styles from '../styles.module.sass'
 import copy from 'static/svg/copy.svg'
 import { ProviderRpcClient } from 'everscale-inpage-provider'
 import daoService from 'store/services/daoService'
+import Spinner from 'components/common/Spinner'
+import Table from 'components/common/Table'
 const GeneralDaoSettings = () => {
   const { register } = useForm()
   const wallet = useSelector((state) => state.wallet)
@@ -25,7 +27,7 @@ const GeneralDaoSettings = () => {
       navigate('/')
     }
   }, [wallet, navigate])
-
+  let [loading, setLoading] = useState(false)
   const [daoInformation, setDaoInformation] = useState({})
   /*useEffect(() => {
     daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
@@ -49,14 +51,16 @@ const GeneralDaoSettings = () => {
       [e.target.name]: e.target.value,
     }))
   }
-
+  let name
+  let slug
+  let description
+  let slugChange
   if (daoInformation.name) {
+    //loading = false
     let daoRootAddr = daoInformation.daoAddress ? daoInformation.daoAddress : ''
-    let name = daoInformation.name ? daoInformation.name : ''
-    let slug = daoInformation.slug ? daoInformation.slug : ''
-    let description = daoInformation.description
-      ? daoInformation.description
-      : ''
+    name = daoInformation.name ? daoInformation.name : ''
+    slug = daoInformation.slug ? daoInformation.slug : ''
+    description = daoInformation.description ? daoInformation.description : ''
 
     const slugArray =
       formData.daoSlug == 'daobuilder.nswebdevelopment.com/'
@@ -64,9 +68,14 @@ const GeneralDaoSettings = () => {
         : formData.daoSlug
 
     console.log('slugArray: ', slugArray)
-    const slugChange = slugArray && slug != '' ? slugArray : daoInformation.slug
+    slugChange = slugArray && slug != '' ? slugArray : daoInformation.slug
     console.log('slug: ', slug)
-    return (
+  }
+  console.log('name: ', name)
+
+  return name ? (
+    <div>
+      {loading && <Spinner />}
       <div className={styles.container}>
         <div className={styles.daoSettings}>
           <Sidebar id={id} />
@@ -99,7 +108,7 @@ const GeneralDaoSettings = () => {
               <Input
                 id="daoSlug"
                 label={'DAO slug'}
-                placeholder={'address'}
+                placeholder={'slug'}
                 registerInput={'daoSlug'}
                 defaultValue={slug}
                 onChange={onChange}
@@ -118,25 +127,50 @@ const GeneralDaoSettings = () => {
                 text={'Save changes'}
                 onClick={async (e) => {
                   // handleSubmit(e)
-
-                  await daoService.setSettingsChanges(
-                    formData.name !== '' ? formData.name : daoInformation.name,
-                    slugChange,
-                    formData.description !== ''
-                      ? formData.description
-                      : daoInformation.description,
-                    daoInformation.daoAddress
-                  )
+                  setLoading(true)
+                  let canNavigate = true
+                  function navigateOff(canNavigate) {
+                    setLoading(false)
+                    if (canNavigate) {
+                      console.log('Resolved: true')
+                      alert('Changes are saved!')
+                      navigate('/')
+                    }
+                    console.log('Resolved: false')
+                  }
+                  await daoService
+                    .setSettingsChanges(
+                      formData.name !== ''
+                        ? formData.name
+                        : daoInformation.name,
+                      slugChange,
+                      formData.description !== ''
+                        ? formData.description
+                        : daoInformation.description,
+                      daoInformation.daoAddress
+                    )
+                    .catch((e) => {
+                      console.log(e)
+                      setLoading(false)
+                      canNavigate = false
+                      return
+                    })
                   e.preventDefault()
-                  alert('Changes are saved!')
-                  navigate('/')
+                  navigateOff(canNavigate)
+                  //  setLoading(false)
+                  //alert('Changes are saved!')
+                  //navigate('/')
                 }}
+                disabled={loading}
               />
             </Form>
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  ) : (
+    <div>{<Spinner />}</div>
+  )
 }
+
 export default GeneralDaoSettings

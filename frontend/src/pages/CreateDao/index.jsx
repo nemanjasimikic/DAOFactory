@@ -130,145 +130,149 @@ const CreateDao = () => {
       : formData.execution * 3600 * 24
 
   return (
-    <div className={styles.container}>
+    <div>
       {loading && <Spinner />}
-      <div className={styles.createDao}>
-        <Sidebar page={page} setPage={setPage} />
-        <div className={styles.createDaoContent}>
-          <ContentHeader title={'Create new DAO'} />
-          {/* // TODO: */}
-          <Form
-            formData={formData}
-            id={'myForm'}
-            handleSubmit={handleSubmit}
-            heading={FormTitles[page]}
-            errors={errors}
-          >
-            {PageDisplay()}
-          </Form>
+      <div className={styles.container}>
+        <div className={styles.createDao}>
+          <Sidebar page={page} setPage={setPage} />
+          <div className={styles.createDaoContent}>
+            <ContentHeader title={'Create new DAO'} />
+            {/* // TODO: */}
+            <Form
+              formData={formData}
+              id={'myForm'}
+              handleSubmit={handleSubmit}
+              heading={FormTitles[page]}
+              errors={errors}
+            >
+              {PageDisplay()}
+            </Form>
+          </div>
+          <CreateDaoInfo page={page} formData={formData} />
         </div>
-        <CreateDaoInfo page={page} formData={formData} />
-      </div>
-      <div className={styles.formNavigation}>
-        <Button
-          style={'transparentBtn'}
-          text={'Back'}
-          leftArrow={leftArrow}
-          onClick={() => {
-            window.scrollTo(0, 0)
-            if (page !== 0) {
-              setPage((currentPage) => currentPage - 1)
-            } else {
-              // Add a "navigate to main page" here maybe?
-            }
-          }}
-        />
-        <Button
-          formId={'myForm'}
-          disabled={page > 3}
-          onClick={async (e) => {
-            // try and validate form
-            handleSubmit(e)
-            // scroll to top
-            window.scrollTo(0, 0)
-
-            let pageValidity = []
-
-            if (page === 0) {
-              pageValidity = [
-                validator(formData.name, page, 'name', false, null),
-                validator(
-                  formData.governanceToken,
-                  page,
-                  'governanceToken',
-                  false,
-                  null
-                ),
-                validator(formData.minStake, page, 'minStake', false, null),
-              ]
-            } else if (page == 1) {
-              pageValidity = [
-                validator(formData.threshold, page, 'threshold', false, null),
-              ]
-            } else if (page == 2) {
-              pageValidity = [
-                validator(
-                  formData.pending,
-                  page,
-                  formData.pendingTime,
-                  false,
-                  null
-                ),
-                validator(
-                  formData.queued,
-                  page,
-                  formData.queuedTime,
-                  false,
-                  null
-                ),
-                validator(
-                  formData.voting,
-                  page,
-                  formData.votingTime,
-                  false,
-                  true
-                ),
-                validator(
-                  formData.execution,
-                  page,
-                  formData.executionTime,
-                  false,
-                  null
-                ),
-              ]
-            }
-
-            if (checkValidity(pageValidity) === true) {
-              if (page < 3) {
-                setPage((currentPage) => currentPage + 1)
-              } else if (page === 3) {
-                setLoading(true)
-
-                let canNavigate = true
-                function navigateOff(canNavigate) {
-                  setLoading(false)
-                  if (canNavigate) {
-                    console.log('Resolved: true')
-                    navigate('/')
-                  }
-                  console.log('Resolved: false')
-                }
-
-                await daoService
-                  .deployFactory(
-                    pendingTime,
-                    votingTime,
-                    formData.quorum,
-                    queuedTime,
-                    formData.threshold,
-                    executionTime,
-                    formData.name,
-                    formData.daoSlug,
-                    formData.governanceToken,
-                    formData.minStake * 1,
-                    formData.description,
-                    formData.treasury,
-                    formData.nonce == 0 ? daoInformation.nonce : formData.nonce
-                  )
-                  .catch((e) => {
-                    console.log(e)
-                    setLoading(false)
-                    canNavigate = false
-                    return
-                  })
-                navigateOff(canNavigate)
+        <div className={styles.formNavigation}>
+          <Button
+            style={'transparentBtn'}
+            text={'Back'}
+            leftArrow={leftArrow}
+            onClick={() => {
+              window.scrollTo(0, 0)
+              if (page !== 0) {
+                setPage((currentPage) => currentPage - 1)
+              } else {
+                // Add a "navigate to main page" here maybe?
               }
-            }
-          }}
-          style={'bigLightBlueBtn'}
-          rightArrow={page < 3 ? rightArrow : ''}
-          text={page < 3 ? 'Next' : 'Create DAO'}
-        />
+            }}
+          />
+          <Button
+            formId={'myForm'}
+            disabled={page > 3}
+            onClick={async (e) => {
+              // try and validate form
+              handleSubmit(e)
+              // scroll to top
+              window.scrollTo(0, 0)
+
+              let pageValidity = []
+
+              if (page === 0) {
+                pageValidity = [
+                  validator(formData.name, page, 'name', false, null),
+                  validator(
+                    formData.governanceToken,
+                    page,
+                    'governanceToken',
+                    false,
+                    null
+                  ),
+                  validator(formData.minStake, page, 'minStake', false, null),
+                ]
+              } else if (page == 1) {
+                pageValidity = [
+                  validator(formData.threshold, page, 'threshold', false, null),
+                ]
+              } else if (page == 2) {
+                pageValidity = [
+                  validator(
+                    formData.pending,
+                    page,
+                    formData.pendingTime,
+                    false,
+                    null
+                  ),
+                  validator(
+                    formData.queued,
+                    page,
+                    formData.queuedTime,
+                    false,
+                    null
+                  ),
+                  validator(
+                    formData.voting,
+                    page,
+                    formData.votingTime,
+                    false,
+                    true
+                  ),
+                  validator(
+                    formData.execution,
+                    page,
+                    formData.executionTime,
+                    false,
+                    null
+                  ),
+                ]
+              }
+
+              if (checkValidity(pageValidity) === true) {
+                if (page < 3) {
+                  setPage((currentPage) => currentPage + 1)
+                } else if (page === 3) {
+                  setLoading(true)
+
+                  let canNavigate = true
+                  function navigateOff(canNavigate) {
+                    setLoading(false)
+                    if (canNavigate) {
+                      console.log('Resolved: true')
+                      navigate('/')
+                    }
+                    console.log('Resolved: false')
+                  }
+
+                  await daoService
+                    .deployFactory(
+                      pendingTime,
+                      votingTime,
+                      formData.quorum,
+                      queuedTime,
+                      formData.threshold,
+                      executionTime,
+                      formData.name,
+                      formData.daoSlug,
+                      formData.governanceToken,
+                      formData.minStake * 1,
+                      formData.description,
+                      formData.treasury,
+                      formData.nonce == 0
+                        ? daoInformation.nonce
+                        : formData.nonce
+                    )
+                    .catch((e) => {
+                      console.log(e)
+                      setLoading(false)
+                      canNavigate = false
+                      return
+                    })
+                  navigateOff(canNavigate)
+                }
+              }
+            }}
+            style={'bigLightBlueBtn'}
+            rightArrow={page < 3 ? rightArrow : ''}
+            text={page < 3 ? 'Next' : 'Create DAO'}
+          />
+        </div>
       </div>
     </div>
   )
