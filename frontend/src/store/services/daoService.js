@@ -198,7 +198,7 @@ const deployFactory = async (
         governanceToken,
         minStake,
         description,
-        treasure,
+        treasury,
         address,
         nonce,
         ownerAddress
@@ -250,7 +250,7 @@ const deployFactory = async (
         governanceToken,
         minStake,
         description,
-        treasure,
+        treasury,
         address,
         nonce,
         ownerAddress
@@ -789,7 +789,7 @@ const getAllProposals = async () => {
     })
 }
 
-let dateNow =  new Date().getTime()
+let dateNow = new Date().getTime()
 
 const getProposals = async () => {
   await getAllProposals()
@@ -802,13 +802,32 @@ const getProposals = async () => {
       status: allProposals.proposals[i].state,
       voting: 'voting1',
       date: 'date1',
-      forVotes: allProposals.proposals[i].forVotes *1,
-      againstVotes: allProposals.proposals[i].againstVotes *1,
-      endTime: dayjs.unix(allProposals.proposals[i].endTime).format('DD MMM YYYY HH:mm'),
-      startTime: dayjs.unix(allProposals.proposals[i].startTime).format('DD MMM YYYY HH:mm'),
-      actionInMS: (new Date(dayjs.unix(allProposals.proposals[i].endTime).format('DD MMM YYYY HH:mm')).getTime()) - dateNow,
-      actionInDays: Math.ceil((new Date(dayjs.unix(allProposals.proposals[i].endTime).format('DD MMM YYYY HH:mm')).getTime() - dateNow) / (1000 * 3600 * 24)),
-      queuedTime: dayjs.unix(allProposals.proposals[i].queuedAt).format('DD MMM YYYY HH:mm'),
+      forVotes: allProposals.proposals[i].forVotes * 1,
+      againstVotes: allProposals.proposals[i].againstVotes * 1,
+      endTime: dayjs
+        .unix(allProposals.proposals[i].endTime)
+        .format('DD MMM YYYY HH:mm'),
+      startTime: dayjs
+        .unix(allProposals.proposals[i].startTime)
+        .format('DD MMM YYYY HH:mm'),
+      actionInMS:
+        new Date(
+          dayjs
+            .unix(allProposals.proposals[i].endTime)
+            .format('DD MMM YYYY HH:mm')
+        ).getTime() - dateNow,
+      actionInDays: Math.ceil(
+        (new Date(
+          dayjs
+            .unix(allProposals.proposals[i].endTime)
+            .format('DD MMM YYYY HH:mm')
+        ).getTime() -
+          dateNow) /
+          (1000 * 3600 * 24)
+      ),
+      queuedTime: dayjs
+        .unix(allProposals.proposals[i].queuedAt)
+        .format('DD MMM YYYY HH:mm'),
     })
   }
   // console.log('proposals: ', proposals)

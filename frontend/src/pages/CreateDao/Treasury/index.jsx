@@ -1,13 +1,20 @@
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 
 const Treasury = ({ formData, setFormData }) => {
   const { register } = useForm()
+  const [isChecked, setIsChecked] = useState(false)
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
+  }
+
+  const handleOnChange = () => {
+    setIsChecked(!isChecked)
+    formData.treasury = !isChecked
   }
   return (
     <div className={styles.container}>
@@ -21,7 +28,7 @@ const Treasury = ({ formData, setFormData }) => {
           id="treasury"
           type={'checkbox'}
           {...register('treasury')}
-          onChange={onChange}
+          onChange={handleOnChange}
         />
         <span className={styles.checkmark} />
       </label>
