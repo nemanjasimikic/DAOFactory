@@ -16,6 +16,8 @@ export const validator = (data, page, what, toAlert, isVoting) => {
       } else {
         error = false
       }
+    } else if (what === 'daoSlug') {
+      // za dao slug
     } else if (what === 'governanceToken' || what === 'ownerAddress') {
       if (data.length < 66) {
         error = true
@@ -102,7 +104,7 @@ export const whatPage = (registerInput) => {
     return 0
   } else if (registerInput === 'threshold') {
     return 1
-  } else {
+  } else if (registerInput === 'queued') {
     return 2
   }
 }
