@@ -180,9 +180,7 @@ const deployFactory = async (
   nonce
 ) => {
   const accounts = await getFactory()
-  console.log('treasury: ', treasury)
-  const treasure = treasury === 'on' ? true : treasury
-  console.log('treasure: ', treasure)
+
   try {
     if (accounts.accounts && accounts.accounts.length > 0) {
       const address = accounts.accounts[0]._address
@@ -199,7 +197,7 @@ const deployFactory = async (
         governanceToken,
         minStake,
         description,
-        treasure,
+        treasury,
         address,
         nonce
       )
@@ -253,7 +251,7 @@ const deployFactory = async (
         governanceToken,
         minStake,
         description,
-        treasure,
+        treasury,
         address,
         nonce
       )
