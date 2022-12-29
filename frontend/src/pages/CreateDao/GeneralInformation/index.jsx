@@ -46,6 +46,7 @@ const GeneralInformation = ({
     e.preventDefault()
     const address = await daoService.getAddressForRoot()
 
+    // console.log('adresa', address)
     rootAddress = address.rootAddress
     setFormData((prevState) => ({
       ...prevState,

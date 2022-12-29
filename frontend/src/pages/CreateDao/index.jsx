@@ -16,8 +16,11 @@ import rightArrow from 'static/svg/rightArrow.svg'
 import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
-import { validator, checkValidity } from 'helpers/formValidator'
-
+import {
+  validator,
+  checkValidity,
+  isEmptyOrSpaces,
+} from 'helpers/formValidator'
 const CreateDao = () => {
   const navigate = useNavigate()
 
@@ -178,27 +181,6 @@ const CreateDao = () => {
               ? setPageChecked([true, true, true, false])
               : setPageChecked([true, true, true, true])
 
-            function slugCheck() {
-              function isEmptyOrSpaces(str) {
-                return str === null || str.match(/^ *$/) !== null
-              }
-              if (isEmptyOrSpaces(formData.daoSlug.split('/')[2])) {
-                console.log(
-                  'Slug true:',
-                  formData.daoSlug.split('/')[2],
-                  isEmptyOrSpaces(formData.daoSlug.split('/')[2])
-                )
-                return false
-              } else {
-                console.log(
-                  'Slug false:',
-                  formData.daoSlug.split('/')[2],
-                  isEmptyOrSpaces(formData.daoSlug.split('/')[2])
-                )
-                return true
-              }
-            }
-
             if (page === 0) {
               pageValidity = [
                 validator(formData.name, page, 'name', false, null),
@@ -209,7 +191,7 @@ const CreateDao = () => {
                   false,
                   null
                 ),
-                slugCheck(),
+                validator(formData.daoSlug, page, 'daoSlug', false, null),
                 validator(formData.minStake, page, 'minStake', false, null),
               ]
             } else if (page == 1) {
@@ -248,6 +230,8 @@ const CreateDao = () => {
                 ),
               ]
             }
+
+            console.log('PAGE VALIDITY:', checkValidity(pageValidity))
 
             if (checkValidity(pageValidity) === true) {
               if (page < 3) {

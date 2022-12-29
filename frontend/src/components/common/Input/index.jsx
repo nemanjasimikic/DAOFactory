@@ -1,6 +1,6 @@
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
-import { validator, whatPage } from 'helpers/formValidator'
+import { validator, whatPage, styling } from 'helpers/formValidator'
 
 const Input = ({
   validated,
@@ -21,33 +21,30 @@ const Input = ({
 }) => {
   const {
     register,
-    handleSubmit,
     formState: { errors },
   } = useForm({
     shouldUseNativeValidation: true,
   })
   function validateInput() {
     let page = whatPage(registerInput)
-    if (registerInput === 'daoAddress' || registerInput === 'daoSlug') {
+    if (registerInput === 'daoAddress') {
       return
     } else if (!value && registerInput !== 'ownerAddress') {
-      // return 'This is a required field *'
       return 'This is a required field *'
     } else if (registerInput === 'ownerAddress') {
       return validator(value, 0, registerInput, false, null)
     } else if (page === 2) {
       let voting = registerInput === 'voting' ? true : false
       return validator(value, page, hourOrDay, false, voting)
+    } else if (id === 'daoSlug') {
+      return validator(value, page, registerInput, false)
     } else {
-      // let page0 = registerInput === 'ownerAddress' ? 0 : page
-
       return validator(value, page, registerInput, false)
     }
   }
 
   function didValidate() {
     let page = whatPage(registerInput)
-    console.log(page, 'PAGE')
     if (validated != null) {
       if (page == 0 && validated[page] === true) {
         return true
@@ -63,60 +60,37 @@ const Input = ({
     return false
   }
 
-  let shouldShow = didValidate()
-  console.log('should show: ', shouldShow)
-  // To be moved to new file, and edited
-  let color = 'red'
-  function styling(what, param) {
-    if (
-      what === 'queued' ||
-      what === 'pending' ||
-      what === 'voting' ||
-      what === 'execution'
-    ) {
-      if (param === 'position') {
-        return 'absolute'
-      } else {
-        return '0'
-      }
-    } else {
-      if (param === 'position') {
-        return 'relative'
-      } else if (param === 'bottom') {
-        return null
-      } else if (param === 'marginT') {
-        return '-0.80rem'
-      } else if (param === 'marginB') {
-        return '0.80rem'
-      }
-      return 'relative'
-    }
-  }
-
-  // console.log('firstimage', firstImage)
-  // console.log('secondimage', buttons?.length)
-
   let domainRoot = 'daobuilder.nswebdevelopment.com/dao/'
-  function nonRepeat(value) {
-    console.log('DefaultSlug:', defaultValue)
-    console.log('SlugValue:', value)
-
-    if (id != 'daoSlug1' && !value) {
-      console.log('Triggered value to def value')
-      value = defaultValue
-      return value.replace(/\s/g, '')
+  function nonRepeat(value1) {
+    console.log(value1, defaultValue)
+    // slug settings
+    if (id === 'daoSlug1') {
+      if (!value1) {
+        value1 = defaultValue
+      }
+      if (value1.includes(' ')) {
+        console.log('ssss', value1)
+        return value1.replace(/\s/, '')
+      }
+      return value1
     }
-
+    // slug create
     if (id === 'daoSlug') {
-      if (!value) {
-        return domainRoot
-      } else if (value.includes(domainRoot)) {
-        return value.replace(/\s/g, '')
-      } else {
+      if (!value1) {
+        value1 = defaultValue
+      }
+      if (!value1 || value1 === '') {
         return domainRoot
       }
+      if (value1.includes(domainRoot)) {
+        console.log('ssss', value1)
+        return value1.replace(/\s/, '')
+      }
+      return domainRoot
     }
   }
+
+  let shouldShow = didValidate()
 
   return (
     <div className={styles.inputWrapper}>
@@ -135,27 +109,21 @@ const Input = ({
         }}
         id={registerInput}
         form={formId}
-        // required={required}
         className={styles.input}
         defaultValue={defaultValue}
         value={registerInput === 'daoSlug' ? nonRepeat(value) : value}
-        // value={value}
+        // value={
+        //   registerInput === 'daoSlug'
+        //     ? 'daobuilder.nswebdevelopment.com/dao/'
+        //     : value
+        // }
         type={type}
         placeholder={placeholder}
         {...register(registerInput)}
         onChange={onChange}
+        // onChange={registerInput === 'daoSlug' ? nonRepeat(value) : onChange}
         disabled={disabled}
       />
-      {/* <img
-        src={firstImage}
-        onError={(event) => (event.target.src = '')}
-        className={styles.inputIconOne}
-      />
-      <img
-        src={secondImage}
-        onError={(event) => (event.target.src = '')}
-        className={styles.inputIconTwo}
-      /> */}
       {buttons}
       <span
         style={{
@@ -163,7 +131,7 @@ const Input = ({
           bottom: styling(registerInput, 'bottom'),
           marginTop: styling(registerInput, 'marginT'),
           marginBottom: styling(registerInput, 'marginB'),
-          color: color,
+          color: 'red',
           fontSize: '14px',
         }}
       >
