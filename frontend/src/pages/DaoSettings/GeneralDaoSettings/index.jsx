@@ -115,6 +115,7 @@ const GeneralDaoSettings = () => {
                 placeholder={'slug'}
                 registerInput={'daoSlug'}
                 defaultValue={slug}
+                // value={slug}
                 onChange={onChange}
               />
 
