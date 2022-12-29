@@ -13,13 +13,13 @@ import { ProviderRpcClient } from 'everscale-inpage-provider'
 import daoService from 'store/services/daoService'
 import Spinner from 'components/common/Spinner'
 import Table from 'components/common/Table'
+import { checkValidity, validator } from 'helpers/formValidator'
 const GeneralDaoSettings = () => {
   const { register } = useForm()
   const wallet = useSelector((state) => state.wallet)
   const navigate = useNavigate()
   let { id } = useParams()
 
-  console.log('id: ', id)
   const { handleSubmit } = useForm()
   const ever = new ProviderRpcClient()
   useEffect(() => {
@@ -29,6 +29,7 @@ const GeneralDaoSettings = () => {
   }, [wallet, navigate])
   let [loading, setLoading] = useState(false)
   const [daoInformation, setDaoInformation] = useState({})
+  let [pageChecked, setPageChecked] = useState(false)
   /*useEffect(() => {
     daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
   }, [])*/
@@ -69,12 +70,8 @@ const GeneralDaoSettings = () => {
         ? slug
         : formData.daoSlug
 
-    console.log('slugArray: ', slugArray)
-
     slugChange = slugArray && slug != '' ? slugArray : daoInformation.slug
-    console.log('slug: ', slug)
   }
-  console.log('name: ', name)
 
   return name ? (
     <div>
@@ -102,6 +99,7 @@ const GeneralDaoSettings = () => {
               />
               <Input
                 id="name"
+                validated={pageChecked}
                 label={'Project name'}
                 placeholder={'Name'}
                 registerInput={'name'}
@@ -132,14 +130,12 @@ const GeneralDaoSettings = () => {
                 style={'bigLightBlueBtn'}
                 text={'Save changes'}
                 onClick={async (e) => {
-
-                  console.log(formData.name)
-                  console.log(formData.slug)
-                  console.log(formData.description)
-
                   // handleSubmit(e)
-
+                  let pageValidity = [
+                    validator(formData.name, 0, 'name', false, null),
+                  ]
                   setLoading(true)
+                  setPageChecked(true)
                   let canNavigate = true
                   function navigateOff(canNavigate) {
                     setLoading(false)
@@ -150,26 +146,29 @@ const GeneralDaoSettings = () => {
                     }
                     console.log('Resolved: false')
                   }
-                  await daoService
-                    .setSettingsChanges(
-                      formData.name !== ''
-                        ? formData.name
-                        : daoInformation.name,
-                      slugChange,
-                      formData.description !== ''
-                        ? formData.description
-                        : daoInformation.description,
-                      daoInformation.daoAddress
-                    )
-                    .catch((e) => {
-                      console.log(e)
-                      setLoading(false)
-                      canNavigate = false
-                      return
-                    })
-                  e.preventDefault()
-                  navigateOff(canNavigate)
-                // comment till here
+                  if (checkValidity(pageValidity) === true) {
+                    await daoService
+                      .setSettingsChanges(
+                        formData.name !== ''
+                          ? formData.name
+                          : daoInformation.name,
+                        slugChange,
+                        formData.description !== ''
+                          ? formData.description
+                          : daoInformation.description,
+                        daoInformation.daoAddress
+                      )
+                      .catch((e) => {
+                        console.log(e)
+                        setLoading(false)
+                        canNavigate = false
+                        return
+                      })
+                    navigateOff(canNavigate)
+                    e.preventDefault()
+                  }
+                  setLoading(false)
+                  // comment till here
                 }}
                 // and the disabled too
                 disabled={loading}

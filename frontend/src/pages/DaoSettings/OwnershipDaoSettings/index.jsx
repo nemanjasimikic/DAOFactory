@@ -23,6 +23,7 @@ const OwnershipDaoSettings = () => {
     }
   }, [wallet, navigate])
   let [loading, setLoading] = useState(false)
+  let [pageChecked, setPageChecked] = useState(false)
   const [formData, setFormData] = useState({
     ownerAddress: '',
   })
@@ -39,7 +40,6 @@ const OwnershipDaoSettings = () => {
     formState: { errors },
   } = useForm()
 
-  console.log('Settings button pressed, errors?', errors)
   return (
     <div>
       {' '}
@@ -58,6 +58,7 @@ const OwnershipDaoSettings = () => {
               <FormHeading heading={'Ownership'} />
               <p>Transfer ownership to another address</p>
               <Input
+                validated={pageChecked}
                 formId={'ownershipForm'}
                 id="ownerAddress"
                 label={'New owner address'}
@@ -71,7 +72,7 @@ const OwnershipDaoSettings = () => {
                 text={'Transfer'}
                 onClick={async (e) => {
                   setLoading(true)
-
+                  setPageChecked(true)
                   let canNavigate = true
                   function navigateOff(canNavigate) {
                     setLoading(false)
@@ -97,13 +98,13 @@ const OwnershipDaoSettings = () => {
                   if (checkValidity(pageValidity) === true) {
                     console.log('DID PASS CHECK!')
                     await daoService
-                    .transferOwnership(formData.ownerAddress, id)
-                    .catch((e) => {
-                      console.log(e)
-                      setLoading(false)
-                      canNavigate = false
-                      return
-                    })
+                      .transferOwnership(formData.ownerAddress, id)
+                      .catch((e) => {
+                        console.log(e)
+                        setLoading(false)
+                        canNavigate = false
+                        return
+                      })
                     navigateOff(canNavigate)
                   }
                   setLoading(false)

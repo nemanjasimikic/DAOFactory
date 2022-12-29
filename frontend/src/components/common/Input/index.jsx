@@ -28,14 +28,13 @@ const Input = ({
   } = useForm({
     shouldUseNativeValidation: true,
   })
-
   function validateInput() {
     let page = whatPage(registerInput)
     if (registerInput === 'daoAddress' || registerInput === 'daoSlug') {
       return
-    } else if (!value) {
+    } else if (!value && registerInput !== 'ownerAddress') {
+      // return 'This is a required field *'
       return 'This is a required field *'
-      return
     } else if (registerInput === 'ownerAddress') {
       return validator(value, 0, registerInput, false, null)
     } else if (page === 2) {
@@ -43,6 +42,7 @@ const Input = ({
       return validator(value, page, hourOrDay, false, voting)
     } else {
       // let page0 = registerInput === 'ownerAddress' ? 0 : page
+
       return validator(value, page, registerInput, false)
     }
   }
@@ -50,18 +50,23 @@ const Input = ({
   function didValidate() {
     let page = whatPage(registerInput)
     console.log(page, 'PAGE')
-    if (page == 0 && validated[page] === true) {
-      return true
-    } else if (page == 1 && validated[page] === true) {
-      return true
-    } else if (page == 2 && validated[page] === true) {
-      return true
+    if (validated != null) {
+      if (page == 0 && validated[page] === true) {
+        return true
+      } else if (page == 1 && validated[page] === true) {
+        return true
+      } else if (page == 2 && validated[page] === true) {
+        return true
+      } else if (page == 0 && validated === true) {
+        return true
+      }
+      return false
     }
     return false
   }
 
   let shouldShow = didValidate()
-
+  console.log('should show: ', shouldShow)
   // To be moved to new file, and edited
   let color = 'red'
   function styling(what, param) {
