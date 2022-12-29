@@ -12,6 +12,8 @@ import daoService from 'store/services/daoService'
 import Spinner from 'components/common/Spinner'
 import { WalletContext } from 'context/walletContext'
 import { useQuery } from 'react-query'
+import Table from 'components/common/Table'
+import { checkValidity, validator } from 'helpers/formValidator'
 const GeneralDaoSettings = () => {
   const { register } = useForm()
   const navigate = useNavigate()
@@ -19,6 +21,11 @@ const GeneralDaoSettings = () => {
 
   const { handleSubmit } = useForm()
   let [loading, setLoading] = useState(false)
+  const [daoInformation, setDaoInformation] = useState({})
+  let [pageChecked, setPageChecked] = useState(false)
+  /*useEffect(() => {
+    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
+  }, [])*/
 
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
@@ -71,11 +78,11 @@ const GeneralDaoSettings = () => {
     description = data.description ? data.description : ''
 
     const slugArray =
-      formData.daoSlug == 'daobuilder.nswebdevelopment.com/'
+      formData.daoSlug === 'daobuilder.nswebdevelopment.com/'
         ? slug
         : formData.daoSlug
 
-    slugChange = slugArray && slug != '' ? slugArray : data.slug
+    slugChange = slugArray && slug !== '' ? slugArray : data.slug
   }
 
   return name ? (
@@ -102,6 +109,7 @@ const GeneralDaoSettings = () => {
               />
               <Input
                 id="name"
+                validated={pageChecked}
                 label={'Project name'}
                 placeholder={'Name'}
                 registerInput={'name'}
@@ -137,8 +145,11 @@ const GeneralDaoSettings = () => {
                   console.log(formData.description)
 
                   // handleSubmit(e)
-
+                  let pageValidity = [
+                    validator(formData.name, 0, 'name', false, null),
+                  ]
                   setLoading(true)
+                  setPageChecked(true)
                   let canNavigate = true
                   function navigateOff(canNavigate) {
                     setLoading(false)
@@ -164,6 +175,29 @@ const GeneralDaoSettings = () => {
                     })
                   e.preventDefault()
                   navigateOff(canNavigate)
+                  if (checkValidity(pageValidity) === true) {
+                    await daoService
+                      .setSettingsChanges(
+                        formData.name !== ''
+                          ? formData.name
+                          : daoInformation.name,
+                        slugChange,
+                        formData.description !== ''
+                          ? formData.description
+                          : daoInformation.description,
+                        daoInformation.daoAddress
+                      )
+                      .catch((e) => {
+                        console.log(e)
+                        setLoading(false)
+                        canNavigate = false
+                        return
+                      })
+                    navigateOff(canNavigate)
+                    e.preventDefault()
+                  }
+                  setLoading(false)
+                  // comment till here
                 }}
                 // and the disabled too
                 disabled={loading}

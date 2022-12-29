@@ -19,6 +19,7 @@ const OwnershipDaoSettings = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   let [loading, setLoading] = useState(false)
+  let [pageChecked, setPageChecked] = useState(false)
   const [formData, setFormData] = useState({
     ownerAddress: '',
   })
@@ -53,6 +54,7 @@ const OwnershipDaoSettings = () => {
               <FormHeading heading={'Ownership'} />
               <p>Transfer ownership to another address</p>
               <Input
+                validated={pageChecked}
                 formId={'ownershipForm'}
                 id="ownerAddress"
                 label={'New owner address'}
@@ -66,7 +68,7 @@ const OwnershipDaoSettings = () => {
                 text={'Transfer'}
                 onClick={async (e) => {
                   setLoading(true)
-
+                  setPageChecked(true)
                   let canNavigate = true
                   function navigateOff(canNavigate) {
                     setLoading(false)

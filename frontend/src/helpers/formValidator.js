@@ -99,7 +99,9 @@ export const whatPage = (registerInput) => {
   if (
     registerInput === 'name' ||
     registerInput === 'governanceToken' ||
-    registerInput === 'minStake'
+    registerInput === 'minStake' ||
+    registerInput === 'ownerAddress' ||
+    registerInput === 'daoSlug'
   ) {
     return 0
   } else if (registerInput === 'threshold') {
