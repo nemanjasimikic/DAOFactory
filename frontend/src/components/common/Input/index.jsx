@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { validator, whatPage } from 'helpers/formValidator'
 
 const Input = ({
+  validated,
   id,
   formId,
   buttons,
@@ -31,12 +32,11 @@ const Input = ({
     if (registerInput === 'daoAddress' || registerInput === 'daoSlug') {
       return
     } else if (!value) {
-      // return 'This is a required field *'
+      return 'This is a required field *'
       return
     } else if (registerInput === 'ownerAddress') {
       return validator(value, 0, registerInput, false, null)
-    }
-    else if (page === 2) {
+    } else if (page === 2) {
       let voting = registerInput === 'voting' ? true : false
       return validator(value, page, hourOrDay, false, voting)
     } else {
@@ -44,6 +44,21 @@ const Input = ({
       return validator(value, page, registerInput, false)
     }
   }
+
+  function didValidate() {
+    let page = whatPage(registerInput)
+    console.log(page, 'PAGE')
+    if (page == 0 && validated[page] === true) {
+      return true
+    } else if (page == 1 && validated[page] === true) {
+      return true
+    } else if (page == 2 && validated[page] === true) {
+      return true
+    }
+    return false
+  }
+
+  let shouldShow = didValidate()
 
   // To be moved to new file, and edited
   let color = 'red'
@@ -77,23 +92,21 @@ const Input = ({
   // console.log('secondimage', buttons?.length)
 
   let domainRoot = 'daobuilder.nswebdevelopment.com/dao/'
-  function nonRepeat(value) { 
-
+  function nonRepeat(value) {
     console.log('DefaultSlug:', defaultValue)
     console.log('SlugValue:', value)
 
     if (id != 'daoSlug1' && !value) {
       console.log('Triggered value to def value')
       value = defaultValue
-      return value
-    } 
-
+      return value.replace(/\s/g, '')
+    }
 
     if (id === 'daoSlug') {
       if (!value) {
         return domainRoot
       } else if (value.includes(domainRoot)) {
-        return value
+        return value.replace(/\s/g, '')
       } else {
         return domainRoot
       }
@@ -117,14 +130,14 @@ const Input = ({
         }}
         id={registerInput}
         form={formId}
-        required={required}
+        // required={required}
         className={styles.input}
         defaultValue={defaultValue}
         value={registerInput === 'daoSlug' ? nonRepeat(value) : value}
         // value={value}
         type={type}
         placeholder={placeholder}
-        {...register(registerInput, { required: 'This is required' })}
+        {...register(registerInput)}
         onChange={onChange}
         disabled={disabled}
       />
@@ -149,7 +162,7 @@ const Input = ({
           fontSize: '14px',
         }}
       >
-        {validateInput()}
+        {shouldShow ? validateInput() : ''}
       </span>
     </div>
   )

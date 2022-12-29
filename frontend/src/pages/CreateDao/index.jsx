@@ -28,6 +28,7 @@ const CreateDao = () => {
 
   const [page, setPage] = useState(0)
   let [loading, setLoading] = useState(false)
+  let [pageChecked, setPageChecked] = useState([false, false, false, false])
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
@@ -70,6 +71,7 @@ const CreateDao = () => {
     if (page === 0) {
       return (
         <GeneralInformation
+          validated={pageChecked}
           formId={'myForm'}
           formData={formData}
           rootAddress={daoAddress}
@@ -79,12 +81,28 @@ const CreateDao = () => {
       )
     } else if (page === 1) {
       return (
-        <VotingConfiguration formData={formData} setFormData={setFormData} />
+        <VotingConfiguration
+          validated={pageChecked}
+          formData={formData}
+          setFormData={setFormData}
+        />
       )
     } else if (page === 2) {
-      return <ProposalTimeline formData={formData} setFormData={setFormData} />
+      return (
+        <ProposalTimeline
+          validated={pageChecked}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     } else {
-      return <Treasury formData={formData} setFormData={setFormData} />
+      return (
+        <Treasury
+          validated={pageChecked}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     }
   }
   const pendingTime =
@@ -152,6 +170,35 @@ const CreateDao = () => {
 
             let pageValidity = []
 
+            page === 0
+              ? setPageChecked([true, false, false, false])
+              : page === 1
+              ? setPageChecked([true, true, false, false])
+              : page === 2
+              ? setPageChecked([true, true, true, false])
+              : setPageChecked([true, true, true, true])
+
+            function slugCheck() {
+              function isEmptyOrSpaces(str) {
+                return str === null || str.match(/^ *$/) !== null
+              }
+              if (isEmptyOrSpaces(formData.daoSlug.split('/')[2])) {
+                console.log(
+                  'Slug true:',
+                  formData.daoSlug.split('/')[2],
+                  isEmptyOrSpaces(formData.daoSlug.split('/')[2])
+                )
+                return false
+              } else {
+                console.log(
+                  'Slug false:',
+                  formData.daoSlug.split('/')[2],
+                  isEmptyOrSpaces(formData.daoSlug.split('/')[2])
+                )
+                return true
+              }
+            }
+
             if (page === 0) {
               pageValidity = [
                 validator(formData.name, page, 'name', false, null),
@@ -162,6 +209,7 @@ const CreateDao = () => {
                   false,
                   null
                 ),
+                slugCheck(),
                 validator(formData.minStake, page, 'minStake', false, null),
               ]
             } else if (page == 1) {

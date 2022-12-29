@@ -2,7 +2,7 @@ import styles from './styles.module.sass'
 import infoIcon from 'static/svg/infoIcon.svg'
 import Input from 'components/common/Input'
 
-const VotingConfiguration = ({ formData, setFormData }) => {
+const VotingConfiguration = ({ validated, formData, setFormData }) => {
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -31,6 +31,7 @@ const VotingConfiguration = ({ formData, setFormData }) => {
         <img src={infoIcon} alt={'info'} />
       </div>
       <Input
+        validated={validated}
         id="threshold"
         defaultValue={0}
         registerInput={'threshold'}
