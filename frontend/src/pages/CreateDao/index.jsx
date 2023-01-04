@@ -16,6 +16,7 @@ import Spinner from '../../components/common/Spinner'
 import { useForm } from 'react-hook-form'
 import { validator, checkValidity } from 'helpers/formValidator'
 import daoService from 'store/services/daoService'
+
 const CreateDao = () => {
   // const wallet = useSelector((state) => state.wallet)
   // const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
