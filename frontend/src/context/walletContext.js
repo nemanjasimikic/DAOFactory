@@ -1,8 +1,5 @@
 import { createContext } from 'react'
 
-const WalletContext = createContext({
-  address: '',
-  balance: '',
-})
+const WalletContext = createContext(null)
 
 export default WalletContext

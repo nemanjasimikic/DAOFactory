@@ -8,7 +8,7 @@ import walletAvatar from 'static/svg/walletAvatar.svg'
 import WalletContext from '../../../context/walletContext'
 
 const Navbar = () => {
-  const wallet = useContext(WalletContext)
+  const { wallet, setWallet } = useContext(WalletContext)
 
   return (
     <nav className={styles.navbar}>
