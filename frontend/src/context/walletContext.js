@@ -1,5 +1,5 @@
 import { createContext } from 'react'
 
-const WalletContext = createContext(null)
+const WalletContext = createContext()
 
 export default WalletContext
