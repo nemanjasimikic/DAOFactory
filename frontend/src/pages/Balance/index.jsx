@@ -7,6 +7,16 @@ import daoCardLogo from 'static/svg/daoCardLogo.svg'
 import linkIcon from 'static/svg/linkIcon.svg'
 import styles from './styles.module.sass'
 import daoService from 'store/services/daoService'
+import Input from '../../components/common/Input'
+import Table from '../../components/common/Table'
+import {
+  columnsAllProposals,
+  dataAllProposals,
+  dataLockedTokens,
+  columnsLockedTokens,
+  columnsVoters,
+  dataVoters,
+} from './mocks'
 
 const Balance = () => {
   const wallet = useSelector((state) => state.wallet)
@@ -25,6 +35,7 @@ const Balance = () => {
   }, [])
 
   console.log('daoInformation: ', daoInformation)
+
   return (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
@@ -93,6 +104,26 @@ const Balance = () => {
           <Button style={'primaryBtn'} text={'Balance management'} />
         </div>
       </div>
+      <div className={styles.tableSectionHeading}>
+        <p>All Proposals</p>
+        <div className={styles.rightContentWrapper}>
+          <Input placeholder={'Search...'} registerInput={'search'} />
+          <Button style={'primaryBtn'} text={'Votes'} />
+          <Button style={'primaryBtn'} text={'Statuses'} />
+        </div>
+      </div>
+      <Table columns={columnsAllProposals} data={dataAllProposals} />
+      <div className={styles.tableSectionHeading}>
+        <p>Proposals with your locked tokens</p>
+        <div className={styles.rightContentWrapper}>
+          <Button style={'primaryBtn'} text={'Unlock all tokens'} />
+        </div>
+      </div>
+      <Table columns={columnsLockedTokens} data={dataLockedTokens} />
+      <div className={styles.tableSectionHeading}>
+        <p>Voters</p>
+      </div>
+      <Table columns={columnsVoters} data={dataVoters} />
     </div>
   )
 }

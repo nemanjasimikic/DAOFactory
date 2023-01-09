@@ -10,8 +10,6 @@ const Input = ({
   value,
   registerInput,
   type,
-  firstImage,
-  secondImage,
   labelIcon,
   onChange,
   defaultValue,
@@ -84,7 +82,10 @@ const Input = ({
         />
       </div>
       <input
-        style={{paddingRight: `${buttons?.length * 31}px`, paddingLeft: '10px'}}
+        style={{
+          paddingRight: `${buttons?.length * 31}px`,
+          paddingLeft: '10px',
+        }}
         id={registerInput}
         form={formId}
         required={required}
