@@ -55,6 +55,7 @@ const GeneralDaoSettings = () => {
     daoAddress: '',
     name: '',
     daoSlug: 'daobuilder.nswebdevelopment.com/',
+    slug: daoInformation.slug ? daoInformation.slug : '',
     description: '',
   })
 
@@ -120,12 +121,12 @@ const GeneralDaoSettings = () => {
                 onChange={onChange}
               />
               <Input
-                id="daoSlug1"
+                id="daoSlugSettings"
                 label={'DAO slug'}
                 placeholder={'slug'}
                 registerInput={'daoSlug'}
-                defaultValue={slug}
-                // value={slug}
+                // defaultValue={slug}
+                value={slug} // formData.daoSlug
                 onChange={onChange}
               />
 

@@ -19,12 +19,10 @@ const Input = ({
   required,
   hourOrDay,
 }) => {
-  const {
-    register,
-    formState: { errors },
-  } = useForm({
+  const { register } = useForm({
     shouldUseNativeValidation: true,
   })
+
   function validateInput() {
     let page = whatPage(registerInput)
     if (registerInput === 'daoAddress') {
@@ -39,11 +37,13 @@ const Input = ({
     } else if (id === 'daoSlug') {
       return validator(value, page, registerInput, false)
     } else {
+      console.log('Is validating page ?', page, hourOrDay)
       return validator(value, page, registerInput, false)
     }
   }
 
   function didValidate() {
+    // console.log('DID VALIDATE: ', validated)
     let page = whatPage(registerInput)
     if (validated != null) {
       if (page == 0 && validated[page] === true) {
@@ -62,16 +62,17 @@ const Input = ({
 
   let domainRoot = 'daobuilder.nswebdevelopment.com/dao/'
   function nonRepeat(value1) {
-    console.log(value1, defaultValue)
+    // console.log(value1, defaultValue)
     // slug settings
-    if (id === 'daoSlug1') {
+    if (id === 'daoSlugSettings') {
       if (!value1) {
         value1 = defaultValue
       }
       if (value1.includes(' ')) {
-        console.log('ssss', value1)
+        // console.log('ssss', value1)
         return value1.replace(/\s/, '')
       }
+      console.log(value1)
       return value1
     }
     // slug create
@@ -83,7 +84,7 @@ const Input = ({
         return domainRoot
       }
       if (value1.includes(domainRoot)) {
-        console.log('ssss', value1)
+        // console.log('ssss', value1)
         return value1.replace(/\s/, '')
       }
       return domainRoot
@@ -112,16 +113,10 @@ const Input = ({
         className={styles.input}
         defaultValue={defaultValue}
         value={registerInput === 'daoSlug' ? nonRepeat(value) : value}
-        // value={
-        //   registerInput === 'daoSlug'
-        //     ? 'daobuilder.nswebdevelopment.com/dao/'
-        //     : value
-        // }
         type={type}
         placeholder={placeholder}
         {...register(registerInput)}
         onChange={onChange}
-        // onChange={registerInput === 'daoSlug' ? nonRepeat(value) : onChange}
         disabled={disabled}
       />
       {buttons}

@@ -98,6 +98,7 @@ export const validator = (data, page, what, toAlert, isVoting) => {
       }
       return `Error: Value can't be lower than ${min}h or over 720h`
     }
+    // console.log('ERROR IN PAGE 2? : ', data)
   }
 
   if (!error) {
@@ -116,7 +117,12 @@ export const whatPage = (registerInput) => {
     return 0
   } else if (registerInput === 'threshold') {
     return 1
-  } else if (registerInput === 'queued') {
+  } else if (
+    registerInput === 'queued' ||
+    registerInput === 'voting' ||
+    registerInput === 'execution' ||
+    registerInput === 'pending'
+  ) {
     return 2
   }
 }
