@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { ContextProvider } from './context/walletProvider'
+import { ContextProvider } from './context/walletContext'
 import Navigation from 'navigation'
 import './App.css'
 
