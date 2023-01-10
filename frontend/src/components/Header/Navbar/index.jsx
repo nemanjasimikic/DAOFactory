@@ -17,6 +17,7 @@ const Navbar = () => {
     addressContext,
     balanceContext,
   } = ContextState
+  console.log('state: ', ContextState)
   return (
     <nav className={styles.navbar}>
       <NavLink
@@ -35,7 +36,7 @@ const Navbar = () => {
       >
         My DAOs
       </NavLink>
-      {balanceContext === 0 ? (
+      {isLoggedIn === false ? (
         <Button
           text={'Connect wallet'}
           style={'primaryBtn'}

@@ -1,5 +1,5 @@
 import { ProviderRpcClient } from 'everscale-inpage-provider'
-
+import { fromNano } from 'helpers/decimalParser'
 const ever = new ProviderRpcClient()
 
 const walletConnect = async () => {
@@ -19,15 +19,14 @@ const walletConnect = async () => {
     'wallet',
     JSON.stringify(accountInteraction.address._address)
   )
-   const balance = await getBalance(accountInteraction.address._address)
-   if(balance)
-   {
+  const balance = await getBalance(accountInteraction.address._address)
+  if (balance) {
     console.log('Balance: ', balance)
-   }
-   const data = {
+  }
+  const data = {
     address: accountInteraction.address._address,
-    balance: balance
-   }
+    balance: fromNano(balance * 1, 9),
+  }
   return data
 }
 
@@ -45,7 +44,7 @@ const logout = async () => {
 
 const getBalance = async (address) => {
   const response = await ever.getBalance(address)
-  console.log('response: ', response);
+  console.log('response: ', response)
   if (response) {
     localStorage.setItem('balance', JSON.stringify(response))
   }
