@@ -66,8 +66,15 @@ export const ContextProvider = (props) => {
     //console.log(state.isLoggedIn)
   }
 
-  const logout = () => {
+  const logout = async () => {
+    const response = await walletService.logout(() => {
+      //setLoginPending(false)
+      //setLoginSuccess(true)
+    })
     setLoginPending(false, false, null, '', 0)
+    console.log('response: ', response)
+    console.log('state: ', state)
+    //setLoginPending(false, false, null, '', 0)
     // setLoginSuccess(false)
     // setLoginError(null)
   }
