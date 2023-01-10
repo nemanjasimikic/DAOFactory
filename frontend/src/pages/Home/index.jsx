@@ -3,7 +3,7 @@ import IsLoggedIn from 'pages/Home/IsLoggedIn'
 
 import styles from './style.module.sass'
 import { useEffect, useContext } from 'react'
-import { WalletContext } from 'context/walletProvider'
+import { WalletContext } from 'context/walletContext'
 
 const Home = () => {
   // const wallet = useSelector((state) => state.wallet)

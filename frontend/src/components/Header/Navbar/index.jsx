@@ -5,7 +5,7 @@ import { addressFormat } from 'helpers/addressFormat'
 import styles from './styles.module.sass'
 import walletLogout from 'static/svg/walletLogout.svg'
 import walletAvatar from 'static/svg/walletAvatar.svg'
-import { WalletContext } from '../../../context/walletProvider'
+import { WalletContext } from '../../../context/walletContext'
 
 const Navbar = () => {
   //const { wallet, setWallet } = useContext(WalletContext)
@@ -45,8 +45,6 @@ const Navbar = () => {
             login()
             console.log('state: ', addressContext)
           }}
-
-          // onClick={() => dispatch(login())}
         />
       ) : (
         <div className={styles.walletInfoWrapper}>
