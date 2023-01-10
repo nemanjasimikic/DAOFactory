@@ -9,7 +9,7 @@ import { WalletContext } from '../../../context/walletContext'
 
 const Navbar = () => {
   //const { wallet, setWallet } = useContext(WalletContext)
-  const { state: ContextState, login } = useContext(WalletContext)
+  const { state: ContextState, login, logout } = useContext(WalletContext)
   const {
     isLoginPending,
     isLoggedIn,
@@ -56,7 +56,11 @@ const Navbar = () => {
           <img
             className={styles.logout}
             src={walletLogout}
-            // onClick={() => dispatch(logout())}
+            onClick={async (e) => {
+              e.preventDefault()
+              logout()
+              console.log('state: ', addressContext)
+            }}
             alt={'logout'}
           />
         </div>
