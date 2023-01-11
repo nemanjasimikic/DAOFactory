@@ -6,9 +6,9 @@ import styles from './styles.module.sass'
 import walletLogout from 'static/svg/walletLogout.svg'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { WalletContext } from '../../../context/walletContext'
+import { useEffect } from 'react'
 
 const Navbar = () => {
-  //const { wallet, setWallet } = useContext(WalletContext)
   const { state: ContextState, login, logout } = useContext(WalletContext)
   const {
     isLoginPending,
@@ -18,6 +18,21 @@ const Navbar = () => {
     balanceContext,
   } = ContextState
   console.log('state: ', ContextState)
+
+  useEffect(() => {
+    const checkWallet = async () => {
+      if (localStorage?.getItem('isLoggedIn')) {
+        console.log('usao')
+        try {
+          login()
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    }
+    checkWallet()
+  }, [])
+
   return (
     <nav className={styles.navbar}>
       <NavLink

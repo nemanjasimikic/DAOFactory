@@ -177,9 +177,10 @@ const deployFactory = async (
   minStake,
   description,
   treasury,
-  nonce
+  nonce,
+  address
 ) => {
-  const accounts = await getFactory()
+  const accounts = await getFactory(address)
   console.log('treasury: ', treasury)
   const treasure = treasury === 'on' ? true : treasury
   console.log('treasure: ', treasure)
@@ -317,14 +318,14 @@ const deployDAOFromFactory = async (
   return deployDao
 }
 
-const getFactory = async () => {
+const getFactory = async (address) => {
   const code = await ever.splitTvc(daoTvc)
-  const walletAddress = addressConverter(localStorage.getItem('wallet'))
+  // const walletAddress = addressConverter(localStorage.getItem('wallet'))
   const hashEver = await ever.setCodeSalt({
     code: code.code,
     salt: {
       structure: [{ name: 'ownerAddress', type: 'address' }],
-      data: { ownerAddress: walletAddress },
+      data: { ownerAddress: address },
     },
   })
   const bocHashEver = await ever.getBocHash(hashEver.code)
@@ -360,8 +361,9 @@ const addDaoRootToFactory = async (
   }
 }
 
-const getAllDAOs = async () => {
-  const factory = await getFactory()
+const getAllDAOs = async (address) => {
+  console.log('address: ', address)
+  const factory = await getFactory(address)
   let rootData = []
   try {
     if (factory.accounts && factory.accounts.length > 0) {
@@ -519,8 +521,8 @@ const getDeployedDaos = async (daoFactoryContract) => {
   }
 }
 
-const transferOwnership = async (newOwnerAddress, id) => {
-  const factory = await getFactory()
+const transferOwnership = async (newOwnerAddress, id, address) => {
+  const factory = await getFactory(address)
   const daoFactoryContract = new ever.Contract(
     daoFactoryAbi,
     factory.accounts[0]._address
@@ -556,8 +558,8 @@ const transferOwnership = async (newOwnerAddress, id) => {
   }
 }
 
-const destroy = async (id) => {
-  const factory = await getFactory()
+const destroy = async (id, address) => {
+  const factory = await getFactory(address)
   const daoFactoryContract = new ever.Contract(
     daoFactoryAbi,
     factory.accounts[0]._address
@@ -691,8 +693,8 @@ const findDaoBySlug = async (factory, slug) => {
   }
 }
 
-const getDaoInfo = async (id) => {
-  const factory = await getFactory()
+const getDaoInfo = async (id, address) => {
+  const factory = await getFactory(address)
   let rootData = {}
   if (factory.accounts && factory.accounts.length > 0) {
     const daoFactoryContract = new ever.Contract(

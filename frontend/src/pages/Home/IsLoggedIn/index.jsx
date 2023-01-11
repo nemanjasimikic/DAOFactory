@@ -8,8 +8,9 @@ import Table from 'components/common/Table'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
 
-const IsLoggedIn = () => {
+const IsLoggedIn = ({ address }) => {
   //const dispatch = useDispatch()
+  console.log('address is logged in: ', address)
   const [renderTable, setRenderTable] = useState(true)
 
   const onLoadEffect = () => {
@@ -22,7 +23,7 @@ const IsLoggedIn = () => {
   //const dao = useSelector((state) => state.dao)
   const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
-    daoService.getAllDAOs().then((data) => setDaoInformation(data))
+    daoService.getAllDAOs(address).then((data) => setDaoInformation(data))
   }, [])
   // daoInformationLog2
   // console.log('daoInformation: ', daoInformation)

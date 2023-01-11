@@ -15,10 +15,7 @@ const walletConnect = async () => {
     throw new Error('Insufficient permissions')
   }
 
-  localStorage.setItem(
-    'wallet',
-    JSON.stringify(accountInteraction.address._address)
-  )
+  localStorage.setItem('isLoggedIn', JSON.stringify(true))
   const balance = await getBalance(accountInteraction.address._address)
   if (balance) {
     console.log('Balance: ', balance)

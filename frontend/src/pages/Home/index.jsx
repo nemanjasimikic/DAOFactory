@@ -21,7 +21,10 @@ const Home = () => {
   console.log('isLoggedIn: ', isLoggedIn)
   return (
     <div className={styles.container}>
-      {isLoggedIn === false ? <IsLoggedOut /> : <IsLoggedIn />}
+      {
+        isLoggedIn ? <IsLoggedIn address={addressContext} /> : <IsLoggedOut />
+        /*isLoggedIn === false ? <IsLoggedOut /> : <IsLoggedIn address={addressContext}/>*/
+      }
     </div>
   )
 }
