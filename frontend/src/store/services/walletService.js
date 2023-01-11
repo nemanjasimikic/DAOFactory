@@ -48,10 +48,23 @@ const getBalance = async (address) => {
   return response
 }
 
+const isLoggedIn = async () => {
+  const { accountInteraction } = await ever.requestPermissions({
+    permissions: ['basic', 'accountInteraction'],
+  })
+
+  if (accountInteraction == null) {
+    throw new Error('Insufficient permissions')
+  }
+
+  return accountInteraction.address._address
+}
+
 const walletService = {
   walletConnect,
   logout,
   getBalance,
+  isLoggedIn,
 }
 
 export default walletService

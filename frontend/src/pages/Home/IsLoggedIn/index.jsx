@@ -7,10 +7,12 @@ import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
+import { useQuery } from 'react-query'
+import walletService from 'store/services/walletService'
 
 const IsLoggedIn = ({ address }) => {
   //const dispatch = useDispatch()
-  console.log('address is logged in: ', address)
+  //console.log('address is logged in: ', address)
   const [renderTable, setRenderTable] = useState(true)
 
   const onLoadEffect = () => {
@@ -19,12 +21,19 @@ const IsLoggedIn = ({ address }) => {
     }, 6000)
   }
   useEffect(onLoadEffect, [])
+  /*const { data, error, isError, isLoading } = useQuery(
+    'user',
+    walletService.isLoggedIn
+  )
 
+  console.log('data query: ', data)*/
   //const dao = useSelector((state) => state.dao)
   const [daoInformation, setDaoInformation] = useState({})
+
   useEffect(() => {
     daoService.getAllDAOs(address).then((data) => setDaoInformation(data))
   }, [])
+
   // daoInformationLog2
   // console.log('daoInformation: ', daoInformation)
   const getDaoList = daoInformation
@@ -51,7 +60,7 @@ const IsLoggedIn = ({ address }) => {
     },
   ]
 
-  const data = [
+  const dataTable = [
     {
       id: '1',
       dao: 'dao1',
@@ -106,7 +115,7 @@ const IsLoggedIn = ({ address }) => {
       {getDaoList?.length < 1 ? (
         <NoResults />
       ) : itemsList.length < 1 /*renderTable*/ ? (
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={dataTable} />
       ) : (
         <div className={styles.daoCardsWrapper}>{itemsList}</div>
       )}
