@@ -8,6 +8,7 @@ import walletAvatar from 'static/svg/walletAvatar.svg'
 import { WalletContext } from '../../../context/walletContext'
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
+import walletService from 'store/services/walletService'
 
 const Navbar = () => {
   const { state: ContextState, login, logout } = useContext(WalletContext)
@@ -19,6 +20,13 @@ const Navbar = () => {
     balanceContext,
   } = ContextState
   console.log('state: ', ContextState)
+  const { status, data, error, refetch } = useQuery(
+    'user',
+    walletService.isLoggedIn,
+    {
+      enabled: false,
+    }
+  )
 
   useEffect(() => {
     const checkWallet = async () => {

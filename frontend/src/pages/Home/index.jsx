@@ -8,10 +8,6 @@ import { useQuery, QueryClient } from 'react-query'
 import walletService from 'store/services/walletService'
 
 const Home = ({ client }) => {
-  // const wallet = useSelector((state) => state.wallet)
-  // useEffect(() => {
-  //   reset()
-  // }, [wallet])
   const { state: ContextState, login } = useContext(WalletContext)
   const {
     isLoginPending,
@@ -22,8 +18,8 @@ const Home = ({ client }) => {
   } = ContextState
   console.log('isLoggedIn: ', isLoggedIn)
 
-  const data = useQuery('user', { refetchOnReconnect: true }) //client.getQueryData('user')
-  console.log('data: ', data)
+  //const data = useQuery('user', { refetchOnReconnect: true }) //client.getQueryData('user')
+  //console.log('data: ', data)
   return (
     <div className={styles.container}>
       {

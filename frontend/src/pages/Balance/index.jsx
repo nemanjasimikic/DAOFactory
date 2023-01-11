@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react'
-
+import { useEffect, useState, useContext } from 'react'
 import { useNavigate, Link, useParams } from 'react-router-dom'
-
 import BalanceInfoCard from 'components/BalanceInfoCard'
 import Button from 'components/common/Button'
 import daoCardLogo from 'static/svg/daoCardLogo.svg'
@@ -18,12 +16,23 @@ import {
   columnsVoters,
   dataVoters,
 } from './mocks'
+import { WalletContext } from 'context/walletContext'
 
 const Balance = () => {
   const { id } = useParams()
+  const { state: ContextState } = useContext(WalletContext)
+  const {
+    isLoginPending,
+    isLoggedIn,
+    loginError,
+    addressContext,
+    balanceContext,
+  } = ContextState
   const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
-    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
+    daoService
+      .getDaoInfo(id, addressContext)
+      .then((data) => setDaoInformation(data))
   }, [])
 
   console.log('daoInformation: ', daoInformation)
