@@ -4,10 +4,10 @@ import IsLoggedIn from 'pages/Home/IsLoggedIn'
 import styles from './style.module.sass'
 import { useEffect, useContext } from 'react'
 import { WalletContext } from 'context/walletContext'
-import { useQuery } from 'react-query'
+import { useQuery, QueryClient } from 'react-query'
 import walletService from 'store/services/walletService'
 
-const Home = () => {
+const Home = ({ client }) => {
   // const wallet = useSelector((state) => state.wallet)
   // useEffect(() => {
   //   reset()
@@ -21,24 +21,13 @@ const Home = () => {
     balanceContext,
   } = ContextState
   console.log('isLoggedIn: ', isLoggedIn)
-  /* const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: Infinity,
-      },
-    },
-  })*/
-  const { data, error, isError, isLoading } = useQuery(
-    'user',
-    walletService.isLoggedIn
-  )
 
-  console.log('data query: ', data)
-
+  const data = useQuery('user', { refetchOnReconnect: true }) //client.getQueryData('user')
+  console.log('data: ', data)
   return (
     <div className={styles.container}>
       {
-        data ? <IsLoggedIn address={data} /> : <IsLoggedOut />
+        isLoggedIn ? <IsLoggedIn address={addressContext} /> : <IsLoggedOut />
         /*isLoggedIn === false ? <IsLoggedOut /> : <IsLoggedIn address={addressContext}/>*/
       }
     </div>

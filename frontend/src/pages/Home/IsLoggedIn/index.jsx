@@ -21,12 +21,12 @@ const IsLoggedIn = ({ address }) => {
     }, 6000)
   }
   useEffect(onLoadEffect, [])
-  /*const { data, error, isError, isLoading } = useQuery(
+  const { data, error, isError, isLoading } = useQuery(
     'user',
     walletService.isLoggedIn
   )
 
-  console.log('data query: ', data)*/
+  console.log('data query: ', data)
   //const dao = useSelector((state) => state.dao)
   const [daoInformation, setDaoInformation] = useState({})
 

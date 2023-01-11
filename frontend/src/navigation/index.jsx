@@ -11,13 +11,13 @@ import Footer from 'components/Footer'
 import MobileFooter from 'components/Footer/MobileFooter'
 import ScrollToTop from 'components/ScrollToTop'
 
-const Navigation = () => {
+const Navigation = ({ client }) => {
   return (
     <Router>
       <ScrollToTop />
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home client={client} />} />
         <Route
           path="dao-settings/general/:id"
           element={<GeneralDaoSettings />}

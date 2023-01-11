@@ -7,6 +7,7 @@ import walletLogout from 'static/svg/walletLogout.svg'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { WalletContext } from '../../../context/walletContext'
 import { useEffect } from 'react'
+import { useQuery } from 'react-query'
 
 const Navbar = () => {
   const { state: ContextState, login, logout } = useContext(WalletContext)

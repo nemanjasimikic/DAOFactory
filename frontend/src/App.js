@@ -10,12 +10,19 @@ function App() {
     () => ({ wallet, setWallet }),
     [wallet, setWallet]
   )*/
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity,
+      },
+    },
+  })
+
   return (
     <div className="container">
       <QueryClientProvider client={queryClient}>
         <ContextProvider value={500}>
-          <Navigation />
+          <Navigation client={queryClient} />
         </ContextProvider>
       </QueryClientProvider>
     </div>
