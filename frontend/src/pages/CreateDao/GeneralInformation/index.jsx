@@ -14,6 +14,7 @@ const GeneralInformation = ({
   setFormData,
   rootAddress,
   handleSubmit,
+  errors,
 }) => {
   const { register } = useForm()
   const onChange = (e) => {
@@ -88,6 +89,7 @@ const GeneralInformation = ({
         buttons={imageButtons}
         onChange={onChange}
         value={daoAddress !== '' ? daoAddress : rootAddress}
+        errors={errors}
       />
       <Input
         validated={validated}
@@ -99,6 +101,7 @@ const GeneralInformation = ({
         onChange={onChange}
         value={name}
         required={true}
+        errors={errors}
       />
       <Input
         validated={validated}
@@ -110,6 +113,7 @@ const GeneralInformation = ({
         defaultValue={''}
         value={daoSlug}
         required={true}
+        errors={errors}
       />
       <Input
         validated={validated}
@@ -122,6 +126,7 @@ const GeneralInformation = ({
         onChange={onAddressChange}
         value={governanceToken}
         required={true}
+        errors={errors}
       />
       <Input
         validated={validated}
@@ -132,6 +137,7 @@ const GeneralInformation = ({
         onChange={onChange}
         value={minStake}
         required={true}
+        errors={errors}
       />
       <label>Description(optional)</label>
       <textarea
