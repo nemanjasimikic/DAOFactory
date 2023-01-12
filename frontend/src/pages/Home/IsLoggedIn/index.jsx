@@ -11,8 +11,6 @@ import { useQuery } from 'react-query'
 import walletService from 'store/services/walletService'
 
 const IsLoggedIn = ({ address }) => {
-  //const dispatch = useDispatch()
-  //console.log('address is logged in: ', address)
   const [renderTable, setRenderTable] = useState(true)
 
   const onLoadEffect = () => {
@@ -26,16 +24,12 @@ const IsLoggedIn = ({ address }) => {
     walletService.isLoggedIn
   )
 
-  console.log('data query: ', data)
-  //const dao = useSelector((state) => state.dao)
   const [daoInformation, setDaoInformation] = useState({})
 
   useEffect(() => {
     daoService.getAllDAOs(address).then((data) => setDaoInformation(data))
   }, [])
 
-  // daoInformationLog2
-  // console.log('daoInformation: ', daoInformation)
   const getDaoList = daoInformation
   const columns = [
     {

@@ -18,7 +18,6 @@ const walletConnect = async () => {
   localStorage.setItem('isLoggedIn', JSON.stringify(true))
   const balance = await getBalance(accountInteraction.address._address)
   if (balance) {
-    console.log('Balance: ', balance)
   }
   const data = {
     address: accountInteraction.address._address,
@@ -35,13 +34,14 @@ const logout = async () => {
   const { accountInteraction } = await ever.rawApi.disconnect({
     permissions: ['basic', 'accountInteraction'],
   })
+  localStorage.removeItem('isLoggedIn')
 
   return accountInteraction
 }
 
 const getBalance = async (address) => {
   const response = await ever.getBalance(address)
-  console.log('response: ', response)
+
   if (response) {
     localStorage.setItem('balance', JSON.stringify(response))
   }

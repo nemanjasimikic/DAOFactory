@@ -37,7 +37,6 @@ const OwnershipDaoSettings = () => {
     formState: { errors },
   } = useForm()
 
-  console.log('Settings button pressed, errors?', errors)
   return (
     <div>
       {' '}
@@ -72,14 +71,11 @@ const OwnershipDaoSettings = () => {
                   function navigateOff(canNavigate) {
                     setLoading(false)
                     if (canNavigate) {
-                      console.log('Resolved: true')
                       alert('Ownership is transferred!')
                       navigate('/')
                     }
-                    console.log('Resolved: false')
                   }
                   handleSubmit(e)
-                  // console.log('handle', handleSubmit(e))
                   await daoService
                     .transferOwnership(formData.ownerAddress, id)
                     .catch((e) => {
@@ -104,11 +100,9 @@ const OwnershipDaoSettings = () => {
                   function navigateOff(canNavigate) {
                     setLoading(false)
                     if (canNavigate) {
-                      console.log('Resolved: true')
                       alert('Contract is destroyed!')
                       navigate('/')
                     }
-                    console.log('Resolved: false')
                   }
                   e.preventDefault()
                   await daoService.destroy(id).catch((e) => {

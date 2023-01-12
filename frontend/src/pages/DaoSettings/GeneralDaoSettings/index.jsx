@@ -18,7 +18,6 @@ const GeneralDaoSettings = () => {
   const navigate = useNavigate()
   let { id } = useParams()
 
-  console.log('id: ', id)
   const { handleSubmit } = useForm()
   const ever = new ProviderRpcClient()
   // useEffect(() => {
@@ -68,12 +67,8 @@ const GeneralDaoSettings = () => {
         ? slug
         : formData.daoSlug
 
-    console.log('slugArray: ', slugArray)
-
     slugChange = slugArray && slug != '' ? slugArray : daoInformation.slug
-    console.log('slug: ', slug)
   }
-  console.log('name: ', name)
 
   return name ? (
     <div>
@@ -134,11 +129,9 @@ const GeneralDaoSettings = () => {
                   function navigateOff(canNavigate) {
                     setLoading(false)
                     if (canNavigate) {
-                      console.log('Resolved: true')
                       alert('Changes are saved!')
                       navigate('/')
                     }
-                    console.log('Resolved: false')
                   }
                   await daoService
                     .setSettingsChanges(
@@ -159,9 +152,6 @@ const GeneralDaoSettings = () => {
                     })
                   e.preventDefault()
                   navigateOff(canNavigate)
-                  //  setLoading(false)
-                  //alert('Changes are saved!')
-                  //navigate('/')
                 }}
                 disabled={loading}
               />

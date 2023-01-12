@@ -181,9 +181,7 @@ const deployFactory = async (
   address
 ) => {
   const accounts = await getFactory(address)
-  console.log('treasury: ', treasury)
   const treasure = treasury === 'on' ? true : treasury
-  console.log('treasure: ', treasure)
   try {
     if (accounts.accounts && accounts.accounts.length > 0) {
       const address = accounts.accounts[0]._address
@@ -204,14 +202,11 @@ const deployFactory = async (
         address,
         nonce
       )
-      console.log('treasury: ', treasury)
-      console.log('daoDeployer: ', daoDeployer)
       return Promise.resolve(accounts)
     } else {
       const address = await getExpectedAddress()
       const walletAddress = addressConverter(localStorage.getItem('wallet'))
       if (address) {
-        console.log('Adresa u deploju: ', address)
       }
 
       const topupVar = await topup(address)
@@ -362,7 +357,6 @@ const addDaoRootToFactory = async (
 }
 
 const getAllDAOs = async (address) => {
-  console.log('address: ', address)
   const factory = await getFactory(address)
   let rootData = []
   try {
@@ -371,15 +365,15 @@ const getAllDAOs = async (address) => {
         daoFactoryAbi,
         factory.accounts[0]._address
       )
-      console.log('daoFactory:', daoFactoryContract)
+
       let daoAddresses = await getDeployedDaos(daoFactoryContract)
-      console.log('daoAddresses: ', daoAddresses)
+
       for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
         const daoRootContract = new ever.Contract(
           daoRootAbi,
           daoAddresses.daoAddr[i][1][0]._address
         )
-        console.log('daoRootContract: ', daoRootContract)
+
         const name = await daoRootContract.methods.name({}).call()
         const description = await daoRootContract.methods.description({}).call()
         const slug = await daoRootContract.methods.slug({}).call()
@@ -390,7 +384,7 @@ const getAllDAOs = async (address) => {
           address: daoAddresses.daoAddr[i][1][0]._address,
         })
       }
-      console.log('root data: ', rootData)
+
       const code = await ever.splitTvc(daoRootTvc)
       const walletAddress = addressConverter(localStorage.getItem('wallet'))
 
@@ -445,8 +439,6 @@ const getAllDAOs = async (address) => {
               const providerState = await ever.getProviderState()
               const publicKey =
                 providerState.permissions.accountInteraction.publicKey
-              console.log('account za dodati: ', accounts.accounts[i]._address)
-              console.log('dao factory: ', daoFactoryContract)
               counter = counter + 1
               if (counter == 1) {
                 const novi = await addDaoRootToFactory(
@@ -456,7 +448,6 @@ const getAllDAOs = async (address) => {
                 )
               }
               daoAddresses = await getDeployedDaos(daoFactoryContract)
-              console.log('daoAddresses: ', daoAddresses)
               rootData.push({
                 name: name.name,
                 description: description.description,
@@ -569,20 +560,10 @@ const destroy = async (id, address) => {
       ? await getDaoByAddress(id)
       : await findDaoBySlug(daoFactoryContract, id)
   const daoAddresses = await getDeployedDaos(daoFactoryContract)
-  let daoRootAddress
-  //let nonce
-  console.log('daoRootContract: ', daoRootContract.address)
-  console.log(daoAddresses.daoAddr[0])
+
   const nonce = daoAddresses.daoAddr.find(
     (address) => address[1][0]._address == daoRootContract.address
   )
-  console.log('nonce: ', nonce)
-  /*for (let i = 0; i < daoAddresses.daoAddr.length; i++) {
-    if (i == id) {
-      daoRootAddress = daoAddresses.daoAddr[i][1][0]._address
-      nonce = daoAddresses.daoAddr[i][0]
-    }
-  }*/
 
   const walletAddress = addressConverter(localStorage.getItem('wallet'))
   try {
@@ -591,7 +572,7 @@ const destroy = async (id, address) => {
       .send({ from: walletAddress, amount: toNano(1, 9), bounce: false })
     const providerState = await ever.getProviderState()
     const publicKey = providerState.permissions.accountInteraction.publicKey
-    console.log('nonce: ', nonce[0] * 1)
+
     const deleteOld = await daoFactoryContract.methods
       .removeDao({ nonce: nonce[0] * 1 })
       .sendExternal({
@@ -638,12 +619,10 @@ const getToken = async (address) => {
   try {
     const label = await root.methods.symbol({ answerId: 1 }).call()
     const token = tokensList.find((token) => token.label === label.value0)
-    console.log('token: ', token)
     const tokenData = {
       label: label,
       icon: token ? token.icon : '',
     }
-    console.log('tokenData: ', tokenData)
     return Promise.resolve(tokenData)
   } catch (e) {
     console.log(e)
@@ -705,7 +684,7 @@ const getDaoInfo = async (id, address) => {
       id.length > 60
         ? await getDaoByAddress(id)
         : await findDaoBySlug(daoFactoryContract, id)
-    console.log(daoRootContract)
+
     const name = await daoRootContract.methods.name({}).call()
     const slug = await daoRootContract.methods.slug({}).call()
     const description = await daoRootContract.methods.description({}).call()
@@ -763,7 +742,6 @@ async function setSettingsChanges(name, slug, description, daoAddress) {
         withoutSignature: true,
       })
 
-    console.log('trx: ', trx)
     return Promise.resolve(trx)
   } catch (e) {
     console.log('error: ', e)
@@ -774,7 +752,6 @@ async function setSettingsChanges(name, slug, description, daoAddress) {
 const getDaoByAddress = async (address) => {
   const daoRootContract = new ever.Contract(daoRootAbi, address)
   try {
-    //const slug = await daoRootContract.methods.slug({}).call()
     return Promise.resolve(daoRootContract)
   } catch (e) {
     console.log(e)

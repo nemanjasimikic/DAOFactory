@@ -19,6 +19,8 @@ import {
 import { WalletContext } from 'context/walletContext'
 
 const Balance = () => {
+  const navigate = useNavigate()
+
   const { id } = useParams()
   const { state: ContextState } = useContext(WalletContext)
   const {
@@ -34,9 +36,6 @@ const Balance = () => {
       .getDaoInfo(id, addressContext)
       .then((data) => setDaoInformation(data))
   }, [])
-
-  console.log('daoInformation: ', daoInformation)
-
   return (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>

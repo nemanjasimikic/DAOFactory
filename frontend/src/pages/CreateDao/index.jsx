@@ -71,8 +71,6 @@ const CreateDao = () => {
   useEffect(() => {
     daoService.getAddressForRoot().then((data) => setDaoInformation(data))
   }, [])
-  // daoInformationLog1
-  console.log('daoInformation: ', daoInformation)
 
   const FormTitles = [
     'General information',
@@ -90,10 +88,7 @@ const CreateDao = () => {
         <GeneralInformation
           formId={'myForm'}
           formData={formData}
-          rootAddress={
-            //daoInformation.rootAddress ? daoInformation.rootAddress : formData
-            daoAddress
-          }
+          rootAddress={daoAddress}
           setFormData={setFormData}
           handleSubmit={handleSubmit}
         />
@@ -232,10 +227,8 @@ const CreateDao = () => {
                 function navigateOff(canNavigate) {
                   setLoading(false)
                   if (canNavigate) {
-                    console.log('Resolved: true')
                     navigate('/')
                   }
-                  console.log('Resolved: false')
                 }
 
                 await daoService

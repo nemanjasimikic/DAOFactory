@@ -19,7 +19,6 @@ const Navbar = () => {
     addressContext,
     balanceContext,
   } = ContextState
-  console.log('state: ', ContextState)
   const { status, data, error, refetch } = useQuery(
     'user',
     walletService.isLoggedIn,
@@ -31,7 +30,6 @@ const Navbar = () => {
   useEffect(() => {
     const checkWallet = async () => {
       if (localStorage?.getItem('isLoggedIn')) {
-        console.log('usao')
         try {
           login()
         } catch (e) {
@@ -67,7 +65,6 @@ const Navbar = () => {
           onClick={async (e) => {
             e.preventDefault()
             login()
-            console.log('state: ', addressContext)
           }}
         />
       ) : (

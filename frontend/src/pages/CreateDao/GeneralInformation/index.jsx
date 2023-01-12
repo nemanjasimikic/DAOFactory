@@ -45,7 +45,7 @@ const GeneralInformation = ({
   async function onClickFunctionInImage1(e) {
     e.preventDefault()
     const address = await daoService.getAddressForRoot()
-    console.log('adresa', address)
+
     rootAddress = address.rootAddress
     setFormData((prevState) => ({
       ...prevState,
@@ -54,7 +54,6 @@ const GeneralInformation = ({
     }))
   }
 
-  console.log('form data: ', formData)
   function onClickFunctionInImage2(e) {
     e.preventDefault()
     navigator.clipboard.writeText(
