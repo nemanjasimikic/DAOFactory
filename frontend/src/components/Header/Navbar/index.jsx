@@ -1,20 +1,35 @@
-import { useEffect } from 'react'
+import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { login, logout, reset } from 'store/features/walletSlice'
 import Button from 'components/common/Button'
 import { addressFormat } from 'helpers/addressFormat'
 import styles from './styles.module.sass'
 import walletLogout from 'static/svg/walletLogout.svg'
 import walletAvatar from 'static/svg/walletAvatar.svg'
+import { WalletContext } from '../../../context/walletContext'
+import { useEffect } from 'react'
 
 const Navbar = () => {
-  const wallet = useSelector((state) => state.wallet)
-  const dispatch = useDispatch()
+  const { state: ContextState, login, logout } = useContext(WalletContext)
+  const {
+    isLoginPending,
+    isLoggedIn,
+    loginError,
+    addressContext,
+    balanceContext,
+  } = ContextState
 
   useEffect(() => {
-    dispatch(reset())
-  }, [wallet, dispatch])
+    const checkWallet = async () => {
+      if (localStorage?.getItem('isLoggedIn')) {
+        try {
+          login()
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    }
+    checkWallet()
+  }, [])
 
   return (
     <nav className={styles.navbar}>
@@ -34,23 +49,29 @@ const Navbar = () => {
       >
         My DAOs
       </NavLink>
-      {wallet.wallet === null ? (
+      {isLoggedIn === false && !isLoginPending ? (
         <Button
           text={'Connect wallet'}
           style={'primaryBtn'}
-          onClick={() => dispatch(login())}
+          onClick={async (e) => {
+            e.preventDefault()
+            login()
+          }}
         />
       ) : (
         <div className={styles.walletInfoWrapper}>
           <img src={walletAvatar} alt={'avatar'} />
           <div className={styles.walletBalanceCol}>
-            <p className={styles.address}>{addressFormat(wallet.wallet)}</p>
-            <p className={styles.balance}>{wallet.balance}</p>
+            <p className={styles.address}>{addressFormat(addressContext)}</p>
+            <p className={styles.balance}>{balanceContext}</p>
           </div>
           <img
             className={styles.logout}
             src={walletLogout}
-            onClick={() => dispatch(logout())}
+            onClick={async (e) => {
+              e.preventDefault()
+              logout()
+            }}
             alt={'logout'}
           />
         </div>

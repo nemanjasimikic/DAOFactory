@@ -111,10 +111,8 @@ export const checkValidity = (checks) => {
   let pass = true
   for (var i = 0; i < checks.length; i++) {
     if (checks[i] !== true) {
-      // console.log('PASSES', false)
       pass = false
     }
   }
-  // console.log('PASS', pass)
   return pass
 }

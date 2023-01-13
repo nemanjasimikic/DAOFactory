@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useEffect, useState, useContext } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import Sidebar from 'components/common/Sidebar'
@@ -9,34 +8,35 @@ import Input from 'components/common/Input'
 import Button from 'components/common/Button'
 import styles from '../styles.module.sass'
 import copy from 'static/svg/copy.svg'
-import { ProviderRpcClient } from 'everscale-inpage-provider'
 import daoService from 'store/services/daoService'
 import Spinner from 'components/common/Spinner'
-import Table from 'components/common/Table'
+import { WalletContext } from 'context/walletContext'
+import { useQuery } from 'react-query'
 const GeneralDaoSettings = () => {
   const { register } = useForm()
-  const wallet = useSelector((state) => state.wallet)
   const navigate = useNavigate()
   let { id } = useParams()
 
-  console.log('id: ', id)
   const { handleSubmit } = useForm()
-  const ever = new ProviderRpcClient()
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
-  }, [wallet, navigate])
   let [loading, setLoading] = useState(false)
-  const [daoInformation, setDaoInformation] = useState({})
-  /*useEffect(() => {
-    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
-  }, [])*/
 
-  const onLoadEffect = () => {
-    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
+  const { state: ContextState } = useContext(WalletContext)
+  const { addressContext } = ContextState
+  const [daoInformation, setDaoInformation] = useState({})
+  useEffect(() => {
+    daoService
+      .getDaoInfo(id, addressContext)
+      .then((data) => setDaoInformation(data))
+  }, [])
+  /*const { data, error, isError, isLoading } = useQuery(['daoInfo'], () =>
+    daoService.getDaoInfo(id, addressContext)
+  )*/
+  /* const onLoadEffect = () => {
+    daoService
+      .getDaoInfo(id, addressContext)
+      .then((data) => setDaoInformation(data))
   }
-  useEffect(onLoadEffect, [])
+  useEffect(onLoadEffect, [])*/
 
   const [formData, setFormData] = useState({
     daoAddress: '',
@@ -57,7 +57,7 @@ const GeneralDaoSettings = () => {
   let description
   let slugChange
 
-  if (daoInformation.name) {
+  if (daoInformation?.name) {
     //loading = false
     let daoRootAddr = daoInformation.daoAddress ? daoInformation.daoAddress : ''
     name = daoInformation.name ? daoInformation.name : ''
@@ -69,12 +69,8 @@ const GeneralDaoSettings = () => {
         ? slug
         : formData.daoSlug
 
-    console.log('slugArray: ', slugArray)
-
     slugChange = slugArray && slug != '' ? slugArray : daoInformation.slug
-    console.log('slug: ', slug)
   }
-  console.log('name: ', name)
 
   return name ? (
     <div>
@@ -135,11 +131,9 @@ const GeneralDaoSettings = () => {
                   function navigateOff(canNavigate) {
                     setLoading(false)
                     if (canNavigate) {
-                      console.log('Resolved: true')
                       alert('Changes are saved!')
                       navigate('/')
                     }
-                    console.log('Resolved: false')
                   }
                   await daoService
                     .setSettingsChanges(
@@ -160,9 +154,6 @@ const GeneralDaoSettings = () => {
                     })
                   e.preventDefault()
                   navigateOff(canNavigate)
-                  //  setLoading(false)
-                  //alert('Changes are saved!')
-                  //navigate('/')
                 }}
                 disabled={loading}
               />

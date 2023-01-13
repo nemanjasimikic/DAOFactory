@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useEffect, useState, useContext } from 'react'
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import BalanceInfoCard from 'components/BalanceInfoCard'
 import Button from 'components/common/Button'
@@ -17,25 +16,26 @@ import {
   columnsVoters,
   dataVoters,
 } from './mocks'
+import { WalletContext } from 'context/walletContext'
 
 const Balance = () => {
-  const wallet = useSelector((state) => state.wallet)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
-  }, [wallet, navigate])
-
   const { id } = useParams()
+  const { state: ContextState } = useContext(WalletContext)
+  const {
+    isLoginPending,
+    isLoggedIn,
+    loginError,
+    addressContext,
+    balanceContext,
+  } = ContextState
   const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
-    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
+    daoService
+      .getDaoInfo(id, addressContext)
+      .then((data) => setDaoInformation(data))
   }, [])
-
-  console.log('daoInformation: ', daoInformation)
-
   return (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>

@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { reset } from 'store/features/daoSlice'
 import Sidebar from 'components/common/Sidebar'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
 import VotingConfiguration from 'pages/CreateDao/VotingConfiguration'
@@ -18,9 +16,11 @@ import Spinner from '../../components/common/Spinner'
 import { useForm } from 'react-hook-form'
 import { validator, checkValidity } from 'helpers/formValidator'
 import daoService from 'store/services/daoService'
+import { WalletContext } from 'context/walletContext'
+
 const CreateDao = () => {
-  const wallet = useSelector((state) => state.wallet)
-  const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
+  // const wallet = useSelector((state) => state.wallet)
+  // const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
   const navigate = useNavigate()
 
   const {
@@ -28,19 +28,19 @@ const CreateDao = () => {
     formState: { errors },
   } = useForm()
 
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
+  // useEffect(() => {
+  //   if (wallet.wallet === null) {
+  //     navigate('/')
+  //   }
+  //
+  //   return () => {
+  //     reset()
+  //   }
+  // }, [wallet, navigate])
 
-    return () => {
-      reset()
-    }
-  }, [wallet, navigate])
-
-  if (isDeployed) {
-    navigate('/')
-  }
+  // if (isDeployed) {
+  //   navigate('/')
+  // }
 
   const [page, setPage] = useState(0)
   let [loading, setLoading] = useState(false)
@@ -67,13 +67,18 @@ const CreateDao = () => {
     icon: '',
     nonce: 0,
   })
-
+  const { state: ContextState } = useContext(WalletContext)
+  const {
+    isLoginPending,
+    isLoggedIn,
+    loginError,
+    addressContext,
+    balanceContext,
+  } = ContextState
   const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
     daoService.getAddressForRoot().then((data) => setDaoInformation(data))
   }, [])
-  // daoInformationLog1
-  console.log('daoInformation: ', daoInformation)
 
   const FormTitles = [
     'General information',
@@ -83,18 +88,13 @@ const CreateDao = () => {
   ]
   let { daoAddress } = formData
   daoAddress = daoInformation.rootAddress
-  let pressed = false
-
   const PageDisplay = () => {
     if (page === 0) {
       return (
         <GeneralInformation
           formId={'myForm'}
           formData={formData}
-          rootAddress={
-            //daoInformation.rootAddress ? daoInformation.rootAddress : formData
-            daoAddress
-          }
+          rootAddress={daoAddress}
           setFormData={setFormData}
           handleSubmit={handleSubmit}
         />
@@ -131,7 +131,7 @@ const CreateDao = () => {
 
   return (
     <div className={styles.container}>
-      {loading && <Spinner />}
+      {/*{isLoading && <Spinner />}*/}
       <div className={styles.createDao}>
         <Sidebar page={page} setPage={setPage} />
         <div className={styles.createDaoContent}>
@@ -233,12 +233,9 @@ const CreateDao = () => {
                 function navigateOff(canNavigate) {
                   setLoading(false)
                   if (canNavigate) {
-                    console.log('Resolved: true')
                     navigate('/')
                   }
-                  console.log('Resolved: false')
                 }
-
                 await daoService
                   .deployFactory(
                     pendingTime,
@@ -253,7 +250,8 @@ const CreateDao = () => {
                     formData.minStake * 1,
                     formData.description,
                     formData.treasury,
-                    formData.nonce == 0 ? daoInformation.nonce : formData.nonce
+                    formData.nonce == 0 ? daoInformation.nonce : formData.nonce,
+                    addressContext
                   )
                   .catch((e) => {
                     console.log(e)
