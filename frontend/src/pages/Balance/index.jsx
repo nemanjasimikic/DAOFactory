@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, Link, useParams } from 'react-router-dom'
 import BalanceInfoCard from 'components/BalanceInfoCard'
 import Button from 'components/common/Button'
 import daoCardLogo from 'static/svg/daoCardLogo.svg'
 import linkIcon from 'static/svg/linkIcon.svg'
-import styles from './styles.module.sass'
 import daoService from 'store/services/daoService'
 import Input from '../../components/common/Input'
 import Table from '../../components/common/Table'
+import styles from './styles.module.sass'
 import {
   columnsAllProposals,
   dataAllProposals,
@@ -49,7 +49,9 @@ const Balance = () => {
         <div className={styles.rightSideWrapper}>
           <img src={linkIcon} alt={'link icon'} />
           <p>Addresses</p>
-          <Button style={'lightBlueBtn'} text={'Create a proposal'} />
+          <Link className={styles.createProposalLink} to={'/create-proposal'}>
+            <Button style={'lightBlueBtn'} text={'Create a proposal'} />
+          </Link>
         </div>
       </div>
       <div className={styles.balanceGrid}>
