@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState, useContext } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Sidebar from '../../../components/common/Sidebar'
 import ContentHeader from '../../../components/common/ContentHeader'
@@ -10,16 +10,13 @@ import daoService from 'store/services/daoService'
 import Form from 'components/common/Form'
 import { useForm } from 'react-hook-form'
 import Spinner from 'components/common/Spinner'
+import { WalletContext } from 'context/walletContext'
 
 const OwnershipDaoSettings = () => {
-  // const wallet = useSelector((state) => state.wallet)
+  const { state: ContextState } = useContext(WalletContext)
+  const { addressContext } = ContextState
   const navigate = useNavigate()
   const { id } = useParams()
-  // useEffect(() => {
-  //   if (wallet.wallet === null) {
-  //     navigate('/')
-  //   }
-  // }, [wallet, navigate])
   let [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     ownerAddress: '',
@@ -77,7 +74,11 @@ const OwnershipDaoSettings = () => {
                   }
                   handleSubmit(e)
                   await daoService
-                    .transferOwnership(formData.ownerAddress, id)
+                    .transferOwnership(
+                      formData.ownerAddress,
+                      id,
+                      addressContext
+                    )
                     .catch((e) => {
                       console.log(e)
                       setLoading(false)
@@ -85,9 +86,6 @@ const OwnershipDaoSettings = () => {
                       return
                     })
                   navigateOff(canNavigate)
-                  //alert('Ownership is transferred!')
-                  //navigate('/')
-                  // e.preventDefault()
                 }}
               />
               <p>Transfer ownership to Black Hole</p>
@@ -105,14 +103,12 @@ const OwnershipDaoSettings = () => {
                     }
                   }
                   e.preventDefault()
-                  await daoService.destroy(id).catch((e) => {
+                  await daoService.destroy(id, addressContext).catch((e) => {
                     console.log(e)
                     setLoading(false)
                     canNavigate = false
                     return
                   })
-                  //alert('Contract is destroyed!')
-                  //navigate('/')
                   navigateOff(canNavigate)
                 }}
               />

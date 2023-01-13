@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Sidebar from 'components/common/Sidebar'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
@@ -16,6 +16,7 @@ import Spinner from '../../components/common/Spinner'
 import { useForm } from 'react-hook-form'
 import { validator, checkValidity } from 'helpers/formValidator'
 import daoService from 'store/services/daoService'
+import { WalletContext } from 'context/walletContext'
 
 const CreateDao = () => {
   // const wallet = useSelector((state) => state.wallet)
@@ -66,7 +67,14 @@ const CreateDao = () => {
     icon: '',
     nonce: 0,
   })
-
+  const { state: ContextState } = useContext(WalletContext)
+  const {
+    isLoginPending,
+    isLoggedIn,
+    loginError,
+    addressContext,
+    balanceContext,
+  } = ContextState
   const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
     daoService.getAddressForRoot().then((data) => setDaoInformation(data))
@@ -80,8 +88,6 @@ const CreateDao = () => {
   ]
   let { daoAddress } = formData
   daoAddress = daoInformation.rootAddress
-  let pressed = false
-
   const PageDisplay = () => {
     if (page === 0) {
       return (
@@ -230,7 +236,6 @@ const CreateDao = () => {
                     navigate('/')
                   }
                 }
-
                 await daoService
                   .deployFactory(
                     pendingTime,
@@ -245,7 +250,8 @@ const CreateDao = () => {
                     formData.minStake * 1,
                     formData.description,
                     formData.treasury,
-                    formData.nonce == 0 ? daoInformation.nonce : formData.nonce
+                    formData.nonce == 0 ? daoInformation.nonce : formData.nonce,
+                    addressContext
                   )
                   .catch((e) => {
                     console.log(e)

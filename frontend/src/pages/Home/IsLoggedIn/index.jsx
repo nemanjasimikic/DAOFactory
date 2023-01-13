@@ -8,7 +8,6 @@ import Table from 'components/common/Table'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
 import { useQuery } from 'react-query'
-import walletService from 'store/services/walletService'
 
 const IsLoggedIn = ({ address }) => {
   const [renderTable, setRenderTable] = useState(true)
@@ -20,17 +19,12 @@ const IsLoggedIn = ({ address }) => {
   }
   useEffect(onLoadEffect, [])
   const { data, error, isError, isLoading } = useQuery(
-    'user',
-    walletService.isLoggedIn
+    ['allDAOs'],
+    () => daoService.getAllDAOs(address),
+    { cacheTime: 1000 * 60 * 2 }
   )
 
-  const [daoInformation, setDaoInformation] = useState({})
-
-  useEffect(() => {
-    daoService.getAllDAOs(address).then((data) => setDaoInformation(data))
-  }, [])
-
-  const getDaoList = daoInformation
+  const getDaoList = data
   const columns = [
     {
       key: 'id',

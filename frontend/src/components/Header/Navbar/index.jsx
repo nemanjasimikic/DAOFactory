@@ -7,8 +7,6 @@ import walletLogout from 'static/svg/walletLogout.svg'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { WalletContext } from '../../../context/walletContext'
 import { useEffect } from 'react'
-import { useQuery } from 'react-query'
-import walletService from 'store/services/walletService'
 
 const Navbar = () => {
   const { state: ContextState, login, logout } = useContext(WalletContext)
@@ -19,13 +17,6 @@ const Navbar = () => {
     addressContext,
     balanceContext,
   } = ContextState
-  const { status, data, error, refetch } = useQuery(
-    'user',
-    walletService.isLoggedIn,
-    {
-      enabled: false,
-    }
-  )
 
   useEffect(() => {
     const checkWallet = async () => {
@@ -58,7 +49,7 @@ const Navbar = () => {
       >
         My DAOs
       </NavLink>
-      {isLoggedIn === false ? (
+      {isLoggedIn === false && !isLoginPending ? (
         <Button
           text={'Connect wallet'}
           style={'primaryBtn'}
@@ -80,7 +71,6 @@ const Navbar = () => {
             onClick={async (e) => {
               e.preventDefault()
               logout()
-              console.log('state: ', addressContext)
             }}
             alt={'logout'}
           />

@@ -178,14 +178,13 @@ const deployFactory = async (
   description,
   treasury,
   nonce,
-  address
+  ownerAddress
 ) => {
-  const accounts = await getFactory(address)
+  const accounts = await getFactory(ownerAddress)
   const treasure = treasury === 'on' ? true : treasury
   try {
     if (accounts.accounts && accounts.accounts.length > 0) {
       const address = accounts.accounts[0]._address
-      //const parsedSlug = slug.split('/')
       const daoDeployer = await deployDAOFromFactory(
         pendingPeriod,
         voting,
@@ -200,7 +199,8 @@ const deployFactory = async (
         description,
         treasure,
         address,
-        nonce
+        nonce,
+        ownerAddress
       )
       return Promise.resolve(accounts)
     } else {
@@ -251,7 +251,8 @@ const deployFactory = async (
         description,
         treasure,
         address,
-        nonce
+        nonce,
+        ownerAddress
       )
 
       return Promise.resolve(sendTransaction)
@@ -276,7 +277,8 @@ const deployDAOFromFactory = async (
   description,
   treasury,
   factoryAddress,
-  nonce
+  nonce,
+  ownerAddress
 ) => {
   const daoAddr = factoryAddress
   const walletAddress = addressConverter(localStorage.getItem('wallet'))
@@ -306,7 +308,7 @@ const deployDAOFromFactory = async (
       nonce_: nonce,
     })
     .send({
-      from: walletAddress,
+      from: ownerAddress,
       amount: toNano(1, 9),
       bounce: true,
     })
@@ -695,9 +697,9 @@ const getDaoInfo = async (id, address) => {
       daoRootContract.address,
       tokenAddress.governanceToken._address
     )
-    const walletAddress = addressConverter(localStorage.getItem('wallet'))
+    //const walletAddress = addressConverter(localStorage.getItem('wallet'))
     const userBalance = await getTokenBalance(
-      walletAddress,
+      address,
       tokenAddress.governanceToken._address
     )
 
