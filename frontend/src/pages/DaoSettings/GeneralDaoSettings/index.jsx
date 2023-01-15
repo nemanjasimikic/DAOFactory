@@ -22,22 +22,27 @@ const GeneralDaoSettings = () => {
 
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
-  const [daoInformation, setDaoInformation] = useState({})
+  /*const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
     daoService
       .getDaoInfo(id, addressContext)
       .then((data) => setDaoInformation(data))
-  }, [])
-  /*const { data, error, isError, isLoading } = useQuery(['daoInfo'], () =>
-    daoService.getDaoInfo(id, addressContext)
-  )*/
+  }, [])*/
+  const { data, error, isError, isLoading } = useQuery(
+    ['daoInfo', id],
+    () => daoService.getDaoInfo(id, addressContext),
+    {
+      enabled: true,
+    } /* () =>
+    daoService.getDaoInfo(id, addressContext)*/
+  )
   /* const onLoadEffect = () => {
     daoService
       .getDaoInfo(id, addressContext)
       .then((data) => setDaoInformation(data))
   }
   useEffect(onLoadEffect, [])*/
-
+  console.log('data: ', data)
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
@@ -57,19 +62,19 @@ const GeneralDaoSettings = () => {
   let description
   let slugChange
 
-  if (daoInformation?.name) {
+  if (data?.name) {
     //loading = false
-    let daoRootAddr = daoInformation.daoAddress ? daoInformation.daoAddress : ''
-    name = daoInformation.name ? daoInformation.name : ''
-    slug = daoInformation.slug ? daoInformation.slug : ''
-    description = daoInformation.description ? daoInformation.description : ''
+    let daoRootAddr = data.daoAddress ? data.daoAddress : ''
+    name = data.name ? data.name : ''
+    slug = data.slug ? data.slug : ''
+    description = data.description ? data.description : ''
 
     const slugArray =
       formData.daoSlug == 'daobuilder.nswebdevelopment.com/'
         ? slug
         : formData.daoSlug
 
-    slugChange = slugArray && slug != '' ? slugArray : daoInformation.slug
+    slugChange = slugArray && slug != '' ? slugArray : data.slug
   }
 
   return name ? (
@@ -90,9 +95,7 @@ const GeneralDaoSettings = () => {
                 label={'Dao Address'}
                 placeholder={'DAO Address'}
                 registerInput={'daoAddress'}
-                value={
-                  daoInformation.daoAddress ? daoInformation.daoAddress : ''
-                }
+                value={data.daoAddress ? data.daoAddress : ''}
                 firstImage={copy}
                 disabled={true}
               />
@@ -137,14 +140,12 @@ const GeneralDaoSettings = () => {
                   }
                   await daoService
                     .setSettingsChanges(
-                      formData.name !== ''
-                        ? formData.name
-                        : daoInformation.name,
+                      formData.name !== '' ? formData.name : data.name,
                       slugChange,
                       formData.description !== ''
                         ? formData.description
-                        : daoInformation.description,
-                      daoInformation.daoAddress
+                        : data.description,
+                      data.daoAddress
                     )
                     .catch((e) => {
                       console.log(e)
