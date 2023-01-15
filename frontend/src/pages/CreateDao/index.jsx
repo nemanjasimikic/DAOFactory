@@ -131,7 +131,7 @@ const CreateDao = () => {
 
   return (
     <div className={styles.container}>
-      {/*{isLoading && <Spinner />}*/}
+      {loading && <Spinner />}
       <div className={styles.createDao}>
         <Sidebar page={page} setPage={setPage} />
         <div className={styles.createDaoContent}>
