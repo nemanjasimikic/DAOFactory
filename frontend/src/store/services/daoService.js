@@ -760,7 +760,50 @@ const getDaoByAddress = async (address) => {
     return Promise.reject(e)
   }
 }
+let allProposals
+const getAllProposals = async () => {
+  //const walletAddress = address
+  var data = JSON.stringify({
+    offset: 0,
+    limit: 10,
+    ordering: { column: 'createdAt', direction: 'DESC' },
+  })
 
+  const config = {
+    method: 'post',
+    url: 'https://api.everdao.net/v1/proposals/search',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: data,
+  }
+  //const response = await axios.post(API_URL, goalData, config)
+
+  return axios(config)
+    .then(function (response) {
+      allProposals = response.data
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+const getProposals = async () => {
+  await getAllProposals()
+  console.log('allProposals: ', allProposals)
+  let proposals = []
+  for (let i = 0; i < allProposals.proposals.length; i++) {
+    proposals.push({
+      id: allProposals.proposals[i].proposalId,
+      summary: allProposals.proposals[i].description.split('"')[1],
+      status: allProposals.proposals[i].state,
+      voting: 'voting1',
+      date: 'date1',
+    })
+  }
+  console.log('proposals: ', proposals)
+  return proposals
+}
 const daoService = {
   getExpectedAddress,
   topup,
@@ -776,6 +819,7 @@ const daoService = {
   findDaoBySlug,
   setSettingsChanges,
   getDaoByAddress,
+  getProposals,
 }
 
 export default daoService

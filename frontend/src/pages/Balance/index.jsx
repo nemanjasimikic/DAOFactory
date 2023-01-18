@@ -17,12 +17,12 @@ import {
   dataVoters,
 } from './mocks'
 import { WalletContext } from 'context/walletContext'
+import { useQuery } from 'react-query'
 
 const Balance = () => {
   const navigate = useNavigate()
-
   const { id } = useParams()
-  const { state: ContextState } = useContext(WalletContext)
+  const { state: ContextState, login } = useContext(WalletContext)
   const {
     isLoginPending,
     isLoggedIn,
@@ -30,20 +30,47 @@ const Balance = () => {
     addressContext,
     balanceContext,
   } = ContextState
+  /* useEffect(() => {
+    const checkWallet = async () => {
+      if (localStorage?.getItem('isLoggedIn')) {
+        try {
+          login()
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    }
+    checkWallet()
+  }, [])*/
+  console.log('address: ', addressContext)
   const [daoInformation, setDaoInformation] = useState({})
-  useEffect(() => {
+  const { data, isIdle, error, isError, isLoading } = useQuery(
+    ['daoBalance', id],
+    () => daoService.getDaoInfo(id, addressContext),
+    {
+      enabled: !!addressContext,
+    }
+  )
+  console.log('data: ', data)
+  /*useEffect(() => {
     daoService
       .getDaoInfo(id, addressContext)
       .then((data) => setDaoInformation(data))
+  }, [])*/
+
+  const [proposalInformation, setProposalInformation] = useState({})
+  useEffect(() => {
+    daoService.getProposals().then((data) => setProposalInformation(data))
   }, [])
-  return (
+
+  return proposalInformation[0] && data ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
         <div className={styles.daoNameWrapper}>
           <img src={daoCardLogo} alt={'dao card logo'} />
           <div className={styles.nameWrapper}>
-            <h3>{daoInformation.name}</h3>
-            <p>daobuilder.nswebdevelopment.com/dao/{daoInformation.slug}</p>
+            <h3>{data.name}</h3>
+            <p>daobuilder.nswebdevelopment.com/dao/{data.slug}</p>
           </div>
         </div>
         <div className={styles.rightSideWrapper}>
@@ -57,49 +84,45 @@ const Balance = () => {
       <div className={styles.balanceGrid}>
         <BalanceInfoCard
           name={'Governance token'}
-          value={daoInformation.token ? daoInformation.token.value0 : '-'}
+          value={data.token ? data.token.value0 : '-'}
           className={styles.bic1}
         />
         <BalanceInfoCard name={'Members'} value={'-'} className={styles.bic2} />
         <BalanceInfoCard
           name={'Quorum'}
           value={`${
-            daoInformation.proposalConfiguration
-              ? daoInformation.proposalConfiguration.quorumVotes
+            data.proposalConfiguration
+              ? data.proposalConfiguration.quorumVotes
               : 0
           }%`}
           className={styles.bic3}
         />
         <BalanceInfoCard
-          name={`Token amount, ${
-            daoInformation.token ? daoInformation.token.value0 : ''
-          }`}
-          value={daoInformation.daoBalance ? daoInformation.daoBalance : '-'}
+          name={`Token amount, ${data.token ? data.token.value0 : ''}`}
+          value={data.daoBalance ? data.daoBalance : '-'}
           className={styles.bic4}
         />
         <BalanceInfoCard
           name={'Proposals'}
-          value={daoInformation.nrOfProposals}
+          value={data.nrOfProposals}
           className={styles.bic5}
         />
         <BalanceInfoCard
-          name={`Threshold, ${
-            daoInformation.token ? daoInformation.token.value0 : ''
-          }`}
+          name={`Threshold, ${data.token ? data.token.value0 : ''}`}
           value={
-            daoInformation.proposalConfiguration
-              ? daoInformation.proposalConfiguration.threshold
+            data.proposalConfiguration
+              ? data.proposalConfiguration.threshold
               : 0
           }
           className={styles.bic6}
         />
-        <div className={styles.bic7}>{daoInformation.description}</div>
+        <div className={styles.bic7}>{data.description}</div>
         <div className={styles.bic8}>
           <div className={styles.infoWrapper}>
             <p className={styles.yourBalance}>Your balance</p>
             <h3 className={styles.balanceValue}>
-              {daoInformation.userBalance ? daoInformation.userBalance : '-'}{' '}
-              {daoInformation.token ? daoInformation.token.value0 : ''}
+              {data.userBalance ? data.userBalance : '-'}{' '}
+              {data.token ? data.token.value0 : ''}
             </h3>
             <p className={styles.voting}>0% voting weight</p>
           </div>
@@ -114,7 +137,7 @@ const Balance = () => {
           <Button style={'primaryBtn'} text={'Statuses'} />
         </div>
       </div>
-      <Table columns={columnsAllProposals} data={dataAllProposals} />
+      <Table columns={columnsAllProposals} data={proposalInformation} />
       <div className={styles.tableSectionHeading}>
         <p>Proposals with your locked tokens</p>
         <div className={styles.rightContentWrapper}>
@@ -127,7 +150,7 @@ const Balance = () => {
       </div>
       <Table columns={columnsVoters} data={dataVoters} />
     </div>
-  )
+  ) : null
 }
 
 export default Balance
