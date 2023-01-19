@@ -103,7 +103,7 @@ const IsLoggedIn = ({ address }) => {
       {getDaoList?.length < 1 ? (
         <NoResults />
       ) : itemsList.length < 1 /*renderTable*/ ? (
-        <Table columns={columns} data={dataTable} />
+        <Table columns={columns} data={dataTable} onLoadEffect={onLoadEffect} />
       ) : (
         <div className={styles.daoCardsWrapper}>{itemsList}</div>
       )}
