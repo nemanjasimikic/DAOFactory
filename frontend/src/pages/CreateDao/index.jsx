@@ -1,46 +1,30 @@
 import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Sidebar from 'components/common/Sidebar'
+import { WalletContext } from 'context/walletContext'
+import daoService from 'store/services/daoService'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
 import VotingConfiguration from 'pages/CreateDao/VotingConfiguration'
 import ProposalTimeline from 'pages/CreateDao/ProposalTimeline'
 import Treasury from 'pages/CreateDao/Treasury'
+import Sidebar from 'components/common/Sidebar'
 import ContentHeader from 'components/common/ContentHeader'
 import Form from 'components/common/Form'
-import Button from '../../components/common/Button'
+import Button from 'components/common/Button'
 import CreateDaoInfo from 'components/CreateDaoInfo'
+import Spinner from '../../components/common/Spinner'
 import rightArrow from 'static/svg/rightArrow.svg'
 import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
-import Spinner from '../../components/common/Spinner'
 import { useForm } from 'react-hook-form'
 import { validator, checkValidity } from 'helpers/formValidator'
-import daoService from 'store/services/daoService'
-import { WalletContext } from 'context/walletContext'
 
 const CreateDao = () => {
-  // const wallet = useSelector((state) => state.wallet)
-  // const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
   const navigate = useNavigate()
 
   const {
     handleSubmit,
     formState: { errors },
   } = useForm()
-
-  // useEffect(() => {
-  //   if (wallet.wallet === null) {
-  //     navigate('/')
-  //   }
-  //
-  //   return () => {
-  //     reset()
-  //   }
-  // }, [wallet, navigate])
-
-  // if (isDeployed) {
-  //   navigate('/')
-  // }
 
   const [page, setPage] = useState(0)
   let [loading, setLoading] = useState(false)
@@ -68,13 +52,7 @@ const CreateDao = () => {
     nonce: 0,
   })
   const { state: ContextState } = useContext(WalletContext)
-  const {
-    isLoginPending,
-    isLoggedIn,
-    loginError,
-    addressContext,
-    balanceContext,
-  } = ContextState
+  const { addressContext } = ContextState
   const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
     daoService.getAddressForRoot().then((data) => setDaoInformation(data))
