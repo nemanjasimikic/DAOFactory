@@ -5,7 +5,7 @@ import Button from '../../Button'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { addressFormat } from '../../../../helpers/addressFormat'
 
-const TableRowCell = ({ item, column }) => {
+const TableRowCell = ({ item, column, isLoading }) => {
   const value = _.get(item, column.key)
   const location = useLocation()
 
@@ -61,16 +61,12 @@ const TableRowCell = ({ item, column }) => {
       ) : column.key === 'addresses' ? (
         <div className={styles.addressWrapper}>
           <img src={walletAvatar} alt={'address'} />
-          <p className={styles.address}>
-            {addressFormat(
-              '0:ce752d9d8fea9be1d760dd2ee2bb3b2d8d1c6459fdaf61561277672c84db11f2'
-            )}
-          </p>
+          <p className={styles.address}>{addressFormat(item.userAddress)}</p>
         </div>
       ) : (
         <p
           className={
-            location.pathname === '/'
+            location.pathname === '/' || isLoading
               ? styles.tableCellLoading
               : styles.tableCell
           }
