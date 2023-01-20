@@ -20,19 +20,18 @@ const TableRowCell = ({ item, column, isLoading }) => {
       ? styles.yellow
       : styles.green
 
-  // get sum of all votes
   const total = item.forVotes + item.againstVotes
-  // calc vote "for" percentage
-  const votesFor = (item.forVotes / total) * 100
-  // if total is 0, make it 0 as it would be a 100 othewise
-  const votesAgainst = total === 0 ? 0 : 100 - votesFor
-  // voting percentage line style
-  let background = 
-    total === 0 || isNaN(total) ? 'rgba(255, 255, 255, 0.08)' : `linear-gradient(to right, #4AB44A 0%, #4AB44A ${votesFor}%, #EB4361 ${votesFor}%, #EB4361 100%)`
-  // to check the var below
-  const actionIn = item.actionInMS < 0 ? 'Action executed' : `Action in ${item.actionInDays} days`
-
-  // console.log(total, 'TOTAL')
+  const votesFor = total === 0 || isNaN(total) ? 0 : (item.forVotes / total) * 100
+  const votesAgainst = total === 0 || isNaN(total) ? 0 : 100 - votesFor
+  const background = 
+    total === 0 || isNaN(total) 
+    ? 'rgba(255, 255, 255, 0.08)' 
+    : `linear-gradient(to right, #4AB44A 0%, #4AB44A ${votesFor}%, #EB4361 ${votesFor}%, #EB4361 100%)`
+  const actionIn = item.actionInMS < 0 
+    ? 'Action executed' 
+    : isNaN(item.actionInMS) 
+    ? "Action date unknown" 
+    : `Action in ${item.actionInDays} days`
 
   return (
     <div style={{ width: column.width }}>
