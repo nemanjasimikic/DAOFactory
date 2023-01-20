@@ -789,6 +789,7 @@ const getAllProposals = async () => {
 }
 
 const getProposals = async () => {
+  console.log('Got Started')
   await getAllProposals()
   console.log('allProposals: ', allProposals)
   let proposals = []
@@ -804,6 +805,8 @@ const getProposals = async () => {
   console.log('proposals: ', proposals)
   return proposals
 }
+
+
 const daoService = {
   getExpectedAddress,
   topup,

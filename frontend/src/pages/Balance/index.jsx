@@ -63,6 +63,8 @@ const Balance = () => {
     daoService.getProposals().then((data) => setProposalInformation(data))
   }, [])
 
+  console.log()
+
   return proposalInformation[0] && data ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>

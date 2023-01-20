@@ -20,15 +20,20 @@ const TableRowCell = ({ item, column }) => {
       ? styles.yellow
       : styles.green
 
+  const votesFor = Math.floor(Math.random() * (100 - 0 + 1) + 0)
+  const votesAgainst = 100 - votesFor
+
   return (
     <div style={{ width: column.width }}>
       {column.key === 'voting' ? (
         <div className={styles.rangeWrapper}>
           <div className={styles.percentageRow}>
-            <p className={styles.yes}>20%</p>
-            <p className={styles.no}>80%</p>
+            <p className={styles.yes}>{votesFor}%</p>
+            <p className={styles.no}>{votesAgainst}%</p>
           </div>
-          <div className={styles.line}></div>
+          <div className={styles.line}
+            style={{background: `linear-gradient(to right, #4AB44A 0%, #4AB44A ${votesFor}%, #EB4361 ${votesFor}%, #EB4361 100%)`}}
+          ></div>
         </div>
       ) : column.key === 'date' ? (
         <div className={styles.dateWrapper}>
