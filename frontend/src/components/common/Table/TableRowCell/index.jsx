@@ -20,25 +20,34 @@ const TableRowCell = ({ item, column }) => {
       ? styles.yellow
       : styles.green
 
-  const votesFor = Math.floor(Math.random() * (100 - 0 + 1) + 0)
-  const votesAgainst = 100 - votesFor
+  const total = item.forVotes + item.againstVotes
+  const votesFor = (item.forVotes / total) * 100
+  // if total is 0, make it 0 as it would be a 100 othewise
+  const votesAgainst = total === 0 ? 0 : 100 - votesFor
+  // voting percentage line style
+  let background = 
+    total === 0 ? 'rgba(255, 255, 255, 0.08)' : `linear-gradient(to right, #4AB44A 0%, #4AB44A ${votesFor}%, #EB4361 ${votesFor}%, #EB4361 100%)`
+  // to check the var below
+  const actionIn = item.actionInMS < 0 ? 'Action executed' : `Action in ${item.actionInDays} days`
 
   return (
     <div style={{ width: column.width }}>
       {column.key === 'voting' ? (
         <div className={styles.rangeWrapper}>
           <div className={styles.percentageRow}>
-            <p className={styles.yes}>{votesFor}%</p>
-            <p className={styles.no}>{votesAgainst}%</p>
+            <p className={styles.yes}>{Math.round(votesFor)}%</p>
+            <p className={styles.no}>{Math.round(votesAgainst)}%</p>
           </div>
           <div className={styles.line}
-            style={{background: `linear-gradient(to right, #4AB44A 0%, #4AB44A ${votesFor}%, #EB4361 ${votesFor}%, #EB4361 100%)`}}
+            style={{background: 
+              background
+            }}
           ></div>
         </div>
       ) : column.key === 'date' ? (
         <div className={styles.dateWrapper}>
-          <p className={styles.action}>Action in 22 days</p>
-          <p className={styles.date}>Jun 07, 2021, 17:22</p>
+          <p className={styles.action}>{actionIn}</p>
+          <p className={styles.date}>{item.queuedTime}</p>
         </div>
       ) : column.key === 'unlockTokens' ? (
         <Button style={'primaryBtn'} text={'Unlock'} />

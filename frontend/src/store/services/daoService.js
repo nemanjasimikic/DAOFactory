@@ -5,6 +5,7 @@ import daoRootAbi from '../../helpers/DaoRoot.abi.json'
 import daoFactoryAbi from '../../helpers/DaoFactory.abi.json'
 import axios from 'axios'
 import tokensList from 'utils/tokens-list'
+import dayjs from 'dayjs'
 
 const API_URL = 'https://tokens.everscan.io/v1/balances'
 const ever = new ProviderRpcClient()
@@ -788,10 +789,11 @@ const getAllProposals = async () => {
     })
 }
 
+let dateNow =  new Date().getTime()
+
 const getProposals = async () => {
-  console.log('Got Started')
   await getAllProposals()
-  console.log('allProposals: ', allProposals)
+  // console.log('allProposals: ', allProposals)
   let proposals = []
   for (let i = 0; i < allProposals.proposals.length; i++) {
     proposals.push({
@@ -800,12 +802,18 @@ const getProposals = async () => {
       status: allProposals.proposals[i].state,
       voting: 'voting1',
       date: 'date1',
+      forVotes: allProposals.proposals[i].forVotes *1,
+      againstVotes: allProposals.proposals[i].againstVotes *1,
+      endTime: dayjs.unix(allProposals.proposals[i].endTime).format('DD MMM YYYY HH:mm'),
+      startTime: dayjs.unix(allProposals.proposals[i].startTime).format('DD MMM YYYY HH:mm'),
+      actionInMS: (new Date(dayjs.unix(allProposals.proposals[i].endTime).format('DD MMM YYYY HH:mm')).getTime()) - dateNow,
+      actionInDays: Math.ceil((new Date(dayjs.unix(allProposals.proposals[i].endTime).format('DD MMM YYYY HH:mm')).getTime() - dateNow) / (1000 * 3600 * 24)),
+      queuedTime: dayjs.unix(allProposals.proposals[i].queuedAt).format('DD MMM YYYY HH:mm'),
     })
   }
-  console.log('proposals: ', proposals)
+  // console.log('proposals: ', proposals)
   return proposals
 }
-
 
 const daoService = {
   getExpectedAddress,
