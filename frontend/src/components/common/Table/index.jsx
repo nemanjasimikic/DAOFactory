@@ -2,7 +2,7 @@ import TableHeader from './TableHeader'
 import TableRow from './TableRow'
 import styles from './styles.module.sass'
 
-const Table = ({ data, columns }) => {
+const Table = ({ data, columns, isLoading }) => {
   console.log('data in table: ', data)
   return (
     <div className={styles.tableWrapper}>
@@ -10,7 +10,7 @@ const Table = ({ data, columns }) => {
         <TableHeader columns={columns} />
       </div>
       <div>
-        <TableRow data={data} columns={columns} />
+        <TableRow data={data} columns={columns} isLoading={isLoading} />
       </div>
     </div>
   )

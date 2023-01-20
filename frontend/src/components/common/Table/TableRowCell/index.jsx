@@ -5,7 +5,7 @@ import Button from '../../Button'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { addressFormat } from '../../../../helpers/addressFormat'
 
-const TableRowCell = ({ item, column }) => {
+const TableRowCell = ({ item, column, isLoading }) => {
   const value = _.get(item, column.key)
   const location = useLocation()
 
@@ -52,7 +52,7 @@ const TableRowCell = ({ item, column }) => {
       ) : (
         <p
           className={
-            location.pathname === '/'
+            location.pathname === '/' || isLoading
               ? styles.tableCellLoading
               : styles.tableCell
           }

@@ -30,20 +30,8 @@ const Balance = () => {
     addressContext,
     balanceContext,
   } = ContextState
-  /* useEffect(() => {
-    const checkWallet = async () => {
-      if (localStorage?.getItem('isLoggedIn')) {
-        try {
-          login()
-        } catch (e) {
-          console.log(e)
-        }
-      }
-    }
-    checkWallet()
-  }, [])*/
+
   console.log('address: ', addressContext)
-  const [daoInformation, setDaoInformation] = useState({})
   const { data, isIdle, error, isError, isLoading } = useQuery(
     ['daoBalance', id],
     () => daoService.getDaoInfo(id, addressContext),
@@ -51,12 +39,6 @@ const Balance = () => {
       enabled: !!addressContext,
     }
   )
-  console.log('data: ', data)
-  /*useEffect(() => {
-    daoService
-      .getDaoInfo(id, addressContext)
-      .then((data) => setDaoInformation(data))
-  }, [])*/
 
   const [proposalInformation, setProposalInformation] = useState({})
   useEffect(() => {
@@ -69,6 +51,58 @@ const Balance = () => {
       .getAllStakeholders()
       .then((data) => setStakeholdersInformation(data))
   }, [])
+  const columns = [
+    {
+      key: 'id',
+      title: '#',
+      width: 100,
+    },
+    {
+      key: 'dao',
+      title: 'DAO',
+      width: 400,
+    },
+    {
+      key: 'members',
+      title: 'Members',
+      width: 400,
+    },
+    {
+      key: 'address',
+      title: 'Address',
+      width: 400,
+    },
+  ]
+
+  const dataTable = [
+    {
+      id: '1',
+      dao: 'dao1',
+      members: 'members1',
+      address: 'address1',
+    },
+    {
+      id: '2',
+      dao: 'dao2',
+      members: 'members2',
+      address: 'address2',
+    },
+    {
+      id: '3',
+      dao: 'dao3',
+      members: 'members3',
+      address: 'address3',
+    },
+    {
+      id: '4',
+      dao: 'dao4',
+      members: 'members4',
+      address: 'address4',
+    },
+  ]
+
+  console.log('isLoading: ', isLoading)
+  console.log('data in balance: ', data)
   return proposalInformation[0] && data ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
@@ -143,7 +177,11 @@ const Balance = () => {
           <Button style={'primaryBtn'} text={'Statuses'} />
         </div>
       </div>
-      <Table columns={columnsAllProposals} data={proposalInformation} />
+      <Table
+        columns={columnsAllProposals}
+        data={proposalInformation}
+        isLoading={isLoading}
+      />
       <div className={styles.tableSectionHeading}>
         <p>Proposals with your locked tokens</p>
         <div className={styles.rightContentWrapper}>
@@ -156,7 +194,9 @@ const Balance = () => {
       </div>
       <Table columns={columnsVoters} data={stakeholdersInformation} />
     </div>
-  ) : null
+  ) : (
+    <Table columns={columns} data={dataTable} isLoading={true} />
+  )
 }
 
 export default Balance
