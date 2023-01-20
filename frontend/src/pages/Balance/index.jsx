@@ -150,7 +150,7 @@ const Balance = () => {
           className={styles.bic5}
         />
         <BalanceInfoCard
-          name={`Threshold, ${data.token ? data.token.value0 : ''}`}
+          name={`Threshold ${data.token ? data.token.value0 : ''}`}
           value={
             data.proposalConfiguration
               ? data.proposalConfiguration.threshold
