@@ -804,6 +804,49 @@ const getProposals = async () => {
   console.log('proposals: ', proposals)
   return proposals
 }
+
+let allStakeholdersData
+const allStakeholders = async () => {
+  var data = JSON.stringify({
+    limit: 10,
+    offset: 0,
+    ordering: 'voteweightdescending',
+  })
+
+  const config = {
+    method: 'post',
+    url: 'https://staking.everdao.net/v1/dao/search/stakeholders',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: data,
+  }
+
+  return axios(config)
+    .then(function (response) {
+      allStakeholdersData = response.data
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+const getAllStakeholders = async () => {
+  await allStakeholders()
+  console.log('allStakeholders: ', allStakeholdersData)
+  let stakeholders = []
+  for (let i = 0; i < allStakeholdersData.stakeholders.length; i++) {
+    stakeholders.push({
+      id: i + 1,
+      userAddress: allStakeholdersData.stakeholders[i].userAddress,
+      voteWeight: allStakeholdersData.stakeholders[i].voteWeight,
+      votes: allStakeholdersData.stakeholders[i].votes,
+      proposalsVoted: allStakeholdersData.stakeholders[i].proposalVotesCount,
+    })
+  }
+  console.log('proposals: ', stakeholders)
+  return stakeholders
+}
 const daoService = {
   getExpectedAddress,
   topup,
@@ -820,6 +863,7 @@ const daoService = {
   setSettingsChanges,
   getDaoByAddress,
   getProposals,
+  getAllStakeholders,
 }
 
 export default daoService

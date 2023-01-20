@@ -63,6 +63,12 @@ const Balance = () => {
     daoService.getProposals().then((data) => setProposalInformation(data))
   }, [])
 
+  const [stakeholdersInformation, setStakeholdersInformation] = useState({})
+  useEffect(() => {
+    daoService
+      .getAllStakeholders()
+      .then((data) => setStakeholdersInformation(data))
+  }, [])
   return proposalInformation[0] && data ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
@@ -148,7 +154,7 @@ const Balance = () => {
       <div className={styles.tableSectionHeading}>
         <p>Voters</p>
       </div>
-      <Table columns={columnsVoters} data={dataVoters} />
+      <Table columns={columnsVoters} data={stakeholdersInformation} />
     </div>
   ) : null
 }
