@@ -6,7 +6,6 @@ import infoIcon from 'static/svg/infoIcon.svg'
 import { useForm } from 'react-hook-form'
 import ImageButton from 'components/common/ImageButton'
 import daoService from 'store/services/daoService'
-import { add } from 'lodash'
 
 const GeneralInformation = ({
   formId,
