@@ -18,7 +18,11 @@ const AddActionToProposalModal = ({ open, setOpen }) => {
       <Input label={'Payload'} registerInput={'payload'} />
       <Input label={'Attached value, TON'} registerInput={'attached-value'} />
       <div className={styles.buttonWrapper}>
-        <Button text={'Cancel'} style={'primaryBtn'} />
+        <Button
+          text={'Cancel'}
+          style={'primaryBtn'}
+          onClick={() => setOpen(!open)}
+        />
         <Button text={'Submit'} style={'lightBlueBtn'} />
       </div>
     </Modal>
