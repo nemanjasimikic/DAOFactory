@@ -1,7 +1,8 @@
 @import 'src/sass/theme'
 
-.selectWrapper
+.selectContainer
   display: flex
+  justify-content: flex-start
   flex-direction: column
   width: 100%
 
@@ -9,21 +10,38 @@
     +small-white-text
     margin-bottom: 5px
 
-  select
-    //display: none
-    height: 36px
-    margin-bottom: 20px
-    background-color: transparent
-    border: 1px solid rgba(255, 255, 255, 0.16)
-    color: rgba(255, 255, 255, 0.72)
-    outline: none
+.selectWrapper
+  position: relative
+  height: 36px
+  margin-bottom: 20px
+  background-color: transparent
+  border: 1px solid rgba(255, 255, 255, 0.16)
+  color: rgba(255, 255, 255, 0.72)
+  outline: none
 
-    option
-      position: absolute
-      left: 0
-      right: 0
-      top: 30px
+  .options
+    background: rgba(255, 255, 255, 0.08)
+    position: absolute
+    display: none
+    padding: 0
+    margin: 0
+    left: 0
+    top: 36px
+    max-height: 152px
+    height: 100%
+    list-style: none
+    width: 100%
+    z-index: 2
 
-  //.customSelect
+  .show
+    display: flex
+    flex-direction: column
+
+
+  .option
+    //padding: 12px
+    cursor: pointer
+
+
 
 
