@@ -19,10 +19,26 @@
   color: rgba(255, 255, 255, 0.72)
   outline: none
 
+  .valueContainer
+    display: flex
+    align-items: center
+    justify-content: space-between
+    height: 36px
+    padding: 0 12px
+    cursor: pointer
+
+    p
+      margin: 0
+
   .options
-    background: rgba(255, 255, 255, 0.08)
-    position: absolute
     display: none
+
+  .show
+    display: flex
+    flex-direction: column
+    //background: rgba(255, 255, 255, 0.08)
+    background: red
+    position: absolute
     padding: 0
     margin: 0
     left: 0
@@ -33,14 +49,14 @@
     width: 100%
     z-index: 2
 
-  .show
-    display: flex
-    flex-direction: column
-
 
   .option
     //padding: 12px
-    cursor: pointer
+      cursor: pointer
+    display: flex
+    align-items: center
+    justify-content: space-between
+
 
 
 

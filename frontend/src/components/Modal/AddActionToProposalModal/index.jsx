@@ -5,20 +5,29 @@ import Button from 'components/common/Button'
 import Select from 'components/common/Select'
 import styles from './styles.module.sass'
 
-const type = [
-  { name: 'Custom action', value: 1 },
-  { name: 'Simple proposal', value: 2 },
-]
-const network = [{ name: 'Everscale', value: 1 }]
-
 const AddActionToProposalModal = ({ open, setOpen }) => {
-  const [typeValue, setTypeValue] = useState[type[0]]
+  const type = [
+    { name: 'Custom action', value: 1 },
+    { name: 'Simple proposal', value: 2 },
+  ]
+  const network = [{ name: 'Everscale', value: 1 }]
+  const [typeValue, setTypeValue] = useState(type[0])
   const [networkValue, setNetworkValue] = useState(network[0])
 
   return (
     <Modal title={'Add action to proposal'} open={open} setOpen={setOpen}>
-      <Select label={'Type'} options={type} value={typeValue} />
-      <Select label={'Network'} options={network} value={networkValue} />
+      <Select
+        label={'Type'}
+        options={type}
+        value={typeValue}
+        onChange={(o) => setTypeValue(o)}
+      />
+      <Select
+        label={'Network'}
+        options={network}
+        value={networkValue}
+        onChanke={(o) => setNetworkValue(o)}
+      />
       <Input
         label={'Target contract address'}
         registerInput={'target-contract-address'}
