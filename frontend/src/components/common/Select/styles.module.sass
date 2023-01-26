@@ -36,28 +36,27 @@
   .show
     display: flex
     flex-direction: column
-    //background: rgba(255, 255, 255, 0.08)
-    background: red
+    background: #2f334b
     position: absolute
     padding: 0
     margin: 0
     left: 0
     top: 36px
     max-height: 152px
-    height: 100%
-    list-style: none
     width: 100%
+    list-style: none
     z-index: 2
 
-
-  .option
-    //padding: 12px
+    .option
       cursor: pointer
-    display: flex
-    align-items: center
-    justify-content: space-between
+      display: flex
+      align-items: center
+      justify-content: space-between
+      padding: 10px 15px
 
+      &.highlighted
+        background-color: #404359
 
-
-
+      &.selected
+        background: url('../../../static/svg/checkmark.svg') no-repeat right 10px center
 

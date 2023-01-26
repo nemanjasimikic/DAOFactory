@@ -26,7 +26,7 @@ const AddActionToProposalModal = ({ open, setOpen }) => {
         label={'Network'}
         options={network}
         value={networkValue}
-        onChanke={(o) => setNetworkValue(o)}
+        onChange={(o) => setNetworkValue(o)}
       />
       <Input
         label={'Target contract address'}
