@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import styles from './styles.module.sass'
-import checkmark from 'static/svg/checkmark.svg'
 import caretUp from 'static/svg/caretUp.svg'
 import caretDown from 'static/svg/caretDown.svg'
 
