@@ -1,7 +1,8 @@
 @import 'src/sass/theme'
 
-.selectWrapper
+.selectContainer
   display: flex
+  justify-content: flex-start
   flex-direction: column
   width: 100%
 
@@ -9,21 +10,53 @@
     +small-white-text
     margin-bottom: 5px
 
-  select
-    //display: none
+.selectWrapper
+  position: relative
+  height: 36px
+  margin-bottom: 20px
+  background-color: transparent
+  border: 1px solid rgba(255, 255, 255, 0.16)
+  color: rgba(255, 255, 255, 0.72)
+  outline: none
+
+  .valueContainer
+    display: flex
+    align-items: center
+    justify-content: space-between
     height: 36px
-    margin-bottom: 20px
-    background-color: transparent
-    border: 1px solid rgba(255, 255, 255, 0.16)
-    color: rgba(255, 255, 255, 0.72)
-    outline: none
+    padding: 0 12px
+    cursor: pointer
 
-    option
-      position: absolute
-      left: 0
-      right: 0
-      top: 30px
+    p
+      margin: 0
 
-  //.customSelect
+  .options
+    display: none
 
+  .show
+    display: flex
+    flex-direction: column
+    background: #2f334b
+    position: absolute
+    padding: 0
+    margin: 0
+    left: 0
+    top: 36px
+    max-height: 152px
+    width: 100%
+    list-style: none
+    z-index: 2
+
+    .option
+      cursor: pointer
+      display: flex
+      align-items: center
+      justify-content: space-between
+      padding: 10px 15px
+
+      &.highlighted
+        background-color: #404359
+
+      &.selected
+        background: url('../../../static/svg/checkmark.svg') no-repeat right 10px center
 
