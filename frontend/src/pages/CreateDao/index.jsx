@@ -1,7 +1,9 @@
 import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { WalletContext } from 'context/walletContext'
+import { useForm } from 'react-hook-form'
 import daoService from 'store/services/daoService'
+import { validator, checkValidity } from 'helpers/formValidator'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
 import VotingConfiguration from 'pages/CreateDao/VotingConfiguration'
 import ProposalTimeline from 'pages/CreateDao/ProposalTimeline'
@@ -15,8 +17,6 @@ import Spinner from '../../components/common/Spinner'
 import rightArrow from 'static/svg/rightArrow.svg'
 import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
-import { useForm } from 'react-hook-form'
-import { validator, checkValidity } from 'helpers/formValidator'
 
 const CreateDao = () => {
   const navigate = useNavigate()
@@ -164,11 +164,11 @@ const CreateDao = () => {
                 ),
                 validator(formData.minStake, page, 'minStake', false, null),
               ]
-            } else if (page == 1) {
+            } else if (page === 1) {
               pageValidity = [
                 validator(formData.threshold, page, 'threshold', false, null),
               ]
-            } else if (page == 2) {
+            } else if (page === 2) {
               pageValidity = [
                 validator(
                   formData.pending,
@@ -228,7 +228,9 @@ const CreateDao = () => {
                     formData.minStake * 1,
                     formData.description,
                     formData.treasury,
-                    formData.nonce == 0 ? daoInformation.nonce : formData.nonce,
+                    formData.nonce === 0
+                      ? daoInformation.nonce
+                      : formData.nonce,
                     addressContext
                   )
                   .catch((e) => {
