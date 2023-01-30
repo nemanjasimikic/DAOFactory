@@ -26,31 +26,9 @@ const CreateDao = () => {
 
   //// REACT HOOK FORM FOR VALIDATION ////
   const {
-    handleSubmit,
     register,
     formState: { errors },
   } = useForm()
-
-  const onSubmit = (data) => {
-    console.log('data', data, formData)
-    if (page < 3) {
-      setPage((currentPage) => currentPage + 1)
-    }
-  }
-  //// /////////////////////////////// ////
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
-
-    return () => {
-      reset()
-    }
-  }, [wallet, navigate])
-
-  if (isDeployed) {
-    navigate('/')
-  }
 
   const [page, setPage] = useState(0)
   let [loading, setLoading] = useState(false)
@@ -102,7 +80,6 @@ const CreateDao = () => {
           formData={formData}
           rootAddress={daoAddress}
           setFormData={setFormData}
-          handleSubmit={handleSubmit}
           errors={errors}
         />
       )
@@ -161,10 +138,8 @@ const CreateDao = () => {
           <ContentHeader title={'Create new DAO'} />
           {/* // TODO: */}
           <Form
-            onSubmit={onSubmit}
             formData={formData}
             id={'myForm'}
-            handleSubmit={handleSubmit}
             heading={FormTitles[page]}
             errors={errors}
           >
@@ -191,11 +166,6 @@ const CreateDao = () => {
           formId={'myForm'}
           disabled={page > 3}
           onClick={async () => {
-            // try and validate form
-            // handleSubmit(e)
-
-            handleSubmit((d) => console.log('handle submit at button', d))
-
             // scroll to top
             window.scrollTo(0, 0)
 
