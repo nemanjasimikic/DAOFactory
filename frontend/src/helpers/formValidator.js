@@ -70,7 +70,7 @@ export const validator = (data, page, what, toAlert, isVoting) => {
     // Page 3
   } else if (page == 2) {
     let multiplier = what == 'Hours' ? 1 : 24
-    let min = 24
+    let min = 0.1
     if (isNaN(data)) {
       error = true
       if (toAlert) {

@@ -8,6 +8,7 @@ import Button from 'components/common/Button'
 import styles from './styles.module.sass'
 import editIcon from 'static/svg/editIcon.svg'
 import addIcon from 'static/svg/addIcon.svg'
+import daoService from 'store/services/daoService'
 
 const CreateProposal = () => {
   const [open, setOpen] = useState(false)
@@ -54,7 +55,12 @@ const CreateProposal = () => {
         </div>
         <div className={styles.bottomLine} />
         <div className={styles.buttonWrapper}>
-          <Button style={'lightBlueBtn'} text={'Publish proposal'} />
+          <Button
+            style={'lightBlueBtn'}
+            text={'Publish proposal'} /*onClick= {async(e)=>{
+            await daoService.
+          }}*/
+          />
         </div>
       </div>
       {<AddActionToProposalModal open={open} setOpen={setOpen} />}

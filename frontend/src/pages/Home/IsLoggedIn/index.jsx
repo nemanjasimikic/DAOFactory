@@ -89,6 +89,8 @@ const IsLoggedIn = ({ address }) => {
     })
   }
 
+  console.log('getDaoList: ', getDaoList)
+
   return (
     <div className={styles.isLoggedIn}>
       <h1>The simplest way to manage your own DAO</h1>
@@ -100,7 +102,7 @@ const IsLoggedIn = ({ address }) => {
           <Button style={'primaryBtn'} text={'Add existing DAO'} />
         </div>
       </ContentHeader>
-      {getDaoList?.length < 1 ? (
+      {getDaoList?.length < 1 || !getDaoList ? (
         <NoResults />
       ) : itemsList.length < 1 /*renderTable*/ ? (
         <Table columns={columns} data={dataTable} onLoadEffect={onLoadEffect} />

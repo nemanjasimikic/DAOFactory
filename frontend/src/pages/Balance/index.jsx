@@ -40,19 +40,18 @@ const Balance = () => {
     }
   )
 
-  const [proposalInformation, setProposalInformation] = useState({})
+  /*const [proposalInformation, setProposalInformation] = useState({})
+
   useEffect(() => {
-    daoService.getProposals().then((data) => setProposalInformation(data))
+    if (data?.daoAddress) {
+      daoService
+        .getProposals(data.daoAddress)
+        .then((data) => setProposalInformation(data))
+    }
   }, [])
 
-  console.log()
+  console.log()*/
 
-  const [stakeholdersInformation, setStakeholdersInformation] = useState({})
-  useEffect(() => {
-    daoService
-      .getAllStakeholders()
-      .then((data) => setStakeholdersInformation(data))
-  }, [])
   const columns = [
     {
       key: 'id',
@@ -105,7 +104,7 @@ const Balance = () => {
 
   console.log('isLoading: ', isLoading)
   console.log('data in balance: ', data)
-  return proposalInformation[0] && data ? (
+  return data?.proposals && data?.proposalsWithLockedTokens && data?.voters ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
         <div className={styles.daoNameWrapper}>
@@ -181,7 +180,7 @@ const Balance = () => {
       </div>
       <Table
         columns={columnsAllProposals}
-        data={proposalInformation}
+        data={data.proposals}
         isLoading={isLoading}
       />
       <div className={styles.tableSectionHeading}>
@@ -190,11 +189,14 @@ const Balance = () => {
           <Button style={'primaryBtn'} text={'Unlock all tokens'} />
         </div>
       </div>
-      <Table columns={columnsLockedTokens} data={dataLockedTokens} />
+      <Table
+        columns={columnsLockedTokens}
+        data={data.proposalsWithLockedTokens}
+      />
       <div className={styles.tableSectionHeading}>
         <p>Voters</p>
       </div>
-      <Table columns={columnsVoters} data={stakeholdersInformation} />
+      <Table columns={columnsVoters} data={data.voters} />
     </div>
   ) : (
     <Table columns={columns} data={dataTable} isLoading={true} />
