@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useQuery } from 'react-query'
 import ContentHeader from 'components/common/ContentHeader'
 import Button from 'components/common/Button'
 import NoResults from 'components/NoResults'
@@ -7,7 +8,6 @@ import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
-import { useQuery } from 'react-query'
 
 const IsLoggedIn = ({ address }) => {
   const [renderTable, setRenderTable] = useState(true)

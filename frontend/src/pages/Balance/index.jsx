@@ -2,11 +2,11 @@ import { useEffect, useState, useContext } from 'react'
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import BalanceInfoCard from 'components/BalanceInfoCard'
 import Button from 'components/common/Button'
+import Input from '../../components/common/Input'
+import Table from '../../components/common/Table'
 import daoCardLogo from 'static/svg/daoCardLogo.svg'
 import linkIcon from 'static/svg/linkIcon.svg'
 import daoService from 'store/services/daoService'
-import Input from '../../components/common/Input'
-import Table from '../../components/common/Table'
 import styles from './styles.module.sass'
 import {
   columnsAllProposals,

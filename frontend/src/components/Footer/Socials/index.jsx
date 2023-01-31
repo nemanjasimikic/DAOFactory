@@ -1,5 +1,5 @@
 import styles from './styles.module.sass'
-
+import telegram from 'static/svg/telegram.svg'
 import facebook from 'static/svg/facebook.svg'
 import twitter from 'static/svg/twitter.svg'
 import github from 'static/svg/github.svg'
@@ -9,6 +9,7 @@ import medium from 'static/svg/medium.svg'
 const Socials = () => {
   return (
     <div className={styles.socials}>
+      <img src={telegram} alt={'facebook'} />
       <img src={facebook} alt={'facebook'} />
       <img src={twitter} alt={'twitter'} />
       <img src={github} alt={'github'} />

@@ -14,7 +14,9 @@ const DaoCard = ({ daoName, description, link, id }) => {
             <img src={daoCardLogo} alt={'dao card logo'} />
             <div className={styles.daoInfoColumn}>
               <h3>{daoName}</h3>
-              <p>{description}</p>
+              <p className={styles.description} title={description}>
+                {description}
+              </p>
             </div>
           </div>
           <Link
@@ -29,6 +31,7 @@ const DaoCard = ({ daoName, description, link, id }) => {
           <a
             href={`http://${link}`}
             target="_blank"
+            title={`http://${link}`}
             className={styles.link}
             onClick={(e) => {
               e.stopPropagation()
