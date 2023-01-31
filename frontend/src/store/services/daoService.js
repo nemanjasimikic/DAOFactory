@@ -14,6 +14,13 @@ import dayjs from 'dayjs'
 const API_URL = 'https://tokens.everscan.io/v1/balances'
 const ever = new ProviderRpcClient()
 
+// STAKING ROOT ADDRESS TEST
+const stakingRootAddressTest =
+  '0:871e085a8e2f51d641af98013f5aa51bee0ac2257397980b7df6401ae3feacef'
+
+const stakingRootAddressMain =
+  '0:c1297cb6f620accdbd6d22a9d069e36f5e1fc5bc8b3d21f22a5dc368f7fa69f2'
+
 const daoTvc =
   'te6ccgECIwEABb8AAgE0AwEBAcACAEPQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgBCSK7VMg4wMgwP/jAiDA/uMC8gsgBQQiA87tRNDXScMB+GaJ+Gkh2zzTAAGOIoMI1xgg+CjIzs7J+QAB0wABlNP/AwGTAvhC4iD4ZfkQ8qiV0wAB8nri0z8B+EMhufK0IPgjgQPoqIIIG3dAoLnytPhj0x8B+CO88rnTHwHbPPI8HBsGA1LtRNDXScMB+GYi0NMD+kAw+GmpOADcIccA4wIh1w0f8rwh4wMB2zzyPB8fBgM8IIIQLvqJVLvjAiCCEF/oRr674wIgghBiiBqouuMCEgkHA3gw+Eby4Ez4Qm7jACGT1NHQ3vpA0ds8IY4cI9DTAfpAMDHIz4cgzoIQ4ogaqM8LgfQAyXD7AJEw4ts88gAeCBoAfPgA+Er4TFyAIPQOlNMf9AWScG3ibwJVAgFvIiGkVSCAIPQWbwLIAW8iAssf9ABZgCD0Q/hs+EqktR/4avhMBFAgghAv81juuuMCIIIQNbEjELrjAiCCEDhEJGq64wIgghBf6Ea+uuMCEQ0LCgFQMNHbPPhMIY4cjQRwAAAAAAAAAAAAAAAAN/oRr6DIzvQAyXD7AN7yAB4DbDD4RvLgTPhCbuMA0x/R2zwhjhwj0NMB+kAwMcjPhyDOghC4RCRqzwuB9ADJcPsAkTDi2zzyAB4MGgAY+AD4TIAg9FswIPhsA8Yw+Eby4Ez4Qm7jACGW1NMf1NHQk9TTH+LTH9N/0x/Tf9MfVVBvBgHU1PpA1NHQ0//U0gDTH9TU0ds8IY4fI9DTAfpAMDHIz4cgznHPC2EByM+S1sSMQs7NyXD7AJEw4ts88gAeDhoC/vgAWF5w+ElVCStwyMv/cG2AQPRDVQvIyx9xWIBA9EPI9ADJVQvIz4SA9AD0AM+BySD5AMjPigBAy//J0FWwLMjPhYjOgoAh3NZQAAAAAAAAAAAAAAAAAAPPC44h2zzMz4NVoMjPkHQXB8LMAW8mXlDLH8sfy3/LH8t/yx/OzMwQDwDYVVDIzsv/zMoAzMzNzclw+wD4bfhK+ExcgCD0DpTTH/QFknBt4m8C+E0BbyIhpFUggCD0Fm8CyAFvIgLLH/QAWYAg9EP4bPhKpLUf+Gr4TY0EcAAAAAAAAAAAAAAAAA7+1zCgyM7OyXD7APhNADTQ0gABk9IEMd7SAAGT0gEx3vQE9AT0BNFfAwFQMNHbPPhKIY4cjQRwAAAAAAAAAAAAAAAAK/zWO6DIzssfyXD7AN7yAB4EUCCCEATGjvW64wIgghAciukbuuMCIIIQIcGEN7rjAiCCEC76iVS64wIdGRYTAzQw+Eby4Ez4Qm7jACGT1NHQ3vpA0ds82zzyAB4UGgFMiPhCwwD4QvhFIG6SMHDeurDy6+n4APgAyM+FiM6Ab89AyYMG+wAVADZPbmx5IHRoZSBvd25lciBjYW4gb3BlcmF0ZSEDaDD4RvLgTPhCbuMA0ds8IY4cI9DTAfpAMDHIz4cgzoIQocGEN88LgfQAyXD7AJEw4uMA8gAeGBcAKO1E0NP/0z8x+ENYyMv/yz/Oye1UAAT4TAJEMPhCbuMA+Ebyc9TR+EL4RSBukjBw3rry4+n4APsE2zzyABsaADr4TfhM+Ev4SvhD+ELIy//LP8+Dyx/LH/QAzsntVAJ07UTQ10nCAY6vcO1E0PQFcHEigED0Dm+Rk9cLH95tifht+Gz4a/hqgED0DvK91wv/+GJw+GNw+GrjDRweAEOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAVAw0ds8+EshjhyNBHAAAAAAAAAAAAAAAAAhMaO9YMjOyx/JcPsA3vIAHgA+7UTQ0//TP9MAMdMf0x/0BPpA0fht+Gz4a/hq+GP4YgAK+Eby4EwCEPSkIPS98sBOIiEAFHNvbCAwLjY2LjAAAA=='
 
@@ -497,7 +504,7 @@ const deployStakingContract = async (ownerAddress, daoRoot) => {
       })
       .send({
         from: ownerAddress,
-        amount: toNano(50, 9),
+        amount: toNano(1, 9),
         bounce: false,
       })
     /*.sendExternal({ publicKey: publicKey, withoutSignature: true })*/
@@ -513,6 +520,9 @@ const deployStakingContract = async (ownerAddress, daoRoot) => {
       methods: [stakingRootDeployerAbi['deploy']],
     })
     console.log('p: ', p)
+
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms))
+    await delay(10000)
 
     console.log(
       'stakingContract: ',
@@ -1046,7 +1056,9 @@ const getDaoInfo = async (id, address) => {
       .call()
     const stakingRootContract = new ever.Contract(
       stakingAbi,
-      stakingRootAddress.value0
+      // stakingRootAddress.value0
+      // STAKING ROOT ADDRESS TEST
+      stakingRootAddressTest
     )
 
     const details = await stakingRootContract.methods
@@ -1307,7 +1319,7 @@ const getAllStakeholders = async (daoRootAddress) => {
   return votesData
 }
 
-const createProposal = async (ownerAddress, daoRoot, stakingRootAddress) => {
+const createProposal = async (ownerAddress, daoRoot) => {
   try {
     const rootDao = new ever.Contract(daoRootAbi, daoRoot)
     const token = await rootDao.methods.governanceToken({}).call()
@@ -1328,7 +1340,7 @@ const createProposal = async (ownerAddress, daoRoot, stakingRootAddress) => {
     const sendTransaction = await walletContract.methods
       .transfer({
         amount: toNano(10000, 9),
-        recipient: stakingRootAddress,
+        recipient: stakingRootAddressTest,
         deployWalletValue: 0, //toNano(0.5, 9),
         remainingGasTo: ownerAddress,
         notify: true,
@@ -1341,7 +1353,7 @@ const createProposal = async (ownerAddress, daoRoot, stakingRootAddress) => {
       })
 
     console.log('sendTransaction: ', sendTransaction)
-    const root = new ever.Contract(stakingAbi, stakingRootAddress)
+    const root = new ever.Contract(stakingAbi, stakingRootAddressTest)
     const event = await root.waitForEvent()
 
     console.log('event: ', event)

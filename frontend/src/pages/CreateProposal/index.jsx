@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import RouteBreadcrumbs from 'components/RouteBreadcrumbs'
 import ContentHeader from 'components/common/ContentHeader'
 import NoResults from 'components/NoResults'
@@ -11,6 +12,9 @@ import addIcon from 'static/svg/addIcon.svg'
 import daoService from 'store/services/daoService'
 
 const CreateProposal = () => {
+  const location = useLocation()
+  const { daoRoot, ownerAddress } = location.state
+
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({
     targetContractAddress: '',
@@ -63,7 +67,8 @@ const CreateProposal = () => {
             style={'lightBlueBtn'}
             text={'Publish proposal'}
             onClick={async (e) => {
-              await daoService.createProposal()
+              console.log('MODAL LOCATION STATE:', location.state)
+              await daoService.createProposal(ownerAddress, daoRoot)
             }}
           />
         </div>
