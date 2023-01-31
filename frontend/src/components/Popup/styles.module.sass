@@ -1,0 +1,39 @@
+@import 'src/sass/theme'
+
+.popupWrapper
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: flex-start
+  z-index: 2
+  background-color: rgba(0, 0, 0, 0.5)
+  position: absolute
+  left: 0
+  top: 0
+  width: 100vw
+  height: 150vh
+  overflow-y: hidden
+
+.popup
+  max-width: 480px
+  width: 100%
+  background-color: #1B213F
+  z-index: 10
+  padding: 20px
+  margin-top: 50px
+
+  .popupHeading
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    p
+      margin: 0 0 20px 0
+      +medium-white-text
+
+    img
+      margin: 0 0 20px 0
+      cursor: pointer
+
+.popupWrapperClosed
+  display: none
