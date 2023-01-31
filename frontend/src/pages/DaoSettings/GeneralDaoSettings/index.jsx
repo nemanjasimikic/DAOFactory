@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useState, useContext } from 'react'
+import { useParams } from 'react-router-dom'
 import { WalletContext } from 'context/walletContext'
 import daoService from 'store/services/daoService'
 import { useQuery } from 'react-query'
@@ -17,7 +17,6 @@ import styles from '../styles.module.sass'
 
 const GeneralDaoSettings = () => {
   const { register } = useForm()
-  const navigate = useNavigate()
   let { id } = useParams()
 
   const { handleSubmit } = useForm()
@@ -48,10 +47,6 @@ const GeneralDaoSettings = () => {
       [e.target.name]: e.target.value,
     }))
   }
-
-  // const showConfirmationPopup = () => {
-  //   return
-  // }
 
   let name
   let slug
@@ -124,13 +119,11 @@ const GeneralDaoSettings = () => {
                   style={'bigLightBlueBtn'}
                   text={'Save changes'}
                   onClick={async (e) => {
-                    // handleSubmit(e)
                     setLoading(true)
                     let canNavigate = true
                     function navigateOff(canNavigate) {
                       setLoading(false)
                       if (canNavigate) {
-                        // alert('Changes are saved!')
                         setOpen(true)
                       }
                     }

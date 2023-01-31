@@ -29,9 +29,14 @@
       margin: 0
       +small-medium-white-text
 
-    p
-      margin: 0
+    .description
       +small-grey-text
+      display: block
+      text-overflow: ellipsis
+      overflow: hidden
+      white-space: nowrap
+      width: 400px
+
 
   .settings
     display: flex
@@ -49,18 +54,18 @@
 
     img
       margin-left: 5px
-
-      &:hover
-        cursor: pointer
+      cursor: pointer
 
     .link
       +small-grey-text
-      &:hover
-        cursor: pointer
+      text-overflow: ellipsis
+      overflow: hidden
+      white-space: nowrap
+      cursor: pointer
 
     .buyDomain
       +small-white-text
       margin-left: 10px
-      &:hover
-        cursor: pointer
+      white-space: nowrap
+      cursor: pointer
 
