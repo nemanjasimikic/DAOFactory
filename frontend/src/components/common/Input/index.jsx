@@ -119,7 +119,7 @@ const Input = ({
           fontSize: '14px',
         }}
       >
-        {validateInput()}
+        {/*validateInput()*/}
       </span>
     </div>
   )

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import styles from './styles.module.sass'
 import caretUp from 'static/svg/caretUp.svg'
 import caretDown from 'static/svg/caretDown.svg'
 
-const Select = ({ label, options, value, onChange }) => {
+const Select = ({ label, options, value, onChange, registerSelect }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(0)
 
@@ -22,7 +23,7 @@ const Select = ({ label, options, value, onChange }) => {
   const isOptionSelected = (option) => {
     return option.value === value.value
   }
-
+  const { register } = useForm()
   return (
     <div className={styles.selectContainer}>
       <label className={styles.label}>{label}</label>
@@ -31,7 +32,10 @@ const Select = ({ label, options, value, onChange }) => {
           <p>{value.name}</p>
           <img src={isOpen ? caretUp : caretDown} alt={'caret'} />
         </div>
-        <ul className={isOpen ? styles.show : styles.options}>
+        <ul
+          className={isOpen ? styles.show : styles.options}
+          {...register(registerSelect)}
+        >
           {options.map((option, index) => (
             <li
               onClick={(e) => {

@@ -444,12 +444,12 @@ const deployDAOFromFactory = async (
       setActive = await setStakingActive(deployStaking._address, ownerAddress)
       console.log('setActive: ', setActive)
 
-      const createProp = await createProposal(
+      /*  const createProp = await createProposal(
         ownerAddress,
         daos.daoAddr[daos.daoAddr.length - 1][1][0]._address,
         deployStaking._address
       )
-      console.log('createProposal: ', createProp)
+      console.log('createProposal: ', createProp)*/
     }
     return Promise.resolve(setActive)
   } catch (e) {
@@ -1328,7 +1328,13 @@ const getAllStakeholders = async (daoRootAddress) => {
   return votesData
 }
 
-const createProposal = async (ownerAddress, daoRoot) => {
+const createProposal = async (
+  ownerAddress,
+  daoRoot,
+  targetAddress,
+  payload,
+  value
+) => {
   try {
     const rootDao = new ever.Contract(daoRootAbi, daoRoot)
     const token = await rootDao.methods.governanceToken({}).call()
@@ -1382,10 +1388,9 @@ const createProposal = async (ownerAddress, daoRoot) => {
 
     let tonActions = [
       {
-        value: toNano(1, 9),
-        target:
-          '0:102cf118b6875d201a3011d5dc17a358ee4d4333ad7e167824515171ed8f6f63',
-        payload: '',
+        value: toNano(value, 9),
+        target: targetAddress,
+        payload: payload,
       },
     ]
 
