@@ -1505,6 +1505,7 @@ const daoService = {
   getDaoByAddress,
   getProposals,
   getAllStakeholders,
+  createProposal,
 }
 
 export default daoService

@@ -5,7 +5,7 @@ import Button from 'components/common/Button'
 import Select from 'components/common/Select'
 import styles from './styles.module.sass'
 
-const AddActionToProposalModal = ({ open, setOpen }) => {
+const AddActionToProposalModal = ({ open, setOpen, formData, setFormData }) => {
   const type = [
     { name: 'Custom action', value: 1 },
     { name: 'Simple proposal', value: 2 },

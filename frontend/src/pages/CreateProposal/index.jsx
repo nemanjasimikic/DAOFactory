@@ -12,7 +12,11 @@ import daoService from 'store/services/daoService'
 
 const CreateProposal = () => {
   const [open, setOpen] = useState(false)
-
+  const [formData, setFormData] = useState({
+    targetContractAddress: '',
+    payload: '',
+    attachedValue: 0,
+  })
   return (
     <>
       <div className={styles.container}>
@@ -57,13 +61,21 @@ const CreateProposal = () => {
         <div className={styles.buttonWrapper}>
           <Button
             style={'lightBlueBtn'}
-            text={'Publish proposal'} /*onClick= {async(e)=>{
-            await daoService.
-          }}*/
+            text={'Publish proposal'}
+            onClick={async (e) => {
+              await daoService.createProposal()
+            }}
           />
         </div>
       </div>
-      {<AddActionToProposalModal open={open} setOpen={setOpen} />}
+      {
+        <AddActionToProposalModal
+          open={open}
+          setOpen={setOpen}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      }
     </>
   )
 }
