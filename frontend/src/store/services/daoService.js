@@ -375,6 +375,8 @@ const deployDAOFromFactory = async (
         bounce: true,
       })
     console.log('deployDao: ', deployDao)
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms))
+    await delay(10000)
     const pastEvents = await daoFactoryContract.getPastEvents({
       range: { fromLt: 135 },
     })
@@ -476,7 +478,7 @@ const updateProposal = async (daoRootAddress, ownerAddress) => {
 const deployStakingContract = async (ownerAddress, daoRoot) => {
   const stakingDeployer = new ever.Contract(
     stakingRootDeployerAbi,
-    '0:e61e039e8bc3bc9c3a91544a5a762770f0ccce1e50ac16e09e154cae60567dd1'
+    '0:871e085a8e2f51d641af98013f5aa51bee0ac2257397980b7df6401ae3feacef'
   )
   try {
     const subscriber = new ever.Subscriber()
@@ -504,25 +506,33 @@ const deployStakingContract = async (ownerAddress, daoRoot) => {
       })
       .send({
         from: ownerAddress,
-        amount: toNano(1, 9),
+        amount: toNano(2, 9),
         bounce: false,
       })
     /*.sendExternal({ publicKey: publicKey, withoutSignature: true })*/
-
-    const trx = await ever.getTransactions({
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms))
+    await delay(10000)
+    let trx = await ever.getTransactions({
       address: stakingDeployer._address,
       continuation: undefined,
       limit: 1,
     })
+
     console.log('trx: ', trx)
+    while (trx.transactions[0].outMessages.length < 1) {
+      trx = await ever.getTransactions({
+        address: stakingDeployer._address,
+        continuation: undefined,
+        limit: 1,
+      })
+
+      if (trx.transactions[0].outMessages.length > 0) break
+    }
     const p = await stakingDeployer.decodeTransaction({
       transaction: trx.transactions[0],
       methods: [stakingRootDeployerAbi['deploy']],
     })
     console.log('p: ', p)
-
-    const delay = (ms) => new Promise((res) => setTimeout(res, ms))
-    await delay(10000)
 
     console.log(
       'stakingContract: ',
@@ -1056,9 +1066,8 @@ const getDaoInfo = async (id, address) => {
       .call()
     const stakingRootContract = new ever.Contract(
       stakingAbi,
-      // stakingRootAddress.value0
+      stakingRootAddress.value0
       // STAKING ROOT ADDRESS TEST
-      stakingRootAddressTest
     )
 
     const details = await stakingRootContract.methods
@@ -1331,7 +1340,9 @@ const createProposal = async (ownerAddress, daoRoot) => {
       })
       .call()
     //  console.log('rootAcc response:', response.value0._address);
-
+    const stakingRootAddress = await rootDao.methods
+      .getStakingRoot({ answerId: 0 })
+      .call()
     const userTokenWalletAddress = response.value0._address
     const tokenWalletAddress = new Address(userTokenWalletAddress)
     const walletContract = new ever.Contract(giver, tokenWalletAddress)
@@ -1340,7 +1351,7 @@ const createProposal = async (ownerAddress, daoRoot) => {
     const sendTransaction = await walletContract.methods
       .transfer({
         amount: toNano(10000, 9),
-        recipient: stakingRootAddressTest,
+        recipient: stakingRootAddress.value0,
         deployWalletValue: 0, //toNano(0.5, 9),
         remainingGasTo: ownerAddress,
         notify: true,
@@ -1353,7 +1364,7 @@ const createProposal = async (ownerAddress, daoRoot) => {
       })
 
     console.log('sendTransaction: ', sendTransaction)
-    const root = new ever.Contract(stakingAbi, stakingRootAddressTest)
+    const root = new ever.Contract(stakingAbi, stakingRootAddress.value0)
     const event = await root.waitForEvent()
 
     console.log('event: ', event)
