@@ -13,14 +13,26 @@ import daoService from 'store/services/daoService'
 
 const CreateProposal = () => {
   const location = useLocation()
-  const { daoRoot, ownerAddress } = location.state
+  // const { daoRoot, ownerAddress } = location.state
 
+  const [deployedActions, setDeployedActions] = useState([])
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({
-    targetContractAddress: '',
+    target_contract_address: '',
     payload: '',
-    attachedValue: 0,
+    attached_value: 0,
+    typeValue: 'Custom Select',
+    networkValue: 'Everscale',
   })
+
+  console.log('formData: ', formData)
+
+  const addAction = (type) => {
+    deployedActions.push(type)
+  }
+
+  console.log('DEPOLOYED', deployedActions)
+
   return (
     <>
       <div className={styles.container}>
@@ -48,14 +60,18 @@ const CreateProposal = () => {
           <div className={`${styles.wrapper} ${styles.right}`}>
             <h3>Actions</h3>
             <div className={styles.line} />
-            {/*<div className={styles.action}>*/}
-            {/*  <div className={styles.actionRow}>*/}
-            {/*    <p className={styles.actionName}>SOMETHING</p>*/}
-            {/*    <img src={editIcon} alt={'edit action'} />*/}
-            {/*  </div>*/}
-            {/*  <div className={styles.line} />*/}
-            {/*</div>*/}
-            <button onClick={() => setOpen(!open)}>
+            {deployedActions.map((action) => {
+              return (
+                <div className={styles.action}>
+                  <div className={styles.actionRow}>
+                    <p className={styles.actionName}>{action}</p>
+                    <img src={editIcon} alt={'edit action'} />
+                  </div>
+                  <div className={styles.line} />
+                </div>
+              )
+            })}
+            <button onClick={() => setOpen(true)}>
               <img src={addIcon} alt={'add action'} />
               <p>Add action</p>
             </button>
@@ -67,8 +83,13 @@ const CreateProposal = () => {
             style={'lightBlueBtn'}
             text={'Publish proposal'}
             onClick={async (e) => {
-              console.log('MODAL LOCATION STATE:', location.state)
-              await daoService.createProposal(ownerAddress, daoRoot)
+              await daoService.createProposal(
+                // ownerAddress,
+                // daoRoot,
+                formData.target_contract_address,
+                formData.payload,
+                formData.attached_value
+              )
             }}
           />
         </div>
@@ -79,6 +100,7 @@ const CreateProposal = () => {
           setOpen={setOpen}
           formData={formData}
           setFormData={setFormData}
+          addAction={addAction}
         />
       }
     </>

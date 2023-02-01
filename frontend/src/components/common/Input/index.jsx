@@ -68,9 +68,6 @@ const Input = ({
     }
   }
 
-  // console.log('firstimage', firstImage)
-  // console.log('secondimage', buttons?.length)
-
   return (
     <div className={styles.inputWrapper}>
       <div className={styles.labelWrapper}>
@@ -119,7 +116,7 @@ const Input = ({
           fontSize: '14px',
         }}
       >
-        {validateInput()}
+        {/*validateInput()*/}
       </span>
     </div>
   )
