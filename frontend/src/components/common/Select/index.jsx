@@ -8,6 +8,8 @@ const Select = ({ label, options, value, onChange, registerSelect }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(0)
 
+  // console.log('OPTION')
+
   useEffect(() => {
     if (isOpen) setHighlightedIndex(0)
   }, [isOpen])
@@ -17,11 +19,11 @@ const Select = ({ label, options, value, onChange, registerSelect }) => {
   }
 
   const selectOption = (option) => {
-    if (option.value !== value.value) onChange(option)
+    if (option !== value) onChange(option)
   }
 
   const isOptionSelected = (option) => {
-    return option.value === value.value
+    return option === value
   }
   const { register } = useForm()
   return (
@@ -29,7 +31,7 @@ const Select = ({ label, options, value, onChange, registerSelect }) => {
       <label className={styles.label}>{label}</label>
       <div className={styles.selectWrapper}>
         <div className={styles.valueContainer} onClick={() => toggleOpen()}>
-          <p>{value.name}</p>
+          <p>{value}</p>
           <img src={isOpen ? caretUp : caretDown} alt={'caret'} />
         </div>
         <ul
@@ -45,12 +47,12 @@ const Select = ({ label, options, value, onChange, registerSelect }) => {
                 setIsOpen(false)
               }}
               onMouseEnter={() => setHighlightedIndex(index)}
-              key={option.value}
+              key={option}
               className={`${styles.option} ${
                 isOptionSelected(option) ? styles.selected : ''
               } ${index === highlightedIndex ? styles.highlighted : ''}`}
             >
-              {option.name}
+              {option}
             </li>
           ))}
         </ul>

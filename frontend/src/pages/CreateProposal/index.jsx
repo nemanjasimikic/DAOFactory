@@ -21,11 +21,8 @@ const CreateProposal = () => {
     target_contract_address: '',
     payload: '',
     attached_value: 0,
-    typeValue: [
-      { name: 'Custom action', value: 1 },
-      { name: 'Simple proposal', value: 2 },
-    ],
-    networkValue: [{ name: 'Everscale', value: 1 }],
+    typeValue: 'Custom Select',
+    networkValue: 'Everscale',
   })
 
   console.log('formData: ', formData)
@@ -33,6 +30,8 @@ const CreateProposal = () => {
   const addAction = (type) => {
     deployedActions.push(type)
   }
+
+  console.log('DEPOLOYED', deployedActions)
 
   return (
     <>
