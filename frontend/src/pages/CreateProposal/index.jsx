@@ -47,7 +47,13 @@ const CreateProposal = () => {
   })
 
   const addAction = (type) => {
-    deployedActions.push(type)
+    let action = {
+      type: type,
+      value: formData.attached_value,
+      target: formData.target_contract_address,
+      payload: formData.payload,
+    }
+    deployedActions.push(action)
   }
 
   return (
@@ -83,7 +89,7 @@ const CreateProposal = () => {
               return (
                 <div className={styles.action}>
                   <div className={styles.actionRow}>
-                    <p className={styles.actionName}>{action}</p>
+                    <p className={styles.actionName}>{action.type}</p>
                     <img src={editIcon} alt={'edit action'} />
                   </div>
                   <div className={styles.line} />
@@ -118,7 +124,8 @@ const CreateProposal = () => {
                   formData.target_contract_address,
                   formData.payload,
                   formData.attached_value,
-                  formData.title
+                  formData.title,
+                  deployedActions
                 )
                 .catch((e) => {
                   setLoading(false)

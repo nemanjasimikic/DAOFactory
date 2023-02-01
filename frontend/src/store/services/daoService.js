@@ -1156,9 +1156,19 @@ const createProposal = async (
   targetAddress,
   payload,
   value,
-  description
+  description,
+  deployedActions
 ) => {
   try {
+    let tonActionsList = []
+    for (let i = 0; i < deployedActions.length; i++) {
+      tonActionsList.push({
+        value: toNano(deployedActions[i].value, 9),
+        target: deployedActions[i].target,
+        payload: deployedActions[i].payload,
+      })
+    }
+
     const rootDao = new ever.Contract(daoRootAbi, daoRoot)
     const token = await rootDao.methods.governanceToken({}).call()
     const rootAcc = new ever.Contract(rootAbi, token.governanceToken)
@@ -1193,27 +1203,20 @@ const createProposal = async (
 
     console.log('sendTransaction: ', sendTransaction)
     const root = new ever.Contract(stakingAbi, stakingRootAddress.value0)
+    /*const event = await root.getPastEvents({range: fromLt: })*/
 
     let ethActions = []
-
-    let tonActions = [
-      {
-        value: toNano(value, 9),
-        target: targetAddress,
-        payload: payload,
-      },
-    ]
 
     const propose = await rootDao.methods
       .propose({
         answerId: 0,
-        tonActions: tonActions,
+        tonActions: tonActionsList,
         ethActions: ethActions,
         description: description,
       })
       .send({
         from: ownerAddress,
-        amount: toNano(12, 9),
+        amount: toNano(10 + tonActionsList.length * 2, 9),
         bounce: false,
       })
     console.log('propose:', propose)
