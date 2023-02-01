@@ -28,7 +28,7 @@ const Navigation = ({ client }) => {
         />
         <Route path="create-dao" element={<CreateDao />} />
         <Route path="dao/:id" element={<Balance />} />
-        <Route path="create-proposal" element={<CreateProposal />} />
+        <Route path="create-proposal/:id" element={<CreateProposal />} />
       </Routes>
       <Footer />
       <MobileFooter />

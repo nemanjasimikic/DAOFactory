@@ -37,6 +37,7 @@ const Balance = () => {
     () => daoService.getDaoInfo(id, addressContext),
     {
       enabled: !!addressContext,
+      cacheTime: 30 * 1000,
     }
   )
 
@@ -104,7 +105,7 @@ const Balance = () => {
 
   console.log('isLoading: ', isLoading)
   console.log('data in balance: ', data)
-  return data?.proposals && data?.proposalsWithLockedTokens && data?.voters ? (
+  return data ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
         <div className={styles.daoNameWrapper}>
@@ -119,7 +120,8 @@ const Balance = () => {
           <p>Addresses</p>
           <Link
             className={styles.createProposalLink}
-            to={'/create-proposal'}
+            to={`/create-proposal/${data.slug}`}
+
             // state={{ daoRoot: data.daoRoot, ownerAddress: addressContext }}
           >
             <Button style={'lightBlueBtn'} text={'Create a proposal'} />

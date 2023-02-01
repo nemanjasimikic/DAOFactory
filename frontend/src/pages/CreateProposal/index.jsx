@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useState, useContext } from 'react'
+import { useLocation, useParams, useNavigate } from 'react-router-dom'
 import RouteBreadcrumbs from 'components/RouteBreadcrumbs'
 import ContentHeader from 'components/common/ContentHeader'
 import NoResults from 'components/NoResults'
@@ -10,11 +10,44 @@ import styles from './styles.module.sass'
 import editIcon from 'static/svg/editIcon.svg'
 import addIcon from 'static/svg/addIcon.svg'
 import daoService from 'store/services/daoService'
+import { WalletContext } from 'context/walletContext'
+import { useQuery } from 'react-query'
+import Spinner from '../../components/common/Spinner'
 
 const CreateProposal = () => {
-  const location = useLocation()
-  // const { daoRoot, ownerAddress } = location.state
+  const navigate = useNavigate()
+  const { state: ContextState, login } = useContext(WalletContext)
+  const {
+    isLoginPending,
+    isLoggedIn,
+    loginError,
+    addressContext,
+    balanceContext,
+  } = ContextState
 
+  console.log('address: ', addressContext)
+
+  const { id } = useParams()
+  const { data, isIdle, error, isError, isLoading } = useQuery(
+    ['daoRoot', id],
+    () => daoService.getDaoInfo(id, addressContext),
+    {
+      enabled: !!addressContext,
+    }
+  )
+  let [loading, setLoading] = useState(false)
+
+  console.log('data: ', data)
+  const location = useLocation()
+  // const { ownerAddress } = location.state
+  //console.log('daoRoot: ', daoRoot)
+  //console.log('ownerAddress: ', ownerAddress)
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+  }
   const [deployedActions, setDeployedActions] = useState([])
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({
@@ -23,6 +56,7 @@ const CreateProposal = () => {
     attached_value: 0,
     typeValue: 'Custom Select',
     networkValue: 'Everscale',
+    title: '',
   })
 
   console.log('formData: ', formData)
@@ -36,6 +70,7 @@ const CreateProposal = () => {
   return (
     <>
       <div className={styles.container}>
+        {loading && <Spinner />}
         <RouteBreadcrumbs text={'Make new proposal'} />
         <ContentHeader title={'Make new proposal'} />
         {/*<NoResults />*/}
@@ -47,6 +82,7 @@ const CreateProposal = () => {
               label={'Title'}
               registerInput={'title'}
               placeholder={'Input text'}
+              onChange={onChange}
             />
             <Input
               id={'discussion'}
@@ -83,13 +119,31 @@ const CreateProposal = () => {
             style={'lightBlueBtn'}
             text={'Publish proposal'}
             onClick={async (e) => {
-              await daoService.createProposal(
-                // ownerAddress,
-                // daoRoot,
-                formData.target_contract_address,
-                formData.payload,
-                formData.attached_value
-              )
+              setLoading(true)
+
+              let canNavigate = true
+              function navigateOff(canNavigate) {
+                setLoading(false)
+                if (canNavigate) {
+                  navigate(`/dao/${id}`)
+                }
+              }
+              await daoService
+                .createProposal(
+                  addressContext,
+                  data.daoAddress,
+                  formData.target_contract_address,
+                  formData.payload,
+                  formData.attached_value,
+                  formData.title
+                )
+                .catch((e) => {
+                  console.log(e)
+                  setLoading(false)
+                  canNavigate = false
+                  return
+                })
+              navigateOff(canNavigate)
             }}
           />
         </div>

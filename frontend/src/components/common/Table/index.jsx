@@ -4,7 +4,7 @@ import styles from './styles.module.sass'
 
 const Table = ({ data, columns, isLoading }) => {
   console.log('data in table: ', data)
-  return (
+  return data ? (
     <div className={styles.tableWrapper}>
       <div>
         <TableHeader columns={columns} />
@@ -12,6 +12,13 @@ const Table = ({ data, columns, isLoading }) => {
       <div>
         <TableRow data={data} columns={columns} isLoading={isLoading} />
       </div>
+    </div>
+  ) : (
+    <div className={styles.tableWrapper}>
+      <div>
+        <TableHeader columns={columns} />
+      </div>
+      <div> </div>
     </div>
   )
 }

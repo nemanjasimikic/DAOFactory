@@ -21,7 +21,7 @@ const IsLoggedIn = ({ address }) => {
   const { data, error, isError, isLoading } = useQuery(
     ['allDAOs'],
     () => daoService.getAllDAOs(address),
-    { cacheTime: 1000 * 60 * 2 }
+    { cacheTime: 1000 * 60 * 1 }
   )
 
   const getDaoList = data
@@ -102,9 +102,9 @@ const IsLoggedIn = ({ address }) => {
           <Button style={'primaryBtn'} text={'Add existing DAO'} />
         </div>
       </ContentHeader>
-      {getDaoList?.length < 1 || !getDaoList ? (
+      {getDaoList?.length < 1 /*|| !getDaoList*/ ? (
         <NoResults />
-      ) : itemsList.length < 1 /*renderTable*/ ? (
+      ) : itemsList.length < 1 || !getDaoList /*renderTable*/ ? (
         <Table columns={columns} data={dataTable} onLoadEffect={onLoadEffect} />
       ) : (
         <div className={styles.daoCardsWrapper}>{itemsList}</div>
