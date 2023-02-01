@@ -23,9 +23,7 @@ const Navbar = () => {
       if (localStorage?.getItem('isLoggedIn')) {
         try {
           login()
-        } catch (e) {
-          console.log(e)
-        }
+        } catch (e) {}
       }
     }
     checkWallet()

@@ -234,7 +234,6 @@ const CreateDao = () => {
                     addressContext
                   )
                   .catch((e) => {
-                    console.log(e)
                     setLoading(false)
                     canNavigate = false
                     return

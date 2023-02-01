@@ -89,8 +89,6 @@ const IsLoggedIn = ({ address }) => {
     })
   }
 
-  console.log('getDaoList: ', getDaoList)
-
   return (
     <div className={styles.isLoggedIn}>
       <h1>The simplest way to manage your own DAO</h1>

@@ -25,15 +25,13 @@ const GeneralDaoSettings = () => {
 
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
-  console.log('addressContext', addressContext)
-  const { data, isIdle, error, isError, isLoading } = useQuery(
+  const { data } = useQuery(
     ['daoInfo', id],
     () => daoService.getDaoInfo(id, addressContext),
     {
       enabled: !!addressContext,
     }
   )
-  console.log('data: ', data)
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',

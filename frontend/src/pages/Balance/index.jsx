@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext } from 'react'
-import { useNavigate, Link, useParams } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import BalanceInfoCard from 'components/BalanceInfoCard'
 import Button from 'components/common/Button'
 import Input from '../../components/common/Input'
@@ -10,29 +10,18 @@ import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
 import {
   columnsAllProposals,
-  dataAllProposals,
-  dataLockedTokens,
   columnsLockedTokens,
   columnsVoters,
-  dataVoters,
 } from './mocks'
 import { WalletContext } from 'context/walletContext'
 import { useQuery } from 'react-query'
 
 const Balance = () => {
-  const navigate = useNavigate()
   const { id } = useParams()
-  const { state: ContextState, login } = useContext(WalletContext)
-  const {
-    isLoginPending,
-    isLoggedIn,
-    loginError,
-    addressContext,
-    balanceContext,
-  } = ContextState
+  const { state: ContextState } = useContext(WalletContext)
+  const { addressContext } = ContextState
 
-  console.log('address: ', addressContext)
-  const { data, isIdle, error, isError, isLoading } = useQuery(
+  const { data, isLoading } = useQuery(
     ['daoBalance', id],
     () => daoService.getDaoInfo(id, addressContext),
     {
@@ -40,18 +29,6 @@ const Balance = () => {
       cacheTime: 30 * 1000,
     }
   )
-
-  /*const [proposalInformation, setProposalInformation] = useState({})
-
-  useEffect(() => {
-    if (data?.daoAddress) {
-      daoService
-        .getProposals(data.daoAddress)
-        .then((data) => setProposalInformation(data))
-    }
-  }, [])
-
-  console.log()*/
 
   const columns = [
     {
@@ -103,8 +80,6 @@ const Balance = () => {
     },
   ]
 
-  console.log('isLoading: ', isLoading)
-  console.log('data in balance: ', data)
   return data ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>

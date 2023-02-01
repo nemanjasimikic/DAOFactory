@@ -149,7 +149,6 @@ const getExpectedAddress = async () => {
 
     return Promise.resolve(address._address)
   } catch (e) {
-    console.log(e)
     return Promise.reject(e)
   }
 }
@@ -178,7 +177,6 @@ const getAddressForRoot = async () => {
 
 const topup = async (addressDao, ownerAddress) => {
   const giverContract = new ever.Contract(giver, addressDao)
-  //const walletAddress = addressConverter(localStorage.getItem('wallet'))
 
   const sendTransaction = await giverContract.methods
     .sendTransaction({
@@ -211,7 +209,6 @@ const deployFactory = async (
   nonce,
   ownerAddress
 ) => {
-  console.log('Usao u deploy')
   const accounts = await getFactory(ownerAddress)
   const treasure = treasury === 'on' ? true : treasury
   try {
@@ -237,7 +234,6 @@ const deployFactory = async (
       return Promise.resolve(accounts)
     } else {
       const address = await getExpectedAddress()
-      console.log('address: ', address)
       if (address) {
       }
 
@@ -258,11 +254,8 @@ const deployFactory = async (
         daoFactoryAbi,
         new Address(address)
       )
-      console.log('Pre provider state-a')
       const providerState = await ever.getProviderState()
-      console.log('providerState: ', providerState)
       const publicKey = providerState.permissions.accountInteraction.publicKey
-      console.log('public key: ', publicKey)
       const sendTransaction = await daoFactoryContract.methods
         .constructor({ newCode: hash2.code })
         .sendExternal({
@@ -292,7 +285,6 @@ const deployFactory = async (
       return Promise.resolve(sendTransaction)
     }
   } catch (e) {
-    console.log(e)
     return Promise.reject(e)
   }
 }
@@ -319,37 +311,12 @@ const deployDAOFromFactory = async (
     daoFactoryAbi,
     new Address(daoAddr)
   )
-  //const subscriber = ever.createSubscriber()
-  //console.log('subscriber: ', subscriber)
-  /* const successStream = subscriber
-    .transactions(daoFactoryContract.address)
-    .flatMap((item) => item.transactions)
-    .map((transaction) =>
-      daoFactoryContract.decodeTransaction({
-        transaction,
-        methods: ['deploy'],
-      })
-    )
-    .filterMap((result) => {
-      console.log('result: ', result)
-      if (result?.method === 'deploy') {*/
-  /*if (result.input.user.toString() === this.tonWallet.address) {
-                            return true
-                        }*/
-  /*      console.log('result: ', result)
-        return true
-      }
-
-      return undefined
-    })
-    .first()*/
   tokenRootAddr = governanceToken
   const code = await ever.splitTvc(daoRootTvc)
   const platformCode = await ever.splitTvc(platformTvc)
   const proposalCode = await ever.splitTvc(proposalTvc)
   const nr = (await daoFactoryContract.methods.getDeployedDAOs({}).call())
     .daoAddr.length
-  console.log('nr: ', nr)
   try {
     const deployDao = await daoFactoryContract.methods
       .deploy({
@@ -377,43 +344,25 @@ const deployDAOFromFactory = async (
         amount: toNano(1, 9),
         bounce: true,
       })
-    console.log('deployDao: ', deployDao)
     const delay = (ms) => new Promise((res) => setTimeout(res, ms))
     await delay(10000)
     const pastEvents = await daoFactoryContract.getPastEvents({
       range: { fromLt: 135 },
     })
-    console.log('pastEvents: ', pastEvents)
     const p = await daoFactoryContract.decodeTransaction({
       transaction: deployDao,
       methods: [daoFactoryAbi['deploy']],
     })
-    console.log('p: ', p)
 
-    //  await successStream
-    //  const event = await daoFactoryContract.waitForEvent()
-    // console.log('event: ', event)
     const daos = await daoFactoryContract.methods.getDeployedDAOs({}).call()
-    console.log(daos)
     let deployStaking
-    let setPlatform
-    let setUserData
-    let setElection
-    let setRelayRound
     let setActive
     if (daos.daoAddr.length > nr) {
-      /*  const daos = await daoFactoryContract.methods.getDeployedDAOs({}).call()
-    console.log('daos: ', daos.daoAddr[daos.daoAddr.length - 1][1][0]._address)
-    const update = await updateProposal(
-      daos.daoAddr[daos.daoAddr.length - 1][1][0]._address,
-      ownerAddress
-    )*/
       let stakingDeployerAddress
       const state = await ever.getProviderState()
-      console.log('provider: ', state)
-      if (state.selectedConnection == 'localnet') {
+      if (state.selectedConnection === 'localnet') {
         stakingDeployerAddress = stakingDeployerAddressLocal
-      } else if (state.selectedConnection == 'testnet') {
+      } else if (state.selectedConnection === 'testnet') {
         stakingDeployerAddress = stakingDeployerAddressTest
       } else {
         stakingDeployerAddress = stakingDeployerAddressMain
@@ -433,65 +382,16 @@ const deployDAOFromFactory = async (
         daos.daoAddr[daos.daoAddr.length - 1][1][0]._address
       )
       const providerState = await ever.getProviderState()
-      // console.log('providerState: ', providerState)
       const publicKey = providerState.permissions.accountInteraction.publicKey
 
       const setStaking = await daoRootContract.methods
         .setStakingRoot({ newStakingRoot: deployStaking._address })
         .sendExternal({ publicKey: publicKey, withoutSignature: true })
-      //.send({ from: ownerAddress, amount: toNano(1, 9), bounce: false })
-      console.log('setStaking: ', setStaking)
-
-      /* setPlatform = await setPlatformCode(deployStaking._address, ownerAddress)
-      console.log('set platform: ', setPlatform)
-      setUserData = await updateUserDataCode(
-        deployStaking._address,
-        ownerAddress
-      )
-      console.log('set user data: ', setUserData)
-
-      setElection = await updateElectionCode(
-        deployStaking._address,
-        ownerAddress
-      )
-      console.log('setElection: ', setElection)
-
-      setRelayRound = await updateRelayRoundCode(
-        deployStaking._address,
-        ownerAddress
-      )
-      console.log('setRelayRound: ', setRelayRound)*/
 
       setActive = await setStakingActive(deployStaking._address, ownerAddress)
-      console.log('setActive: ', setActive)
-
-      /*  const createProp = await createProposal(
-        ownerAddress,
-        daos.daoAddr[daos.daoAddr.length - 1][1][0]._address,
-        deployStaking._address
-      )
-      console.log('createProposal: ', createProp)*/
     }
     return Promise.resolve(setActive)
   } catch (e) {
-    return Promise.reject(e)
-  }
-}
-
-const updateProposal = async (daoRootAddress, ownerAddress) => {
-  try {
-    const proposal = await ever.splitTvc(proposalTvc)
-    const daoRootContract = new ever.Contract(daoRootAbi, daoRootAddress)
-    const providerState = await ever.getProviderState()
-    console.log('providerState: ', providerState)
-    const publicKey = providerState.permissions.accountInteraction.publicKey
-    const update = await daoRootContract.methods
-      .updateProposalCode({ code: proposal.code })
-      .send({ from: ownerAddress, amount: toNano(1, 9), bounce: false })
-    console.log(update)
-    return Promise.resolve(update)
-  } catch (e) {
-    console.log(e)
     return Promise.reject(e)
   }
 }
@@ -506,7 +406,6 @@ const deployStakingContract = async (
     stakingDeployerAddress
   )
   try {
-    const subscriber = new ever.Subscriber()
     const platformCode = await ever.splitTvc(platformTvc)
     const userDataCode = await ever.splitTvc(userDataTvc)
     const electionCode = await ever.splitTvc(electionTvc)
@@ -534,7 +433,6 @@ const deployStakingContract = async (
         amount: toNano(2, 9),
         bounce: false,
       })
-    /*.sendExternal({ publicKey: publicKey, withoutSignature: true })*/
     const delay = (ms) => new Promise((res) => setTimeout(res, ms))
     await delay(10000)
     let trx = await ever.getTransactions({
@@ -574,106 +472,6 @@ const deployStakingContract = async (
     })
     console.log('contract state: ', contractState)
     return Promise.resolve(staking)
-  } catch (e) {
-    console.log(e)
-    return Promise.reject(e)
-  }
-}
-
-const setPlatformCode = async (stakingContractAddress, ownerAddress) => {
-  const stakingRoot = new ever.Contract(stakingAbi, stakingContractAddress)
-  const platformCode = await ever.splitTvc(platformTvc)
-  try {
-    const setUserData = await stakingRoot.methods
-      .installPlatformOnce({
-        code: platformCode.code,
-        send_gas_to: ownerAddress,
-      })
-      .send({
-        from: ownerAddress,
-        amount: toNano(11, 9),
-        bounce: false,
-      })
-
-    console.log(setUserData)
-    return Promise.resolve(setUserData)
-  } catch (e) {
-    return Promise.reject(e)
-  }
-}
-
-const updateUserDataCode = async (stakingContractAddress, ownerAddress) => {
-  const stakingRoot = new ever.Contract(stakingAbi, stakingContractAddress)
-  const userDataCode = await ever.splitTvc(userDataTvc)
-  try {
-    const setUserData = await stakingRoot.methods
-      .installOrUpdateUserDataCode({
-        code: userDataCode.code,
-        send_gas_to: ownerAddress,
-      })
-      .send({
-        from: ownerAddress,
-        amount: toNano(11, 9),
-        bounce: false,
-      })
-    console.log(setUserData)
-    const event = await stakingRoot.getPastEvents({
-      range: { fromLt: setUserData.id.lt * 1 - 1 },
-    })
-    console.log('event: ', event)
-    return Promise.resolve(setUserData)
-  } catch (e) {
-    console.log(e)
-    return Promise.reject(e)
-  }
-}
-
-const updateElectionCode = async (stakingContractAddress, ownerAddress) => {
-  const stakingRoot = new ever.Contract(stakingAbi, stakingContractAddress)
-  const electionCode = await ever.splitTvc(electionTvc)
-  try {
-    const setUserData = await stakingRoot.methods
-      .installOrUpdateElectionCode({
-        code: electionCode.code,
-        send_gas_to: ownerAddress,
-      })
-      .send({
-        from: ownerAddress,
-        amount: toNano(11, 9),
-        bounce: false,
-      })
-    console.log(setUserData)
-    const event = await stakingRoot.getPastEvents({
-      range: { fromLt: setUserData.id.lt * 1 - 1 },
-    })
-    console.log('event: ', event)
-    return Promise.resolve(setUserData)
-  } catch (e) {
-    console.log(e)
-    return Promise.reject(e)
-  }
-}
-
-const updateRelayRoundCode = async (stakingContractAddress, ownerAddress) => {
-  const stakingRoot = new ever.Contract(stakingAbi, stakingContractAddress)
-  const relayRoundCode = await ever.splitTvc(relayRoundTvc)
-  try {
-    const setUserData = await stakingRoot.methods
-      .installOrUpdateRelayRoundCode({
-        code: relayRoundCode.code,
-        send_gas_to: ownerAddress,
-      })
-      .send({
-        from: ownerAddress,
-        amount: toNano(11, 9),
-        bounce: false,
-      })
-    console.log(setUserData)
-    const event = await stakingRoot.getPastEvents({
-      range: { fromLt: setUserData.id.lt * 1 - 1 },
-    })
-    console.log('event: ', event)
-    return Promise.resolve(setUserData)
   } catch (e) {
     console.log(e)
     return Promise.reject(e)
@@ -983,7 +781,7 @@ const destroy = async (id, address) => {
 let tokenAddr
 const getBalances = async (address) => {
   const walletAddress = address
-  var data = JSON.stringify({
+  let data = JSON.stringify({
     ownerAddress: walletAddress,
     limit: 100,
     offset: 0,
@@ -998,7 +796,6 @@ const getBalances = async (address) => {
     },
     data: data,
   }
-  //const response = await axios.post(API_URL, goalData, config)
 
   return axios(config)
     .then(function (response) {
@@ -1087,25 +884,18 @@ const getDaoInfo = async (id, address) => {
       .governanceToken({})
       .call()
 
-    ///root balance
     const stakingRootAddress = await daoRootContract.methods
       .getStakingRoot({ answerId: 0 })
       .call()
     const stakingRootContract = new ever.Contract(
       stakingAbi,
       stakingRootAddress.value0
-      // STAKING ROOT ADDRESS TEST
     )
 
     const details = await stakingRootContract.methods
       .getDetails({ answerId: 0 })
       .call()
     const balance = fromNano(details.value0.tokenBalance * 1, 9)
-    /*const balance = await getTokenBalance(
-      daoRootContract.address,
-      tokenAddress.governanceToken._address
-    )*/
-    //const walletAddress = addressConverter(localStorage.getItem('wallet'))
     const userBalance = await getTokenBalance(
       address,
       tokenAddress.governanceToken._address
@@ -1144,9 +934,7 @@ const getDaoInfo = async (id, address) => {
   }
 
   return new Promise((resolve) => {
-    //setTimeout(() => {
     resolve(rootData)
-    //})
   })
 }
 
@@ -1197,7 +985,6 @@ const getAllProposals = async () => {
     },
     data: data,
   }
-  //const response = await axios.post(API_URL, goalData, config)
 
   return axios(config)
     .then(function (response) {
@@ -1222,7 +1009,6 @@ const getProposals = async (daoRootAddress) => {
     const proposal = new ever.Contract(proposalAbi, proposalAddr.value0)
     proposalDataArray.push(proposal)
   }
-  // await getAllProposals()
   console.log('allProposals: ', proposalDataArray)
 
   let proposals = []
@@ -1231,15 +1017,15 @@ const getProposals = async (daoRootAddress) => {
       .getOverview({ answerId: 0 })
       .call()
     let state
-    if (data.state_ == 0) {
+    if (data.state_ === 0) {
       state = 'Pending'
-    } else if (data.state_ == 1) state = 'Active'
-    else if (data.state_ == 2) state = 'Canceled'
-    else if (data.state_ == 3) state = 'Failed'
-    else if (data.state_ == 4) state = 'Succeeded'
-    else if (data.state_ == 5) state = 'Expired'
-    else if (data.state_ == 6) state = 'Queued'
-    else if (data.state_ == 7) state = 'Executed'
+    } else if (data.state_ === 1) state = 'Active'
+    else if (data.state_ === 2) state = 'Canceled'
+    else if (data.state_ === 3) state = 'Failed'
+    else if (data.state_ === 4) state = 'Succeeded'
+    else if (data.state_ === 5) state = 'Expired'
+    else if (data.state_ === 6) state = 'Queued'
+    else if (data.state_ === 7) state = 'Executed'
     else state = 'Unknown'
     console.log('end time: ', data.endTime_)
     const time = Math.ceil(
@@ -1275,7 +1061,7 @@ const getProposals = async (daoRootAddress) => {
       queuedTime: dayjs.unix(data.executionTime_).format('DD MMM YYYY HH:mm'),
     })
   }
-  // console.log('proposals: ', proposals)
+
   return proposals
 }
 
@@ -1325,13 +1111,12 @@ const getAllStakeholders = async (daoRootAddress) => {
       methods: ['castVote'],
     })
     let duplicate
-    console.log('trx: ', trx)
     if (trx) {
       console.log(successStream.transactions[i])
       if (voters) {
         duplicate = voters.find(
           (voter) =>
-            voter == successStream.transactions[i].inMessage.src._address
+            voter === successStream.transactions[i].inMessage.src._address
         )
         console.log('duplicate: ', duplicate)
       }
@@ -1383,7 +1168,6 @@ const createProposal = async (
         walletOwner: ownerAddress,
       })
       .call()
-    //  console.log('rootAcc response:', response.value0._address);
     const stakingRootAddress = await rootDao.methods
       .getStakingRoot({ answerId: 0 })
       .call()
@@ -1392,8 +1176,6 @@ const createProposal = async (
     const userTokenWalletAddress = response.value0._address
     const tokenWalletAddress = new Address(userTokenWalletAddress)
     const walletContract = new ever.Contract(giver, tokenWalletAddress)
-    //const balanceForToken= await walletContract.methods.balance({answerId:1}).call();
-    //console.log('Token balance: ', balanceForToken.value0);
     const sendTransaction = await walletContract.methods
       .transfer({
         amount: toNano(tokenAmount.minStake, decimals.value0 * 1),
@@ -1411,20 +1193,8 @@ const createProposal = async (
 
     console.log('sendTransaction: ', sendTransaction)
     const root = new ever.Contract(stakingAbi, stakingRootAddress.value0)
-    /*const event = await root.getPastEvents({range: fromLt: })
 
-    console.log('event: ', event)*/
-
-    let ethActions = [
-      /*{
-        value: 1,
-        chainId: 2,
-        target: '0x7a250d5630b4cf539739df2c5dacb4c659f2488d',
-        signature: 'test(uint8 a)',
-        callData:
-          '000000000000000000000000000000000000000000000000000000000000000f',
-      },*/
-    ]
+    let ethActions = []
 
     let tonActions = [
       {
@@ -1463,7 +1233,6 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
     .getStakingRoot({ answerId: 0 })
     .call()
 
-  console.log('stakingRootAddr: ', stakingRootAddr)
   try {
     const stakingRoot = new ever.Contract(stakingAbi, stakingRootAddr.value0)
     const userDataAddress = await daoRoot.methods
@@ -1475,22 +1244,6 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
     const userData = new ever.Contract(userDataAbi, userDataAddress.value0)
     console.log('userData: ', userData)
 
-    /*.flatMap((item) => item.transactions)
-      .map((transaction) =>
-        userData.decodeTransaction({
-          transaction,
-          methods: ['castVote'],
-        })
-      )
-      .filterMap((result) => {
-        console.log('result: ', result)
-        if (result?.method === 'castVote') {
-          console.log('result: ', result)
-          return true
-        } else return undefined
-      })
-      .first()*/
-
     const contractState = await ever.getFullContractState({
       address: userDataAddress.value0,
     })
@@ -1498,7 +1251,6 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
     let proposalContractArray = []
     if (contractState.state?.isDeployed) {
       const proposal = await userData.methods.casted_votes({}).call()
-      //await successStream
       console.log('proposal: ', proposal)
       const count = await userData.methods.created_proposals({}).call()
       console.log('count: ', proposal.casted_votes.length)
@@ -1510,7 +1262,6 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
             proposalId: prop[i][0] * 1,
           })
           .call()
-        console.log('proposalAddr: ', proposalAddr)
         const proposal = new ever.Contract(proposalAbi, proposalAddr.value0)
         proposalContractArray.push(proposal)
       }
@@ -1526,13 +1277,13 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
       let state
       if (data.state_ == 0) {
         state = 'Pending'
-      } else if (data.state_ == 1) state = 'Active'
-      else if (data.state_ == 2) state = 'Canceled'
-      else if (data.state_ == 3) state = 'Failed'
-      else if (data.state_ == 4) state = 'Succeeded'
-      else if (data.state_ == 5) state = 'Expired'
-      else if (data.state_ == 6) state = 'Queued'
-      else if (data.state_ == 7) state = 'Executed'
+      } else if (data.state_ === 1) state = 'Active'
+      else if (data.state_ === 2) state = 'Canceled'
+      else if (data.state_ === 3) state = 'Failed'
+      else if (data.state_ === 4) state = 'Succeeded'
+      else if (data.state_ === 5) state = 'Expired'
+      else if (data.state_ === 6) state = 'Queued'
+      else if (data.state_ === 7) state = 'Executed'
       else state = 'Unknown'
       proposals.push({
         id: i + 1,
@@ -1559,7 +1310,6 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
         myVote: fromNano(vote.value0.token_balance * 1, 9),
       })
     }
-    // console.log('proposals: ', proposals)
 
     return Promise.resolve(proposals)
   } catch (e) {

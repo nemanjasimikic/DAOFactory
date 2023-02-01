@@ -8,8 +8,6 @@ const Select = ({ label, options, value, onChange, registerSelect }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(0)
 
-  // console.log('OPTION')
-
   useEffect(() => {
     if (isOpen) setHighlightedIndex(0)
   }, [isOpen])

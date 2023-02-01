@@ -80,7 +80,6 @@ const OwnershipDaoSettings = () => {
                       addressContext
                     )
                     .catch((e) => {
-                      console.log(e)
                       setLoading(false)
                       canNavigate = false
                       return
@@ -104,7 +103,6 @@ const OwnershipDaoSettings = () => {
                   }
                   e.preventDefault()
                   await daoService.destroy(id, addressContext).catch((e) => {
-                    console.log(e)
                     setLoading(false)
                     canNavigate = false
                     return

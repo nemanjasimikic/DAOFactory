@@ -16,19 +16,11 @@ import Spinner from '../../components/common/Spinner'
 
 const CreateProposal = () => {
   const navigate = useNavigate()
-  const { state: ContextState, login } = useContext(WalletContext)
-  const {
-    isLoginPending,
-    isLoggedIn,
-    loginError,
-    addressContext,
-    balanceContext,
-  } = ContextState
-
-  console.log('address: ', addressContext)
+  const { state: ContextState } = useContext(WalletContext)
+  const { addressContext } = ContextState
 
   const { id } = useParams()
-  const { data, isIdle, error, isError, isLoading } = useQuery(
+  const { data } = useQuery(
     ['daoRoot', id],
     () => daoService.getDaoInfo(id, addressContext),
     {
@@ -37,11 +29,6 @@ const CreateProposal = () => {
   )
   let [loading, setLoading] = useState(false)
 
-  console.log('data: ', data)
-  const location = useLocation()
-  // const { ownerAddress } = location.state
-  //console.log('daoRoot: ', daoRoot)
-  //console.log('ownerAddress: ', ownerAddress)
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -59,13 +46,9 @@ const CreateProposal = () => {
     title: '',
   })
 
-  console.log('formData: ', formData)
-
   const addAction = (type) => {
     deployedActions.push(type)
   }
-
-  console.log('DEPOLOYED', deployedActions)
 
   return (
     <>
@@ -138,7 +121,6 @@ const CreateProposal = () => {
                   formData.title
                 )
                 .catch((e) => {
-                  console.log(e)
                   setLoading(false)
                   canNavigate = false
                   return
