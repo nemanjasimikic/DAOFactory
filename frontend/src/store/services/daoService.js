@@ -1387,6 +1387,7 @@ const createProposal = async (
     const stakingRootAddress = await rootDao.methods
       .getStakingRoot({ answerId: 0 })
       .call()
+    const decimals = await rootAcc.methods.decimals({ answerId: 0 }).call()
     const tokenAmount = await rootDao.methods.minStake({}).call()
     const userTokenWalletAddress = response.value0._address
     const tokenWalletAddress = new Address(userTokenWalletAddress)
@@ -1395,7 +1396,7 @@ const createProposal = async (
     //console.log('Token balance: ', balanceForToken.value0);
     const sendTransaction = await walletContract.methods
       .transfer({
-        amount: toNano(tokenAmount.minStake, 9),
+        amount: toNano(tokenAmount.minStake, decimals.value0 * 1),
         recipient: stakingRootAddress.value0,
         deployWalletValue: 0, //toNano(0.5, 9),
         remainingGasTo: ownerAddress,

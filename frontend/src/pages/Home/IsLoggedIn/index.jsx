@@ -102,10 +102,10 @@ const IsLoggedIn = ({ address }) => {
           <Button style={'primaryBtn'} text={'Add existing DAO'} />
         </div>
       </ContentHeader>
-      {getDaoList?.length < 1 /*|| !getDaoList*/ ? (
-        <NoResults />
-      ) : itemsList.length < 1 || !getDaoList /*renderTable*/ ? (
+      {!getDaoList ? (
         <Table columns={columns} data={dataTable} onLoadEffect={onLoadEffect} />
+      ) : itemsList.length < 1 ? (
+        <NoResults />
       ) : (
         <div className={styles.daoCardsWrapper}>{itemsList}</div>
       )}

@@ -54,7 +54,7 @@ const CreateProposal = () => {
     target_contract_address: '',
     payload: '',
     attached_value: 0,
-    typeValue: 'Custom Select',
+    typeValue: 'Custom action',
     networkValue: 'Everscale',
     title: '',
   })
