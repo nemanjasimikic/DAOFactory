@@ -54,8 +54,8 @@ const AddActionToProposalModal = ({
         value={formData.typeValue}
         onChange={onChange}
       >
-        <option className={styles.option}>Custom Select</option>
-        <option className={styles.option}>Simple Proposal</option>
+        <option className={styles.option}>Custom action</option>
+        <option className={styles.option}>Simple proposal</option>
       </select>
       <label className={styles.label}>Network</label>
       <select
