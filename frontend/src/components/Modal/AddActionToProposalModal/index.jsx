@@ -13,13 +13,8 @@ const AddActionToProposalModal = ({
   setFormData,
   addAction,
 }) => {
-  const type = [
-    { name: 'Custom action', value: 1 },
-    { name: 'Simple proposal', value: 2 },
-  ]
-  const network = [{ name: 'Everscale', value: 1 }]
-  const [typeValue, setTypeValue] = useState(type[0])
-  const [networkValue, setNetworkValue] = useState(network[0])
+  // const [typeValue, setTypeValue] = useState(type[0])
+  // const [networkValue, setNetworkValue] = useState(network[0])
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -27,24 +22,25 @@ const AddActionToProposalModal = ({
     }))
   }
 
-  console.log('open: ', open)
   return (
     <Modal title={'Add action to proposal'} open={open} setOpen={setOpen}>
       <Select
+        name={formData.typeValue[0].name}
         label={'Type'}
         id="type"
-        options={type}
-        value={typeValue}
+        options={formData.typeValue}
+        value={formData.typeValue[0].value}
         registerSelect={'type'}
-        onChange={(o) => setTypeValue(o)}
+        onChange={onChange}
       />
       <Select
+        name={formData.networkValue[0].name}
         label={'Network'}
         id="network"
-        options={network}
-        value={networkValue}
+        options={formData.networkValue}
+        value={formData.networkValue[0].value}
         registerSelect={'network'}
-        onChange={(o) => setNetworkValue(o)}
+        onChange={onChange}
       />
       <Input
         label={'Target contract address'}

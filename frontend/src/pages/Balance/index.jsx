@@ -120,7 +120,7 @@ const Balance = () => {
           <Link
             className={styles.createProposalLink}
             to={'/create-proposal'}
-            state={{ daoRoot: data.daoRoot, ownerAddress: addressContext }}
+            // state={{ daoRoot: data.daoRoot, ownerAddress: addressContext }}
           >
             <Button style={'lightBlueBtn'} text={'Create a proposal'} />
           </Link>

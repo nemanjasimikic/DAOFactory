@@ -34,6 +34,7 @@ const Select = ({ label, options, value, onChange, registerSelect }) => {
         </div>
         <ul
           className={isOpen ? styles.show : styles.options}
+          id={registerSelect}
           {...register(registerSelect)}
         >
           {options.map((option, index) => (
