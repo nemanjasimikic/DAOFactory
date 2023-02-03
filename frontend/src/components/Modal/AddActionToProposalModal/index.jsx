@@ -16,11 +16,7 @@ const AddActionToProposalModal = ({
 }) => {
   const type = ['Custom action', 'Simple proposal']
   const network = ['Everscale']
-  // const [typeValue, setTypeValue] = useState(type[0])
-  // const [networkValue, setNetworkValue] = useState(network[0])
   const onChange = (e) => {
-    // console.log('onChangeTriggered', e)
-    // console.log('toChangeFormData', formData)
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
