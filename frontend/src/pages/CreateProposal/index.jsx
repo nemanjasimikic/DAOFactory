@@ -60,7 +60,7 @@ const CreateProposal = () => {
     <>
       <div className={styles.container}>
         {loading && <Spinner />}
-        <RouteBreadcrumbs text={'Make new proposal'} />
+        <RouteBreadcrumbs text={'Make new proposal'} daoName={data.name}/>
         <ContentHeader title={'Make new proposal'} />
         {/*<NoResults />*/}
         <div className={styles.contentWrapper}>

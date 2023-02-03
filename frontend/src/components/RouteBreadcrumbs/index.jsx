@@ -1,10 +1,10 @@
 import styles from './styles.module.sass'
 import breadcrumbArrow from 'static/svg/breadcrumbArrow.svg'
 
-const RouteBreadcrumbs = ({ text }) => {
+const RouteBreadcrumbs = ({ text, daoName }) => {
   return (
     <div className={styles.routeBreadcrumbs}>
-      <p className={styles.inactive}>$DAO_NAME</p>
+      <p className={styles.inactive}>{daoName}</p>
       <img
         className={styles.arrow}
         src={breadcrumbArrow}
