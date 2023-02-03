@@ -1,4 +1,14 @@
 @import 'src/sass/theme'
+// For scrollable container
+.scrollable
+  margin-top: 64px
+  position: absolute
+  display: block
+  overflow-x: hidden
+  overflow-y: overlay
+  min-height: 42px
+  max-height: 80px
+  width: 100%
 
 .select
   width: 100%
@@ -8,7 +18,6 @@
   flex-direction: column
 
   .label
-    // margin-bottom: 6px !important
     +small-white-text
 
   .selectField
@@ -29,9 +38,11 @@
     background: #2f334b
     position: absolute
     padding: 0
-    margin: 0
+    margin: 8px 0 0 0
+    // margin: 0
     left: 0
     top: 56px
+    // top:0
     max-height: 152px
     width: 100%
     list-style: none

@@ -1,26 +1,36 @@
 import { useState } from 'react'
+import { useOutsideClick } from 'helpers/useOutsideClick'
 import styles from './styles.module.sass'
 
 const Select = ({ selected, setSelected, options, label, onChange }) => {
   const [isActive, setIsActive] = useState(false)
+  const handleClickOutside = () => {
+    setIsActive(false)
+  }
+  const handleClickInside = () => {
+    setIsActive(true)
+  }
+  const ref = useOutsideClick(handleClickOutside)
 
   return (
     <div className={styles.select}>
       <label className={styles.label}>{label}</label>
-      <div
+      <div ref={ref} onClick={handleClickInside}
         className={styles.selectField}
-        onClick={() => setIsActive(!isActive)}
       >
         {selected ? selected : options[0]}
       </div>
 
-      {isActive && (
-        <div className={styles.selectContent}>
+      {isActive && 
+      // Commented out container for making
+      // a scrollable container to hold dropdown items
+      // <div className={styles.scrollable}>
+        (<div className={styles.selectContent}>
           {options.map((option, index) => (
             <div key={index}
               onClick={() => {
                 setSelected(option)
-                setIsActive(false)
+                handleClickOutside()
                 let changedValue = {
                   target: {
                     /// To be expanded for other types of inputs
@@ -45,8 +55,8 @@ const Select = ({ selected, setSelected, options, label, onChange }) => {
               {option}
             </div>
           ))}
-        </div>
-      )}
+        </div>)}
+      {/* </div> */}   
     </div>
   )
 }

@@ -22,10 +22,9 @@ const AddActionToProposalModal = ({
       [e.target.name]: e.target.value,
     }))
   }
-  const { register } = useForm()
 
-  const [selectedOptions, setSelectedOption] = useState('')
-  const [selectedNetwork, setSelectedNetwork] = useState('')
+  const [selectedOptions, setSelectedOption] = useState(formData.typeValue)
+  const [selectedNetwork, setSelectedNetwork] = useState(formData.networkValue)
   
   return (
     <Modal title={'Add action to proposal'} open={open} setOpen={setOpen}>
