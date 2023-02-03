@@ -56,6 +56,8 @@ const CreateProposal = () => {
     deployedActions.push(action)
   }
 
+  // console.log('Depl Actions',deployedActions)
+
   return (
     <>
       <div className={styles.container}>
@@ -85,9 +87,9 @@ const CreateProposal = () => {
           <div className={`${styles.wrapper} ${styles.right}`}>
             <h3>Actions</h3>
             <div className={styles.line} />
-            {deployedActions.map((action) => {
+            {deployedActions.map((action, index) => {
               return (
-                <div className={styles.action}>
+                <div key={index} className={styles.action}>
                   <div className={styles.actionRow}>
                     <p className={styles.actionName}>{action.type}</p>
                     <img src={editIcon} alt={'edit action'} />

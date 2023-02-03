@@ -19,6 +19,8 @@ const AddActionToProposalModal = ({
   // const [typeValue, setTypeValue] = useState(type[0])
   // const [networkValue, setNetworkValue] = useState(network[0])
   const onChange = (e) => {
+    // console.log('onChangeTriggered', e)
+    // console.log('toChangeFormData', formData)
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -26,16 +28,21 @@ const AddActionToProposalModal = ({
   }
   const { register } = useForm()
 
+  const [selectedOptions, setSelectedOption] = useState('')
+  const [selectedNetwork, setSelectedNetwork] = useState('')
+  
   return (
     <Modal title={'Add action to proposal'} open={open} setOpen={setOpen}>
       <Select
-      name={'Custom action'}
+        name={'Custom action'}
         label={'Type'}
         id="type"
         options={type}
         value={'Custom action'}
         registerSelect={'type'}
         onChange={onChange}
+        selected={selectedOptions}
+        setSelected={setSelectedOption}
       />
       <Select
         name={'Everscale'}
@@ -45,7 +52,9 @@ const AddActionToProposalModal = ({
         value={'Everscale'}
         registerSelect={'network'}
         onChange={onChange}
-      /> 
+        selected={selectedNetwork}
+        setSelected={setSelectedNetwork}
+      />
       {/* <label className={styles.label}>Type</label> */}
       {/* <select
         className={styles.select}
