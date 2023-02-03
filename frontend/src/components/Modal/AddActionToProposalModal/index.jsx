@@ -28,26 +28,26 @@ const AddActionToProposalModal = ({
 
   return (
     <Modal title={'Add action to proposal'} open={open} setOpen={setOpen}>
-      {/*<Select*/}
-      {/*  name={'Custom action'}*/}
-      {/*  label={'Type'}*/}
-      {/*  id="type"*/}
-      {/*  options={type}*/}
-      {/*  value={'Custom action'}*/}
-      {/*  registerSelect={'type'}*/}
-      {/*  onChange={onChange}*/}
-      {/*/>*/}
-      {/*<Select*/}
-      {/*  name={'Everscale'}*/}
-      {/*  label={'Network'}*/}
-      {/*  id="network"*/}
-      {/*  options={network}*/}
-      {/*  value={'Everscale'}*/}
-      {/*  registerSelect={'network'}*/}
-      {/*  onChange={onChange}*/}
-      {/*/>*/}
-      <label className={styles.label}>Type</label>
-      <select
+      <Select
+      name={'Custom action'}
+        label={'Type'}
+        id="type"
+        options={type}
+        value={'Custom action'}
+        registerSelect={'type'}
+        onChange={onChange}
+      />
+      <Select
+        name={'Everscale'}
+        label={'Network'}
+        id="network"
+        options={network}
+        value={'Everscale'}
+        registerSelect={'network'}
+        onChange={onChange}
+      /> 
+      {/* <label className={styles.label}>Type</label> */}
+      {/* <select
         className={styles.select}
         id="typeValue"
         {...register('typeValue')}
@@ -56,9 +56,9 @@ const AddActionToProposalModal = ({
       >
         <option className={styles.option}>Custom action</option>
         <option className={styles.option}>Simple proposal</option>
-      </select>
-      <label className={styles.label}>Network</label>
-      <select
+      </select> */}
+      {/* <label className={styles.label}>Network</label> */}
+      {/* <select
         className={styles.select}
         id="networkValue"
         {...register('networkValue')}
@@ -66,7 +66,7 @@ const AddActionToProposalModal = ({
         onChange={onChange}
       >
         <option>Everscale</option>
-      </select>
+      </select> */}
       <Input
         label={'Target contract address'}
         registerInput={'target_contract_address'}

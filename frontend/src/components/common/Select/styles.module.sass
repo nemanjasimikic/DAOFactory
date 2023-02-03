@@ -1,39 +1,27 @@
 @import 'src/sass/theme'
 
-.selectContainer
-  display: flex
-  justify-content: flex-start
-  flex-direction: column
+.select
   width: 100%
+  position: relative
+  user-select: none
+  display: flex
+  flex-direction: column
 
   .label
     +small-white-text
-    margin-bottom: 5px
 
-.selectWrapper
-  position: relative
-  height: 36px
-  margin-bottom: 20px
-  background-color: transparent
-  border: 1px solid rgba(255, 255, 255, 0.16)
-  color: rgba(255, 255, 255, 0.72)
-  outline: none
-
-  .valueContainer
+  .selectField
+    height: 36px
+    margin-bottom: 20px
+    background-color: transparent
+    border: 1px solid rgba(255, 255, 255, 0.16)
+    color: rgba(255, 255, 255, 0.72)
+    padding: 0 65px 0 10px
+    outline: none
     display: flex
     align-items: center
-    justify-content: space-between
-    height: 36px
-    padding: 0 12px
-    cursor: pointer
 
-    p
-      margin: 0
-
-  .options
-    display: none
-
-  .show
+  .selectContent
     display: flex
     flex-direction: column
     background: #2f334b
@@ -41,22 +29,23 @@
     padding: 0
     margin: 0
     left: 0
-    top: 36px
+    top: 56px
     max-height: 152px
     width: 100%
     list-style: none
     z-index: 2
 
-    .option
+    .optionItem
       cursor: pointer
       display: flex
       align-items: center
       justify-content: space-between
-      padding: 10px 15px
-
-      &.highlighted
-        background-color: #404359
+      padding: 10px 10px
+      color: $white
+      &:hover
+        cursor: pointer
 
       &.selected
         background: url('../../../static/svg/checkmark.svg') no-repeat right 10px center
+
 

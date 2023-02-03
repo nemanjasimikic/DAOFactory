@@ -1,60 +1,37 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 import styles from './styles.module.sass'
-import caretUp from 'static/svg/caretUp.svg'
-import caretDown from 'static/svg/caretDown.svg'
 
-const Select = ({ label, options, value, onChange, registerSelect }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [highlightedIndex, setHighlightedIndex] = useState(0)
-
-  useEffect(() => {
-    if (isOpen) setHighlightedIndex(0)
-  }, [isOpen])
-
-  const toggleOpen = () => {
-    setIsOpen(!isOpen)
-  }
-
-  const selectOption = (option) => {
-    if (option !== value) onChange(option)
-  }
-
-  const isOptionSelected = (option) => {
-    return option === value
-  }
-  const { register } = useForm()
+const Select = ({ selected, setSelected, options, label }) => {
+  const [isActive, setIsActive] = useState(false)
   return (
-    <div className={styles.selectContainer}>
+    <div className={styles.select}>
       <label className={styles.label}>{label}</label>
-      <div className={styles.selectWrapper}>
-        <div className={styles.valueContainer} onClick={() => toggleOpen()}>
-          <p>{value}</p>
-          <img src={isOpen ? caretUp : caretDown} alt={'caret'} />
-        </div>
-        <ul
-          className={isOpen ? styles.show : styles.options}
-          id={registerSelect}
-          {...register(registerSelect)}
-        >
+      <div
+        className={styles.selectField}
+        onClick={() => setIsActive(!isActive)}
+      >
+        {selected}
+      </div>
+
+      {isActive && (
+        <div className={styles.selectContent}>
           {options.map((option, index) => (
-            <li
-              onClick={(e) => {
-                e.stopPropagation()
-                selectOption(option)
-                setIsOpen(false)
+            <div
+              onClick={() => {
+                setSelected(option)
+                setIsActive(false)
               }}
-              onMouseEnter={() => setHighlightedIndex(index)}
-              key={option}
-              className={`${styles.option} ${
-                isOptionSelected(option) ? styles.selected : ''
-              } ${index === highlightedIndex ? styles.highlighted : ''}`}
+              className={
+                selected
+                  ? `${styles.optionItem} ${styles.selected}`
+                  : styles.optionItem
+              }
             >
               {option}
-            </li>
+            </div>
           ))}
-        </ul>
-      </div>
+        </div>
+      )}
     </div>
   )
 }
