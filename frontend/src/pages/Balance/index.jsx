@@ -148,7 +148,9 @@ const Balance = () => {
             </h3>
             <p className={styles.voting}>0% voting weight</p>
           </div>
-          <Button style={'primaryBtn'} text={'Balance management'} />
+          <Link to={'balance-management'}>
+            <Button style={'primaryBtn'} text={'Balance management'} />
+          </Link>
         </div>
       </div>
       <div className={styles.tableSectionHeading}>
