@@ -1017,15 +1017,15 @@ const getProposals = async (daoRootAddress) => {
       .getOverview({ answerId: 0 })
       .call()
     let state
-    if (data.state_ === 0) {
+    if (data.state_ == 0) {
       state = 'Pending'
-    } else if (data.state_ === 1) state = 'Active'
-    else if (data.state_ === 2) state = 'Canceled'
-    else if (data.state_ === 3) state = 'Failed'
-    else if (data.state_ === 4) state = 'Succeeded'
-    else if (data.state_ === 5) state = 'Expired'
-    else if (data.state_ === 6) state = 'Queued'
-    else if (data.state_ === 7) state = 'Executed'
+    } else if (data.state_ == 1) state = 'Active'
+    else if (data.state_ == 2) state = 'Canceled'
+    else if (data.state_ == 3) state = 'Failed'
+    else if (data.state_ == 4) state = 'Succeeded'
+    else if (data.state_ == 5) state = 'Expired'
+    else if (data.state_ == 6) state = 'Queued'
+    else if (data.state_ == 7) state = 'Executed'
     else state = 'Unknown'
     // console.log('end time: ', data.endTime_)
     const time = Math.ceil(
@@ -1236,6 +1236,7 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
     .getStakingRoot({ answerId: 0 })
     .call()
 
+  console.log('stakingRootAddr: ', stakingRootAddr)
   try {
     const stakingRoot = new ever.Contract(stakingAbi, stakingRootAddr.value0)
     const userDataAddress = await daoRoot.methods
@@ -1245,25 +1246,20 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
       })
       .call()
     const userData = new ever.Contract(userDataAbi, userDataAddress.value0)
-    // console.log('userData: ', userData)
+    console.log('userData: ', userData)
 
     const contractState = await ever.getFullContractState({
       address: userDataAddress.value0,
     })
-    // console.log('contractState: ', contractState.state?.isDeployed)
+    console.log('contractState: ', contractState.state.isDeployed)
     let proposalContractArray = []
-    if (contractState.state?.isDeployed) {
-      const proposal = await userData.methods.casted_votes({}).call()
-      // console.log('proposal: ', proposal)
+    if (contractState.state.isDeployed) {
+      //await successStream
       const count = await userData.methods.created_proposals({}).call()
-      // console.log('count: ', proposal.casted_votes.length)
-      const prop = proposal.casted_votes
-      for (let i = 0; i < prop.length; i++) {
+      console.log('count: ', count.created_proposals)
+      for (let i = 0; i < count.created_proposals.length; i++) {
         const proposalAddr = await daoRoot.methods
-          .expectedProposalAddress({
-            answerId: 0,
-            proposalId: prop[i][0] * 1,
-          })
+          .expectedProposalAddress({ answerId: 0, proposalId: i + 1 })
           .call()
         const proposal = new ever.Contract(proposalAbi, proposalAddr.value0)
         proposalContractArray.push(proposal)
@@ -1275,18 +1271,16 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
       const data = await proposalContractArray[i].methods
         .getOverview({ answerId: 0 })
         .call()
-
-      const vote = await userData.methods.getDetails({ answerId: 0 }).call()
       let state
       if (data.state_ == 0) {
         state = 'Pending'
-      } else if (data.state_ === 1) state = 'Active'
-      else if (data.state_ === 2) state = 'Canceled'
-      else if (data.state_ === 3) state = 'Failed'
-      else if (data.state_ === 4) state = 'Succeeded'
-      else if (data.state_ === 5) state = 'Expired'
-      else if (data.state_ === 6) state = 'Queued'
-      else if (data.state_ === 7) state = 'Executed'
+      } else if (data.state_ == 1) state = 'Active'
+      else if (data.state_ == 2) state = 'Canceled'
+      else if (data.state_ == 3) state = 'Failed'
+      else if (data.state_ == 4) state = 'Succeeded'
+      else if (data.state_ == 5) state = 'Expired'
+      else if (data.state_ == 6) state = 'Queued'
+      else if (data.state_ == 7) state = 'Executed'
       else state = 'Unknown'
       proposals.push({
         id: i + 1,
@@ -1310,13 +1304,13 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
             (1000 * 3600 * 24)
         ),
         queuedTime: dayjs.unix(data.executionTime_).format('DD MMM YYYY HH:mm'),
-        myVote: fromNano(vote.value0.token_balance * 1, 9),
       })
     }
+    // console.log('proposals: ', proposals)
 
     return Promise.resolve(proposals)
   } catch (e) {
-    // console.log(e)
+    console.log(e)
     return Promise.reject(e)
   }
 }
