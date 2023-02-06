@@ -1232,13 +1232,8 @@ const createProposal = async (
 
 const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
   const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
-  const stakingRootAddr = await daoRoot.methods
-    .getStakingRoot({ answerId: 0 })
-    .call()
 
-  console.log('stakingRootAddr: ', stakingRootAddr)
   try {
-    const stakingRoot = new ever.Contract(stakingAbi, stakingRootAddr.value0)
     const userDataAddress = await daoRoot.methods
       .getUserDataAddress({
         answerId: 0,
@@ -1246,17 +1241,14 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
       })
       .call()
     const userData = new ever.Contract(userDataAbi, userDataAddress.value0)
-    console.log('userData: ', userData)
 
     const contractState = await ever.getFullContractState({
       address: userDataAddress.value0,
     })
-    console.log('contractState: ', contractState.state.isDeployed)
     let proposalContractArray = []
     if (contractState.state.isDeployed) {
       //await successStream
       const count = await userData.methods.created_proposals({}).call()
-      console.log('count: ', count.created_proposals)
       for (let i = 0; i < count.created_proposals.length; i++) {
         const proposalAddr = await daoRoot.methods
           .expectedProposalAddress({ answerId: 0, proposalId: i + 1 })
@@ -1306,11 +1298,9 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
         queuedTime: dayjs.unix(data.executionTime_).format('DD MMM YYYY HH:mm'),
       })
     }
-    // console.log('proposals: ', proposals)
 
     return Promise.resolve(proposals)
   } catch (e) {
-    console.log(e)
     return Promise.reject(e)
   }
 }
