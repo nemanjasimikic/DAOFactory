@@ -928,7 +928,7 @@ const getDaoInfo = async (id, address) => {
       userBalance: userBalance,
       daoAddress: daoRootContract.address,
       proposals: proposals,
-      proposalsWithLockedTokens: prop,
+      proposalsWithLockedTokens: prop ?? null,
       voters: voters,
     }
   }
@@ -1301,7 +1301,7 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
 
     return Promise.resolve(proposals)
   } catch (e) {
-    return Promise.reject(e)
+    return null
   }
 }
 
