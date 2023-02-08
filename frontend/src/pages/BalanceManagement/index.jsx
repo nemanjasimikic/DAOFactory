@@ -1,7 +1,10 @@
 import RouteBreadcrumbs from 'components/RouteBreadcrumbs'
 import ContentHeader from 'components/common/ContentHeader'
 import YourAccountCard from 'components/YourAccountCard'
-import AccountBalance from 'components/AccountBalance'
+import AccountBalance from 'components/BalanceProposalInfo/AccountBalance'
+import NoResults from 'components/NoResults'
+import Table from 'components/common/Table'
+import { columnsTransactionHistory, dataTransactionHistory } from './mocks'
 import styles from './styles.module.sass'
 
 const BalanceManagement = () => {
@@ -15,6 +18,9 @@ const BalanceManagement = () => {
             <YourAccountCard text={'Your voting weight'} />
             <YourAccountCard text={'Your $TOKEN_TICKET locked'} />
           </div>
+          <h3 className={styles.contentHeading}>Transaction history</h3>
+          {/*<NoResults />*/}
+          <Table columns={columnsTransactionHistory} />
         </div>
         <AccountBalance />
       </div>

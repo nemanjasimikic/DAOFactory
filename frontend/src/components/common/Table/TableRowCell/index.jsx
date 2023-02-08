@@ -43,7 +43,7 @@ const TableRowCell = ({ item, column, isLoading }) => {
             <p className={styles.yes}>{Math.round(votesFor)}%</p>
             <p className={styles.no}>{Math.round(votesAgainst)}%</p>
           </div>
-          <div className={styles.line} style={{ background: background }}></div>
+          <div className={styles.line} style={{ background: background }} />
         </div>
       ) : column.key === 'date' ? (
         <div className={styles.dateWrapper}>
