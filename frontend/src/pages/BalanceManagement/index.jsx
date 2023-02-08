@@ -20,7 +20,10 @@ const BalanceManagement = () => {
           </div>
           <h3 className={styles.contentHeading}>Transaction history</h3>
           {/*<NoResults />*/}
-          <Table columns={columnsTransactionHistory} />
+          <Table
+            columns={columnsTransactionHistory}
+            data={dataTransactionHistory}
+          />
         </div>
         <AccountBalance />
       </div>

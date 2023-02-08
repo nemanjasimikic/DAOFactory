@@ -18,9 +18,23 @@ export const columnsTransactionHistory = [
 
 export const dataTransactionHistory = [
   {
-    transaction: 'Transaction',
+    transaction: 'Transaction 1',
     amount: '1000000',
-    date: 'Pending',
-    voting: 'voting1',
+    date: '54 Minutes ago',
+  },
+  {
+    transaction: 'Transaction 2',
+    amount: '-1000000',
+    date: '54 Minutes ago',
+  },
+  {
+    transaction: 'Transaction 3',
+    amount: '1000000',
+    date: '54 Minutes ago',
+  },
+  {
+    transaction: 'Transaction 4',
+    amount: '-1000000',
+    date: '54 Minutes ago',
   },
 ]

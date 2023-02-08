@@ -64,6 +64,10 @@ const TableRowCell = ({ item, column, isLoading }) => {
           <img src={walletAvatar} alt={'address'} />
           <p className={styles.address}>{addressFormat(item.userAddress)}</p>
         </div>
+      ) : column.key === 'amount' ? (
+        <p className={value < 0 ? styles.negative : styles.positive}>
+          {Number(-1000)}
+        </p>
       ) : (
         <p
           className={
