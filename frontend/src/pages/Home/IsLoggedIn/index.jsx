@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getAllDAOs, reset } from 'store/features/daoSlice'
-import { useSelector, useDispatch } from 'react-redux'
+import { useQuery } from 'react-query'
 import ContentHeader from 'components/common/ContentHeader'
 import Button from 'components/common/Button'
 import NoResults from 'components/NoResults'
@@ -9,25 +8,23 @@ import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
-//import NoResults from 'components/NoResults'
 
-const IsLoggedIn = () => {
-  const dispatch = useDispatch()
+const IsLoggedIn = ({ address }) => {
   const [renderTable, setRenderTable] = useState(true)
 
   const onLoadEffect = () => {
     setTimeout(() => {
       setRenderTable(false)
-    }, 3000)
+    }, 6000)
   }
   useEffect(onLoadEffect, [])
+  const { data, error, isError, isLoading } = useQuery(
+    ['allDAOs'],
+    () => daoService.getAllDAOs(address),
+    { cacheTime: 1000 * 60 * 1 }
+  )
 
-  const dao = useSelector((state) => state.dao)
-  useEffect(() => {
-    dispatch(getAllDAOs())
-  }, [])
-
-  const getDaoList = dao.allDAOs
+  const getDaoList = data
   const columns = [
     {
       key: 'id',
@@ -51,7 +48,7 @@ const IsLoggedIn = () => {
     },
   ]
 
-  const data = [
+  const dataTable = [
     {
       id: '1',
       dao: 'dao1',
@@ -79,7 +76,7 @@ const IsLoggedIn = () => {
   ]
   let itemsList = []
 
-  if (getDaoList != null) {
+  if (getDaoList != null && getDaoList.length > 0) {
     getDaoList.forEach((item, index) => {
       itemsList.push(
         <DaoCard
@@ -103,10 +100,10 @@ const IsLoggedIn = () => {
           <Button style={'primaryBtn'} text={'Add existing DAO'} />
         </div>
       </ContentHeader>
-      {getDaoList?.length < 1 ? (
+      {!getDaoList ? (
+        <Table columns={columns} data={dataTable} onLoadEffect={onLoadEffect} />
+      ) : itemsList.length < 1 ? (
         <NoResults />
-      ) : renderTable ? (
-        <Table columns={columns} data={data} />
       ) : (
         <div className={styles.daoCardsWrapper}>{itemsList}</div>
       )}

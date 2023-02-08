@@ -1,8 +1,85 @@
 @import 'src/sass/theme'
 
-.tableCell
+.tableCellLoading
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.48) 53.68%, rgba(255, 255, 255, 0.08) 100%) no-repeat
   +small-grey-text
   color: transparent
   background-position-x: left
   background-size: 50%
+
+.tableCell
+  color: $light-blue
+  background-position-x: left
+  background-size: 50%
+  font-size: 14px
+  line-height: 20px
+
+  span
+    padding: 4px 8px
+    border-radius: 27px
+
+.darkBlueInactive
+  background: linear-gradient(0deg, rgba(5, 11, 46, 0.12), rgba(5, 11, 46, 0.12)), rgba(255, 255, 255, 0.12)
+  color: rgba(255, 255, 255, 0.48)
+.darkBlueActive
+  background: linear-gradient(0deg, rgba(5, 11, 46, 0.12), rgba(5, 11, 46, 0.12)), rgba(255, 255, 255, 0.12)
+  color: $white
+.red
+  background: rgba(235, 67, 97, 0.16)
+  color: #EB4361
+.yellow
+  background: rgba(230, 172, 0, 0.16)
+  color: #E6AC00
+.green
+  background: rgba(74, 180, 74, 0.16)
+  color: #4AB44A
+
+.rangeWrapper
+  display: flex
+  flex-direction: column
+  justify-content: flex-start
+
+  .percentageRow
+    display: flex
+    align-items: flex-start
+    align-self: flex-start
+    justify-content: space-between
+    width: 80%
+    margin-bottom: -5px
+
+    .yes
+      font-size: 14px
+      color: #4AB44A
+    .no
+      font-size: 14px
+      color: #EB4361
+
+  .line
+    width: 80%
+    height: 4px
+    // background: linear-gradient(to right, #4AB44A 0%, #4AB44A 20%, #EB4361 20%, #EB4361 100%)
+    margin-bottom: 20px
+    display: flex
+    align-self: flex-start
+
+.dateWrapper
+  display: flex
+  align-items: flex-start
+  flex-direction: column
+
+  .action
+    margin-right: 10px !important
+    +small-white-text
+  .date
+    font-size: 12px
+    +small-grey-text
+
+.addressWrapper
+  display: flex
+  align-items: center
+
+  .address
+    color: $white
+    margin-left: 5px
+
+

@@ -29,6 +29,9 @@
     .rightSideWrapper
       display: flex
       align-items: center
+
+      .createProposalLink
+        text-decoration: none
       p
         +small-grey-text
         margin: 0 10px
@@ -58,6 +61,9 @@
     padding: 16px 24px
     background-color: rgba(255, 255, 255, 0.08)
     font-weight: 400
+    overflow-x: auto
+    max-height: 165px
+    text-align: justify
     +small-white-text
   .bic8
     grid-area: 1 / 4 / 5 / 6
@@ -82,3 +88,25 @@
 
     button
       width: 100%
+
+.tableSectionHeading
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+  p
+    +medium-white-text
+
+  .rightContentWrapper
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    width: 50%
+
+    div
+      flex-direction: row
+    input
+      margin-bottom: 0
+      width: 100%
+    button
+      margin-left: 8px

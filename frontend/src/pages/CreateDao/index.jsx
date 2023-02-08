@@ -1,60 +1,37 @@
-import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  deployFactory,
-  deployDAOFromFactory,
-  getAllDAOs,
-  getAddressForRoot,
-  reset,
-} from 'store/features/daoSlice'
-import Sidebar from 'components/common/Sidebar'
+import { WalletContext } from 'context/walletContext'
+import { useForm } from 'react-hook-form'
+import daoService from 'store/services/daoService'
+import { validator, checkValidity } from 'helpers/formValidator'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
 import VotingConfiguration from 'pages/CreateDao/VotingConfiguration'
 import ProposalTimeline from 'pages/CreateDao/ProposalTimeline'
 import Treasury from 'pages/CreateDao/Treasury'
+import Sidebar from 'components/common/Sidebar'
 import ContentHeader from 'components/common/ContentHeader'
 import Form from 'components/common/Form'
-import Button from '../../components/common/Button'
+import Button from 'components/common/Button'
 import CreateDaoInfo from 'components/CreateDaoInfo'
+import Spinner from '../../components/common/Spinner'
 import rightArrow from 'static/svg/rightArrow.svg'
 import leftArrow from 'static/svg/leftArrow.svg'
 import styles from './styles.module.sass'
-import Spinner from '../../components/common/Spinner'
-import { useForm } from 'react-hook-form'
-import { validator, checkValidity } from 'helpers/formValidator'
 
 const CreateDao = () => {
-  const wallet = useSelector((state) => state.wallet)
-  const { dao, isLoading, isDeployed } = useSelector((state) => state.dao)
   const navigate = useNavigate()
 
   const {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  // const onSubmit = (data, e) => console.log(data, e)
 
-  useEffect(() => {
-    if (wallet.wallet === null) {
-      navigate('/')
-    }
-
-    return () => {
-      reset()
-    }
-  }, [wallet, navigate])
-
-  if (isDeployed) {
-    navigate('/')
-  }
-
-  const dispatch = useDispatch()
   const [page, setPage] = useState(0)
+  let [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
-    daoSlug: 'daoubilder.io/',
+    daoSlug: '',
     governanceToken: '',
     minStake: '',
     quorum: 51,
@@ -71,30 +48,31 @@ const CreateDao = () => {
     treasury: false,
     description: '',
     token: '',
+    icon: '',
+    nonce: 0,
   })
-
+  const { state: ContextState } = useContext(WalletContext)
+  const { addressContext } = ContextState
+  const [daoInformation, setDaoInformation] = useState({})
   useEffect(() => {
-    dispatch(getAddressForRoot())
-  }, [dao, dispatch])
+    daoService.getAddressForRoot().then((data) => setDaoInformation(data))
+  }, [])
 
-  const addressForRoot = JSON.parse(localStorage.getItem('daoRootAddress'))
-    ? JSON.parse(localStorage.getItem('daoRootAddress')).rootAddress
-    : ''
-  //console.log('addressForRoot: ', addressForRoot)
   const FormTitles = [
     'General information',
     'Voting configuration',
     'Proposal timeline ',
     'Treasury',
   ]
-
+  let { daoAddress } = formData
+  daoAddress = daoInformation.rootAddress
   const PageDisplay = () => {
     if (page === 0) {
       return (
         <GeneralInformation
           formId={'myForm'}
           formData={formData}
-          rootAddress={addressForRoot}
+          rootAddress={daoAddress}
           setFormData={setFormData}
           handleSubmit={handleSubmit}
         />
@@ -109,55 +87,29 @@ const CreateDao = () => {
       return <Treasury formData={formData} setFormData={setFormData} />
     }
   }
-  console.log('formData: ', formData)
+  const pendingTime =
+    formData.pendingTime === 'Hours'
+      ? formData.pending * 3600
+      : formData.pending * 3600 * 24
 
-  formData.pendingTime === 'Hours'
-    ? localStorage.setItem('pending', JSON.stringify(formData.pending * 3600))
-    : localStorage.setItem(
-        'pending',
-        JSON.stringify(formData.pending * 3600 * 24)
-      )
-  formData.votingTime === 'Hours'
-    ? localStorage.setItem('voting', JSON.stringify(formData.voting * 3600))
-    : localStorage.setItem(
-        'voting',
-        JSON.stringify(formData.voting * 3600 * 24)
-      )
-  localStorage.setItem('quorum', JSON.stringify(formData.quorum))
-  formData.queuedTime === 'Hours'
-    ? localStorage.setItem('queued', JSON.stringify(formData.queued * 3600))
-    : localStorage.setItem(
-        'queued',
-        JSON.stringify(formData.queued * 3600 * 24)
-      )
-  localStorage.setItem('threshold', JSON.stringify(formData.threshold))
-  formData.executionTime === 'Hours'
-    ? localStorage.setItem(
-        'execution',
-        JSON.stringify(formData.execution * 3600)
-      )
-    : localStorage.setItem(
-        'execution',
-        JSON.stringify(formData.execution * 3600 * 24)
-      )
-  localStorage.setItem('daoAddress', JSON.stringify(formData.daoAddress))
-  localStorage.setItem('name', JSON.stringify(formData.name))
-  const slug = formData.daoSlug.split('/')
-  console.log('slug splitted: ', slug[1])
-  localStorage.setItem('daoSlug', JSON.stringify(slug[1]))
-  localStorage.setItem(
-    'governanceToken',
-    JSON.stringify(formData.governanceToken)
-  )
-  localStorage.setItem('minStake', JSON.stringify(formData.minStake))
-  localStorage.setItem('treasury', JSON.stringify(formData.treasury))
-  localStorage.setItem('description', JSON.stringify(formData.description))
+  const votingTime =
+    formData.votingTime === 'Hours'
+      ? formData.voting * 3600
+      : formData.voting * 3600 * 24
 
-  //console.log('Form data: ', formData)
+  const queuedTime =
+    formData.queuedTime === 'Hours'
+      ? formData.queued * 3600
+      : formData.queued * 3600 * 24
+
+  const executionTime =
+    formData.executionTime === 'Hours'
+      ? formData.execution * 3600
+      : formData.execution * 3600 * 24
 
   return (
     <div className={styles.container}>
-      {isLoading && <Spinner />}
+      {loading && <Spinner />}
       <div className={styles.createDao}>
         <Sidebar page={page} setPage={setPage} />
         <div className={styles.createDaoContent}>
@@ -192,10 +144,9 @@ const CreateDao = () => {
         <Button
           formId={'myForm'}
           disabled={page > 3}
-          onClick={(e) => {
+          onClick={async (e) => {
             // try and validate form
             handleSubmit(e)
-            // console.log('Btn ckicked to validate form')
             // scroll to top
             window.scrollTo(0, 0)
 
@@ -213,11 +164,11 @@ const CreateDao = () => {
                 ),
                 validator(formData.minStake, page, 'minStake', false, null),
               ]
-            } else if (page == 1) {
+            } else if (page === 1) {
               pageValidity = [
                 validator(formData.threshold, page, 'threshold', false, null),
               ]
-            } else if (page == 2) {
+            } else if (page === 2) {
               pageValidity = [
                 validator(
                   formData.pending,
@@ -250,19 +201,50 @@ const CreateDao = () => {
               ]
             }
 
-            console.log(pageValidity)
-
             if (checkValidity(pageValidity) === true) {
               if (page < 3) {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {
-                dispatch(deployFactory())
+                setLoading(true)
+
+                let canNavigate = true
+                function navigateOff(canNavigate) {
+                  setLoading(false)
+                  if (canNavigate) {
+                    navigate('/')
+                  }
+                }
+                await daoService
+                  .deployFactory(
+                    pendingTime,
+                    votingTime,
+                    formData.quorum,
+                    queuedTime,
+                    formData.threshold,
+                    executionTime,
+                    formData.name,
+                    formData.daoSlug,
+                    formData.governanceToken,
+                    formData.minStake * 1,
+                    formData.description,
+                    formData.treasury,
+                    formData.nonce === 0
+                      ? daoInformation.nonce
+                      : formData.nonce,
+                    addressContext
+                  )
+                  .catch((e) => {
+                    setLoading(false)
+                    canNavigate = false
+                    return
+                  })
+                navigateOff(canNavigate)
               }
             }
           }}
           style={'bigLightBlueBtn'}
           rightArrow={page < 3 ? rightArrow : ''}
-          text={page < 3 ? 'Next' : 'Create Dao'}
+          text={page < 3 ? 'Next' : 'Create DAO'}
         />
       </div>
     </div>

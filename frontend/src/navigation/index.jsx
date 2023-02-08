@@ -5,18 +5,19 @@ import CreateDao from 'pages/CreateDao'
 import GeneralDaoSettings from 'pages/DaoSettings/GeneralDaoSettings'
 import OwnershipDaoSettings from 'pages/DaoSettings/OwnershipDaoSettings'
 import Balance from 'pages/Balance'
+import CreateProposal from 'pages/CreateProposal'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import MobileFooter from 'components/Footer/MobileFooter'
 import ScrollToTop from 'components/ScrollToTop'
 
-const Navigation = () => {
+const Navigation = ({ client }) => {
   return (
     <Router>
       <ScrollToTop />
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home client={client} />} />
         <Route
           path="dao-settings/general/:id"
           element={<GeneralDaoSettings />}
@@ -26,7 +27,8 @@ const Navigation = () => {
           element={<OwnershipDaoSettings />}
         />
         <Route path="create-dao" element={<CreateDao />} />
-        <Route path="balance/:id" element={<Balance />} />
+        <Route path="dao/:id" element={<Balance />} />
+        <Route path="create-proposal/:id" element={<CreateProposal />} />
       </Routes>
       <Footer />
       <MobileFooter />

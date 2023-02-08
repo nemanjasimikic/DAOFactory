@@ -1,6 +1,6 @@
 {
 	"ABI version": 2,
-	"version": "2.2",
+	"version": "2.3",
 	"header": ["time"],
 	"functions": [
 		{
@@ -14,7 +14,9 @@
 				{"name":"governanceToken_","type":"address"},
 				{"name":"minStake_","type":"uint256"},
 				{"name":"description_","type":"string"},
-				{"name":"treasury_","type":"bool"}
+				{"name":"treasury_","type":"bool"},
+				{"name":"code_","type":"cell"},
+				{"name":"proposalCode_","type":"cell"}
 			],
 			"outputs": [
 			]
@@ -284,6 +286,16 @@
 			]
 		},
 		{
+			"name": "getUserDataAddress",
+			"inputs": [
+				{"name":"answerId","type":"uint32"},
+				{"name":"user","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
 			"name": "encodeDaoEthereumActionData",
 			"inputs": [
 				{"name":"gasBackWid","type":"int8"},
@@ -369,6 +381,14 @@
 			],
 			"outputs": [
 				{"name":"platformCode","type":"cell"}
+			]
+		},
+		{
+			"name": "code",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"code","type":"cell"}
 			]
 		},
 		{
@@ -610,6 +630,7 @@
 		{"components":[{"name":"votingDelay","type":"uint32"},{"name":"votingPeriod","type":"uint32"},{"name":"quorumVotes","type":"uint128"},{"name":"timeLock","type":"uint32"},{"name":"threshold","type":"uint128"},{"name":"gracePeriod","type":"uint32"}],"name":"proposalConfiguration","type":"tuple"},
 		{"name":"proposalCode","type":"cell"},
 		{"name":"platformCode","type":"cell"},
+		{"name":"code","type":"cell"},
 		{"name":"proposalVersion","type":"uint16"},
 		{"name":"admin","type":"address"},
 		{"name":"pendingAdmin","type":"address"},
@@ -618,6 +639,10 @@
 		{"name":"governanceToken","type":"address"},
 		{"name":"minStake","type":"uint256"},
 		{"name":"description","type":"string"},
-		{"name":"treasury","type":"bool"}
+		{"name":"treasury","type":"bool"},
+		{"name":"_answerId","type":"uint32"},
+		{"components":[{"name":"value","type":"uint128"},{"name":"target","type":"address"},{"name":"payload","type":"cell"}],"name":"_tonActions","type":"tuple[]"},
+		{"components":[{"name":"value","type":"uint256"},{"name":"chainId","type":"uint32"},{"name":"target","type":"uint160"},{"name":"signature","type":"string"},{"name":"callData","type":"bytes"}],"name":"_ethereumActions","type":"tuple[]"},
+		{"name":"_description","type":"string"}
 	]
 }

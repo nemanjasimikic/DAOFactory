@@ -1,0 +1,64 @@
+@import 'src/sass/theme'
+// For scrollable container
+.scrollable
+  margin-top: 64px
+  position: absolute
+  display: block
+  overflow-x: hidden
+  overflow-y: overlay
+  min-height: 42px
+  max-height: 80px
+  width: 100%
+
+.select
+  width: 100%
+  position: relative
+  user-select: none
+  display: flex
+  flex-direction: column
+
+  .label
+    +small-white-text
+
+  .selectField
+    height: 36px
+    margin-top: 6px
+    margin-bottom: 20px
+    background-color: transparent
+    border: 1px solid rgba(255, 255, 255, 0.16)
+    color: rgba(255, 255, 255, 0.72)
+    padding: 0 65px 0 10px
+    outline: none
+    display: flex
+    align-items: center
+
+  .selectContent
+    display: flex
+    flex-direction: column
+    background: #2f334b
+    position: absolute
+    padding: 0
+    margin: 8px 0 0 0
+    // margin: 0
+    left: 0
+    top: 56px
+    // top:0
+    max-height: 152px
+    width: 100%
+    list-style: none
+    z-index: 2
+
+    .optionItem
+      cursor: pointer
+      display: flex
+      align-items: center
+      justify-content: space-between
+      padding: 10px 10px
+      color: $white
+      &:hover
+        cursor: pointer
+
+      &.selected
+        background: url('../../../static/svg/checkmark.svg') no-repeat right 10px center
+
+

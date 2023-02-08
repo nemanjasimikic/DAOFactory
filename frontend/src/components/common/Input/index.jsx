@@ -10,8 +10,6 @@ const Input = ({
   value,
   registerInput,
   type,
-  firstImage,
-  secondImage,
   labelIcon,
   onChange,
   defaultValue,
@@ -70,9 +68,6 @@ const Input = ({
     }
   }
 
-  // console.log('firstimage', firstImage)
-  // console.log('secondimage', secondImage)
-
   return (
     <div className={styles.inputWrapper}>
       <div className={styles.labelWrapper}>
@@ -84,12 +79,16 @@ const Input = ({
         />
       </div>
       <input
+        style={{
+          paddingRight: `${buttons?.length * 31}px`,
+          paddingLeft: '10px',
+        }}
         id={registerInput}
         form={formId}
         required={required}
         className={styles.input}
-        value={value}
         defaultValue={defaultValue}
+        value={value}
         type={type}
         placeholder={placeholder}
         {...register(registerInput, { required: 'This is required' })}
@@ -117,7 +116,7 @@ const Input = ({
           fontSize: '14px',
         }}
       >
-        {validateInput()}
+        {/*validateInput()*/}
       </span>
     </div>
   )

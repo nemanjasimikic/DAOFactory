@@ -4,16 +4,18 @@ import decentralizedIcon from 'static/svg/decentralizedIcon.svg'
 import stopwatch from 'static/png/stopwatch.png'
 import walletIcon from 'static/svg/wallet.svg'
 import Button from '../../../components/common/Button'
-import { login, reset } from 'store/features/walletSlice'
-import { useDispatch } from 'react-redux'
-import { useEffect } from 'react'
+import { useContext } from 'react'
+import { WalletContext } from 'context/walletContext'
 
 const IsLoggedOut = ({ wallet }) => {
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    reset()
-  }, [wallet, dispatch])
+  const { state: ContextState, login } = useContext(WalletContext)
+  const {
+    isLoginPending,
+    isLoggedIn,
+    loginError,
+    addressContext,
+    balanceContext,
+  } = ContextState
 
   return (
     <div className={styles.isLoggedOut}>
@@ -22,7 +24,10 @@ const IsLoggedOut = ({ wallet }) => {
       <Button
         style={'bigLightBlueBtn'}
         text={'Connect wallet'}
-        onClick={() => dispatch(login())}
+        onClick={async (e) => {
+          e.preventDefault()
+          login()
+        }}
       />
       <div className={styles.icons}>
         <div className={styles.iconContainer}>
