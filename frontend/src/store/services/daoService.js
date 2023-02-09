@@ -1153,9 +1153,6 @@ const getAllStakeholders = async (daoRootAddress) => {
 const createProposal = async (
   ownerAddress,
   daoRoot,
-  targetAddress,
-  payload,
-  value,
   description,
   deployedActions
 ) => {
@@ -1305,6 +1302,46 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
   }
 }
 
+const stakeTokens = async (daoRootAddress, ownerAddress, amount) => {
+  try {
+    const rootDao = new ever.Contract(daoRootAbi, daoRootAddress)
+    const token = await rootDao.methods.governanceToken({}).call()
+    const rootAcc = new ever.Contract(rootAbi, token.governanceToken)
+    const response = await rootAcc.methods
+      .walletOf({
+        answerId: 1,
+        walletOwner: ownerAddress,
+      })
+      .call()
+    const stakingRootAddress = await rootDao.methods
+      .getStakingRoot({ answerId: 0 })
+      .call()
+    const decimals = await rootAcc.methods.decimals({ answerId: 0 }).call()
+    const tokenAmount = await rootDao.methods.minStake({}).call()
+    const userTokenWalletAddress = response.value0._address
+    const tokenWalletAddress = new Address(userTokenWalletAddress)
+    const walletContract = new ever.Contract(giver, tokenWalletAddress)
+    const sendTransaction = await walletContract.methods
+      .transfer({
+        amount: toNano(amount, decimals.value0 * 1),
+        recipient: stakingRootAddress.value0,
+        deployWalletValue: 0, //toNano(0.5, 9),
+        remainingGasTo: ownerAddress,
+        notify: true,
+        payload: 'te6ccgEBAQEAAwAAAgA=',
+      })
+      .send({
+        from: ownerAddress,
+        amount: toNano(10.5, 9),
+        bounce: true,
+      })
+
+    return Promise.resolve(sendTransaction)
+  } catch (e) {
+    return Promise.reject(e)
+  }
+}
+
 const daoService = {
   getExpectedAddress,
   topup,
@@ -1323,6 +1360,7 @@ const daoService = {
   getProposals,
   getAllStakeholders,
   createProposal,
+  stakeTokens,
 }
 
 export default daoService
