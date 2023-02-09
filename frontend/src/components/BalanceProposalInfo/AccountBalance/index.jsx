@@ -12,18 +12,10 @@ import { useNavigate } from 'react-router-dom'
 
 const titles = ['Deposit', 'Withdraw']
 
-const AccountBalance = ({ id }) => {
+const AccountBalance = ({ id, data, address }) => {
   const [active, setActive] = useState(titles[0])
   const navigate = useNavigate()
-  const { state: ContextState } = useContext(WalletContext)
-  const { addressContext } = ContextState
-  const { data } = useQuery(
-    ['daoRoot', id],
-    () => daoService.getDaoInfo(id, addressContext),
-    {
-      enabled: !!addressContext,
-    }
-  )
+
   let [loading, setLoading] = useState(false)
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -34,8 +26,22 @@ const AccountBalance = ({ id }) => {
   const [formData, setFormData] = useState({
     max: 0,
   })
-
+  console.log('data: ', data)
   console.log('formData: ', formData)
+  const clicked = false
+  function setMax(clicked) {
+    if (clicked) {
+      formData.max = data.tokenBalance
+      setFormData((prevState) => ({
+        ...prevState,
+        max: data ? data.tokenBalance : '',
+      }))
+      console.log('formData in function: ', formData.max)
+    } else {
+    }
+  }
+  const { max } = formData
+
   return (
     <BalanceProposalInfo heading={'Account balance'}>
       {loading && <Spinner />}
@@ -43,9 +49,24 @@ const AccountBalance = ({ id }) => {
       <Tabs titles={titles} active={active} setActive={setActive} />
       <p className={styles.amount}>Amount</p>
       <div className={styles.inputWrapper}>
-        <Input registerInput={'max'} id={'amount'} onChange={onChange} />
-        <p className={styles.result}>Your balance: 321321321</p>
-        <Button style={'primaryBtn'} text={'Max'} />
+        <Input
+          registerInput={'max'}
+          id={'max'}
+          onChange={onChange}
+          value={max}
+        />
+        <p className={styles.result}>
+          Your balance: {data?.tokenBalance ? data.tokenBalance : '-'}
+        </p>
+        <Button
+          style={'primaryBtn'}
+          text={'Max'}
+          onClick={(e) => {
+            e.preventDefault()
+            //clicked = true
+            setMax(true)
+          }}
+        />
       </div>
       {active === titles[0] ? (
         <Button
@@ -62,7 +83,7 @@ const AccountBalance = ({ id }) => {
               }
             }
             await daoService
-              .stakeTokens(data.daoAddress, addressContext, formData.max * 1)
+              .stakeTokens(data.daoAddress, address, formData.max * 1)
               .catch((e) => {
                 setLoading(false)
                 canNavigate = false
