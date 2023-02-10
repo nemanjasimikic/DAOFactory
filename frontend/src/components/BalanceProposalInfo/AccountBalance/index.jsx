@@ -93,7 +93,29 @@ const AccountBalance = ({ id, data, address }) => {
           }}
         />
       ) : (
-        <Button style={'lightBlueBtn'} text={'Withdraw tokens'} />
+        <Button
+          style={'lightBlueBtn'}
+          text={'Withdraw tokens'}
+          onClick={async (e) => {
+            setLoading(true)
+
+            let canNavigate = true
+            function navigateOff(canNavigate) {
+              setLoading(false)
+              if (canNavigate) {
+                //navigate(`/dao/${id}`)
+              }
+            }
+            await daoService
+              .withdrawTokens(data.daoAddress, address, formData.max * 1)
+              .catch((e) => {
+                setLoading(false)
+                canNavigate = false
+                return
+              })
+            navigateOff(canNavigate)
+          }}
+        />
       )}
     </BalanceProposalInfo>
   )
