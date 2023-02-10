@@ -1420,6 +1420,46 @@ const calculateBalance = async (ownerAddress, tokenAddr) => {
   }
 }
 
+const getTransactionHistory = async (daoRootAddress) => {
+  try {
+    const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
+    const stakingRootAddr = await daoRoot.methods
+      .getStakingRoot({ answerId: 0 })
+      .call()
+    const stakingRoot = new ever.Contract(stakingAbi, stakingRootAddr.value0)
+
+    const successStream = await ever.getTransactions({
+      address: stakingRoot.address,
+      continuation: undefined,
+      limit: 50,
+    })
+    let voters = []
+    for (let i = 0; i < successStream.transactions.length; i++) {
+      const trx = await stakingRoot.decodeTransaction({
+        transaction: successStream.transactions[i],
+        methods: ['onAcceptTokensTransfer'],
+      })
+      const trx2 = await stakingRoot.decodeTransaction({
+        transaction: successStream.transactions[i],
+        methods: ['withdraw'],
+      })
+      if (trx) {
+        voters.push({ method: trx, transaction: successStream.transactions[i] })
+      }
+      if (trx2)
+        voters.push({
+          method: trx2,
+          transaction: successStream.transactions[i],
+        })
+    }
+    console.log('trx: ', voters)
+    return Promise.resolve(voters)
+  } catch (e) {
+    console.log(e)
+    return Promise.reject(e)
+  }
+}
+
 const daoService = {
   getExpectedAddress,
   topup,
@@ -1441,6 +1481,7 @@ const daoService = {
   stakeTokens,
   calculateBalance,
   withdrawTokens,
+  getTransactionHistory,
 }
 
 export default daoService

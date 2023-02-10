@@ -11,6 +11,7 @@ import { useContext } from 'react'
 import daoService from 'store/services/daoService'
 import { WalletContext } from 'context/walletContext'
 import { useQuery } from 'react-query'
+import { useState, useEffect } from 'react'
 
 const BalanceManagement = () => {
   const { id } = useParams()
@@ -25,6 +26,16 @@ const BalanceManagement = () => {
     }
   )
 
+  const [stakingInfo, setStakingInfo] = useState({})
+  useEffect(() => {
+    if (data) {
+      daoService
+        .getTransactionHistory(data.daoAddress)
+        .then((data) => setStakingInfo(data))
+    }
+  }, [])
+
+  console.log('staking info: ', stakingInfo)
   const columns = [
     {
       key: 'id',

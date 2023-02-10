@@ -30,14 +30,19 @@ const AccountBalance = ({ id, data, address }) => {
   console.log('formData: ', formData)
   const clicked = false
   function setMax(clicked) {
-    if (clicked) {
+    if (clicked && active === titles[0]) {
       formData.max = data.tokenBalance
       setFormData((prevState) => ({
         ...prevState,
         max: data ? data.tokenBalance : '',
       }))
       console.log('formData in function: ', formData.max)
-    } else {
+    } else if (clicked && active === titles[1]) {
+      formData.max = data.daoBalance
+      setFormData((prevState) => ({
+        ...prevState,
+        max: data ? data.daoBalance : '',
+      }))
     }
   }
   const { max } = formData
@@ -48,26 +53,49 @@ const AccountBalance = ({ id, data, address }) => {
 
       <Tabs titles={titles} active={active} setActive={setActive} />
       <p className={styles.amount}>Amount</p>
-      <div className={styles.inputWrapper}>
-        <Input
-          registerInput={'max'}
-          id={'max'}
-          onChange={onChange}
-          value={max}
-        />
-        <p className={styles.result}>
-          Your balance: {data?.tokenBalance ? data.tokenBalance : '-'}
-        </p>
-        <Button
-          style={'primaryBtn'}
-          text={'Max'}
-          onClick={(e) => {
-            e.preventDefault()
-            //clicked = true
-            setMax(true)
-          }}
-        />
-      </div>
+      {active === titles[0] ? (
+        <div className={styles.inputWrapper}>
+          <Input
+            registerInput={'max'}
+            id={'max'}
+            onChange={onChange}
+            value={max}
+          />
+          <p className={styles.result}>
+            Your balance: {data?.tokenBalance ? data.tokenBalance : '-'}
+          </p>
+          <Button
+            style={'primaryBtn'}
+            text={'Max'}
+            onClick={(e) => {
+              e.preventDefault()
+              //clicked = true
+              setMax(true)
+            }}
+          />
+        </div>
+      ) : (
+        <div className={styles.inputWrapper}>
+          <Input
+            registerInput={'max'}
+            id={'max'}
+            onChange={onChange}
+            value={max}
+          />
+          <p className={styles.result}>
+            Your balance: {data?.daoBalance ? data.daoBalance : '-'}
+          </p>
+          <Button
+            style={'primaryBtn'}
+            text={'Max'}
+            onClick={(e) => {
+              e.preventDefault()
+              //clicked = true
+              setMax(true)
+            }}
+          />
+        </div>
+      )}
       {active === titles[0] ? (
         <Button
           style={'lightBlueBtn'}
