@@ -1,14 +1,12 @@
 import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import daoService from 'store/services/daoService'
 import BalanceProposalInfo from 'components/BalanceProposalInfo'
 import Button from 'components/common/Button'
 import Input from 'components/common/Input'
 import Tabs from 'components/common/Tabs'
-import styles from './styles.module.sass'
-import daoService from 'store/services/daoService'
-import { WalletContext } from 'context/walletContext'
-import { useQuery } from 'react-query'
 import Spinner from '../../common/Spinner'
-import { useNavigate } from 'react-router-dom'
+import styles from './styles.module.sass'
 
 const titles = ['Deposit', 'Withdraw']
 
