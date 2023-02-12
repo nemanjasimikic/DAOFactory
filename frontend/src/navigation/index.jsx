@@ -7,6 +7,7 @@ import OwnershipDaoSettings from 'pages/DaoSettings/OwnershipDaoSettings'
 import Balance from 'pages/Balance'
 import BalanceManagement from 'pages/BalanceManagement'
 import CreateProposal from 'pages/CreateProposal'
+import Proposal from 'pages/Proposal'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import MobileFooter from 'components/Footer/MobileFooter'
@@ -34,6 +35,7 @@ const Navigation = ({ client }) => {
           path="dao/:id/balance-management"
           element={<BalanceManagement />}
         />
+        <Route path="proposal" element={<Proposal />} />
       </Routes>
       <Footer />
       <MobileFooter />
