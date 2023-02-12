@@ -921,6 +921,7 @@ const getDaoInfo = async (id, address) => {
       address,
       tokenAddress.governanceToken._address
     )
+    const history = await getTransactionHistory(daoRootContract.address)
     // console.log('prop: ', prop)
     rootData = {
       name: name.name,
@@ -936,6 +937,7 @@ const getDaoInfo = async (id, address) => {
       proposalsWithLockedTokens: prop ?? null,
       voters: voters,
       tokenBalance: tokenBalance,
+      history: history,
     }
   }
 
@@ -1427,7 +1429,9 @@ const getTransactionHistory = async (daoRootAddress) => {
       .getStakingRoot({ answerId: 0 })
       .call()
     const stakingRoot = new ever.Contract(stakingAbi, stakingRootAddr.value0)
-
+    const token = await daoRoot.methods.governanceToken({}).call()
+    const tokenContract = new ever.Contract(rootAbi, token.governanceToken)
+    const tokenName = await tokenContract.methods.symbol({ answerId: 0 }).call()
     const successStream = await ever.getTransactions({
       address: stakingRoot.address,
       continuation: undefined,
@@ -1444,13 +1448,39 @@ const getTransactionHistory = async (daoRootAddress) => {
         methods: ['withdraw'],
       })
       if (trx) {
-        voters.push({ method: trx, transaction: successStream.transactions[i] })
-      }
-      if (trx2)
+        const method = `Deposit ${tokenName.value0} tokens`
         voters.push({
-          method: trx2,
-          transaction: successStream.transactions[i],
+          transaction: method,
+          amount: fromNano(trx.input.amount, 9),
+          dateStaking:
+            Math.ceil(
+              (new Date(
+                dayjs
+                  .unix(successStream.transactions[i].createdAt)
+                  .format('DD MMM YYYY HH:mm')
+              ).getTime() -
+                dateNow) /
+                (1000 * 3600)
+            ) * -1,
         })
+      }
+      if (trx2) {
+        const method = `Withdraw ${tokenName.value0} tokens`
+        voters.push({
+          transaction: method,
+          amount: fromNano(trx2.input.amount, 9),
+          dateStaking:
+            Math.ceil(
+              (new Date(
+                dayjs
+                  .unix(successStream.transactions[i].createdAt)
+                  .format('DD MMM YYYY HH:mm')
+              ).getTime() -
+                dateNow) /
+                (1000 * 3600)
+            ) * -1,
+        })
+      }
     }
     console.log('trx: ', voters)
     return Promise.resolve(voters)

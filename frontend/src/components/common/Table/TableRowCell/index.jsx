@@ -35,6 +35,8 @@ const TableRowCell = ({ item, column, isLoading }) => {
       ? 'Action date unknown'
       : `Action in ${item.actionInDays} days`
 
+  const actionBefore = `${item.dateStaking} minutes ago`
+
   return (
     <div style={{ width: column.width }}>
       {column.key === 'voting' ? (
@@ -49,6 +51,10 @@ const TableRowCell = ({ item, column, isLoading }) => {
         <div className={styles.dateWrapper}>
           <p className={styles.action}>{actionIn}</p>
           <p className={styles.date}>{item.endTime}</p>
+        </div>
+      ) : column.key === 'dateStaking' ? (
+        <div className={styles.dateWrapper}>
+          <p className={styles.action}>{actionBefore}</p>
         </div>
       ) : column.key === 'unlockTokens' ? (
         <Button style={'primaryBtn'} text={'Unlock'} />
@@ -66,7 +72,7 @@ const TableRowCell = ({ item, column, isLoading }) => {
         </div>
       ) : column.key === 'amount' ? (
         <p className={value < 0 ? styles.negative : styles.positive}>
-          {Number(-1000)}
+          {item.amount}
         </p>
       ) : (
         <p

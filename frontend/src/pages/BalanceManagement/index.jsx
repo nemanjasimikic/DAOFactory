@@ -109,10 +109,7 @@ const BalanceManagement = () => {
           </div>
           <h3 className={styles.contentHeading}>Transaction history</h3>
           {/*<NoResults />*/}
-          <Table
-            columns={columnsTransactionHistory}
-            data={dataTransactionHistory}
-          />
+          <Table columns={columnsTransactionHistory} data={data.history} />
         </div>
         <AccountBalance id={id} data={data} address={addressContext} />
       </div>

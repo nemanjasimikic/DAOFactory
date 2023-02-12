@@ -10,7 +10,7 @@ export const columnsTransactionHistory = [
     width: 237,
   },
   {
-    key: 'date',
+    key: 'dateStaking',
     title: 'Date',
     width: 237,
   },
