@@ -1016,7 +1016,7 @@ const getAllProposals = async () => {
 }
 
 let dateNow = new Date().getTime()
-console.log('date now: ', dateNow)
+// console.log('date now: ', dateNow)
 const getProposals = async (daoRootAddress) => {
   // console.log('daoRootAddress: ', daoRootAddress)
   const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
@@ -1185,9 +1185,9 @@ const createProposal = async (
         payload: deployedActions[i].payload,
       })
     }
-    console.log('tonActionsList: ', tonActionsList)
+    // console.log('tonActionsList: ', tonActionsList)
     const rootDao = new ever.Contract(daoRootAbi, daoRoot)
-    console.log('dao root: ', rootDao)
+    // console.log('dao root: ', rootDao)
     const token = await rootDao.methods.governanceToken({}).call()
     const rootAcc = new ever.Contract(rootAbi, token.governanceToken)
     const response = await rootAcc.methods
@@ -1219,12 +1219,12 @@ const createProposal = async (
         bounce: true,
       })
 
-    console.log('sendTransaction: ', sendTransaction)
+    // console.log('sendTransaction: ', sendTransaction)
     // const root = new ever.Contract(stakingAbi, stakingRootAddress.value0)
     // const event = await root.getPastEvents({range: fromLt: })
 
     let ethActions = []
-    console.log(tonActionsList.length)
+    // console.log(tonActionsList.length)
     const propose = await rootDao.methods
       .propose({
         answerId: 0,
@@ -1237,14 +1237,14 @@ const createProposal = async (
         amount: toNano(10 + tonActionsList.length * 2, 9),
         bounce: false,
       })
-    console.log('propose:', propose)
+    // console.log('propose:', propose)
     const deployEvent = await rootDao.getPastEvents({
       range: { fromLt: propose.id.lt * 1 - 1 },
     })
     // console.log('deployEvent', deployEvent)
     return Promise.resolve(deployEvent)
   } catch (e) {
-    console.log(e)
+    // console.log(e)
     return Promise.reject(e)
   }
 }
@@ -1351,7 +1351,7 @@ const stakeTokens = async (daoRootAddress, ownerAddress, amount) => {
     const tokenBalance = await tokenWallet.methods
       .balance({ answerId: 0 })
       .call()
-    console.log('tokenBalance: ', tokenBalance)
+    // console.log('tokenBalance: ', tokenBalance)
 
     const sendTransaction = await walletContract.methods
       .transfer({
@@ -1379,12 +1379,12 @@ const withdrawTokens = async (daoRootAddress, ownerAddress, amount) => {
   const stakingRootAddress = await rootDao.methods
     .getStakingRoot({ answerId: 0 })
     .call()
-  console.log('owner address: ', ownerAddress)
+  // console.log('owner address: ', ownerAddress)
   const stakingContract = new ever.Contract(
     stakingAbi,
     stakingRootAddress.value0
   )
-  console.log('stakingContract: ', stakingContract)
+  // console.log('stakingContract: ', stakingContract)
   try {
     const withdraw = await stakingContract.methods
       .withdraw({
@@ -1397,16 +1397,16 @@ const withdrawTokens = async (daoRootAddress, ownerAddress, amount) => {
         amount: toNano(10.5, 9),
         bounce: false,
       })
-    console.log('withdraw: ', withdraw)
+    // console.log('withdraw: ', withdraw)
     return Promise.resolve(withdraw)
   } catch (e) {
-    console.log(e)
+    // console.log(e)
     return Promise.reject(e)
   }
 }
 
 const calculateBalance = async (ownerAddress, tokenAddr) => {
-  console.log('token addr: ', tokenAddr)
+  // console.log('token addr: ', tokenAddr)
   //const token = await rootDao.methods.governanceToken({}).call()
   try {
     const rootAcc = new ever.Contract(rootAbi, tokenAddr)
@@ -1425,7 +1425,7 @@ const calculateBalance = async (ownerAddress, tokenAddr) => {
     const tokenBalance = await tokenWallet.methods
       .balance({ answerId: 0 })
       .call()
-    console.log('tokenBalance: ', tokenBalance)
+    // console.log('tokenBalance: ', tokenBalance)
     return fromNano(tokenBalance.value0 * 1, decimals.value0 * 1)
   } catch {
     return null
@@ -1493,12 +1493,12 @@ const getTransactionHistory = async (daoRootAddress) => {
         const dt = new Date(successStream.transactions[i].createdAt * 1000)
         //.toLocaleString()
         //.getMinutes()
-        console.log('dt: ', dt)
+        // console.log('dt: ', dt)
         const date = new Date().getTime()
         const result = date - dt
-        console.log('result: ', result)
+        // console.log('result: ', result)
         const parsed = parseMillisecondsIntoReadableTime(result)
-        console.log('parsed: ', parsed)
+        // console.log('parsed: ', parsed)
         /*const minutes = result / (1000 * 60)
         if (minutes > 1 && minutes < 60) {
           console.log(`${minutes} minutes ago`)
@@ -1532,7 +1532,7 @@ const getTransactionHistory = async (daoRootAddress) => {
         const dt = new Date(successStream.transactions[i].createdAt * 1000)
         //.toLocaleString()
         //.getMinutes()
-        console.log('dt: ', dt)
+        // console.log('dt: ', dt)
         const date = new Date().getTime()
         const result = date - dt
         voters.push({
@@ -1551,10 +1551,10 @@ const getTransactionHistory = async (daoRootAddress) => {
         })
       }
     }
-    console.log('trx: ', voters)
+    // console.log('trx: ', voters)
     return Promise.resolve(voters)
   } catch (e) {
-    console.log(e)
+    // console.log(e)
     return Promise.reject(e)
   }
 }
