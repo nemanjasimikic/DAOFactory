@@ -56,7 +56,7 @@ const CreateProposal = () => {
     deployedActions.push(action)
   }
 
-  console.log('deployedActions: ', deployedActions)
+  // console.log('deployedActions: ', deployedActions)
   return (
     <>
       <div className={styles.container}>
