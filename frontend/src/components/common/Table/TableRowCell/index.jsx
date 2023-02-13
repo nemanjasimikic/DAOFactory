@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom'
 import Button from '../../Button'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { addressFormat } from '../../../../helpers/addressFormat'
+import daoService from 'store/services/daoService'
 
 const TableRowCell = ({ item, column, isLoading }) => {
   const value = _.get(item, column.key)
@@ -35,7 +36,9 @@ const TableRowCell = ({ item, column, isLoading }) => {
       ? 'Action date unknown'
       : `Action in ${item.actionInDays} days`
 
-  const actionBefore = `${item.dateStaking} minutes ago`
+  const actionBefore = daoService.parseMillisecondsIntoReadableTime(
+    item.dateStaking
+  ) //`${item.dateStaking} minutes ago`
 
   return (
     <div style={{ width: column.width }}>

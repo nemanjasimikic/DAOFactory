@@ -1422,6 +1422,37 @@ const calculateBalance = async (ownerAddress, tokenAddr) => {
   }
 }
 
+function parseMillisecondsIntoReadableTime(milliseconds) {
+  var days = milliseconds / (1000 * 60 * 60 * 24)
+  var absoluteDays = Math.floor(days)
+  if (absoluteDays > 0) {
+    return `${absoluteDays} days ago`
+  }
+  //Get hours from milliseconds
+  var hours = milliseconds / (1000 * 60 * 60)
+  var absoluteHours = Math.floor(hours)
+  var h = absoluteHours > 9 ? absoluteHours : '0' + absoluteHours
+  if (absoluteDays < 1 && absoluteHours > 0) {
+    return `${absoluteHours} hours ago`
+  }
+  //Get remainder from hours and convert to minutes
+  var minutes = (hours - absoluteHours) * 60
+  var absoluteMinutes = Math.floor(minutes)
+  var m = absoluteMinutes > 9 ? absoluteMinutes : '0' + absoluteMinutes
+  if (absoluteDays < 1 && absoluteHours < 1 && absoluteMinutes > 0) {
+    return `${absoluteMinutes} minutes ago`
+  }
+
+  //Get remainder from minutes and convert to seconds
+  if (absoluteDays < 1 && absoluteHours < 1 && absoluteMinutes < 1) {
+    var seconds = (minutes - absoluteMinutes) * 60
+    var absoluteSeconds = Math.floor(seconds)
+    var s = absoluteSeconds > 9 ? absoluteSeconds : '0' + absoluteSeconds
+    return `${absoluteSeconds} seconds ago`
+    //return h + ':' + m + ':' + s
+  }
+}
+
 const getTransactionHistory = async (daoRootAddress) => {
   try {
     const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
@@ -1449,11 +1480,32 @@ const getTransactionHistory = async (daoRootAddress) => {
       })
       if (trx) {
         const method = `Deposit ${tokenName.value0} tokens`
+        const dt = new Date(successStream.transactions[i].createdAt * 1000)
+        //.toLocaleString()
+        //.getMinutes()
+        console.log('dt: ', dt)
+        const result = dateNow - dt
+        console.log('result: ', result)
+        const parsed = parseMillisecondsIntoReadableTime(result)
+        console.log('parsed: ', parsed)
+        /*const minutes = result / (1000 * 60)
+        if (minutes > 1 && minutes < 60) {
+          console.log(`${minutes} minutes ago`)
+          //minutes
+        } else if (minutes >= 60 && minutes < 3600) {
+          const ostatak = minutes % 60
+          console.log('ostatak: ', ostatak)
+          //hours
+        } else if (minutes >= 3600) {
+          const ostatak = minutes / 3600
+          console.log('ostatak dani: ', ostatak)
+        }
+        console.log('minutes: ', minutes)*/
         voters.push({
           transaction: method,
           amount: fromNano(trx.input.amount, 9),
-          dateStaking:
-            Math.ceil(
+          dateStaking: result,
+          /*Math.ceil(
               (new Date(
                 dayjs
                   .unix(successStream.transactions[i].createdAt)
@@ -1461,16 +1513,21 @@ const getTransactionHistory = async (daoRootAddress) => {
               ).getTime() -
                 dateNow) /
                 (1000 * 3600)
-            ) * -1,
+            ) * -1,*/
         })
       }
       if (trx2) {
         const method = `Withdraw ${tokenName.value0} tokens`
+        const dt = new Date(successStream.transactions[i].createdAt * 1000)
+        //.toLocaleString()
+        //.getMinutes()
+        console.log('dt: ', dt)
+        const result = dateNow - dt
         voters.push({
           transaction: method,
           amount: fromNano(trx2.input.amount, 9),
-          dateStaking:
-            Math.ceil(
+          dateStaking: result,
+          /* Math.ceil(
               (new Date(
                 dayjs
                   .unix(successStream.transactions[i].createdAt)
@@ -1478,7 +1535,7 @@ const getTransactionHistory = async (daoRootAddress) => {
               ).getTime() -
                 dateNow) /
                 (1000 * 3600)
-            ) * -1,
+            ) * -1,*/
         })
       }
     }
@@ -1512,6 +1569,7 @@ const daoService = {
   calculateBalance,
   withdrawTokens,
   getTransactionHistory,
+  parseMillisecondsIntoReadableTime,
 }
 
 export default daoService
