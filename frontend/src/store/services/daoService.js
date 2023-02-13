@@ -908,7 +908,7 @@ const getDaoInfo = async (id, address) => {
       address: userDataAddress.value0,
     })
     let userBalance
-    if (contractState?.state.isDeployed) {
+    if (contractState?.state?.isDeployed) {
       const details = await userData.methods.getDetails({ answerId: 0 }).call()
       userBalance = fromNano(details.value0.token_balance * 1, 9)
     }
