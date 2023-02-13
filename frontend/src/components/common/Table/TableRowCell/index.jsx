@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom'
 import Button from '../../Button'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { addressFormat } from '../../../../helpers/addressFormat'
+import daoService from 'store/services/daoService'
 
 const TableRowCell = ({ item, column, isLoading }) => {
   const value = _.get(item, column.key)
@@ -35,6 +36,11 @@ const TableRowCell = ({ item, column, isLoading }) => {
       ? 'Action date unknown'
       : `Action in ${item.actionInDays} days`
 
+  const actionBefore = daoService.parseMillisecondsIntoReadableTime(
+    item.dateStaking
+  ) //`${item.dateStaking} minutes ago`
+  console.log('item.dateStaking: ', item.dateStaking)
+
   return (
     <div style={{ width: column.width }}>
       {column.key === 'voting' ? (
@@ -43,12 +49,16 @@ const TableRowCell = ({ item, column, isLoading }) => {
             <p className={styles.yes}>{Math.round(votesFor)}%</p>
             <p className={styles.no}>{Math.round(votesAgainst)}%</p>
           </div>
-          <div className={styles.line} style={{ background: background }}></div>
+          <div className={styles.line} style={{ background: background }} />
         </div>
       ) : column.key === 'date' ? (
         <div className={styles.dateWrapper}>
           <p className={styles.action}>{actionIn}</p>
           <p className={styles.date}>{item.endTime}</p>
+        </div>
+      ) : column.key === 'dateStaking' ? (
+        <div className={styles.dateWrapper}>
+          <p className={styles.action}>{actionBefore}</p>
         </div>
       ) : column.key === 'unlockTokens' ? (
         <Button style={'primaryBtn'} text={'Unlock'} />
@@ -64,6 +74,10 @@ const TableRowCell = ({ item, column, isLoading }) => {
           <img src={walletAvatar} alt={'address'} />
           <p className={styles.address}>{addressFormat(item.userAddress)}</p>
         </div>
+      ) : column.key === 'amount' ? (
+        <p className={value < 0 ? styles.negative : styles.positive}>
+          {item.amount}
+        </p>
       ) : (
         <p
           className={
