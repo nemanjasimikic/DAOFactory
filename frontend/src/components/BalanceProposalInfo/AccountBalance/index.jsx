@@ -133,8 +133,9 @@ const AccountBalance = ({ id, data, address }) => {
         />
       ) : (
         <Button
-          style={'lightBlueBtn'}
+          style={data?.withdraw === false ? 'disabledBtn' : 'lightBlueBtn'}
           text={'Withdraw tokens'}
+          disabled={data?.withdraw === false}
           onClick={async (e) => {
             setLoading(true)
 
