@@ -39,7 +39,7 @@ const TableRowCell = ({ item, column, isLoading }) => {
   const actionBefore = daoService.parseMillisecondsIntoReadableTime(
     item.dateStaking
   ) //`${item.dateStaking} minutes ago`
-  console.log('item.dateStaking: ', item.dateStaking)
+  // console.log('item.dateStaking: ', item.dateStaking)
 
   return (
     <div style={{ width: column.width }}>

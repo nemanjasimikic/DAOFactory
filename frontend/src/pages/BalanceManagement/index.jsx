@@ -15,7 +15,7 @@ import { useState, useEffect } from 'react'
 
 const BalanceManagement = () => {
   const { id } = useParams()
-  console.log('id: ', id)
+  // console.log('id: ', id)
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
   // const queryClient = useQueryClient()
@@ -48,7 +48,7 @@ const BalanceManagement = () => {
     }
   }, [])
 
-  console.log('staking info: ', stakingInfo)
+  // console.log('staking info: ', stakingInfo)
   const columns = [
     {
       key: 'id',

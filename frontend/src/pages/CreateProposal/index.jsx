@@ -118,7 +118,7 @@ const CreateProposal = () => {
                   navigate(`/dao/${id}`)
                 }
               }
-              console.log('deployedActions: ', deployedActions)
+              // console.log('deployedActions: ', deployedActions)
               await daoService
                 .createProposal(
                   addressContext,
