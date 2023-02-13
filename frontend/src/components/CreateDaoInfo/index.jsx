@@ -2,28 +2,28 @@ import styles from './styles.module.sass'
 
 const CreateDaoInfo = ({ page, formData }) => {
   function calculateDays(what) {
-    let pending = parseInt(
+    let pending = parseFloat(
       formData.pending
         ? formData.pendingTime === 'Days'
           ? formData.pending * 24
           : formData.pending
         : '0'
     )
-    let queued = parseInt(
+    let queued = parseFloat(
       formData.queued
         ? formData.queuedTime === 'Days'
           ? formData.queued * 24
           : formData.queued
         : '0'
     )
-    let voting = parseInt(
+    let voting = parseFloat(
       formData.voting
         ? formData.votingTime === 'Days'
           ? formData.voting * 24
           : formData.voting
         : '0'
     )
-    let execution = parseInt(
+    let execution = parseFloat(
       formData.execution
         ? formData.executionTime === 'Days'
           ? formData.execution * 24
@@ -34,13 +34,10 @@ const CreateDaoInfo = ({ page, formData }) => {
     // Save the total amount of hours in the form for later use in deploying the contract
     formData.totalTime = sum
     let toReturn =
-      what === 'days'
-        ? Math.floor(sum / 24)
-        : Math.ceil(sum - Math.floor(sum / 24) * 24)
+      what === 'days' ? Math.floor(sum / 24) : sum - Math.floor(sum / 24) * 24
     return toReturn
   }
 
-  //TODO:
   const iconLogo = formData.token ? (
     <img
       src={formData.icon !== '' ? formData.icon : '/5.svg'}
@@ -62,6 +59,9 @@ const CreateDaoInfo = ({ page, formData }) => {
       return ((formData.execution * modifier) / total) * 100 + '%'
     }
   }
+
+  let days = calculateDays('days')
+  let hours = calculateDays('').toFixed(1)
 
   return (
     <div className={styles.container}>
@@ -107,8 +107,7 @@ const CreateDaoInfo = ({ page, formData }) => {
             <div className={styles.sectionRow}>
               <p className={styles.name}>Proposal duration</p>
               <p className={styles.value}>
-                {calculateDays('days')} days {Math.ceil(calculateDays(''))}{' '}
-                hours
+                {days} days {hours % 1 != 0 ? hours : Math.round(hours)} hours
               </p>
             </div>
             <div className={styles.graphic}>

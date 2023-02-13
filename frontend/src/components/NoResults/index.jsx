@@ -6,7 +6,7 @@ import styles from './styles.module.sass'
 const renderNoDao = () => {
   return (
     <div className={styles.noResultsContainer}>
-      <h3>It seems you haven't made any dao yet</h3>
+      <h3>It seems you haven't made any DAO yet</h3>
       <p>Create your first DAO or add existing one.</p>
     </div>
   )

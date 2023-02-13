@@ -128,6 +128,7 @@ const GeneralInformation = ({
       />
       <label>Description(optional)</label>
       <textarea
+        defaultValue={formData.description}
         id="description"
         className={styles.textarea}
         {...register('description')}

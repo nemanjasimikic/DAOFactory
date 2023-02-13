@@ -29,18 +29,25 @@ const DaoCard = ({ daoName, description, link, id }) => {
         </div>
         <div className={styles.daoCardBottomRow}>
           <a
-            href={`http://${link}`}
+            href={`https://${link}`}
             target="_blank"
-            title={`http://${link}`}
+            title={`https://${link}`}
             className={styles.link}
             onClick={(e) => {
               e.stopPropagation()
             }}
           >
-            http://{link}
+            https://{link}
           </a>
           <img src={linkIcon} alt={'link icon'} />
-          <a href="#" target="_blank" className={styles.buyDomain}>
+          <a
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+            href="https://evername.io/"
+            // target="_blank"
+            className={styles.buyDomain}
+          >
             Buy domain
           </a>
         </div>

@@ -332,7 +332,7 @@ const deployDAOFromFactory = async (
         name_: name,
         slug_: slug,
         governanceToken_: governanceToken,
-        minStake_: minStake,
+        minStake_: toNano(minStake, 9),
         description_: description,
         treasury_: treasury,
         nonce_: nonce,
@@ -1175,14 +1175,14 @@ const createProposal = async (
     const stakingRootAddress = await rootDao.methods
       .getStakingRoot({ answerId: 0 })
       .call()
-    const decimals = await rootAcc.methods.decimals({ answerId: 0 }).call()
+    // const decimals = await rootAcc.methods.decimals({ answerId: 0 }).call()
     const tokenAmount = await rootDao.methods.minStake({}).call()
     const userTokenWalletAddress = response.value0._address
     const tokenWalletAddress = new Address(userTokenWalletAddress)
     const walletContract = new ever.Contract(giver, tokenWalletAddress)
     const sendTransaction = await walletContract.methods
       .transfer({
-        amount: toNano(tokenAmount.minStake, decimals.value0 * 1),
+        amount: tokenAmount.minStake,
         recipient: stakingRootAddress.value0,
         deployWalletValue: 0, //toNano(0.5, 9),
         remainingGasTo: ownerAddress,
