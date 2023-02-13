@@ -21,6 +21,13 @@ const AccountBalance = ({ id, data, address }) => {
       [e.target.name]: e.target.value,
     }))
   }
+
+  const onReset = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      max: 0,
+    }))
+  }
   const [formData, setFormData] = useState({
     max: 0,
   })
@@ -49,7 +56,12 @@ const AccountBalance = ({ id, data, address }) => {
     <BalanceProposalInfo heading={'Account balance'}>
       {loading && <Spinner />}
 
-      <Tabs titles={titles} active={active} setActive={setActive} />
+      <Tabs
+        titles={titles}
+        active={active}
+        setActive={setActive}
+        onReset={onReset}
+      />
       <p className={styles.amount}>Amount</p>
       {active === titles[0] ? (
         <div className={styles.inputWrapper}>
@@ -105,7 +117,7 @@ const AccountBalance = ({ id, data, address }) => {
             function navigateOff(canNavigate) {
               setLoading(false)
               if (canNavigate) {
-                //navigate(`/dao/${id}`)
+                navigate(`/dao/${id}/balance-management`)
               }
             }
             await daoService
@@ -115,6 +127,7 @@ const AccountBalance = ({ id, data, address }) => {
                 canNavigate = false
                 return
               })
+            onReset()
             navigateOff(canNavigate)
           }}
         />
@@ -129,7 +142,7 @@ const AccountBalance = ({ id, data, address }) => {
             function navigateOff(canNavigate) {
               setLoading(false)
               if (canNavigate) {
-                //navigate(`/dao/${id}`)
+                navigate(`/dao/${id}/balance-management`)
               }
             }
             await daoService
@@ -139,6 +152,7 @@ const AccountBalance = ({ id, data, address }) => {
                 canNavigate = false
                 return
               })
+            onReset()
             navigateOff(canNavigate)
           }}
         />

@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom'
 import { useContext } from 'react'
 import daoService from 'store/services/daoService'
 import { WalletContext } from 'context/walletContext'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient, useMutation } from 'react-query'
 import { useState, useEffect } from 'react'
 
 const BalanceManagement = () => {
@@ -18,11 +18,24 @@ const BalanceManagement = () => {
   console.log('id: ', id)
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
+  // const queryClient = useQueryClient()
+
+  /*const mutation = useMutation(daoService.getDaoInfo(id, addressContext), {
+    onSuccess: (data) => {
+      queryClient.setQueryData(['daoRoot', id], data)
+    },
+  })
+
+  mutation.mutate({
+    id: 5,
+    name: 'Do the laundry',
+  })*/
   const { data } = useQuery(
     ['daoRoot', id],
     () => daoService.getDaoInfo(id, addressContext),
     {
       enabled: !!addressContext,
+      refetchInterval: 1000,
     }
   )
 

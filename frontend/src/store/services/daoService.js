@@ -1525,7 +1525,7 @@ const getTransactionHistory = async (daoRootAddress) => {
         const result = dateNow - dt
         voters.push({
           transaction: method,
-          amount: fromNano(trx2.input.amount, 9),
+          amount: fromNano(trx2.input.amount * -1, 9),
           dateStaking: result,
           /* Math.ceil(
               (new Date(
