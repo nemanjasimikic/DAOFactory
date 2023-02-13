@@ -21,7 +21,7 @@ const IsLoggedIn = ({ address }) => {
   const { data, error, isError, isLoading } = useQuery(
     ['allDAOs'],
     () => daoService.getAllDAOs(address),
-    { cacheTime: 1000 * 60 * 1 }
+    { enabled: !!address, cacheTime: 1000 * 60 * 1 }
   )
 
   const getDaoList = data
@@ -80,6 +80,7 @@ const IsLoggedIn = ({ address }) => {
     getDaoList.forEach((item, index) => {
       itemsList.push(
         <DaoCard
+          key={index}
           id={getDaoList ? index : 'nema'}
           daoName={getDaoList ? item.name : 'nema'}
           description={getDaoList ? item.description : 'nema'}

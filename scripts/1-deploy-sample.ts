@@ -12,12 +12,12 @@ async function main() {
     value: locklift.utils.toNano(3),
   });
 
-  console.log(`Sample deployed at: ${sample.address.toString()}`);
+  // console.log(`Sample deployed at: ${sample.address.toString()}`);
 }
 
 main()
   .then(() => process.exit(0))
   .catch(e => {
-    console.log(e);
+    // console.log(e);
     process.exit(1);
   });

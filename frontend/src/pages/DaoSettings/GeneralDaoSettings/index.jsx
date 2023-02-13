@@ -135,7 +135,7 @@ const GeneralDaoSettings = () => {
                         data.daoAddress
                       )
                       .catch((e) => {
-                        console.log(e)
+                        // console.log(e)
                         setLoading(false)
                         canNavigate = false
                         return
