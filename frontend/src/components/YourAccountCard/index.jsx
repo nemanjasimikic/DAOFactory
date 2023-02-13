@@ -1,5 +1,5 @@
 import styles from './styles.module.sass'
-import tokenImage from 'static/svg/tokenImage.svg'
+import tokenImage from 'static/svg/walletAvatar.svg'
 import { dataAllProposals } from 'pages/Balance/mocks'
 
 const YourAccountCard = ({ text, data, symbol }) => {
