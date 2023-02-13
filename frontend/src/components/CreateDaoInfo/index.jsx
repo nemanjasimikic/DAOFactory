@@ -48,12 +48,12 @@ const CreateDaoInfo = ({ page, formData }) => {
   ) : null
   function calculateTimelineWidth(line, format) {
     let total = formData.totalTime
-    let modifier = format == 'Days' ? 24 : 1
-    if (line == 1) {
+    let modifier = format === 'Days' ? 24 : 1
+    if (line === 1) {
       return ((formData.pending * modifier) / total) * 100 + '%'
-    } else if (line == 2) {
+    } else if (line === 2) {
       return ((formData.queued * modifier) / total) * 100 + '%'
-    } else if (line == 3) {
+    } else if (line === 3) {
       return ((formData.voting * modifier) / total) * 100 + '%'
     } else {
       return ((formData.execution * modifier) / total) * 100 + '%'
@@ -67,7 +67,7 @@ const CreateDaoInfo = ({ page, formData }) => {
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.section}>
-          <h3>{formData.name == '' ? 'DAO Name' : formData.name}</h3>
+          <h3>{formData.name === '' ? 'DAO Name' : formData.name}</h3>
           <p className={styles.link}>
             daobuilder.nswebdevelopment.com/dao/{formData.daoSlug}
           </p>

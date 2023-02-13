@@ -36,11 +36,26 @@ const renderInsufficientStake = () => {
   )
 }
 
+const renderEmptyTransactionList = () => {
+  return (
+    <div className={styles.noResultsContainer}>
+      <h3>Transaction list is empty</h3>
+      <p>
+        There will be shown all transactions related with your account balance
+      </p>
+    </div>
+  )
+}
+
 const NoResults = () => {
   const location = useLocation()
   return (
     <div className={styles.render}>
-      {location.pathname === '/' ? renderNoDao() : renderInsufficientStake()}
+      {location.pathname === '/'
+        ? renderNoDao()
+        : location.pathname === 'create-proposal'
+        ? renderInsufficientStake()
+        : renderEmptyTransactionList()}
     </div>
   )
 }
