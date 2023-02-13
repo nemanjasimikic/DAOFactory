@@ -18,7 +18,7 @@ const VotingConfiguration = ({ formData, setFormData }) => {
           src={infoIcon}
           alt={'info'}
           title={
-            'Minimum level of participation required for a vote to be valid'
+            'Minimum level of participation required for a proposal to be valid'
           }
         />
       </div>

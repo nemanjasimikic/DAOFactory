@@ -45,7 +45,7 @@ const DaoCard = ({ daoName, description, link, id }) => {
               e.stopPropagation()
             }}
             href="https://evername.io/"
-            // target="_blank"
+            target="_blank"
             className={styles.buyDomain}
           >
             Buy domain

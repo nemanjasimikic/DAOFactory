@@ -31,8 +31,8 @@ const AccountBalance = ({ id, data, address }) => {
   const [formData, setFormData] = useState({
     max: 0,
   })
-  console.log('data: ', data)
-  console.log('formData: ', formData)
+  // console.log('data: ', data)
+  // console.log('formData: ', formData)
   const clicked = false
   function setMax(clicked) {
     if (clicked && active === titles[0]) {
@@ -41,7 +41,7 @@ const AccountBalance = ({ id, data, address }) => {
         ...prevState,
         max: data ? data.tokenBalance : '',
       }))
-      console.log('formData in function: ', formData.max)
+      // console.log('formData in function: ', formData.max)
     } else if (clicked && active === titles[1]) {
       formData.max = data.daoBalance
       setFormData((prevState) => ({

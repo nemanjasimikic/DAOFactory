@@ -87,9 +87,13 @@ const Input = ({
               onError={(event) => (event.target.src = '')}
             />
           </div>
-          <div className={styles.labelInnerWrap2}>
-            <div>Create token</div>
-            <a href="https://app.flatqube.io/builder/">
+          <div>
+            <a
+              className={styles.labelInnerWrap2}
+              target="_blank"
+              href="https://app.flatqube.io/builder/"
+            >
+              <div>Create token</div>
               <img src={linkIcon} alt={'link icon'} />
             </a>
           </div>
