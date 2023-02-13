@@ -431,7 +431,7 @@ const deployStakingContract = async (
       })
       .send({
         from: ownerAddress,
-        amount: toNano(2, 9),
+        amount: toNano(3, 9),
         bounce: false,
       })
     const delay = (ms) => new Promise((res) => setTimeout(res, ms))
@@ -897,11 +897,21 @@ const getDaoInfo = async (id, address) => {
       .getDetails({ answerId: 0 })
       .call()
     const balance = fromNano(details.value0.tokenBalance * 1, 9)
-    const userBalance = await getTokenBalance(
-      address,
-      tokenAddress.governanceToken._address
-    )
-
+    const userDataAddress = await daoRootContract.methods
+      .getUserDataAddress({
+        answerId: 0,
+        user: address,
+      })
+      .call()
+    const userData = new ever.Contract(userDataAbi, userDataAddress.value0)
+    const contractState = await ever.getFullContractState({
+      address: userDataAddress.value0,
+    })
+    let userBalance
+    if (contractState?.state.isDeployed) {
+      const details = await userData.methods.getDetails({ answerId: 0 }).call()
+      userBalance = fromNano(details.value0.token_balance * 1, 9)
+    }
     const tokenSymbol = await getToken(tokenAddress.governanceToken._address)
 
     const proposalConfiguration = await daoRootContract.methods
@@ -922,6 +932,7 @@ const getDaoInfo = async (id, address) => {
       tokenAddress.governanceToken._address
     )
     const history = await getTransactionHistory(daoRootContract.address)
+    const canWithdraw = await canWithdrawVotes(daoRootContract.address, address)
     // console.log('prop: ', prop)
     rootData = {
       name: name.name,
@@ -938,6 +949,7 @@ const getDaoInfo = async (id, address) => {
       voters: voters,
       tokenBalance: tokenBalance,
       history: history,
+      withdraw: canWithdraw,
     }
   }
 
@@ -1004,7 +1016,7 @@ const getAllProposals = async () => {
 }
 
 let dateNow = new Date().getTime()
-
+console.log('date now: ', dateNow)
 const getProposals = async (daoRootAddress) => {
   // console.log('daoRootAddress: ', daoRootAddress)
   const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
@@ -1484,7 +1496,8 @@ const getTransactionHistory = async (daoRootAddress) => {
         //.toLocaleString()
         //.getMinutes()
         console.log('dt: ', dt)
-        const result = dateNow - dt
+        const date = new Date().getTime()
+        const result = date - dt
         console.log('result: ', result)
         const parsed = parseMillisecondsIntoReadableTime(result)
         console.log('parsed: ', parsed)
@@ -1522,7 +1535,8 @@ const getTransactionHistory = async (daoRootAddress) => {
         //.toLocaleString()
         //.getMinutes()
         console.log('dt: ', dt)
-        const result = dateNow - dt
+        const date = new Date().getTime()
+        const result = date - dt
         voters.push({
           transaction: method,
           amount: fromNano(trx2.input.amount * -1, 9),
@@ -1544,6 +1558,44 @@ const getTransactionHistory = async (daoRootAddress) => {
   } catch (e) {
     console.log(e)
     return Promise.reject(e)
+  }
+}
+
+const canWithdrawVotes = async (daoRootAddress, ownerAddress) => {
+  const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
+  let answer
+  try {
+    const userDataAddress = await daoRoot.methods
+      .getUserDataAddress({
+        answerId: 0,
+        user: ownerAddress,
+      })
+      .call()
+    const userData = new ever.Contract(userDataAbi, userDataAddress.value0)
+    const contractState = await ever.getFullContractState({
+      address: userDataAddress.value0,
+    })
+    if (contractState?.state.isDeployed) {
+      const created_proposals = await userData.methods
+        .created_proposals({})
+        .call()
+      const tmp_proposals = await userData.methods._tmp_proposals({}).call()
+      const votes = await userData.methods.casted_votes({}).call()
+
+      if (
+        created_proposals.created_proposals.length > 0 ||
+        tmp_proposals._tmp_proposals.length > 0 ||
+        votes.casted_votes.length > 0
+      ) {
+        answer = false
+      } else {
+        answer = true
+      }
+    } else answer = false
+
+    return Promise.resolve(answer)
+  } catch (e) {
+    return false
   }
 }
 

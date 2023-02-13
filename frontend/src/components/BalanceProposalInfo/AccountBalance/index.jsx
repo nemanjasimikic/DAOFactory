@@ -93,7 +93,7 @@ const AccountBalance = ({ id, data, address }) => {
             value={max}
           />
           <p className={styles.result}>
-            Your balance: {data?.daoBalance ? data.daoBalance : '-'}
+            Your balance: {data?.withdraw ? data.daoBalance : 0}
           </p>
           <Button
             style={'primaryBtn'}
@@ -117,7 +117,7 @@ const AccountBalance = ({ id, data, address }) => {
             function navigateOff(canNavigate) {
               setLoading(false)
               if (canNavigate) {
-                navigate(`/dao/${id}/balance-management`)
+                //navigate(`/dao/${id}/balance-management`)
               }
             }
             await daoService
@@ -142,7 +142,7 @@ const AccountBalance = ({ id, data, address }) => {
             function navigateOff(canNavigate) {
               setLoading(false)
               if (canNavigate) {
-                navigate(`/dao/${id}/balance-management`)
+                // navigate(`/dao/${id}/balance-management`)
               }
             }
             await daoService

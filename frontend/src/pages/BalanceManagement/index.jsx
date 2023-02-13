@@ -108,21 +108,24 @@ const BalanceManagement = () => {
             <YourAccountCard
               text={'Your voting weight'}
               data={
-                data.daoBalance /*proposalsWithLockedTokens[0].lockedTokens*/
+                data.userBalance /*proposalsWithLockedTokens[0].lockedTokens*/
               }
               symbol={data.token}
             />
             <YourAccountCard
               text={`Your ${data.token.value0} locked`}
               data={
-                data.daoBalance /*proposalsWithLockedTokens[0].lockedTokens*/
+                data.userBalance /*proposalsWithLockedTokens[0].lockedTokens*/
               }
               symbol={data.token}
             />
           </div>
           <h3 className={styles.contentHeading}>Transaction history</h3>
-          {/*<NoResults />*/}
-          <Table columns={columnsTransactionHistory} data={data.history} />
+          {!data.history.length > 0 ? (
+            <NoResults />
+          ) : (
+            <Table columns={columnsTransactionHistory} data={data.history} />
+          )}
         </div>
         <AccountBalance id={id} data={data} address={addressContext} />
       </div>
