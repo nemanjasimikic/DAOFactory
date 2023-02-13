@@ -9,11 +9,28 @@ const VotingConfiguration = ({ formData, setFormData }) => {
       [e.target.name]: e.target.value,
     }))
   }
+
   return (
     <div className={styles.container}>
       <div className={styles.infoWrapper}>
         <span>Quorum</span>
-        <img src={infoIcon} alt={'info'} />
+        <img
+          src={infoIcon}
+          alt={'info'}
+          title={
+            'Minimum level of participation required for a vote to be valid'
+          }
+        />
+      </div>
+      <div className={styles.percentileContainer}>
+        <div
+          style={{
+            width: '92%', // TODO: tbc
+            transform: `translateX(${formData.quorum}%)`,
+          }}
+        >
+          {formData.quorum}%
+        </div>
       </div>
       <input
         name="quorum"
@@ -28,7 +45,13 @@ const VotingConfiguration = ({ formData, setFormData }) => {
       />
       <div className={styles.infoWrapper}>
         <span>Threshold</span>
-        <img src={infoIcon} alt={'info'} />
+        <img
+          src={infoIcon}
+          alt={'info'}
+          title={
+            'Minimum number of approvals required for the proposal to pass'
+          }
+        />
       </div>
       <Input
         id="threshold"

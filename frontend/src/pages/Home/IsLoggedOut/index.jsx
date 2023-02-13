@@ -48,7 +48,7 @@ const IsLoggedOut = ({ wallet }) => {
           </div>
           <p>Own unique address</p>
         </div>
-        <div className={styles.iconContainer}>
+        <div className={`${styles.iconContainer} ${styles.decentralized}`}>
           <div className={styles.iconWrapper}>
             <img src={decentralizedIcon} alt={'decentralized'} />
           </div>

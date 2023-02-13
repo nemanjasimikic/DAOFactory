@@ -1,5 +1,6 @@
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
+import linkIcon from 'static/svg/linkIcon.svg'
 import { validator, whatPage } from 'helpers/formValidator'
 
 const Input = ({
@@ -68,16 +69,42 @@ const Input = ({
     }
   }
 
+  let hint =
+    registerInput === 'governanceToken'
+      ? 'Token used for voting on a given proposal'
+      : null
+
   return (
     <div className={styles.inputWrapper}>
-      <div className={styles.labelWrapper}>
-        <label className={styles.label}>{label}</label>
-        <img
-          src={labelIcon}
-          className={styles.labelIcon}
-          onError={(event) => (event.target.src = '')}
-        />
-      </div>
+      {registerInput === 'governanceToken' ? (
+        <div className={styles.labelWrapper}>
+          <div className={styles.labelInnerWrap}>
+            <label className={styles.label}>{label}</label>
+            <img
+              title={hint}
+              src={labelIcon}
+              className={styles.labelIcon}
+              onError={(event) => (event.target.src = '')}
+            />
+          </div>
+          <div className={styles.labelInnerWrap2}>
+            <div>Create token</div>
+            <a href="https://app.flatqube.io/builder/">
+              <img src={linkIcon} alt={'link icon'} />
+            </a>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.labelWrapper}>
+          <label className={styles.label}>{label}</label>
+          <img
+            title={hint}
+            src={labelIcon}
+            className={styles.labelIcon}
+            onError={(event) => (event.target.src = '')}
+          />
+        </div>
+      )}
       <input
         style={{
           paddingRight: `${buttons?.length * 31}px`,
