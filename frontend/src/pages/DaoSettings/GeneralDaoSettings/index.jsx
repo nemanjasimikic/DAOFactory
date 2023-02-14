@@ -12,13 +12,13 @@ import Button from 'components/common/Button'
 import NotificationPopup from 'components/Popup/NotificationPopup'
 import Spinner from 'components/common/Spinner'
 import copy from 'static/svg/copy.svg'
+
 import styles from '../styles.module.sass'
 
 const GeneralDaoSettings = () => {
   const { register } = useForm()
   let { id } = useParams()
 
-  console.log('id: ', id)
   const { handleSubmit } = useForm()
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
@@ -38,13 +38,12 @@ const GeneralDaoSettings = () => {
     daoSlug: 'daobuilder.nswebdevelopment.com/',
     description: '',
   })
-  const [daoInformation, setDaoInformation] = useState({})
-  /*useEffect(() => {
-    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
-  }, [])*/
 
-  const onLoadEffect = () => {
-    daoService.getDaoInfo(id).then((data) => setDaoInformation(data))
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
   }
 
   let name
