@@ -23,22 +23,22 @@ const Footer = () => {
             </div>
             <div className={styles.topFooterLinks}>
               <p className={styles.heading}>DeFi Products</p>
-              <a href={'#'} className={styles.footerLink}>
+              <a target="_blank" href={'https://octusbridge.io/'} className={styles.footerLink}>
                 Octus Bridge
               </a>
-              <a href={'#'} className={styles.footerLink}>
+              <a target="_blank" href={'https://flatqube.io/'} className={styles.footerLink}>
                 FlatQube
               </a>
-              <a href={'#'} className={styles.footerLink}>
+              <a target="_blank" href={'https://everscan.io/'} className={styles.footerLink}>
                 EverScan
               </a>
-              <a href={'#'} className={styles.footerLink}>
+              <a target="_blank" href={'https://wrappedever.io/'} className={styles.footerLink}>
                 Wrapped EVER
               </a>
-              <a href={'#'} className={styles.footerLink}>
+              <a target="_blank" href={'https://everwallet.net/'} className={styles.footerLink}>
                 EVER Wallet
               </a>
-              <a href={'#'} className={styles.footerLink}>
+              <a target="_blank" href={'https://everpools.io/'} className={styles.footerLink}>
                 EVER Pools
               </a>
             </div>
