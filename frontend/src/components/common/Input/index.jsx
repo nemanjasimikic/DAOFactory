@@ -71,7 +71,7 @@ const Input = ({
 
   let hint =
     registerInput === 'governanceToken'
-      ? 'Token used for voting on a given proposal'
+      ? 'You can find the addresses on everscan.io/tokens'
       : null
 
   return (
