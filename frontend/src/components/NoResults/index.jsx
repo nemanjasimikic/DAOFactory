@@ -6,7 +6,7 @@ import styles from './styles.module.sass'
 const renderNoDao = () => {
   return (
     <div className={styles.noResultsContainer}>
-      <h3>It seems you haven't made any dao yet</h3>
+      <h3>It seems you haven't made any DAO yet</h3>
       <p>Create your first DAO or add existing one.</p>
     </div>
   )
@@ -36,11 +36,26 @@ const renderInsufficientStake = () => {
   )
 }
 
+const renderEmptyTransactionList = () => {
+  return (
+    <div className={styles.noResultsContainer}>
+      <h3>Transaction list is empty</h3>
+      <p>
+        There will be shown all transactions related with your account balance
+      </p>
+    </div>
+  )
+}
+
 const NoResults = () => {
   const location = useLocation()
   return (
     <div className={styles.render}>
-      {location.pathname === '/' ? renderNoDao() : renderInsufficientStake()}
+      {location.pathname === '/'
+        ? renderNoDao()
+        : location.pathname === 'create-proposal'
+        ? renderInsufficientStake()
+        : renderEmptyTransactionList()}
     </div>
   )
 }

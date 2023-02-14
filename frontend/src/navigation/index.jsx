@@ -5,6 +5,7 @@ import CreateDao from 'pages/CreateDao'
 import GeneralDaoSettings from 'pages/DaoSettings/GeneralDaoSettings'
 import OwnershipDaoSettings from 'pages/DaoSettings/OwnershipDaoSettings'
 import Balance from 'pages/Balance'
+import BalanceManagement from 'pages/BalanceManagement'
 import CreateProposal from 'pages/CreateProposal'
 import Header from 'components/Header'
 import Footer from 'components/Footer'
@@ -29,6 +30,10 @@ const Navigation = ({ client }) => {
         <Route path="create-dao" element={<CreateDao />} />
         <Route path="dao/:id" element={<Balance />} />
         <Route path="create-proposal/:id" element={<CreateProposal />} />
+        <Route
+          path="dao/:id/balance-management"
+          element={<BalanceManagement />}
+        />
       </Routes>
       <Footer />
       <MobileFooter />

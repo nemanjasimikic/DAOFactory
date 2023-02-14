@@ -2,28 +2,28 @@ import styles from './styles.module.sass'
 
 const CreateDaoInfo = ({ page, formData }) => {
   function calculateDays(what) {
-    let pending = parseInt(
+    let pending = parseFloat(
       formData.pending
         ? formData.pendingTime === 'Days'
           ? formData.pending * 24
           : formData.pending
         : '0'
     )
-    let queued = parseInt(
+    let queued = parseFloat(
       formData.queued
         ? formData.queuedTime === 'Days'
           ? formData.queued * 24
           : formData.queued
         : '0'
     )
-    let voting = parseInt(
+    let voting = parseFloat(
       formData.voting
         ? formData.votingTime === 'Days'
           ? formData.voting * 24
           : formData.voting
         : '0'
     )
-    let execution = parseInt(
+    let execution = parseFloat(
       formData.execution
         ? formData.executionTime === 'Days'
           ? formData.execution * 24
@@ -34,13 +34,10 @@ const CreateDaoInfo = ({ page, formData }) => {
     // Save the total amount of hours in the form for later use in deploying the contract
     formData.totalTime = sum
     let toReturn =
-      what === 'days'
-        ? Math.floor(sum / 24)
-        : Math.ceil(sum - Math.floor(sum / 24) * 24)
+      what === 'days' ? Math.floor(sum / 24) : sum - Math.floor(sum / 24) * 24
     return toReturn
   }
 
-  //TODO:
   const iconLogo = formData.token ? (
     <img
       src={formData.icon !== '' ? formData.icon : '/5.svg'}
@@ -51,23 +48,26 @@ const CreateDaoInfo = ({ page, formData }) => {
   ) : null
   function calculateTimelineWidth(line, format) {
     let total = formData.totalTime
-    let modifier = format == 'Days' ? 24 : 1
-    if (line == 1) {
+    let modifier = format === 'Days' ? 24 : 1
+    if (line === 1) {
       return ((formData.pending * modifier) / total) * 100 + '%'
-    } else if (line == 2) {
+    } else if (line === 2) {
       return ((formData.queued * modifier) / total) * 100 + '%'
-    } else if (line == 3) {
+    } else if (line === 3) {
       return ((formData.voting * modifier) / total) * 100 + '%'
     } else {
       return ((formData.execution * modifier) / total) * 100 + '%'
     }
   }
 
+  let days = calculateDays('days')
+  let hours = calculateDays('').toFixed(1)
+
   return (
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.section}>
-          <h3>{formData.name == '' ? 'DAO Name' : formData.name}</h3>
+          <h3>{formData.name === '' ? 'DAO Name' : formData.name}</h3>
           <p className={styles.link}>
             daobuilder.nswebdevelopment.com/dao/{formData.daoSlug}
           </p>
@@ -107,8 +107,7 @@ const CreateDaoInfo = ({ page, formData }) => {
             <div className={styles.sectionRow}>
               <p className={styles.name}>Proposal duration</p>
               <p className={styles.value}>
-                {calculateDays('days')} days {Math.ceil(calculateDays(''))}{' '}
-                hours
+                {days} days {hours % 1 != 0 ? hours : Math.round(hours)} hours
               </p>
             </div>
             <div className={styles.graphic}>

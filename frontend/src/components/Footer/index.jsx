@@ -12,46 +12,40 @@ const Footer = () => {
           <div className={styles.topFooterLinksWrapper}>
             <Logo />
             <div className={styles.topFooterLinks}>
-              <p className={styles.heading}>Product</p>
+              <p className={styles.heading}>DAO Builder</p>
 
               <a href={'#'} className={styles.footerLink}>
-                Swap
+                Create new DAO
               </a>
               <a href={'#'} className={styles.footerLink}>
-                Pools
-              </a>
-              <a href={'#'} className={styles.footerLink}>
-                Tokens
-              </a>
-              <a href={'#'} className={styles.footerLink}>
-                Pairs
-              </a>
-              <a href={'#'} className={styles.footerLink}>
-                Farming
-              </a>
-              <a href={'#'} className={styles.footerLink}>
-                Builder
-              </a>
+                My DAOs
+              </a>              
             </div>
             <div className={styles.topFooterLinks}>
               <p className={styles.heading}>DeFi Products</p>
-              <a href={'#'} className={styles.footerLink}>
-                TON Bridge
+              <a target="_blank" href={'https://octusbridge.io/'} className={styles.footerLink}>
+                Octus Bridge
               </a>
-              <a href={'#'} className={styles.footerLink}>
-                TON Token
+              <a target="_blank" href={'https://flatqube.io/'} className={styles.footerLink}>
+                FlatQube
               </a>
-              <a href={'#'} className={styles.footerLink}>
-                TON Explorer
+              <a target="_blank" href={'https://everscan.io/'} className={styles.footerLink}>
+                EverScan
               </a>
-              <a href={'#'} className={styles.footerLink}>
-                WTON
+              <a target="_blank" href={'https://wrappedever.io/'} className={styles.footerLink}>
+                Wrapped EVER
+              </a>
+              <a target="_blank" href={'https://everwallet.net/'} className={styles.footerLink}>
+                EVER Wallet
+              </a>
+              <a target="_blank" href={'https://everpools.io/'} className={styles.footerLink}>
+                EVER Pools
               </a>
             </div>
           </div>
           <div className={styles.buttonWrapper}>
             <Link>
-              <Button style={'primaryBtn'} text={'Install Crystal Wallet'} />
+              <Button style={'primaryBtn'} text={'Install EVER Wallet'} />
             </Link>
             <Link>
               <Button style={'secondaryBtn'} text={'Source code on Github'} />

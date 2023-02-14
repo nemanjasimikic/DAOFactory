@@ -44,7 +44,6 @@ const GeneralInformation = ({
   async function onClickFunctionInImage1(e) {
     e.preventDefault()
     const address = await daoService.getAddressForRoot()
-
     rootAddress = address.rootAddress
     setFormData((prevState) => ({
       ...prevState,
@@ -129,6 +128,7 @@ const GeneralInformation = ({
       />
       <label>Description(optional)</label>
       <textarea
+        defaultValue={formData.description}
         id="description"
         className={styles.textarea}
         {...register('description')}

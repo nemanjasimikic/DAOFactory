@@ -56,11 +56,12 @@ const CreateProposal = () => {
     deployedActions.push(action)
   }
 
+  // console.log('deployedActions: ', deployedActions)
   return (
     <>
       <div className={styles.container}>
         {loading && <Spinner />}
-        <RouteBreadcrumbs text={'Make new proposal'} daoName={data?.name}/>
+        <RouteBreadcrumbs text={'Make new proposal'} daoName={data?.name} />
         <ContentHeader title={'Make new proposal'} />
         {/*<NoResults />*/}
         <div className={styles.contentWrapper}>
@@ -117,13 +118,11 @@ const CreateProposal = () => {
                   navigate(`/dao/${id}`)
                 }
               }
+              // console.log('deployedActions: ', deployedActions)
               await daoService
                 .createProposal(
                   addressContext,
                   data.daoAddress,
-                  formData.target_contract_address,
-                  formData.payload,
-                  formData.attached_value,
                   formData.title,
                   deployedActions
                 )
