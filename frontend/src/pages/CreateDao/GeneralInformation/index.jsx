@@ -44,7 +44,6 @@ const GeneralInformation = ({
   async function onClickFunctionInImage1(e) {
     e.preventDefault()
     const address = await daoService.getAddressForRoot()
-
     rootAddress = address.rootAddress
     setFormData((prevState) => ({
       ...prevState,
