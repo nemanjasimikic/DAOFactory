@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Button from 'components/common/Button'
 import { addressFormat } from 'helpers/addressFormat'
 import walletLogout from 'static/svg/walletLogout.svg'
@@ -17,6 +17,8 @@ const Navbar = () => {
     balanceContext,
   } = ContextState
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     const checkWallet = async () => {
       if (localStorage?.getItem('isLoggedIn')) {
@@ -30,14 +32,18 @@ const Navbar = () => {
 
   return (
     <nav className={styles.navbar}>
-      <NavLink
-        to={'/create-dao'}
-        className={({ isActive }) =>
-          isActive ? styles.active : styles.navLink
-        }
-      >
-        Create new DAO
-      </NavLink>
+      {isLoggedIn ? (
+        <NavLink
+          to={'/create-dao'}
+          className={({ isActive }) =>
+            isActive ? styles.active : styles.navLink
+          }
+        >
+          Create new DAO
+        </NavLink>
+      ) : (
+        <p className={styles.navLink}> Create new DAO</p>
+      )}
       <NavLink
         to={'/'}
         className={({ isActive }) =>
@@ -68,6 +74,7 @@ const Navbar = () => {
             onClick={async (e) => {
               e.preventDefault()
               logout()
+              navigate('/')
             }}
             alt={'logout'}
           />
