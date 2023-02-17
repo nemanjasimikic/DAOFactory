@@ -48,9 +48,7 @@ const VotingConfiguration = ({ formData, setFormData }) => {
         <img
           src={infoIcon}
           alt={'info'}
-          title={
-            'Minimum number of approvals required for the proposal to pass'
-          }
+          title={'Minimum number of "yes" votes for a proposal to be accepted'}
         />
       </div>
       <Input
