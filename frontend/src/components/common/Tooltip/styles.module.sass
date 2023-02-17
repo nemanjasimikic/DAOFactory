@@ -1,0 +1,27 @@
+.tooltipWrapper
+    position: relative
+    
+.tooltipContainer
+    display: flex
+    flex-direction: column
+    color: white
+    position: absolute
+    z-index: 10000000
+    width: 240px
+    padding: 8px
+    margin-top: 2px
+    visibility: hidden
+    align-items: flex-start
+    gap: 4px
+    background-color: #323650
+    // background: linear-gradient(0deg, rgba(5, 11, 46, 0.12), rgba(5, 11, 46, 0.12)), rgba(255, 255, 255, 0.12)
+    backdrop-filter: blur(32px)
+    border-radius: 2px
+    p
+        margin: 0rem
+    p:first-child
+        font-weight: 500
+
+.tooltipWrapper:hover
+    .tooltipContainer
+        visibility: visible
