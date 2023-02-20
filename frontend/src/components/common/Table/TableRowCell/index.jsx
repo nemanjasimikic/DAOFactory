@@ -6,10 +6,15 @@ import walletAvatar from 'static/svg/walletAvatar.svg'
 import { addressFormat } from '../../../../helpers/addressFormat'
 import daoService from 'store/services/daoService'
 
-const TableRowCell = ({ item, column, isLoading }) => {
+const TableRowCell = ({
+  item,
+  column,
+  isLoading,
+  ownerAddress,
+  daoAddress,
+}) => {
   const value = _.get(item, column.key)
   const location = useLocation()
-
   const className =
     item.status === 'Active' || item.status === 'Pending'
       ? styles.darkBlueActive
@@ -61,7 +66,18 @@ const TableRowCell = ({ item, column, isLoading }) => {
           <p className={styles.action}>{actionBefore}</p>
         </div>
       ) : column.key === 'unlockTokens' ? (
-        <Button style={'primaryBtn'} text={'Unlock'} />
+        <Button
+          style={'primaryBtn'}
+          text={'Unlock'}
+          onClick={async (e) => {
+            // console.log('deployedActions: ', deployedActions)
+            await daoService
+              .unlockVotes(daoAddress, item.id, ownerAddress)
+              .catch((e) => {
+                return
+              })
+          }}
+        />
       ) : column.key === 'myvote' ? (
         <div className={styles.rangeWrapper}>
           <div className={styles.dateWrapper}>

@@ -169,12 +169,25 @@ const Balance = () => {
       <div className={styles.tableSectionHeading}>
         <p>Proposals with your locked tokens</p>
         <div className={styles.rightContentWrapper}>
-          <Button style={'primaryBtn'} text={'Unlock all tokens'} />
+          <Button
+            style={'primaryBtn'}
+            text={'Unlock all tokens'}
+            onClick={async (e) => {
+              // console.log('deployedActions: ', deployedActions)
+              await daoService
+                .unlockVotes(data.daoAddress, 0, addressContext)
+                .catch((e) => {
+                  return
+                })
+            }}
+          />
         </div>
       </div>
       <Table
         columns={columnsLockedTokens}
         data={data.proposalsWithLockedTokens}
+        ownerAddress={addressContext}
+        daoAddress={data.daoAddress}
       />
       <div className={styles.tableSectionHeading}>
         <p>Voters</p>

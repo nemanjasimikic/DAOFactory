@@ -1,7 +1,7 @@
 import styles from './styles.module.sass'
 import TableRowCell from '../TableRowCell'
 
-const TableRow = ({ data, columns, isLoading }) => {
+const TableRow = ({ data, columns, isLoading, ownerAddress, daoAddress }) => {
   return (
     <>
       {data.map((item, itemIndex) => (
@@ -12,6 +12,8 @@ const TableRow = ({ data, columns, isLoading }) => {
               item={item}
               column={column}
               isLoading={isLoading}
+              ownerAddress={ownerAddress}
+              daoAddress={daoAddress}
             />
           ))}
         </div>

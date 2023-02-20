@@ -1597,6 +1597,101 @@ const canWithdrawVotes = async (daoRootAddress, ownerAddress) => {
   }
 }
 
+const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
+  try {
+    let success = false
+    if (proposalId == 0) {
+      const proposalAddr = await daoRoot.methods
+        .expectedProposalAddress({ answerId: 0, proposalId: proposalId })
+        .call()
+      const proposal = new ever.Contract(proposalAbi, proposalAddr.value0)
+      const state = await proposal.methods.getState({ answerId: 0 }).call()
+
+      if (state.value0 != 0 && state.value0 != 1) {
+        success = true
+      }
+    } else {
+      //let proposalAddresses
+
+      const userAddress = await daoRoot.methods
+        .getUserDataAddress({ answerId: 0, user: ownerAddress })
+        .call()
+
+      const userData = new ever.Contract(userDataAbi, userAddress.value0)
+      const castedVotes = await userData.methods.casted_votes({}).call()
+
+      let flag = 0
+      if (castedVotes.casted_votes.length > 0) {
+        for (let i = 0; i < castedVotes.casted_votes.length; i++) {
+          const proposalAddr = await daoRoot.methods
+            .expectedProposalAddress({
+              answerId: 0,
+              proposalId: castedVotes.casted_votes[i][0] * 1,
+            })
+            .call()
+          const proposal = new ever.Contract(proposalAbi, proposalAddr.value0)
+          const state = await proposal.methods.getState({ answerId: 0 }).call()
+          if (state.value0 == 0 || state.value0 == 1) {
+            flag = 1
+          }
+          //proposalAddresses.push(proposalAddr.value0)
+        }
+        if (flag == 0) success = true
+      }
+    }
+    return Promise.resolve(success)
+  } catch (e) {
+    return false
+  }
+}
+
+const unlockVotes = async (daoRootAddress, proposalId, ownerAddress) => {
+  const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
+
+  try {
+    const stakingAddress = await daoRoot.methods
+      .getStakingRoot({ answerId: 0 })
+      .call()
+
+    const stakingRoot = new ever.Contract(stakingAbi, stakingAddress.value0)
+    const success = await canUnlockVotes(daoRoot, proposalId, ownerAddress)
+    let proposalIds = []
+    let unlock
+    if (success) {
+      if (proposalId != 0) {
+        proposalIds.push(proposalId)
+        unlock = await stakingRoot.methods
+          .tryUnlockCastedVotes({ proposal_ids: proposalIds })
+          .send({
+            from: ownerAddress,
+            amount: toNano(15, 9),
+            bounce: false,
+          })
+      } else {
+        const userAddress = await daoRoot.methods
+          .getUserDataAddress({ answerId: 0, user: ownerAddress })
+          .call()
+        const userData = new ever.Contract(userDataAbi, userAddress.value0)
+        const castedVotes = await userData.methods.casted_votes({}).call()
+        for (let i = 0; i < castedVotes.casted_votes.length; i++) {
+          proposalIds.push(castedVotes.casted_votes[i][0] * 1)
+        }
+        unlock = await stakingRoot.methods
+          .tryUnlockCastedVotes({ proposal_ids: proposalIds })
+          .send({
+            from: ownerAddress,
+            amount: toNano(15, 9),
+            bounce: false,
+          })
+      }
+    }
+    return Promise.resolve(unlock)
+  } catch (e) {
+    // console.log(e)
+    return Promise.reject(e)
+  }
+}
+
 const daoService = {
   getExpectedAddress,
   topup,
@@ -1620,6 +1715,7 @@ const daoService = {
   withdrawTokens,
   getTransactionHistory,
   parseMillisecondsIntoReadableTime,
+  unlockVotes,
 }
 
 export default daoService
