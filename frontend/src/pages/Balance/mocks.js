@@ -118,7 +118,7 @@ export const columnsLockedTokens = [
   },
   {
     key: 'unlockTokens',
-    title: 'UnlockTokens',
+    title: 'Unlock Tokens',
     width: 285,
   },
 ]

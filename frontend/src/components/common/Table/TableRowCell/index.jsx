@@ -5,11 +5,18 @@ import daoService from 'store/services/daoService'
 import { addressFormat } from 'helpers/addressFormat'
 import styles from './styles.module.sass'
 import walletAvatar from 'static/svg/walletAvatar.svg'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
-const TableRowCell = ({ item, column, isLoading }) => {
+const TableRowCell = ({
+  item,
+  column,
+  isLoading,
+  ownerAddress,
+  daoAddress,
+}) => {
   const value = _.get(item, column.key)
   const location = useLocation()
-
   const className =
     item.status === 'Active' || item.status === 'Pending'
       ? styles.darkBlueActive
@@ -41,6 +48,37 @@ const TableRowCell = ({ item, column, isLoading }) => {
   ) //`${item.dateStaking} minutes ago`
   // console.log('item.dateStaking: ', item.dateStaking)
 
+  const [isActive, setActive] = useState(false)
+
+  async function canUnlock(proposalId) {
+    try {
+      const unlock = await daoService.canUnlockVotes(
+        daoAddress,
+        proposalId,
+        ownerAddress
+      )
+      console.log('unlock: ', unlock)
+      console.log('proposalId: ', proposalId)
+      setActive(unlock)
+    } catch (e) {
+      setActive(false)
+    }
+  }
+
+  console.log(column.key)
+  useEffect(() => {
+    const checkWallet = async () => {
+      if (column.key === 'unlockTokens') {
+        try {
+          canUnlock(item.id)
+        } catch (e) {}
+      }
+    }
+    checkWallet()
+  }, [])
+
+  console.log('isActive: ', isActive)
+
   return (
     <div style={{ width: column.width }}>
       {column.key === 'voting' ? (
@@ -61,7 +99,19 @@ const TableRowCell = ({ item, column, isLoading }) => {
           <p className={styles.action}>{actionBefore}</p>
         </div>
       ) : column.key === 'unlockTokens' ? (
-        <Button style={'primaryBtn'} text={'Unlock'} />
+        <Button
+          style={'primaryBtn'}
+          text={'Unlock'}
+          //  disabled={!isActive}
+          onClick={async (e) => {
+            // console.log('deployedActions: ', deployedActions)
+            await daoService
+              .unlockVotes(daoAddress, item.id, ownerAddress)
+              .catch((e) => {
+                return
+              })
+          }}
+        />
       ) : column.key === 'myvote' ? (
         <div className={styles.rangeWrapper}>
           <div className={styles.dateWrapper}>
