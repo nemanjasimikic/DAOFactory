@@ -81,7 +81,7 @@ const CreateProposal = () => {
               placeholder={'Input text'}
             />
             <label>Description(optional)</label>
-            <textarea rows={6} />
+            <textarea className={styles.textarea} rows={6} />
           </div>
           <div className={`${styles.wrapper} ${styles.right}`}>
             <h3>Actions</h3>
