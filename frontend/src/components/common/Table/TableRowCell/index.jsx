@@ -1,10 +1,10 @@
 import _ from 'lodash'
-import styles from './styles.module.sass'
 import { useLocation } from 'react-router-dom'
-import Button from '../../Button'
-import walletAvatar from 'static/svg/walletAvatar.svg'
-import { addressFormat } from '../../../../helpers/addressFormat'
+import Button from 'components/common/Button'
 import daoService from 'store/services/daoService'
+import { addressFormat } from 'helpers/addressFormat'
+import styles from './styles.module.sass'
+import walletAvatar from 'static/svg/walletAvatar.svg'
 
 const TableRowCell = ({ item, column, isLoading }) => {
   const value = _.get(item, column.key)

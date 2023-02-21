@@ -3,6 +3,9 @@ import styles from './styles.module.sass'
 import { proposalColumns } from './mocks'
 
 const ProposalVotingCard = ({ heading }) => {
+  const background = 0
+    ? 'rgba(255, 255, 255, 0.08)'
+    : `linear-gradient(to right, #4AB44A 0%, #4AB44A 20%, #EB4361 20%, #EB4361 100%)`
   return (
     <div className={styles.proposalVotingCard}>
       <div className={styles.heading}>
@@ -13,7 +16,9 @@ const ProposalVotingCard = ({ heading }) => {
           <h3 className={styles.maxValue}>1000000000</h3>
         </div>
       </div>
+      <div className={styles.line} style={{ background: background }} />
       <Table columns={proposalColumns} />
+      <p className={styles.viewAllVoters}>View all voters</p>
     </div>
   )
 }

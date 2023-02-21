@@ -1,23 +1,46 @@
 @import 'src/sass/theme'
 
 .container
-  +layout
-
+  +container
   .proposal
     display: flex
     justify-content: space-between
     align-items: flex-start
 
-    .content
-      +container
-
+    .contentWrapper
       .subheading
         +medium-white-text
         display: flex
         align-items: flex-start
         width: 100%
 
-      .votingCardContainer
+      .content
         display: flex
-        align-items: center
+        align-items: flex-start
+        .votingCardContainer
+          display: flex
+          align-items: center
+
+  .infoRow
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    margin-bottom: 16px
+
+    .votingPower
+      +small-grey-text
+
+    .value
+      +small-white-text
+      font-size: 14px
+
+
+  .buttonsWrapper
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    button
+      width: 49%
 
