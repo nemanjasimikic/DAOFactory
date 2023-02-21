@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Button from 'components/common/Button'
 import daoService from 'store/services/daoService'
 import { addressFormat } from 'helpers/addressFormat'
@@ -61,23 +61,26 @@ const TableRowCell = ({
       console.log('proposalId: ', proposalId)
       setActive(unlock)
     } catch (e) {
+      console.log(e)
       setActive(false)
     }
   }
 
-  console.log(column.key)
+  //console.log(column.key)
   useEffect(() => {
     const checkWallet = async () => {
       if (column.key === 'unlockTokens') {
         try {
           canUnlock(item.id)
-        } catch (e) {}
+        } catch (e) {
+          console.log(e)
+        }
       }
     }
     checkWallet()
   }, [])
 
-  console.log('isActive: ', isActive)
+  //console.log('isActive: ', isActive)
 
   return (
     <div style={{ width: column.width }}>
@@ -102,7 +105,7 @@ const TableRowCell = ({
         <Button
           style={'primaryBtn'}
           text={'Unlock'}
-          //  disabled={!isActive}
+          disabled={!isActive}
           onClick={async (e) => {
             // console.log('deployedActions: ', deployedActions)
             await daoService
@@ -128,6 +131,10 @@ const TableRowCell = ({
         <p className={value < 0 ? styles.negative : styles.positive}>
           {item.amount}
         </p>
+      ) : column.key === 'summary' ? (
+        <Link to={`/proposal/${item.id}`}>
+          <p className={styles.tableCell}>{item.summary}</p>
+        </Link>
       ) : (
         <p
           className={
