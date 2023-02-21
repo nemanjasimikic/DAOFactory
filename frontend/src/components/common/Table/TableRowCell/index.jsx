@@ -5,6 +5,8 @@ import Button from '../../Button'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { addressFormat } from '../../../../helpers/addressFormat'
 import daoService from 'store/services/daoService'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
 const TableRowCell = ({
   item,
@@ -46,6 +48,37 @@ const TableRowCell = ({
   ) //`${item.dateStaking} minutes ago`
   // console.log('item.dateStaking: ', item.dateStaking)
 
+  const [isActive, setActive] = useState(false)
+
+  async function canUnlock(proposalId) {
+    try {
+      const unlock = await daoService.canUnlockVotes(
+        daoAddress,
+        proposalId,
+        ownerAddress
+      )
+      console.log('unlock: ', unlock)
+      console.log('proposalId: ', proposalId)
+      setActive(unlock)
+    } catch (e) {
+      setActive(false)
+    }
+  }
+
+  console.log(column.key)
+  useEffect(() => {
+    const checkWallet = async () => {
+      if (column.key === 'unlockTokens') {
+        try {
+          canUnlock(item.id)
+        } catch (e) {}
+      }
+    }
+    checkWallet()
+  }, [])
+
+  console.log('isActive: ', isActive)
+
   return (
     <div style={{ width: column.width }}>
       {column.key === 'voting' ? (
@@ -69,6 +102,7 @@ const TableRowCell = ({
         <Button
           style={'primaryBtn'}
           text={'Unlock'}
+          //  disabled={!isActive}
           onClick={async (e) => {
             // console.log('deployedActions: ', deployedActions)
             await daoService

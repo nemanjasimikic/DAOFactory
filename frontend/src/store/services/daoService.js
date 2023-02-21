@@ -1600,7 +1600,7 @@ const canWithdrawVotes = async (daoRootAddress, ownerAddress) => {
 const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
   try {
     let success = false
-    if (proposalId == 0) {
+    if (proposalId != 0) {
       const proposalAddr = await daoRoot.methods
         .expectedProposalAddress({ answerId: 0, proposalId: proposalId })
         .call()
@@ -1716,6 +1716,7 @@ const daoService = {
   getTransactionHistory,
   parseMillisecondsIntoReadableTime,
   unlockVotes,
+  canUnlockVotes,
 }
 
 export default daoService
