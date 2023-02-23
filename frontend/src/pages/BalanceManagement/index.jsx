@@ -98,9 +98,16 @@ const BalanceManagement = () => {
       address: 'address4',
     },
   ]
+
+  console.log('DATA:', data)
+
   return data ? (
     <div className={styles.container}>
-      <RouteBreadcrumbs text={'Your account'} daoName={data.name} />
+      <RouteBreadcrumbs
+        text={'Your account'}
+        daoName={data.name}
+        route={`dao/${data.slug}`}
+      />
       <ContentHeader title={'Your account'} />
       <div className={styles.balanceManagement}>
         <div className={styles.balanceContent}>
