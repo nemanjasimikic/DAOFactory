@@ -114,10 +114,7 @@ const BalanceManagement = () => {
           <div className={styles.cardRow}>
             <YourAccountCard
               text={'Your voting weight'}
-              data={
-                data.userBalance /*proposalsWithLockedTokens[0].lockedTokens*/
-              }
-              symbol={data.token}
+              data={'0%' /*proposalsWithLockedTokens[0].lockedTokens*/}
             />
             <YourAccountCard
               text={`Your ${data.token.value0} locked`}
