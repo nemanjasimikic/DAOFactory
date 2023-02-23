@@ -79,7 +79,7 @@ const TableRowCell = ({
     }
     checkWallet()
   }, [])
-
+  console.log('item: ', item)
   //console.log('isActive: ', isActive)
 
   return (
@@ -116,12 +116,28 @@ const TableRowCell = ({
           }}
         />
       ) : column.key === 'myvote' ? (
-        <div className={styles.rangeWrapper}>
-          <div className={styles.dateWrapper}>
-            <p className={styles.action}>For</p>
-            <p className={styles.date}>{item.myVote}</p>
+        item.forVotes > 0 ? (
+          <div className={styles.rangeWrapper}>
+            <div className={styles.dateWrapper}>
+              <p className={styles.action}>For</p>
+              <p className={styles.date}>{item.forVotes /*item.myVote*/}</p>
+            </div>
           </div>
-        </div>
+        ) : item.againstVotes > 0 ? (
+          <div className={styles.rangeWrapper}>
+            <div className={styles.dateWrapper}>
+              <p className={styles.action}>Against</p>
+              <p className={styles.date}>{item.againstVotes /*item.myVote*/}</p>
+            </div>
+          </div>
+        ) : (
+          <div className={styles.rangeWrapper}>
+            <div className={styles.dateWrapper}>
+              <p className={styles.action}>-</p>
+              <p className={styles.date}>{'-' /*item.myVote*/}</p>
+            </div>
+          </div>
+        )
       ) : column.key === 'addresses' ? (
         <div className={styles.addressWrapper}>
           <img src={walletAvatar} alt={'address'} />
