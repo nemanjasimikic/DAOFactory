@@ -8,6 +8,7 @@
     align-items: flex-start
 
     .contentWrapper
+      display: flex
       .subheading
         +medium-white-text
         display: flex
@@ -17,6 +18,7 @@
       .content
         display: flex
         align-items: flex-start
+        flex-direction: column
         .votingCardContainer
           display: flex
           align-items: center
@@ -48,4 +50,55 @@
 
     button
       width: 49%
+
+.aboutProposalContainer
+  display: flex
+  flex-direction: column
+  background-color: rgba(255, 255, 255, 0.08)
+  width: 97%
+  padding: 0 24px 24px 24px
+
+  .subheadingText
+    +medium-white-text
+    margin-top: 24px
+    margin-bottom: 16px
+
+  .aboutSectionSubheading
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    .linkWrapper
+      display: flex
+      align-items: flex-start
+      height: 100%
+      padding-top: 5px
+
+      .discussion
+        +small-grey-text
+        margin-right: 10px
+        margin-top: 0
+
+  .row
+    display: flex
+    align-items: center
+    padding: 8px 0
+
+    .info
+      +small-grey-text
+      width: 226px
+
+    .value
+      +small-white-text
+      font-size: 14px
+      line-height: 20px
+
+
+  .descriptionContent
+    +small-white-text
+    font-size: 14px
+    line-height: 20px
+    margin-bottom: 16px
+
+
 
