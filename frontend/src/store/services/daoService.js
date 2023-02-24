@@ -878,6 +878,7 @@ const getDaoInfo = async (id, address) => {
         ? await getDaoByAddress(id)
         : await findDaoBySlug(daoFactoryContract, id)
 
+    console.log('daoRootContract: ', daoRootContract)
     const name = await daoRootContract.methods.name({}).call()
     const slug = await daoRootContract.methods.slug({}).call()
     const description = await daoRootContract.methods.description({}).call()
@@ -1015,6 +1016,7 @@ const getAllProposals = async () => {
 let dateNow = new Date().getTime()
 const getProposals = async (daoRootAddress) => {
   const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
+  //const slug = await daoRoot.methods.slug({}).call()
   const counter = await daoRoot.methods.getProposalCount({ answerId: 0 }).call()
   let proposalDataArray = []
   for (let i = 0; i < counter.value0; i++) {
@@ -1068,6 +1070,7 @@ const getProposals = async (daoRootAddress) => {
           (1000 * 3600 * 24)
       ),
       queuedTime: dayjs.unix(data.executionTime_).format('DD MMM YYYY HH:mm'),
+      //slug: slug.slug,
     })
   }
 
@@ -1215,6 +1218,8 @@ const createProposal = async (
 
 const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
   try {
+    // const daoRoot = createDaoRootContract(daoRootAddress)
+    // const slug = await daoRoot.methods.slug({}).call()
     const userData = await createUserDataContract(daoRootAddress, ownerAddress)
     const lockedTokens = await userData.methods
       .lockedTokens({ answerId: 0 })
@@ -1270,6 +1275,7 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
         ),
         queuedTime: dayjs.unix(data.executionTime_).format('DD MMM YYYY HH:mm'),
         lockedTokens: lockedTokens.value0,
+        //   slug: slug.slug,
       })
     }
 

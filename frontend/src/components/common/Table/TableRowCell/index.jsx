@@ -103,7 +103,7 @@ const TableRowCell = ({
         </div>
       ) : column.key === 'unlockTokens' ? (
         <Button
-          style={'primaryBtn'}
+          style={isActive ? 'primaryBtn' : 'disabledBtn'}
           text={'Unlock'}
           disabled={!isActive}
           onClick={async (e) => {
@@ -148,7 +148,9 @@ const TableRowCell = ({
           {item.amount}
         </p>
       ) : column.key === 'summary' ? (
-        <Link to={`/proposal/${item.id}`}>
+        <Link
+          to={`proposal/${item.id}` /*`/dao/${item.slug}/proposal/${item.id}`*/}
+        >
           <p className={styles.tableCell}>{item.summary}</p>
         </Link>
       ) : (

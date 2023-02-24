@@ -35,7 +35,7 @@ const Navigation = ({ client }) => {
           path="dao/:id/balance-management"
           element={<BalanceManagement />}
         />
-        <Route path="proposal/:id" element={<Proposal />} />
+        <Route path="dao/:id1/proposal/:id" element={<Proposal />} />
       </Routes>
       <Footer />
       <MobileFooter />

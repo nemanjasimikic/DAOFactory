@@ -2,18 +2,40 @@ import Table from 'components/common/Table'
 import styles from './styles.module.sass'
 import { proposalColumns } from './mocks'
 
-const ProposalVotingCard = ({ heading }) => {
+const ProposalVotingCard = ({ heading, data, id }) => {
   const background = 0
     ? 'rgba(255, 255, 255, 0.08)'
     : `linear-gradient(to right, #4AB44A 0%, #4AB44A 20%, #EB4361 20%, #EB4361 100%)`
-  return (
+  return heading === 'For' ? (
     <div className={styles.proposalVotingCard}>
       <div className={styles.heading}>
         <h3 className={styles.headingText}>{heading}</h3>
         <div className={styles.headingData}>
-          <h3 className={styles.currentValue}>829138291</h3>
+          <h3 className={styles.currentValue}>
+            {data?.proposals[id - 1].forVotes}
+          </h3>
           of
-          <h3 className={styles.maxValue}>1000000000</h3>
+          <h3 className={styles.maxValue}>
+            {data?.proposalConfiguration.threshold}
+          </h3>
+        </div>
+      </div>
+      <div className={styles.line} style={{ background: background }} />
+      <Table columns={proposalColumns} />
+      <p className={styles.viewAllVoters}>View all voters</p>
+    </div>
+  ) : (
+    <div className={styles.proposalVotingCard}>
+      <div className={styles.heading}>
+        <h3 className={styles.headingText}>{heading}</h3>
+        <div className={styles.headingData}>
+          <h3 className={styles.currentValue}>
+            {data?.proposals[id - 1].againstVotes}
+          </h3>
+          of
+          <h3 className={styles.maxValue}>
+            {data?.proposalConfiguration.threshold}
+          </h3>
         </div>
       </div>
       <div className={styles.line} style={{ background: background }} />
