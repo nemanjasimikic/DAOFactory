@@ -4,6 +4,7 @@ import ProposalVotingCard from 'components/ProposalVotingCard'
 import BalanceProposalInfo from 'components/BalanceProposalInfo'
 import Button from 'components/common/Button'
 import Accordion from 'components/common/Accordion'
+import Timeline from '../../components/Timeline'
 import styles from './styles.module.sass'
 import linkIcon from 'static/svg/linkIcon.svg'
 
@@ -16,6 +17,10 @@ const Proposal = () => {
     <div className={styles.container}>
       <RouteBreadcrumbs text={'ProposalId'} />
       <ContentHeader title={'#33 Proposal name'} />
+      <div className={styles.proposalStatus}>
+        <div className={styles.green}>Active</div>
+        <div className={styles.time}>14 hrs 2min left</div>
+      </div>
       <div className={styles.proposal}>
         <div className={styles.contentWrapper}>
           <div className={styles.content}>
@@ -25,6 +30,9 @@ const Proposal = () => {
               <ProposalVotingCard heading={'Against'} />
             </div>
             <Subheading text={'Timeline'} />
+            <div className={styles.timelineContainer}>
+              <Timeline />
+            </div>
             <Subheading text={'About proposal'} />
             <div className={styles.aboutProposalContainer}>
               <div className={styles.aboutSectionSubheading}>
