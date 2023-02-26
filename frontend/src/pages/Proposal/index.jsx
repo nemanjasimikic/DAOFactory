@@ -4,6 +4,7 @@ import ProposalVotingCard from 'components/ProposalVotingCard'
 import BalanceProposalInfo from 'components/BalanceProposalInfo'
 import Button from 'components/common/Button'
 import Accordion from 'components/common/Accordion'
+import Timeline from '../../components/Timeline'
 import styles from './styles.module.sass'
 import daoService from 'store/services/daoService'
 import { useParams } from 'react-router-dom'
@@ -31,10 +32,39 @@ const Proposal = () => {
   )
 
   console.log('data: ', data)
+  const gracePeriodInHrs =
+    (data?.proposalConfiguration.gracePeriod * 1) / (60 * 60)
+  const votingDelayInHrs =
+    (data?.proposalConfiguration.votingDelay * 1) / (60 * 60)
+  const votingPeriodInHrs =
+    (data?.proposalConfiguration.votingPeriod * 1) / (60 * 60)
+  const timeLockInHrs = (data?.proposalConfiguration.timeLock * 1) / (60 * 60)
+  //console.log('data in hours: ', dataInHrs)
+  console.log('proposal actions: ', data?.proposals[id - 1].proposalActions)
+  let proposalActions = []
+  //if (data != null && data.length > 0) {
+  data?.proposals[id - 1].proposalActions.forEach((item, index) => {
+    proposalActions.push(<Accordion title={'Title 1'} content={data} />)
+  })
+  //}
+  console.log('proposalActions: ', proposalActions)
   return (
     <div className={styles.container}>
       <RouteBreadcrumbs text={id} daoName={data?.name} />
       <ContentHeader title={`#${id} ${data?.proposals[id - 1].summary}`} />
+
+      <div className={styles.proposalStatus}>
+        {data?.proposals[id - 1].status === 'Failed' ? (
+          <div className={styles.red}>{data?.proposals[id - 1].status}</div>
+        ) : (
+          <div className={styles.green}>{data?.proposals[id - 1].status}</div>
+        )}
+        {data?.proposals[id - 1].actionInMS < 0 ? (
+          <div></div>
+        ) : (
+          <div className={styles.time}>14 hrs 2min left</div>
+        )}
+      </div>
       <div className={styles.proposal}>
         <div className={styles.contentWrapper}>
           <div className={styles.content}>
@@ -44,6 +74,9 @@ const Proposal = () => {
               <ProposalVotingCard heading={'Against'} data={data} id={id} />
             </div>
             <Subheading text={'Timeline'} />
+            <div className={styles.timelineContainer}>
+              <Timeline />
+            </div>
             <Subheading text={'About proposal'} />
             <div className={styles.aboutProposalContainer}>
               <div className={styles.aboutSectionSubheading}>
@@ -64,24 +97,25 @@ const Proposal = () => {
                 individuals away.
               </p>
               <h4 className={styles.subheadingText}>Actions</h4>
-              <Accordion title={'Title 1'} />
-              <Accordion title={'Title 2'} />
+              {proposalActions}
+              {/* <Accordion title={'Title 1'} /> */}
+              {/* <Accordion title={'Title 2'} /> */}
               <h4 className={styles.subheadingText}>Periods</h4>
               <div className={styles.row}>
                 <p className={styles.info}>Voting delay</p>
-                <p className={styles.value}>Value</p>
+                <p className={styles.value}>{votingDelayInHrs}h</p>
               </div>
               <div className={styles.row}>
                 <p className={styles.info}>Voting period</p>
-                <p className={styles.value}>Value</p>
+                <p className={styles.value}>{votingPeriodInHrs}h</p>
               </div>
               <div className={styles.row}>
                 <p className={styles.info}>Time lock</p>
-                <p className={styles.value}>Value</p>
+                <p className={styles.value}>{timeLockInHrs}h</p>
               </div>
               <div className={styles.row}>
                 <p className={styles.info}>Grace period</p>
-                <p className={styles.value}>Value</p>
+                <p className={styles.value}>{gracePeriodInHrs}h</p>
               </div>
             </div>
           </div>

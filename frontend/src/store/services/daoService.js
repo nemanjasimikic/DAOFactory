@@ -73,6 +73,11 @@ const rootAbi = {
       inputs: [{ name: 'answerId', type: 'uint32' }],
       outputs: [{ name: 'value0', type: 'uint8' }],
     },
+    {
+      name: 'name',
+      inputs: [{ name: 'answerId', type: 'uint32' }],
+      outputs: [{ name: 'value0', type: 'string' }],
+    },
   ],
   data: [],
   events: [],
@@ -811,10 +816,14 @@ const getToken = async (address) => {
   const root = new ever.Contract(rootAbi, address)
   try {
     const label = await root.methods.symbol({ answerId: 1 }).call()
+    const decimals = await root.methods.decimals({ answerId: 0 }).call()
+    const name = await root.methods.name({ answerId: 0 }).call()
     const token = tokensList.find((token) => token.label === label.value0)
     const tokenData = {
       label: label,
       icon: token ? token.icon : '',
+      decimals: decimals.value0,
+      name: name.value0,
     }
     return Promise.resolve(tokenData)
   } catch (e) {
@@ -894,6 +903,7 @@ const getDaoInfo = async (id, address) => {
       .getDetails({ answerId: 0 })
       .call()
     const balance = fromNano(details.value0.tokenBalance * 1, 9)
+    const tokenRootAddress = details.value0.tokenRoot
     const userData = await createUserDataContract(
       daoRootContract.address,
       address
@@ -948,6 +958,9 @@ const getDaoInfo = async (id, address) => {
       history: history,
       withdraw: canWithdraw,
       unlockArray: canUnlock,
+      decimals: tokenSymbol ? tokenSymbol.decimals : null,
+      tokenRootAddress: tokenRootAddress,
+      tokenName: tokenSymbol ? tokenSymbol.name : null,
     }
   }
 
@@ -1029,6 +1042,9 @@ const getProposals = async (daoRootAddress) => {
     const data = await proposalDataArray[i].methods
       .getOverview({ answerId: 0 })
       .call()
+    const proposalActions = await proposalDataArray[i].methods
+      .getActions({ answerId: 0 })
+      .call()
     let state
     if (data.state_ == 0) {
       state = 'Pending'
@@ -1071,6 +1087,7 @@ const getProposals = async (daoRootAddress) => {
       ),
       queuedTime: dayjs.unix(data.executionTime_).format('DD MMM YYYY HH:mm'),
       //slug: slug.slug,
+      proposalActions: proposalActions.value0,
     })
   }
 

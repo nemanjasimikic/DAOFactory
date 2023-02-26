@@ -28,23 +28,23 @@ const Accordion = ({ title, content }) => {
         </div>
         <div className={styles.row}>
           <p className={styles.info}>Original network</p>
-          <p className={styles.value}>Value</p>
+          <p className={styles.value}>Everscale</p>
         </div>
         <div className={styles.row}>
           <p className={styles.info}>Token contract address</p>
-          <p className={styles.value}>Value</p>
+          <p className={styles.value}>{content.tokenRootAddress._address}</p>
         </div>
         <div className={styles.row}>
           <p className={styles.info}>Ticker</p>
-          <p className={styles.value}>Value</p>
+          <p className={styles.value}>{content.token.value0}</p>
         </div>
         <div className={styles.row}>
           <p className={styles.info}>Token name</p>
-          <p className={styles.value}>Value</p>
+          <p className={styles.value}>{content.tokenName}</p>
         </div>
         <div className={styles.row}>
           <p className={styles.info}>Decimal places</p>
-          <p className={styles.value}>Value</p>
+          <p className={styles.value}>{content.decimals}</p>
         </div>
       </div>
     </div>
