@@ -1,0 +1,81 @@
+@import 'src/sass/theme'
+
+.progressRow
+  display: flex
+  flex-direction: column
+  width: 100%
+
+  .stats
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    .voteStatus
+      +small-medium-white-text
+
+    .voteResult
+      display: flex
+      align-items: center
+
+      .voteCurrentResult
+        +small-medium-white-text
+        margin-right: 10px
+
+      .voteMax
+        +medium-grey-text
+        font-size: 18px
+
+  .progressBar
+    width: 100%
+    height: 4px
+    margin-bottom: 20px
+    display: flex
+    align-self: flex-start
+
+.listHeading
+  display: flex
+  align-items: center
+  width: 100%
+  justify-content: space-between
+  margin-bottom: 12px
+
+
+
+  p
+    +small-grey-text
+.listItem
+  display: flex
+  align-items: center
+  justify-content: space-between
+  width: 100%
+  height: 60px
+  border-top: 1px solid rgba(255, 255, 255, 0.16)
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16)
+
+  .nameWrapper
+    display: flex
+    align-items: center
+
+    .info
+      display: flex
+      flex-direction: column
+      margin-left: 10px
+
+      .name
+        +small-white-text
+        font-size: 14px
+
+  .valueWrapper
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+
+    .value
+      +small-white-text
+      font-size: 14px
+
+    .percentage
+      +small-grey-text
+      font-size: 12px
+
+
