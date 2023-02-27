@@ -1,10 +1,11 @@
+import { useState } from 'react'
 import RouteBreadcrumbs from 'components/RouteBreadcrumbs'
 import ContentHeader from 'components/common/ContentHeader'
 import ProposalVotingCard from 'components/ProposalVotingCard'
 import BalanceProposalInfo from 'components/BalanceProposalInfo'
 import Button from 'components/common/Button'
 import Accordion from 'components/common/Accordion'
-import Timeline from '../../components/Timeline'
+import Timeline from 'components/Timeline'
 import styles from './styles.module.sass'
 import daoService from 'store/services/daoService'
 import { useParams } from 'react-router-dom'
@@ -12,6 +13,7 @@ import { useContext } from 'react'
 import { WalletContext } from 'context/walletContext'
 import { useQuery } from 'react-query'
 import linkIcon from 'static/svg/linkIcon.svg'
+import VotesModal from '../../components/Modal/VotesModal'
 
 const Subheading = ({ text }) => {
   return <h3 className={styles.subheading}>{text}</h3>
@@ -51,6 +53,8 @@ const Proposal = () => {
   })
   //}
   console.log('proposalActions: ', proposalActions)
+  const [open, setOpen] = useState(false)
+
   return (
     <div className={styles.container}>
       <RouteBreadcrumbs text={id} daoName={data?.name} />
@@ -73,8 +77,20 @@ const Proposal = () => {
           <div className={styles.content}>
             <Subheading text={'Voting'} />
             <div className={styles.votingCardContainer}>
-              <ProposalVotingCard heading={'For'} data={data} id={id} />
-              <ProposalVotingCard heading={'Against'} data={data} id={id} />
+              <ProposalVotingCard
+                heading={'For'}
+                data={data}
+                id={id}
+                open={open}
+                setOpen={setOpen}
+              />
+              <ProposalVotingCard
+                heading={'Against'}
+                data={data}
+                id={id}
+                open={open}
+                setOpen={setOpen}
+              />
             </div>
             <Subheading text={'Timeline'} />
             <div className={styles.timelineContainer}>
@@ -182,6 +198,7 @@ const Proposal = () => {
           </BalanceProposalInfo>
         </div>
       </div>
+      <VotesModal open={open} setOpen={setOpen} />
     </div>
   )
 }

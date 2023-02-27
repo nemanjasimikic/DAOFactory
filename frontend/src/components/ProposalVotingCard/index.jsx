@@ -1,8 +1,9 @@
 import Table from 'components/common/Table'
+import VotesModal from 'components/Modal/VotesModal'
 import styles from './styles.module.sass'
 import { proposalColumns } from './mocks'
 
-const ProposalVotingCard = ({ heading, data, id }) => {
+const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
   const background = 0
     ? 'rgba(255, 255, 255, 0.08)'
     : `linear-gradient(to right, #4AB44A 0%, #4AB44A 20%, #EB4361 20%, #EB4361 100%)`
@@ -40,7 +41,9 @@ const ProposalVotingCard = ({ heading, data, id }) => {
       </div>
       <div className={styles.line} style={{ background: background }} />
       <Table columns={proposalColumns} />
-      <p className={styles.viewAllVoters}>View all voters</p>
+      <p onClick={() => setOpen(!open)} className={styles.viewAllVoters}>
+        View all voters
+      </p>
     </div>
   )
 }
