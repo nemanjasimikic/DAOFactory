@@ -1108,6 +1108,16 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       i + 1,
       ownerAddress
     )
+    let proposalVoteWeigth = 0
+    console.log('isVoted: ', isVoted.isVoted)
+    if (isVoted.isVoted) {
+      proposalVoteWeigth = await calculateVoteWeigth(
+        daoRootAddress,
+        i + 1,
+        isVoted.data.vote * 1
+      )
+      console.log('proposalVoteWeigth: ', proposalVoteWeigth)
+    }
     proposals.push({
       id: i + 1,
       summary: summ[0],
@@ -1144,6 +1154,7 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       unsupportVotes: unsupportVotes,
       userVoteSupport: userVoteSupport,
       proposer: proposer,
+      proposalVoteWeigth: proposalVoteWeigth,
     })
   }
 
@@ -1965,7 +1976,21 @@ const executeProposal = async (daoRootAddress, proposalId, ownerAddress) => {
 
     return Promise.resolve(execute)
   } catch (e) {
-    Promise.reject(e)
+    return Promise.reject(e)
+  }
+}
+
+const calculateVoteWeigth = async (daoRootAddress, proposalId, userVotes) => {
+  try {
+    const proposal = await createProposalContract(daoRootAddress, proposalId)
+    const details = await proposal.methods.getOverview({ answerId: 0 }).call()
+    const forVotes = details.forVotes_ * 1
+    console.log('userVotes: ', userVotes)
+    console.log('forVotes: ', forVotes)
+    const voteWeigth = Math.round((userVotes / fromNano(forVotes, 9)) * 100)
+    return Promise.resolve(voteWeigth)
+  } catch (e) {
+    return Promise.reject(e)
   }
 }
 

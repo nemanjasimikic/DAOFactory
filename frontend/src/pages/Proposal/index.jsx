@@ -273,8 +273,8 @@ const Proposal = () => {
               <p className={styles.parameter}>Vote weight</p>
               <p className={styles.value}>
                 {data?.proposals[id - 1].isVoted.isVoted
-                  ? data?.proposals[id - 1].isVoted.data.vote
-                  : 0}
+                  ? `${data?.proposals[id - 1].proposalVoteWeigth}%`
+                  : '0%'}
               </p>
             </div>
             <Button
@@ -297,11 +297,7 @@ const Proposal = () => {
           </BalanceProposalInfo>
         </div>
       </div>
-      <VotesModal
-        open={open}
-        setOpen={setOpen}
-        data={data?.proposals[id - 1]}
-      />
+      <VotesModal open={open} setOpen={setOpen} data={data} id={id} />
     </div>
   )
 }

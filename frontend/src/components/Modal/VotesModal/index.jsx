@@ -3,16 +3,17 @@ import styles from './styles.module.sass'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { addressFormat } from 'helpers/addressFormat'
 
-const VotesListItem = ({ data }) => {
+const VotesListItem = ({ data, id }) => {
   let supportVotes = []
-  data?.supportVotes.forEach((item, index) => {
+  data?.proposals[id - 1].supportVotes.forEach((item, index) => {
     supportVotes.push(<p className={styles.value}>{item.vote}</p>)
   })
 
   let addresses = []
-  data?.supportVotes.forEach((item, index) => {
+  data?.proposals[id - 1].supportVotes.forEach((item, index) => {
     addresses.push(<p className={styles.name}>{addressFormat(item.voter)}</p>)
   })
+
   return (
     <div className={styles.listItem}>
       <div className={styles.nameWrapper}>
@@ -24,24 +25,30 @@ const VotesListItem = ({ data }) => {
       </div>
       <div className={styles.valueWrapper}>
         {supportVotes}
-        <p className={styles.percentage}>13.14%</p>
+        {/* <p className={styles.percentage}>13.14%</p> */}
       </div>
     </div>
   )
 }
 
-const VotesModal = ({ open, setOpen, data }) => {
+const VotesModal = ({ open, setOpen, data, id }) => {
   const background = 0
     ? 'rgba(255, 255, 255, 0.08)'
     : `linear-gradient(to right, #4AB44A 0%, #4AB44A 20%, #EB4361 20%, #EB4361 100%)`
 
   return (
-    <Modal title={'For - 84.76%'} open={open} setOpen={setOpen}>
+    <Modal
+      title={`For - ${data?.proposals[id - 1].proposalVoteWeigth}%`}
+      open={open}
+      setOpen={setOpen}
+    >
       <div className={styles.progressRow}>
         <div className={styles.stats}>
           <p className={styles.voteStatus}>For</p>
           <div className={styles.voteResult}>
-            <p className={styles.voteCurrentResult}>{data?.forVotes}</p>
+            <p className={styles.voteCurrentResult}>
+              {data?.proposals[id - 1].forVotes}
+            </p>
             <p className={styles.voteMax}>of 10000</p>
           </div>
         </div>
@@ -53,7 +60,7 @@ const VotesModal = ({ open, setOpen, data }) => {
           <p>Voter</p>
           <p>Vote</p>
         </div>
-        <VotesListItem data={data} />
+        <VotesListItem data={data} id={id} />
       </div>
     </Modal>
   )
