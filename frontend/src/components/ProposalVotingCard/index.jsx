@@ -26,7 +26,9 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
         columns={proposalColumns}
         data={data?.proposals[id - 1].supportVotes}
       />
-      <p className={styles.viewAllVoters}>View all voters</p>
+      <p onClick={() => setOpen(!open)} className={styles.viewAllVoters}>
+        View all voters
+      </p>
     </div>
   ) : (
     <div className={styles.proposalVotingCard}>

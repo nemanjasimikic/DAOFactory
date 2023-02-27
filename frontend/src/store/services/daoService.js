@@ -1102,6 +1102,11 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
     const supportVotes = await returnForVotes(daoRootAddress, i + 1)
     console.log('supportVotes: ', supportVotes)
     const unsupportVotes = await returnAgainstVotes(daoRootAddress, i + 1)
+    const userVoteSupport = await userSupport(
+      daoRootAddress,
+      i + 1,
+      ownerAddress
+    )
     proposals.push({
       id: i + 1,
       summary: summ[0],
@@ -1136,6 +1141,7 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       isVoted: isVoted,
       supportVotes: supportVotes,
       unsupportVotes: unsupportVotes,
+      userVoteSupport: userVoteSupport,
     })
   }
 
@@ -1928,6 +1934,16 @@ const returnAgainstVotes = async (daoRootAddress, proposalId) => {
   }
 
   return Promise.resolve(votesData)
+}
+
+const userSupport = async (daoRootAddress, proposalId, ownerAddress) => {
+  const forVotes = await returnForVotes(daoRootAddress, proposalId)
+  const support = forVotes.find((vote) => vote.voter == ownerAddress)
+  if (support) {
+    return Promise.resolve(true)
+  } else {
+    return Promise.resolve(false)
+  }
 }
 
 const daoService = {

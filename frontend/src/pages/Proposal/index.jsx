@@ -159,6 +159,7 @@ const Proposal = () => {
           <BalanceProposalInfo
             heading={'Your vote'}
             status={data?.proposals[id - 1].isVoted.isVoted}
+            support={data?.proposals[id - 1].userVoteSupport}
           >
             <div className={styles.infoRow}>
               <p className={styles.parameter}>
@@ -228,7 +229,11 @@ const Proposal = () => {
           </BalanceProposalInfo>
         </div>
       </div>
-      <VotesModal open={open} setOpen={setOpen} />
+      <VotesModal
+        open={open}
+        setOpen={setOpen}
+        data={data?.proposals[id - 1]}
+      />
     </div>
   )
 }

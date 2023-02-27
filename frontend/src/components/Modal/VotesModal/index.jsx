@@ -1,26 +1,36 @@
 import Modal from 'components/Modal'
 import styles from './styles.module.sass'
 import walletAvatar from 'static/svg/walletAvatar.svg'
+import { addressFormat } from 'helpers/addressFormat'
 
-const VotesListItem = () => {
+const VotesListItem = ({ data }) => {
+  let supportVotes = []
+  data?.supportVotes.forEach((item, index) => {
+    supportVotes.push(<p className={styles.value}>{item.vote}</p>)
+  })
+
+  let addresses = []
+  data?.supportVotes.forEach((item, index) => {
+    addresses.push(<p className={styles.name}>{addressFormat(item.voter)}</p>)
+  })
   return (
     <div className={styles.listItem}>
       <div className={styles.nameWrapper}>
         <img src={walletAvatar} alt={'avatar'} />
         <div className={styles.info}>
-          <p className={styles.name}>Name</p>
+          {addresses}
           {/*<p>Value</p>*/}
         </div>
       </div>
       <div className={styles.valueWrapper}>
-        <p className={styles.value}>123000</p>
+        {supportVotes}
         <p className={styles.percentage}>13.14%</p>
       </div>
     </div>
   )
 }
 
-const VotesModal = ({ open, setOpen }) => {
+const VotesModal = ({ open, setOpen, data }) => {
   const background = 0
     ? 'rgba(255, 255, 255, 0.08)'
     : `linear-gradient(to right, #4AB44A 0%, #4AB44A 20%, #EB4361 20%, #EB4361 100%)`
@@ -31,8 +41,8 @@ const VotesModal = ({ open, setOpen }) => {
         <div className={styles.stats}>
           <p className={styles.voteStatus}>For</p>
           <div className={styles.voteResult}>
-            <p className={styles.voteCurrentResult}>847</p>
-            <p className={styles.voteMax}> of 1000000</p>
+            <p className={styles.voteCurrentResult}>{data?.forVotes}</p>
+            <p className={styles.voteMax}>of 10000</p>
           </div>
         </div>
         <div
@@ -43,7 +53,7 @@ const VotesModal = ({ open, setOpen }) => {
           <p>Voter</p>
           <p>Vote</p>
         </div>
-        <VotesListItem />
+        <VotesListItem data={data} />
       </div>
     </Modal>
   )
