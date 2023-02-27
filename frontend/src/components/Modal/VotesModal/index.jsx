@@ -49,7 +49,9 @@ const VotesModal = ({ open, setOpen, data, id }) => {
             <p className={styles.voteCurrentResult}>
               {data?.proposals[id - 1].forVotes}
             </p>
-            <p className={styles.voteMax}>of 10000</p>
+            <p
+              className={styles.voteMax}
+            >{`of ${data?.proposalConfiguration.threshold}`}</p>
           </div>
         </div>
         <div
