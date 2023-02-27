@@ -18,11 +18,15 @@
     display: flex
     flex: 1
     justify-content: space-around
+    border-bottom: 1px solid #5F6279
+    padding-bottom: 14px
 
     .singleDay
       display: flex
       flex-direction: column
       text-align: center
+      flex-grow: 1
+      padding: 0.5rem
 
       .day
         +small-grey-text
@@ -31,3 +35,71 @@
 
       .date
         +small-white-text
+
+.timelineRowWrapper
+  position: relative
+  display: block
+
+.timelineHand
+  background-color: white
+  height: 87px
+  position: absolute
+  width: 2px
+  display: flex
+  div
+    background-color: white
+    border-radius: 50%
+    width: 10px
+    height: 10px
+    position: absolute
+    transform: translate(-4px, -9px)
+
+.timelineRow
+  display: flex
+  margin-top: 26px
+  div
+    height: 35px
+    margin-right: 4px
+    display: flex
+    flex-direction: column
+    p
+      margin: 0
+      margin-top: 2px
+      margin-left: 4px
+    div
+      height: 2px
+      margin: 0
+
+.pendingRow
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 100%)
+  p
+    color: rgba(255, 255, 2552, 0.5)
+  div
+    background-color: rgba(255, 255, 2552, 0.5)
+
+.votingRow
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)
+  p
+    color: rgba(255, 255, 2552)
+  div
+    background-color: rgba(255, 255, 255)
+
+.queuedRow
+  background: linear-gradient(180deg, rgba(230, 172, 0, 0.2) 0%, rgba(230, 172, 0, 0) 100%)
+  p
+    color: rgba(230, 172, 0)
+  div
+    background-color: rgba(230, 172, 0)
+
+.executionRow
+  margin-right: 0px !important
+  background: linear-gradient(180deg, rgba(74, 180, 74, 0.2) 0%, rgba(74, 180, 74, 0) 100%)
+  p
+    color: rgba(74, 180, 74)
+  div
+    background-color: rgba(74, 180, 74)
+
+.greyRow
+  margin-top: 26px
+  height: 8px
+  background-color: #2B314E
