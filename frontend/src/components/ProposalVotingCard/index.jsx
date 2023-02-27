@@ -4,9 +4,22 @@ import styles from './styles.module.sass'
 import { proposalColumns } from './mocks'
 
 const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
-  const background = 0
-    ? 'rgba(255, 255, 255, 0.08)'
-    : `linear-gradient(to right, #4AB44A 0%, #4AB44A 20%, #EB4361 20%, #EB4361 100%)`
+  const votesPercentage = (votes) => {
+    return (votes / data?.proposalConfiguration.threshold) * 100
+  }
+  const background = (forVotes) => {
+    if (!data) {
+      return 'rgba(255, 255, 255, 0.08)'
+    }
+    return `linear-gradient(to right, ${
+      forVotes ? '#4AB44A' : ' #EB4361'
+    } 0%, ${forVotes ? '#4AB44A' : ' #EB4361'} ${votesPercentage(
+      data?.proposals[id - 1].supportVotes
+    )}%, rgba(255, 255, 255, 0.08) ${votesPercentage(
+      data?.proposals[id - 1].supportVotes
+    )}%, rgba(255, 255, 255, 0.08) 100%)`
+  }
+
   return heading === 'For' ? (
     <div className={styles.proposalVotingCard}>
       <div className={styles.heading}>
@@ -21,7 +34,7 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
           </h3>
         </div>
       </div>
-      <div className={styles.line} style={{ background: background }} />
+      <div className={styles.line} style={{ background: background(true) }} />
       <Table
         columns={proposalColumns}
         data={data?.proposals[id - 1].supportVotes}
@@ -44,7 +57,7 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
           </h3>
         </div>
       </div>
-      <div className={styles.line} style={{ background: background }} />
+      <div className={styles.line} style={{ background: background(false) }} />
       <Table
         columns={proposalColumns}
         data={data?.proposals[id - 1].unsupportVotes}

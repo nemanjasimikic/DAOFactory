@@ -32,9 +32,21 @@ const VotesListItem = ({ data, id }) => {
 }
 
 const VotesModal = ({ open, setOpen, data, id }) => {
-  const background = 0
-    ? 'rgba(255, 255, 255, 0.08)'
-    : `linear-gradient(to right, #4AB44A 0%, #4AB44A 20%, #EB4361 20%, #EB4361 100%)`
+  const votesPercentage = (votes) => {
+    return (votes / data?.proposalConfiguration.threshold) * 100
+  }
+  const background = (forVotes) => {
+    if (!data) {
+      return 'rgba(255, 255, 255, 0.08)'
+    }
+    return `linear-gradient(to right, ${
+      forVotes ? '#4AB44A' : ' #EB4361'
+    } 0%, ${forVotes ? '#4AB44A' : ' #EB4361'} ${votesPercentage(
+      data?.forVotes
+    )}%, rgba(255, 255, 255, 0.08) ${votesPercentage(
+      data?.forVotes
+    )}%, rgba(255, 255, 255, 0.08) 100%)`
+  }
 
   return (
     <Modal
@@ -56,7 +68,7 @@ const VotesModal = ({ open, setOpen, data, id }) => {
         </div>
         <div
           className={styles.progressBar}
-          style={{ background: background }}
+          style={{ background: background(true) }}
         />
         <div className={styles.listHeading}>
           <p>Voter</p>
