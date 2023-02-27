@@ -999,32 +999,6 @@ const getDaoByAddress = async (address) => {
     return Promise.reject(e)
   }
 }
-let allProposals
-const getAllProposals = async () => {
-  //const walletAddress = address
-  var data = JSON.stringify({
-    offset: 0,
-    limit: 10,
-    ordering: { column: 'createdAt', direction: 'DESC' },
-  })
-
-  const config = {
-    method: 'post',
-    url: 'https://api.everdao.net/v1/proposals/search',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: data,
-  }
-
-  return axios(config)
-    .then(function (response) {
-      allProposals = response.data
-    })
-    .catch(function (error) {
-      // console.log(error)
-    })
-}
 
 let dateNow = new Date().getTime()
 const getProposals = async (daoRootAddress) => {
@@ -1063,10 +1037,65 @@ const getProposals = async (daoRootAddress) => {
         dateNow) /
         (1000 * 3600 * 24)
     )
-
+    const options = { weekday: 'short' }
+    const timeToDate = new Date(data.startTime_ * 1000).toLocaleString(
+      'en-US',
+      options
+    )
+    console.log('time to Date: ', timeToDate)
+    const date = dayjs.unix(data.startTime_).format('D.M')
+    console.log('date short: ', date)
+    const startEndDifference = Math.ceil(
+      new Date(
+        dayjs.unix(data.startTime_).format('DD MMM YYYY HH:mm')
+      ).getTime() -
+        new Date(
+          dayjs.unix(data.endTime_).format('DD MMM YYYY HH:mm')
+        ).getTime()
+    )
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+    const month =
+      monthNames[
+        new Date(
+          dayjs.unix(data.startTime_).format('DD MMM YYYY HH:mm')
+        ).getMonth()
+      ]
+    const daysDifference = parseMillisecondsIntoReadableTime(startEndDifference)
+    console.log('days difference: ', daysDifference)
+    let numberOfDifference
+    if (
+      daysDifference.split(' ')[1] == 'minutes' ||
+      daysDifference.split(' ')[1] == 'hours'
+    ) {
+      numberOfDifference = 0
+      console.log('numberDifference: ', numberOfDifference)
+    } else {
+      numberOfDifference = daysDifference.split(' ')[0]
+      console.log('numberDifference: ', numberOfDifference)
+    }
+    const summ = data.description_.split('%')
+    console.log('summary: ', summ)
+    let description
+    if (summ.length > 1) {
+      description = summ[1]
+    }
+    const voters = await getVoters(daoRootAddress, i + 1)
     proposals.push({
       id: i + 1,
-      summary: data.description_,
+      summary: summ[0],
       status: state,
       voting: 'voting1',
       date: 'date1',
@@ -1088,36 +1117,16 @@ const getProposals = async (daoRootAddress) => {
       queuedTime: dayjs.unix(data.executionTime_).format('DD MMM YYYY HH:mm'),
       //slug: slug.slug,
       proposalActions: proposalActions.value0,
+      dayForTimeline: timeToDate,
+      dayDifference: numberOfDifference * 1,
+      month: month,
+      dateShort: date,
+      description: description ? description : '',
+      voters: voters,
     })
   }
 
   return proposals
-}
-
-let allStakeholdersData
-const allStakeholders = async () => {
-  var data = JSON.stringify({
-    limit: 10,
-    offset: 0,
-    ordering: 'voteweightdescending',
-  })
-
-  const config = {
-    method: 'post',
-    url: 'https://staking.everdao.net/v1/dao/search/stakeholders',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: data,
-  }
-
-  return axios(config)
-    .then(function (response) {
-      allStakeholdersData = response.data
-    })
-    .catch(function (error) {
-      // console.log(error)
-    })
 }
 
 const getAllStakeholders = async (daoRootAddress) => {
@@ -1269,9 +1278,12 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
       else if (data.state_ == 6) state = 'Queued'
       else if (data.state_ == 7) state = 'Executed'
       else state = 'Unknown'
+
+      const summ = data.description_.split('%')
+
       proposals.push({
         id: i + 1,
-        summary: data.description_,
+        summary: summ[0],
         status: state,
         voting: 'voting1',
         date: 'date1',
@@ -1748,6 +1760,30 @@ const cancelProposal = async (proposalId, daoRootAddress, ownerAddress) => {
   } catch (e) {
     Promise.reject(e)
   }
+}
+
+const getVoters = async (daoRootAddress, proposalId) => {
+  const proposal = await createProposalContract(daoRootAddress, proposalId)
+  const successStream = await ever.getTransactions({
+    address: proposal.address,
+    continuation: undefined,
+    limit: 50,
+  })
+  let votesData = []
+  for (let i = 0; i < successStream.transactions.length; i++) {
+    const trx = await proposal.decodeTransaction({
+      transaction: successStream.transactions[i],
+      methods: ['castVote'],
+    })
+    if (trx) {
+      console.log('trx: ', trx)
+      votesData.push({
+        voter: trx.input.voter._address,
+        vote: fromNano(trx.input.votes, 9),
+      })
+    }
+  }
+  return Promise.resolve(votesData)
 }
 
 const daoService = {

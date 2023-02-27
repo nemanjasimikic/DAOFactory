@@ -21,7 +21,7 @@ const ProposalVotingCard = ({ heading, data, id }) => {
         </div>
       </div>
       <div className={styles.line} style={{ background: background }} />
-      <Table columns={proposalColumns} />
+      <Table columns={proposalColumns} data={data?.proposals[id - 1].voters} />
       <p className={styles.viewAllVoters}>View all voters</p>
     </div>
   ) : (

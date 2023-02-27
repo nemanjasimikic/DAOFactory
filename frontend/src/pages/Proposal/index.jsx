@@ -32,6 +32,7 @@ const Proposal = () => {
   )
 
   console.log('data: ', data)
+  console.log('data date: ', data?.proposals[id - 1].startTime)
   const gracePeriodInHrs =
     (data?.proposalConfiguration.gracePeriod * 1) / (60 * 60)
   const votingDelayInHrs =
@@ -44,7 +45,9 @@ const Proposal = () => {
   let proposalActions = []
   //if (data != null && data.length > 0) {
   data?.proposals[id - 1].proposalActions.forEach((item, index) => {
-    proposalActions.push(<Accordion title={'Title 1'} content={data} />)
+    proposalActions.push(
+      <Accordion title={'Everscale action'} content={data} />
+    )
   })
   //}
   console.log('proposalActions: ', proposalActions)
@@ -75,7 +78,11 @@ const Proposal = () => {
             </div>
             <Subheading text={'Timeline'} />
             <div className={styles.timelineContainer}>
-              <Timeline />
+              <Timeline
+                //day={data?.proposals[id - 1].dayForTimeline}
+                data={data}
+                id={id - 1}
+              />
             </div>
             <Subheading text={'About proposal'} />
             <div className={styles.aboutProposalContainer}>
@@ -87,14 +94,7 @@ const Proposal = () => {
                 </div>
               </div>
               <p className={styles.descriptionContent}>
-                The general problem The current rules and social mechanics of
-                Wikipedia discourage people from contributing. The existing
-                community is much smaller than it potentially could be. Many
-                Wikipedia mechanics and bureaucratic procedures are easy to
-                abuse. That leads to a lack of trust between community members.
-                These problems lower user engagement and turn potentially very
-                experienced and seasoned professionals and knowledgeable
-                individuals away.
+                {data?.proposals[id - 1].description}
               </p>
               <h4 className={styles.subheadingText}>Actions</h4>
               {proposalActions}

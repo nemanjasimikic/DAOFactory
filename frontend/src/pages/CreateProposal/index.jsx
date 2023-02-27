@@ -35,6 +35,14 @@ const CreateProposal = () => {
       [e.target.name]: e.target.value,
     }))
   }
+
+  const onChangeDesc = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      description: e.target.value,
+    }))
+  }
+
   const [deployedActions, setDeployedActions] = useState([])
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState({
@@ -44,6 +52,7 @@ const CreateProposal = () => {
     typeValue: 'Custom action',
     networkValue: 'Everscale',
     title: '',
+    description: '',
   })
 
   const addAction = (type) => {
@@ -55,7 +64,7 @@ const CreateProposal = () => {
     }
     deployedActions.push(action)
   }
-
+  console.log('formData: ', formData)
   // console.log('deployedActions: ', deployedActions)
   return (
     <>
@@ -81,7 +90,7 @@ const CreateProposal = () => {
               placeholder={'Input text'}
             />
             <label>Description(optional)</label>
-            <textarea rows={6} />
+            <textarea id={'description'} rows={6} onChange={onChangeDesc} />
           </div>
           <div className={`${styles.wrapper} ${styles.right}`}>
             <h3>Actions</h3>
@@ -123,7 +132,7 @@ const CreateProposal = () => {
                 .createProposal(
                   addressContext,
                   data.daoAddress,
-                  formData.title,
+                  formData.title + '%' + formData.description,
                   deployedActions
                 )
                 .catch((e) => {

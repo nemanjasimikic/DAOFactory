@@ -3,30 +3,39 @@ import styles from './styles.module.sass'
 const Day = ({ day, date }) => {
   return (
     <div className={styles.singleDay}>
-      <p className={styles.day}>day</p>
-      <p className={styles.date}>date</p>
+      <p className={styles.day}>{day}</p>
+      <p className={styles.date}>{date}</p>
     </div>
   )
 }
 
-const Timeline = () => {
+const Timeline = ({ data, id }) => {
   return (
     <div className={styles.timeline}>
       <div className={styles.monthRow}>
-        <p className={styles.month}>November</p>
-        <p className={styles.month}>December</p>
+        <p className={styles.month}>{data?.proposals[id].month}</p>
+        {/* <p className={styles.month}>December</p> */}
       </div>
       <div className={styles.dayRow}>
-        <Day />
-        <Day />
-        <Day />
-        <Day />
-        <Day />
-        <Day />
-        <Day />
-        <Day />
-        <Day />
-        <Day />
+        {
+          data?.proposals[id].dayDifference == 0 ? (
+            <Day
+              day={data?.proposals[id].dayForTimeline}
+              date={data?.proposals[id].dateShort}
+            />
+          ) : (
+            <Day />
+          )
+          // <Day />
+          // <Day />
+          // <Day />
+          // <Day />
+          // <Day />
+          // <Day />
+          // <Day />
+          // <Day />
+          // <Day />
+        }
       </div>
       <div className={styles.timelineRow}></div>
     </div>

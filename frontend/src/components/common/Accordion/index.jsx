@@ -24,7 +24,7 @@ const Accordion = ({ title, content }) => {
       >
         <div className={styles.row}>
           <p className={styles.info}>Type</p>
-          <p className={styles.value}>Value</p>
+          <p className={styles.value}>Custom action</p>
         </div>
         <div className={styles.row}>
           <p className={styles.info}>Original network</p>

@@ -153,6 +153,10 @@ const TableRowCell = ({
         >
           <p className={styles.tableCell}>{item.summary}</p>
         </Link>
+      ) : column.key === 'voter' ? (
+        <div className={styles.addressWrapper}>
+          <p className={styles.address}>{addressFormat(item.voter)}</p>
+        </div>
       ) : (
         <p
           className={
