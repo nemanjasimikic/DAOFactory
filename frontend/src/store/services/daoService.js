@@ -922,7 +922,7 @@ const getDaoInfo = async (id, address) => {
       .proposalConfiguration({})
       .call()
     const nrOfProposals = await daoRootContract.methods.proposalCount({}).call()
-    const proposals = await getProposals(daoRootContract.address)
+    const proposals = await getProposals(daoRootContract.address, address)
     // console.log('proposals data: ', proposals)
 
     const prop = await proposalsWithYourLockedTokens(
@@ -1002,7 +1002,7 @@ const getDaoByAddress = async (address) => {
 }
 
 let dateNow = new Date().getTime()
-const getProposals = async (daoRootAddress) => {
+const getProposals = async (daoRootAddress, ownerAddress) => {
   const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
   //const slug = await daoRoot.methods.slug({}).call()
   const counter = await daoRoot.methods.getProposalCount({ answerId: 0 }).call()
@@ -1098,6 +1098,10 @@ const getProposals = async (daoRootAddress) => {
     }
     const voters = await getVoters(daoRootAddress, i + 1)
     const timelineData = await timelineCalculation(daoRootAddress, i + 1)
+    const isVoted = await didVote(daoRootAddress, i + 1, ownerAddress)
+    const supportVotes = await returnForVotes(daoRootAddress, i + 1)
+    console.log('supportVotes: ', supportVotes)
+    const unsupportVotes = await returnAgainstVotes(daoRootAddress, i + 1)
     proposals.push({
       id: i + 1,
       summary: summ[0],
@@ -1129,6 +1133,9 @@ const getProposals = async (daoRootAddress) => {
       description: description ? description : '',
       voters: voters,
       timeline: timelineData,
+      isVoted: isVoted,
+      supportVotes: supportVotes,
+      unsupportVotes: unsupportVotes,
     })
   }
 
@@ -1733,6 +1740,8 @@ const isOwner = async (daoRootAddress, ownerAddress, proposalId) => {
       owner = true
     }
   }
+
+  console.log('isOwner servis: ', owner)
   return Promise.resolve(owner)
 }
 
@@ -1848,6 +1857,79 @@ const timelineCalculation = async (daoRootAddress, proposalId) => {
   return Promise.resolve(timelineArray)
 }
 
+const didVote = async (daoRootAddress, proposalId, ownerAddress) => {
+  let voteData
+  const voters = await getVoters(daoRootAddress, proposalId)
+  const found = voters.find((voter) => voter.voter == ownerAddress)
+  if (found) {
+    voteData = {
+      isVoted: true,
+      data: found,
+    }
+  } else {
+    voteData = {
+      isVoted: false,
+      data: null,
+    }
+  }
+
+  return Promise.resolve(voteData)
+}
+
+const returnForVotes = async (daoRootAddress, proposalId) => {
+  const proposal = await createProposalContract(daoRootAddress, proposalId)
+  const successStream = await ever.getTransactions({
+    address: proposal.address,
+    continuation: undefined,
+    limit: 50,
+  })
+  let votesData = []
+  for (let i = 0; i < successStream.transactions.length; i++) {
+    const trx = await proposal.decodeTransaction({
+      transaction: successStream.transactions[i],
+      methods: ['castVote'],
+    })
+    if (trx) {
+      console.log('trx: ', trx)
+      if (trx.input.support == true) {
+        votesData.push({
+          voter: trx.input.voter._address,
+          vote: fromNano(trx.input.votes * 1, 9),
+        })
+      }
+    }
+  }
+
+  return Promise.resolve(votesData)
+}
+
+const returnAgainstVotes = async (daoRootAddress, proposalId) => {
+  const proposal = await createProposalContract(daoRootAddress, proposalId)
+  const successStream = await ever.getTransactions({
+    address: proposal.address,
+    continuation: undefined,
+    limit: 50,
+  })
+  let votesData = []
+  for (let i = 0; i < successStream.transactions.length; i++) {
+    const trx = await proposal.decodeTransaction({
+      transaction: successStream.transactions[i],
+      methods: ['castVote'],
+    })
+    if (trx) {
+      console.log('trx: ', trx)
+      if (trx.input.support == false) {
+        votesData.push({
+          voter: trx.input.voter._address,
+          vote: fromNano(trx.input.votes * 1, 9),
+        })
+      }
+    }
+  }
+
+  return Promise.resolve(votesData)
+}
+
 const daoService = {
   getExpectedAddress,
   topup,
@@ -1875,6 +1957,7 @@ const daoService = {
   canUnlockVotes,
   castVote,
   cancelProposal,
+  isOwner,
 }
 
 export default daoService

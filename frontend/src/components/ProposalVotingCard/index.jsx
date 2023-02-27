@@ -22,7 +22,10 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
         </div>
       </div>
       <div className={styles.line} style={{ background: background }} />
-      <Table columns={proposalColumns} data={data?.proposals[id - 1].voters} />
+      <Table
+        columns={proposalColumns}
+        data={data?.proposals[id - 1].supportVotes}
+      />
       <p className={styles.viewAllVoters}>View all voters</p>
     </div>
   ) : (
@@ -40,7 +43,10 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
         </div>
       </div>
       <div className={styles.line} style={{ background: background }} />
-      <Table columns={proposalColumns} />
+      <Table
+        columns={proposalColumns}
+        data={data?.proposals[id - 1].unsupportVotes}
+      />
       <p onClick={() => setOpen(!open)} className={styles.viewAllVoters}>
         View all voters
       </p>

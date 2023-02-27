@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import RouteBreadcrumbs from 'components/RouteBreadcrumbs'
 import ContentHeader from 'components/common/ContentHeader'
 import ProposalVotingCard from 'components/ProposalVotingCard'
@@ -33,6 +33,17 @@ const Proposal = () => {
     }
   )
 
+  const [isOwner, setOwner] = useState({})
+  useEffect(() => {
+    if (data) {
+      daoService
+        .isOwner(data.daoAddress, addressContext, id)
+        .then((data) => setOwner(data))
+    }
+  }, [])
+
+  console.log('isOwner: ', isOwner)
+
   console.log('data: ', data)
   console.log('data date: ', data?.proposals[id - 1].startTime)
   const gracePeriodInHrs =
@@ -43,12 +54,6 @@ const Proposal = () => {
     (data?.proposalConfiguration.votingPeriod * 1) / (60 * 60)
   const timeLockInHrs = (data?.proposalConfiguration.timeLock * 1) / (60 * 60)
 
-  const timelineInDays =
-    (gracePeriodInHrs + votingDelayInHrs + votingPeriodInHrs + timeLockInHrs) /
-    24
-  console.log('timelineInDays: ', timelineInDays)
-  //console.log('data in hours: ', dataInHrs)
-  console.log('proposal actions: ', data?.proposals[id - 1].proposalActions)
   let proposalActions = []
   //if (data != null && data.length > 0) {
   data?.proposals[id - 1].proposalActions.forEach((item, index) => {
@@ -141,47 +146,67 @@ const Proposal = () => {
             </div>
           </div>
 
-          {/*<BalanceProposalInfo heading={'Proposal management'}>*/}
-          {/*  <Button style={'primaryBtn'} text={'Cancel proposal'} />*/}
-          {/*  <Button style={'lightBlueBtn'} text={'Execute proposal'} />*/}
-          {/*</BalanceProposalInfo>*/}
+          {isOwner && data?.proposals[id - 1].status === 'Active' ? (
+            <BalanceProposalInfo heading={'Proposal management'}>
+              <Button style={'primaryBtn'} text={'Cancel proposal'} />
+            </BalanceProposalInfo>
+          ) : isOwner && data?.proposals[id - 1].status === 'Queued' ? (
+            <BalanceProposalInfo heading={'Proposal management'}>
+              <Button style={'lightBlueBtn'} text={'Execute proposal'} />
+            </BalanceProposalInfo>
+          ) : null}
 
-          <BalanceProposalInfo heading={'Your vote'}>
+          <BalanceProposalInfo
+            heading={'Your vote'}
+            status={data?.proposals[id - 1].isVoted.isVoted}
+          >
             <div className={styles.infoRow}>
               <p className={styles.parameter}>
                 Voting power, {`${data?.token.value0}`}
               </p>
-              <p className={styles.value}>{data?.userBalance}</p>
+              <p className={styles.value}>
+                {data?.proposals[id - 1].isVoted.isVoted
+                  ? data?.proposals[id - 1].isVoted.data.vote
+                  : 0}
+              </p>
             </div>
-            <div className={styles.buttonsWrapper}>
-              <Button
-                text={'Vote for'}
-                style={'greenBtn'}
-                onClick={async (e) => {
-                  // console.log('deployedActions: ', deployedActions)
-                  await daoService
-                    .castVote(data.daoAddress, true, id, addressContext)
-                    .catch((e) => {
-                      return
-                    })
-                }}
-              />
-              <Button
-                text={'Vote against'}
-                style={'redBtn'}
-                onClick={async (e) => {
-                  // console.log('deployedActions: ', deployedActions)
-                  await daoService
-                    .castVote(data.daoAddress, false, id, addressContext)
-                    .catch((e) => {
-                      return
-                    })
-                }}
-              />
-            </div>
+            {(data?.proposals[id - 1].voters.length < 1 ||
+              !data?.proposals[id - 1].isVoted.isVoted) &&
+            data?.proposals[id - 1].status !== 'Failed' ? (
+              <div className={styles.buttonsWrapper}>
+                <Button
+                  text={'Vote for'}
+                  style={'greenBtn'}
+                  onClick={async (e) => {
+                    // console.log('deployedActions: ', deployedActions)
+                    await daoService
+                      .castVote(data.daoAddress, true, id, addressContext)
+                      .catch((e) => {
+                        return
+                      })
+                  }}
+                />
+                <Button
+                  text={'Vote against'}
+                  style={'redBtn'}
+                  onClick={async (e) => {
+                    // console.log('deployedActions: ', deployedActions)
+                    await daoService
+                      .castVote(data.daoAddress, false, id, addressContext)
+                      .catch((e) => {
+                        return
+                      })
+                  }}
+                />
+              </div>
+            ) : null}
             <div className={styles.infoRow}>
               <p className={styles.parameter}>Vote weight</p>
-              <p className={styles.value}>11.65</p>
+              <p className={styles.value}>
+                {data?.proposals[id - 1].isVoted.isVoted
+                  ? data?.proposals[id - 1].isVoted.data.vote
+                  : 0}
+              </p>
             </div>
             <Button
               disabled={true}
