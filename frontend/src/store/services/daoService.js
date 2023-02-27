@@ -1157,6 +1157,7 @@ const getAllStakeholders = async (daoRootAddress) => {
     limit: 20,
   })
   let voters = []
+  let proposalsVoted = 0
   for (let i = 0; i < successStream.transactions.length; i++) {
     const trx = await stakingRoot.decodeTransaction({
       transaction: successStream.transactions[i],
@@ -1164,6 +1165,7 @@ const getAllStakeholders = async (daoRootAddress) => {
     })
     let duplicate
     if (trx) {
+      console.log('trx stakeholder: ', trx)
       if (voters) {
         duplicate = voters.find(
           (voter) =>
@@ -1173,6 +1175,7 @@ const getAllStakeholders = async (daoRootAddress) => {
       if (!duplicate) {
         voters.push(successStream.transactions[i].inMessage.src._address)
       }
+      proposalsVoted++
     }
   }
   let votesData = []
@@ -1186,7 +1189,7 @@ const getAllStakeholders = async (daoRootAddress) => {
       userAddress: voters[i],
       voteWeight: 100,
       votes: votes.value0,
-      proposalsVoted: castedVotes.casted_votes.length,
+      proposalsVoted: proposalsVoted,
     })
   }
 

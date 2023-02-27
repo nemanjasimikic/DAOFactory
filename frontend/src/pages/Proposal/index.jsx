@@ -203,7 +203,7 @@ const Proposal = () => {
             </div>
             {(data?.proposals[id - 1].voters.length < 1 ||
               !data?.proposals[id - 1].isVoted.isVoted) &&
-            data?.proposals[id - 1].status !== 'Failed' ? (
+            data?.proposals[id - 1].status === 'Active' ? (
               <div className={styles.buttonsWrapper}>
                 <Button
                   text={'Vote for'}
