@@ -1607,7 +1607,6 @@ const getUnlockArray = async (daoRoot, ownerAddress) => {
 
 const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
   try {
-    console.log('usao u unlock')
     let success = false
     if (proposalId != 0) {
       const userData = await createUserDataContract(daoRoot, ownerAddress)
@@ -1641,6 +1640,8 @@ const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
           }
         }
         if (flag == 0) success = true
+      } else {
+        success = false
       }
     }
     return Promise.resolve(success)
