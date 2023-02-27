@@ -52,8 +52,16 @@ const Proposal = () => {
         .then((data) => setActive(data))
     }
   }, [])
-  console.log('isOwner: ', isOwner)
 
+  const [queue, setQueue] = useState({})
+  useEffect(() => {
+    if (data && data?.proposals[id - 1].status == 'Succeeded') {
+      daoService.queue(data.daoAddress, id).then((data) => setQueue(data))
+    }
+  })
+  console.log('queue: ', queue)
+  console.log('isOwner: ', isOwner)
+  console.log('isActive: ', isActive)
   console.log('data: ', data)
   console.log('data date: ', data?.proposals[id - 1].startTime)
   const gracePeriodInHrs =
