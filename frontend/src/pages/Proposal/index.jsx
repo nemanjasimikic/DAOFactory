@@ -14,6 +14,7 @@ import { WalletContext } from 'context/walletContext'
 import { useQuery } from 'react-query'
 import linkIcon from 'static/svg/linkIcon.svg'
 import VotesModal from '../../components/Modal/VotesModal'
+import walletAvatar from 'static/svg/walletAvatar.svg'
 
 const Subheading = ({ text }) => {
   return <h3 className={styles.subheading}>{text}</h3>
@@ -68,7 +69,20 @@ const Proposal = () => {
   return (
     <div className={styles.container}>
       <RouteBreadcrumbs text={id} daoName={data?.name} />
-      <ContentHeader title={`#${id} ${data?.proposals[id - 1].summary}`} />
+      <ContentHeader title={`#${id} ${data?.proposals[id - 1].summary}`}>
+        <div className={styles.walletWrapper}>
+          <img
+            className={styles.walletAvatar}
+            src={walletAvatar}
+            alt={'wallet avatar'}
+          />
+          <div className={styles.addressInfo}>
+            <p className={styles.name}>Name</p>
+            <p className={styles.value}>-8181881</p>
+          </div>
+          <img src={linkIcon} alt={'link-icon'} />
+        </div>
+      </ContentHeader>
 
       <div className={styles.proposalStatus}>
         {data?.proposals[id - 1].status === 'Failed' ? (

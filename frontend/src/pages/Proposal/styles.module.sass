@@ -54,6 +54,8 @@
         .votingCardContainer
           display: flex
           align-items: center
+          flex: 1
+          justify-content: space-around
 
   .infoRow
     display: flex
@@ -116,8 +118,6 @@
         +small-grey-text
         margin-right: 10px
 
-
-
   .row
     display: flex
     align-items: center
@@ -137,6 +137,25 @@
     font-size: 14px
     line-height: 20px
     margin-bottom: 16px
+
+.walletWrapper
+  display: flex
+  align-items: center
+
+  .walletAvatar
+    margin-right: 10px
+
+  .addressInfo
+    margin-right: 10px
+    .name
+      +small-white-text
+      margin: 0
+    .value
+      +small-grey-text
+
+
+
+
 
 
 
