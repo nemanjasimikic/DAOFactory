@@ -16,6 +16,7 @@ import linkIcon from 'static/svg/linkIcon.svg'
 import VotesModal from '../../components/Modal/VotesModal'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { addressFormat } from '../../helpers/addressFormat'
+import Table from '../../components/common/Table'
 
 const Subheading = ({ text }) => {
   return <h3 className={styles.subheading}>{text}</h3>
@@ -44,14 +45,14 @@ const Proposal = () => {
     }
   }, [])
 
-  const [isActive, setActive] = useState({})
+  /*const [isActive, setActive] = useState({})
   useEffect(() => {
     if (data) {
       daoService
         .canUnlockVotes(data.daoAddress, id, addressContext)
         .then((data) => setActive(data))
     }
-  }, [])
+  }, [])*/
 
   const [queue, setQueue] = useState({})
   useEffect(() => {
@@ -61,7 +62,6 @@ const Proposal = () => {
   })
   console.log('queue: ', queue)
   console.log('isOwner: ', isOwner)
-  console.log('isActive: ', isActive)
   console.log('data: ', data)
   console.log('data date: ', data?.proposals[id - 1].startTime)
   const gracePeriodInHrs =
@@ -95,8 +95,56 @@ const Proposal = () => {
   //}
   console.log('proposalActions: ', proposalActions)
   const [open, setOpen] = useState(false)
+  const columns = [
+    {
+      key: 'id',
+      title: '#',
+      width: 100,
+    },
+    {
+      key: 'dao',
+      title: 'DAO',
+      width: 400,
+    },
+    {
+      key: 'members',
+      title: 'Members',
+      width: 400,
+    },
+    {
+      key: 'address',
+      title: 'Address',
+      width: 400,
+    },
+  ]
 
-  return (
+  const dataTable = [
+    {
+      id: '1',
+      dao: 'dao1',
+      members: 'members1',
+      address: 'address1',
+    },
+    {
+      id: '2',
+      dao: 'dao2',
+      members: 'members2',
+      address: 'address2',
+    },
+    {
+      id: '3',
+      dao: 'dao3',
+      members: 'members3',
+      address: 'address3',
+    },
+    {
+      id: '4',
+      dao: 'dao4',
+      members: 'members4',
+      address: 'address4',
+    },
+  ]
+  return data ? (
     <div className={styles.container}>
       <RouteBreadcrumbs text={id} daoName={data?.name} />
       <ContentHeader title={`#${id} ${data?.proposals[id - 1].summary}`}>
@@ -131,7 +179,11 @@ const Proposal = () => {
         {data?.proposals[id - 1].actionInMS < 0 ? (
           <div></div>
         ) : (
-          <div className={styles.time}>14 hrs 2min left</div>
+          <div className={styles.time}>
+            {data?.proposals[id - 1].actionIn
+              ? `${data?.proposals[id - 1].actionIn} left`
+              : ''}
+          </div>
         )}
       </div>
       <div className={styles.proposal}>
@@ -199,114 +251,121 @@ const Proposal = () => {
               </div>
             </div>
           </div>
-
-          {isOwner && data?.proposals[id - 1].status === 'Active' ? (
-            <BalanceProposalInfo heading={'Proposal management'}>
-              <Button
-                style={'primaryBtn'}
-                text={'Cancel proposal'}
-                onClick={async (e) => {
-                  // console.log('deployedActions: ', deployedActions)
-                  await daoService
-                    .cancelProposal(id, data.daoAddress, addressContext)
-                    .catch((e) => {
-                      return
-                    })
-                }}
-              />
-            </BalanceProposalInfo>
-          ) : isOwner && data?.proposals[id - 1].status === 'Queued' ? (
-            <BalanceProposalInfo heading={'Proposal management'}>
-              <Button
-                style={'lightBlueBtn'}
-                text={'Execute proposal'}
-                onClick={async (e) => {
-                  // console.log('deployedActions: ', deployedActions)
-                  await daoService
-                    .executeProposal(data.daoAddress, id, addressContext)
-                    .catch((e) => {
-                      return
-                    })
-                }}
-              />
-            </BalanceProposalInfo>
-          ) : null}
-
-          <BalanceProposalInfo
-            heading={'Your vote'}
-            status={data?.proposals[id - 1].isVoted.isVoted}
-            support={data?.proposals[id - 1].userVoteSupport}
-          >
-            <div className={styles.infoRow}>
-              <p className={styles.parameter}>
-                Voting power, {`${data?.token.value0}`}
-              </p>
-              <p className={styles.value}>
-                {data?.proposals[id - 1].isVoted.isVoted
-                  ? data?.proposals[id - 1].isVoted.data.vote
-                  : 0}
-              </p>
-            </div>
-            {(data?.proposals[id - 1].voters.length < 1 ||
-              !data?.proposals[id - 1].isVoted.isVoted) &&
-            data?.proposals[id - 1].status === 'Active' ? (
-              <div className={styles.buttonsWrapper}>
+          <div className={styles.balanceProposalInfoWrapper}>
+            {isOwner && data?.proposals[id - 1].status === 'Active' ? (
+              <BalanceProposalInfo heading={'Proposal management'}>
                 <Button
-                  text={'Vote for'}
-                  style={'greenBtn'}
+                  style={'primaryBtn'}
+                  text={'Cancel proposal'}
                   onClick={async (e) => {
                     // console.log('deployedActions: ', deployedActions)
                     await daoService
-                      .castVote(data.daoAddress, true, id, addressContext)
+                      .cancelProposal(id, data.daoAddress, addressContext)
                       .catch((e) => {
                         return
                       })
                   }}
                 />
+              </BalanceProposalInfo>
+            ) : isOwner && data?.proposals[id - 1].status === 'Queued' ? (
+              <BalanceProposalInfo heading={'Proposal management'}>
                 <Button
-                  text={'Vote against'}
-                  style={'redBtn'}
+                  style={'lightBlueBtn'}
+                  text={'Execute proposal'}
                   onClick={async (e) => {
                     // console.log('deployedActions: ', deployedActions)
                     await daoService
-                      .castVote(data.daoAddress, false, id, addressContext)
+                      .executeProposal(data.daoAddress, id, addressContext)
                       .catch((e) => {
                         return
                       })
                   }}
                 />
-              </div>
+              </BalanceProposalInfo>
             ) : null}
-            <div className={styles.infoRow}>
-              <p className={styles.parameter}>Vote weight</p>
-              <p className={styles.value}>
-                {data?.proposals[id - 1].isVoted.isVoted
-                  ? `${data?.proposals[id - 1].proposalVoteWeigth}%`
-                  : '0%'}
+
+            <BalanceProposalInfo
+              heading={'Your vote'}
+              status={data?.proposals[id - 1].isVoted.isVoted}
+              support={data?.proposals[id - 1].userVoteSupport}
+            >
+              <div className={styles.infoRow}>
+                <p className={styles.parameter}>
+                  Voting power, {`${data?.token.value0}`}
+                </p>
+                <p className={styles.value}>
+                  {data?.proposals[id - 1].isVoted.isVoted
+                    ? data?.proposals[id - 1].isVoted.data.vote
+                    : 0}
+                </p>
+              </div>
+              {(data?.proposals[id - 1].voters.length < 1 ||
+                !data?.proposals[id - 1].isVoted.isVoted) &&
+              data?.proposals[id - 1].status === 'Active' ? (
+                <div className={styles.buttonsWrapper}>
+                  <Button
+                    text={'Vote for'}
+                    style={'greenBtn'}
+                    onClick={async (e) => {
+                      // console.log('deployedActions: ', deployedActions)
+                      await daoService
+                        .castVote(data.daoAddress, true, id, addressContext)
+                        .catch((e) => {
+                          return
+                        })
+                    }}
+                  />
+                  <Button
+                    text={'Vote against'}
+                    style={'redBtn'}
+                    onClick={async (e) => {
+                      // console.log('deployedActions: ', deployedActions)
+                      await daoService
+                        .castVote(data.daoAddress, false, id, addressContext)
+                        .catch((e) => {
+                          return
+                        })
+                    }}
+                  />
+                </div>
+              ) : null}
+              <div className={styles.infoRow}>
+                <p className={styles.parameter}>Vote weight</p>
+                <p className={styles.value}>
+                  {data?.proposals[id - 1].isVoted.isVoted
+                    ? `${data?.proposals[id - 1].proposalVoteWeigth}%`
+                    : '0%'}
+                </p>
+              </div>
+              <Button
+                disabled={!data?.proposals[id - 1].canUnlock}
+                style={
+                  !data?.proposals[id - 1].canUnlock
+                    ? 'disabledBtn'
+                    : 'primaryBtn'
+                }
+                text={'Unlock Tokens'}
+                onClick={async (e) => {
+                  // console.log('deployedActions: ', deployedActions)
+                  await daoService
+                    .unlockVotes(data.daoAddress, id, addressContext)
+                    .catch((e) => {
+                      return
+                    })
+                }}
+              />
+              <p className={styles.notice}>
+                Your tokens are locked. You can unlock them after voting to be
+                able to withdraw.
               </p>
-            </div>
-            <Button
-              disabled={!isActive}
-              style={!isActive ? 'disabledBtn' : 'primaryBtn'}
-              text={'Unlock Tokens'}
-              onClick={async (e) => {
-                // console.log('deployedActions: ', deployedActions)
-                await daoService
-                  .unlockVotes(data.daoAddress, id, addressContext)
-                  .catch((e) => {
-                    return
-                  })
-              }}
-            />
-            <p className={styles.notice}>
-              Your tokens are locked. You can unlock them after voting to be
-              able to withdraw.
-            </p>
-          </BalanceProposalInfo>
+            </BalanceProposalInfo>
+          </div>
         </div>
       </div>
       <VotesModal open={open} setOpen={setOpen} data={data} id={id} />
     </div>
+  ) : (
+    <Table columns={columns} data={dataTable} isLoading={true} />
   )
 }
 

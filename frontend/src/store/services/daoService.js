@@ -1143,6 +1143,12 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       )
       // console.log('proposalVoteWeigth: ', proposalVoteWeigth)
     }
+    const canUnlock = await canUnlockVotes(daoRootAddress, i + 1, ownerAddress)
+    const actionIn = parseMsToActionTime(
+      new Date(
+        dayjs.unix(data.endTime_).format('DD MMM YYYY HH:mm')
+      ).getTime() - dateNow
+    )
     proposals.push({
       id: i + 1,
       summary: summ[0],
@@ -1180,6 +1186,8 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       userVoteSupport: userVoteSupport,
       proposer: proposer,
       proposalVoteWeigth: proposalVoteWeigth,
+      actionIn: actionIn,
+      canUnlock: canUnlock,
     })
   }
 
@@ -1464,6 +1472,46 @@ const calculateBalance = async (ownerAddress, tokenAddr) => {
   }
 }
 
+function parseMsToActionTime(milliseconds) {
+  let result = ''
+  const days = milliseconds / (1000 * 60 * 60 * 24)
+  var absoluteDays = Math.floor(days)
+  let daysLeft
+  if (absoluteDays > 0) {
+    daysLeft = absoluteDays
+    const hours = days - absoluteDays
+    const absoluteHours = Math.floor(hours)
+    result = `${daysLeft} days `
+    if (absoluteHours > 0) {
+      result += `${absoluteHours} hrs `
+      const minutes = hours - absoluteHours
+      const absoluteMinutes = Math.floor(minutes)
+      if (absoluteMinutes > 0) {
+        result += `${absoluteMinutes} mins`
+      }
+    }
+    //return `${absoluteDays} days ago`
+  }
+  const hours = milliseconds / (1000 * 60 * 60)
+  const absoluteHours = Math.floor(hours)
+  if (absoluteHours > 0) {
+    result += `${absoluteHours} hrs `
+    const minutes = hours - absoluteHours
+    const absoluteMinutes = Math.floor(minutes)
+    if (absoluteMinutes > 0) {
+      result += `${absoluteMinutes} mins`
+    }
+  }
+
+  const minutes = milliseconds / (1000 * 60)
+  const absoluteMinutes = Math.floor(minutes)
+  if (absoluteMinutes > 0) {
+    result += `${absoluteMinutes} mins`
+  }
+
+  return result
+}
+
 function parseMillisecondsIntoReadableTime(milliseconds) {
   var days = milliseconds / (1000 * 60 * 60 * 24)
   var absoluteDays = Math.floor(days)
@@ -1607,7 +1655,6 @@ const getUnlockArray = async (daoRoot, ownerAddress) => {
 
 const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
   try {
-    //console.log('usao u unlock')
     let success = false
     console.log('proposalId: ', proposalId)
     if (proposalId != 0) {
@@ -1629,9 +1676,10 @@ const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
     } else {
       const userData = await createUserDataContract(daoRoot, ownerAddress)
       const castedVotes = await userData.methods.casted_votes({}).call()
-
+      console.log('ovde sam')
       let flag = 0
       if (castedVotes.casted_votes.length > 0) {
+        console.log('ima voteova')
         for (let i = 0; i < castedVotes.casted_votes.length; i++) {
           const proposal = await createProposalContract(
             daoRoot,
@@ -1643,6 +1691,8 @@ const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
           }
         }
         if (flag == 0) success = true
+      } else {
+        success = false
       }
     }
     return Promise.resolve(success)
