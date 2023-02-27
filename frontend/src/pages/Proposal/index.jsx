@@ -43,6 +43,13 @@ const Proposal = () => {
     (data?.proposalConfiguration.votingPeriod * 1) / (60 * 60)
   const timeLockInHrs = (data?.proposalConfiguration.timeLock * 1) / (60 * 60)
 
+  const proposalTimelinePeriods = [
+    votingDelayInHrs,
+    votingPeriodInHrs,
+    timeLockInHrs,
+    gracePeriodInHrs,
+  ]
+
   const timelineInDays =
     (gracePeriodInHrs + votingDelayInHrs + votingPeriodInHrs + timeLockInHrs) /
     24
@@ -103,6 +110,8 @@ const Proposal = () => {
                 //day={data?.proposals[id - 1].dayForTimeline}
                 data={data}
                 id={id - 1}
+                timelinePeriodsList={proposalTimelinePeriods}
+                status={data?.proposals[id - 1].status}
               />
             </div>
             <Subheading text={'About proposal'} />
