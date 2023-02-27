@@ -1,7 +1,18 @@
-import Table from 'components/common/Table'
-import VotesModal from 'components/Modal/VotesModal'
+import { addressFormat } from '../../helpers/addressFormat'
 import styles from './styles.module.sass'
-import { proposalColumns } from './mocks'
+import walletAvatar from 'static/svg/walletAvatar.svg'
+
+const VoteListItem = ({ item }) => {
+  return (
+    <div className={styles.voteListItem}>
+      <div className={styles.voterWrapper}>
+        <img src={walletAvatar} alt={'voter avatar'} />
+        <p>{addressFormat(item.voter)}</p>
+      </div>
+      <p>{item.vote}</p>
+    </div>
+  )
+}
 
 const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
   const votesPercentage = (votes) => {
@@ -34,11 +45,14 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
           </h3>
         </div>
       </div>
-      <div className={styles.line} style={{ background: background(true) }} />
-      <Table
-        columns={proposalColumns}
-        data={data?.proposals[id - 1].supportVotes}
-      />
+      <div className={styles.line} style={{ background: background }} />
+      <div className={styles.tableHeading}>
+        <p>Voter</p>
+        <p>Vote</p>
+      </div>
+      {data?.proposals[id - 1].supportVotes.map((item) => (
+        <VoteListItem item={item} />
+      ))}
       <p onClick={() => setOpen(!open)} className={styles.viewAllVoters}>
         View all voters
       </p>
@@ -57,11 +71,14 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
           </h3>
         </div>
       </div>
-      <div className={styles.line} style={{ background: background(false) }} />
-      <Table
-        columns={proposalColumns}
-        data={data?.proposals[id - 1].unsupportVotes}
-      />
+      <div className={styles.line} style={{ background: background }} />
+      <div className={styles.tableHeading}>
+        <p>Voter</p>
+        <p>Vote</p>
+      </div>
+      {data?.proposals[id - 1].unsupportVotes.map((item) => (
+        <VoteListItem item={item} />
+      ))}
       <p onClick={() => setOpen(!open)} className={styles.viewAllVoters}>
         View all voters
       </p>
