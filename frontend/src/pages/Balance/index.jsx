@@ -26,9 +26,11 @@ const Balance = () => {
     () => daoService.getDaoInfo(id, addressContext),
     {
       enabled: !!addressContext,
-      cacheTime: 30 * 1000,
+      refetchInterval: 1000,
     }
   )
+
+  console.log('data: ', data)
 
   const columns = [
     {

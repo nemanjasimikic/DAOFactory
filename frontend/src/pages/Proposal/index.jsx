@@ -29,7 +29,7 @@ const Proposal = () => {
     () => daoService.getDaoInfo(id1, addressContext),
     {
       enabled: !!addressContext,
-      cacheTime: 30 * 1000,
+      refetchInterval: 1000,
     }
   )
 
@@ -42,6 +42,14 @@ const Proposal = () => {
     }
   }, [])
 
+  const [isActive, setActive] = useState({})
+  useEffect(() => {
+    if (data) {
+      daoService
+        .canUnlockVotes(data.daoAddress, id, addressContext)
+        .then((data) => setActive(data))
+    }
+  }, [])
   console.log('isOwner: ', isOwner)
 
   console.log('data: ', data)
@@ -148,11 +156,33 @@ const Proposal = () => {
 
           {isOwner && data?.proposals[id - 1].status === 'Active' ? (
             <BalanceProposalInfo heading={'Proposal management'}>
-              <Button style={'primaryBtn'} text={'Cancel proposal'} />
+              <Button
+                style={'primaryBtn'}
+                text={'Cancel proposal'}
+                onClick={async (e) => {
+                  // console.log('deployedActions: ', deployedActions)
+                  await daoService
+                    .cancelProposal(id, data.daoAddress, addressContext)
+                    .catch((e) => {
+                      return
+                    })
+                }}
+              />
             </BalanceProposalInfo>
           ) : isOwner && data?.proposals[id - 1].status === 'Queued' ? (
             <BalanceProposalInfo heading={'Proposal management'}>
-              <Button style={'lightBlueBtn'} text={'Execute proposal'} />
+              <Button
+                style={'lightBlueBtn'}
+                text={'Execute proposal'}
+                onClick={async (e) => {
+                  // console.log('deployedActions: ', deployedActions)
+                  await daoService
+                    .executeProposal(data.daoAddress, id, addressContext)
+                    .catch((e) => {
+                      return
+                    })
+                }}
+              />
             </BalanceProposalInfo>
           ) : null}
 
@@ -210,8 +240,8 @@ const Proposal = () => {
               </p>
             </div>
             <Button
-              disabled={true}
-              style={'disabledBtn'}
+              disabled={!isActive}
+              style={!isActive ? 'disabledBtn' : 'primaryBtn'}
               text={'Unlock Tokens'}
               onClick={async (e) => {
                 // console.log('deployedActions: ', deployedActions)

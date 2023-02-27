@@ -1938,11 +1938,29 @@ const returnAgainstVotes = async (daoRootAddress, proposalId) => {
 
 const userSupport = async (daoRootAddress, proposalId, ownerAddress) => {
   const forVotes = await returnForVotes(daoRootAddress, proposalId)
+  console.log('forVotes: ', forVotes)
   const support = forVotes.find((vote) => vote.voter == ownerAddress)
+  console.log('ownerAddress: ', ownerAddress)
+  console.log('support: ', support)
   if (support) {
     return Promise.resolve(true)
   } else {
     return Promise.resolve(false)
+  }
+}
+
+const executeProposal = async (daoRootAddress, proposalId, ownerAddress) => {
+  try {
+    const proposal = await createProposalContract(daoRootAddress, proposalId)
+    const execute = await proposal.methods.execute({}).send({
+      from: ownerAddress,
+      amount: toNano(15, 9),
+      bounce: false,
+    })
+
+    return Promise.resolve(execute)
+  } catch (e) {
+    Promise.reject(e)
   }
 }
 
@@ -1974,6 +1992,7 @@ const daoService = {
   castVote,
   cancelProposal,
   isOwner,
+  executeProposal,
 }
 
 export default daoService
