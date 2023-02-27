@@ -42,6 +42,11 @@ const Proposal = () => {
   const votingPeriodInHrs =
     (data?.proposalConfiguration.votingPeriod * 1) / (60 * 60)
   const timeLockInHrs = (data?.proposalConfiguration.timeLock * 1) / (60 * 60)
+
+  const timelineInDays =
+    (gracePeriodInHrs + votingDelayInHrs + votingPeriodInHrs + timeLockInHrs) /
+    24
+  console.log('timelineInDays: ', timelineInDays)
   //console.log('data in hours: ', dataInHrs)
   console.log('proposal actions: ', data?.proposals[id - 1].proposalActions)
   let proposalActions = []

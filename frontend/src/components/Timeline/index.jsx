@@ -10,6 +10,14 @@ const Day = ({ day, date }) => {
 }
 
 const Timeline = ({ data, id }) => {
+  let timelineDays = []
+  // if (data != null && data.length > 0) {
+  console.log('data timeline: ', data?.proposals[id].timeline)
+  data?.proposals[id].timeline.forEach((item, index) => {
+    timelineDays.push(<Day day={item.weekday} date={item.date} />)
+  })
+  console.log('timelineDays: ', timelineDays)
+  //}
   return (
     <div className={styles.timeline}>
       <div className={styles.monthRow}>
@@ -24,7 +32,8 @@ const Timeline = ({ data, id }) => {
               date={data?.proposals[id].dateShort}
             />
           ) : (
-            <Day />
+            // <Day />
+            timelineDays
           )
           // <Day />
           // <Day />

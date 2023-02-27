@@ -940,6 +940,7 @@ const getDaoInfo = async (id, address) => {
     const canUnlock = await getUnlockArray(daoRootContract, address)
     console.log('canUnlock: ', canUnlock)
     await getVotes(daoRootContract.address, address)
+
     // console.log('prop: ', prop)
     rootData = {
       name: name.name,
@@ -1053,6 +1054,7 @@ const getProposals = async (daoRootAddress) => {
           dayjs.unix(data.endTime_).format('DD MMM YYYY HH:mm')
         ).getTime()
     )
+    console.log('start end difference: ', startEndDifference)
     const monthNames = [
       'January',
       'February',
@@ -1073,7 +1075,9 @@ const getProposals = async (daoRootAddress) => {
           dayjs.unix(data.startTime_).format('DD MMM YYYY HH:mm')
         ).getMonth()
       ]
-    const daysDifference = parseMillisecondsIntoReadableTime(startEndDifference)
+    const daysDifference = parseMillisecondsIntoReadableTime(
+      startEndDifference * -1
+    )
     console.log('days difference: ', daysDifference)
     let numberOfDifference
     if (
@@ -1093,6 +1097,7 @@ const getProposals = async (daoRootAddress) => {
       description = summ[1]
     }
     const voters = await getVoters(daoRootAddress, i + 1)
+    const timelineData = await timelineCalculation(daoRootAddress, i + 1)
     proposals.push({
       id: i + 1,
       summary: summ[0],
@@ -1123,6 +1128,7 @@ const getProposals = async (daoRootAddress) => {
       dateShort: date,
       description: description ? description : '',
       voters: voters,
+      timeline: timelineData,
     })
   }
 
@@ -1784,6 +1790,62 @@ const getVoters = async (daoRootAddress, proposalId) => {
     }
   }
   return Promise.resolve(votesData)
+}
+
+const timelineCalculation = async (daoRootAddress, proposalId) => {
+  const daoRoot = createDaoRootContract(daoRootAddress)
+  const proposalConfiguration = await daoRoot.methods
+    .proposalConfiguration({})
+    .call()
+  const days =
+    (proposalConfiguration.proposalConfiguration.votingDelay * 1 +
+      proposalConfiguration.proposalConfiguration.votingPeriod * 1 +
+      proposalConfiguration.proposalConfiguration.timeLock * 1 +
+      proposalConfiguration.proposalConfiguration.gracePeriod * 1) /
+    (60 * 60 * 24)
+  console.log('days: ', days)
+  const proposal = await createProposalContract(daoRootAddress, proposalId)
+  const data = await proposal.methods.getOverview({ answerId: 0 }).call()
+  const options = { weekday: 'short' }
+  let timelineArray = []
+  for (let i = 0; i < days; i++) {
+    const timeToDate = new Date(
+      data.startTime_ * 1000 + 24 * 60 * 60 * i * 1000
+    ).toLocaleString('en-US', options)
+    console.log('time to Date: ', timeToDate)
+    const adition = data.startTime_ * 1 + 24 * 60 * 60 * i
+    console.log('adition: ', adition)
+    const date = dayjs.unix(adition).format('D.M')
+    console.log('date short: ', date)
+    const dateNow = dayjs.unix(data.startTime_).format('D.M')
+    console.log('dateNow: ', dateNow)
+    console.log('data.start: ', data.startTime_)
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+    const month =
+      monthNames[
+        new Date(dayjs.unix(adition).format('DD MMM YYYY HH:mm')).getMonth()
+      ]
+    timelineArray.push({
+      date: date,
+      weekday: timeToDate,
+      month: month,
+    })
+  }
+  console.log('timelineArray: ', timelineArray)
+  return Promise.resolve(timelineArray)
 }
 
 const daoService = {
