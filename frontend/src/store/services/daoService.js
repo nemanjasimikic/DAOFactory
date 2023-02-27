@@ -1055,6 +1055,7 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
         ).getTime()
     )
     console.log('start end difference: ', startEndDifference)
+    const proposer = data.proposer_
     const monthNames = [
       'January',
       'February',
@@ -1142,6 +1143,7 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       supportVotes: supportVotes,
       unsupportVotes: unsupportVotes,
       userVoteSupport: userVoteSupport,
+      proposer: proposer,
     })
   }
 
