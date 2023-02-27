@@ -192,7 +192,7 @@ const Proposal = () => {
             </div>
           </div>
           <div className={styles.balanceProposalInfoWrapper}>
-            {isOwner && data?.proposals[id - 1].status === 'Failed' ? (
+            {isOwner && data?.proposals[id - 1].status === 'Active' ? (
               <BalanceProposalInfo heading={'Proposal management'}>
                 <Button
                   style={'primaryBtn'}
