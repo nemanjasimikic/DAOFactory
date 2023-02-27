@@ -15,6 +15,7 @@ import { useQuery } from 'react-query'
 import linkIcon from 'static/svg/linkIcon.svg'
 import VotesModal from '../../components/Modal/VotesModal'
 import walletAvatar from 'static/svg/walletAvatar.svg'
+import { addressFormat } from '../../helpers/addressFormat'
 
 const Subheading = ({ text }) => {
   return <h3 className={styles.subheading}>{text}</h3>
@@ -77,10 +78,18 @@ const Proposal = () => {
             alt={'wallet avatar'}
           />
           <div className={styles.addressInfo}>
-            <p className={styles.name}>Name</p>
-            <p className={styles.value}>-8181881</p>
+            <div className={styles.name}>
+              {addressFormat(data?.proposals[id - 1].proposer._address)}
+            </div>
           </div>
-          <img src={linkIcon} alt={'link-icon'} />
+          <a
+            href={`https://everscan.io/accounts/${
+              data?.proposals[id - 1].proposer._address
+            }`}
+            target={'_blank'}
+          >
+            <img src={linkIcon} alt={'link-icon'} />
+          </a>
         </div>
       </ContentHeader>
 
