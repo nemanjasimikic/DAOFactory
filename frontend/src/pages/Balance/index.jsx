@@ -183,7 +183,6 @@ const Balance = () => {
             style={'primaryBtn'}
             text={'Unlock all tokens'}
             onClick={async (e) => {
-              // console.log('deployedActions: ', deployedActions)
               await daoService
                 .unlockVotes(data.daoAddress, 0, addressContext)
                 .catch((e) => {
