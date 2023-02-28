@@ -25,9 +25,13 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
     return `linear-gradient(to right, ${
       forVotes ? '#4AB44A' : ' #EB4361'
     } 0%, ${forVotes ? '#4AB44A' : ' #EB4361'} ${votesPercentage(
-      data?.proposals[id - 1].supportVotes
+      forVotes
+        ? data?.proposals[id - 1].forVotes
+        : data?.proposals[id - 1].againstVotes
     )}%, rgba(255, 255, 255, 0.08) ${votesPercentage(
-      data?.proposals[id - 1].supportVotes
+      forVotes
+        ? data?.proposals[id - 1].forVotes
+        : data?.proposals[id - 1].againstVotes
     )}%, rgba(255, 255, 255, 0.08) 100%)`
   }
 
@@ -45,7 +49,7 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
           </h3>
         </div>
       </div>
-      <div className={styles.line} style={{ background: background }} />
+      <div className={styles.line} style={{ background: background(true) }} />
       <div className={styles.tableHeading}>
         <p>Voter</p>
         <p>Vote</p>
@@ -71,7 +75,7 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
           </h3>
         </div>
       </div>
-      <div className={styles.line} style={{ background: background }} />
+      <div className={styles.line} style={{ background: background(false) }} />
       <div className={styles.tableHeading}>
         <p>Voter</p>
         <p>Vote</p>
