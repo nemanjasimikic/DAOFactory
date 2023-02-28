@@ -54,10 +54,12 @@ const Proposal = () => {
     }
   }, [])*/
 
+  const [counter, setCounter] = useState(0)
   const [queue, setQueue] = useState({})
   useEffect(() => {
-    if (data && data?.proposals[id - 1].status == 'Succeeded') {
+    if (data && data?.proposals[id - 1].status == 'Succeeded' && counter < 1) {
       daoService.queue(data.daoAddress, id).then((data) => setQueue(data))
+      setCounter(1)
     }
   })
   console.log('queue: ', queue)
@@ -267,7 +269,9 @@ const Proposal = () => {
                   }}
                 />
               </BalanceProposalInfo>
-            ) : isOwner && data?.proposals[id - 1].status === 'Queued' ? (
+            ) : isOwner &&
+              data?.proposals[id - 1].status === 'Queued' &&
+              data?.proposals[id - 1].canExecuteProposal ? (
               <BalanceProposalInfo heading={'Proposal management'}>
                 <Button
                   style={'lightBlueBtn'}
