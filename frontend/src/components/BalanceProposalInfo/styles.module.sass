@@ -1,14 +1,41 @@
 @import 'src/sass/theme'
 
 .balanceProposalInfo
-  width: 400px
+  max-height: 315px
   border: 1px solid rgba(255, 255, 255, 0.16)
   padding: 24px
-  overflow-x: auto
   margin-left: 40px
+  margin-top: 30px
   display: flex
   flex-direction: column
+  width: 100%
+
 
   .heading
-    margin: 0
-    +small-medium-white-text
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin: 0 0 16px 0
+
+    .title
+      +small-medium-white-text
+
+    .red
+      background: rgba(235, 67, 97, 0.16)
+      color: #EB4361
+      padding: 4px 8px
+      border-radius: 27px
+      font-size: 14px
+    .yellow
+      background: rgba(230, 172, 0, 0.16)
+      color: #E6AC00
+      padding: 4px 8px
+      border-radius: 27px
+      font-size: 14px
+    .green
+      background: rgba(74, 180, 74, 0.16)
+      color: #4AB44A
+      padding: 4px 8px
+      border-radius: 27px
+      font-size: 14px
+

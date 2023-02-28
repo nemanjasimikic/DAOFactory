@@ -1,0 +1,81 @@
+@import 'src/sass/theme'
+
+.proposalVotingCard
+  background: rgba(255, 255, 255, 0.08)
+  padding: 24px
+  display: flex
+  flex-direction: column
+  align-items: center
+  height: 386px
+  width: 49%
+
+  .heading
+    display: flex
+    justify-content: space-between
+    align-items: center
+    width: 100%
+
+    .headingText
+      +small-medium-white-text
+
+    .headingData
+      display: flex
+      align-items: center
+      +small-medium-white-text
+
+      .currentValue
+        +small-medium-white-text
+        margin-right: 5px
+
+      .maxValue
+        +medium-grey-text
+        line-height: 24px
+        font-size: 18px
+        margin-left: 5px
+
+  .line
+    width: 100%
+    height: 4px
+    margin-bottom: 20px
+    display: flex
+    align-self: flex-start
+
+  .viewAllVoters
+    color: $light-blue
+    font-size: 14px
+    font-weight: 700
+    cursor: pointer
+
+  .tableHeading
+    display: flex
+    justify-content: space-between
+    width: 100%
+    align-items: center
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16)
+    padding: 6px 12px
+
+
+    p
+      +small-grey-text
+
+  .voteListItem
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    height: 62px
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16)
+    padding: 0 12px
+
+    p
+      +small-white-text
+
+    .voterWrapper
+      display: flex
+      align-items: center
+
+      img
+        margin-right: 10px
+
+
+

@@ -1,0 +1,41 @@
+@import 'src/sass/theme'
+
+.accordion
+  display: flex
+  flex-direction: column
+  width: 100%
+
+  .accordionTopContainer
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    cursor: pointer
+    height: 52px
+    border-top: 1px solid rgba(255, 255, 255, 0.08)
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08)
+    background: transparent
+    color: $white
+
+  .accordionContent
+    display: flex
+    flex-direction: column
+    width: 100%
+
+    .row
+      display: flex
+      align-items: center
+      padding: 8px 0
+
+      .info
+        +small-grey-text
+        width: 226px
+
+      .value
+        +small-white-text
+        font-size: 14px
+        line-height: 20px
+
+  .accordionContentHidden
+    display: none
+

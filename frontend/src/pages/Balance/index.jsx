@@ -26,9 +26,11 @@ const Balance = () => {
     () => daoService.getDaoInfo(id, addressContext),
     {
       enabled: !!addressContext,
-      cacheTime: 30 * 1000,
+      refetchInterval: 1000,
     }
   )
+
+  console.log('data: ', data)
 
   const columns = [
     {
@@ -80,6 +82,8 @@ const Balance = () => {
     },
   ]
 
+  console.log(data?.proposalConfiguration ? data : 'MEMBERS NO UNDEF')
+
   return data ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
@@ -109,7 +113,13 @@ const Balance = () => {
           value={data.token ? data.token.value0 : '-'}
           className={styles.bic1}
         />
-        <BalanceInfoCard name={'Members'} value={'-'} className={styles.bic2} />
+        <BalanceInfoCard
+          name={'Members'}
+          value={
+            data.stakers && data.stakers.length > 0 ? data.stakers.length : '-'
+          }
+          className={styles.bic2}
+        />
         <BalanceInfoCard
           name={'Quorum'}
           value={`${
@@ -169,12 +179,25 @@ const Balance = () => {
       <div className={styles.tableSectionHeading}>
         <p>Proposals with your locked tokens</p>
         <div className={styles.rightContentWrapper}>
-          <Button style={'primaryBtn'} text={'Unlock all tokens'} />
+          <Button
+            style={'primaryBtn'}
+            text={'Unlock all tokens'}
+            onClick={async (e) => {
+              // console.log('deployedActions: ', deployedActions)
+              await daoService
+                .unlockVotes(data.daoAddress, 0, addressContext)
+                .catch((e) => {
+                  return
+                })
+            }}
+          />
         </div>
       </div>
       <Table
         columns={columnsLockedTokens}
         data={data.proposalsWithLockedTokens}
+        ownerAddress={addressContext}
+        daoAddress={data.daoAddress}
       />
       <div className={styles.tableSectionHeading}>
         <p>Voters</p>

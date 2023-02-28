@@ -2,6 +2,7 @@ import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
 import linkIcon from 'static/svg/linkIcon.svg'
 import { validator, whatPage } from 'helpers/formValidator'
+import Tooltip from 'components/common/Tooltip'
 
 const Input = ({
   formId,
@@ -71,8 +72,17 @@ const Input = ({
 
   let hint =
     registerInput === 'governanceToken'
-      ? 'Token used for voting on a given proposal'
+      ? 'You can find the addresses on everscan.io/tokens'
       : null
+
+  let icon = (
+    <img
+      title=""
+      src={labelIcon}
+      className={styles.labelIcon}
+      onError={(event) => (event.target.src = '')}
+    />
+  )
 
   return (
     <div className={styles.inputWrapper}>
@@ -80,12 +90,11 @@ const Input = ({
         <div className={styles.labelWrapper}>
           <div className={styles.labelInnerWrap}>
             <label className={styles.label}>{label}</label>
-            <img
-              title={hint}
-              src={labelIcon}
-              className={styles.labelIcon}
-              onError={(event) => (event.target.src = '')}
-            />
+            <Tooltip
+              label={'Governance Token'}
+              text={'You can find the addresses on everscan.io/tokens'}
+              wrappedElement={icon}
+            ></Tooltip>
           </div>
           <div>
             <a
