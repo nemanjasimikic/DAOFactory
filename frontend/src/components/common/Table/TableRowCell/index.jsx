@@ -1,15 +1,22 @@
 import _ from 'lodash'
-import styles from './styles.module.sass'
-import { useLocation } from 'react-router-dom'
-import Button from '../../Button'
-import walletAvatar from 'static/svg/walletAvatar.svg'
-import { addressFormat } from '../../../../helpers/addressFormat'
+import { Link, useLocation } from 'react-router-dom'
+import Button from 'components/common/Button'
 import daoService from 'store/services/daoService'
+import { addressFormat } from 'helpers/addressFormat'
+import styles from './styles.module.sass'
+import walletAvatar from 'static/svg/walletAvatar.svg'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
-const TableRowCell = ({ item, column, isLoading }) => {
+const TableRowCell = ({
+  item,
+  column,
+  isLoading,
+  ownerAddress,
+  daoAddress,
+}) => {
   const value = _.get(item, column.key)
   const location = useLocation()
-
   const className =
     item.status === 'Active' || item.status === 'Pending'
       ? styles.darkBlueActive
@@ -38,8 +45,41 @@ const TableRowCell = ({ item, column, isLoading }) => {
 
   const actionBefore = daoService.parseMillisecondsIntoReadableTime(
     item.dateStaking
-  ) //`${item.dateStaking} minutes ago`
-  // console.log('item.dateStaking: ', item.dateStaking)
+  )
+
+  const [isActive, setActive] = useState(false)
+
+  async function canUnlock(proposalId) {
+    try {
+      const unlock = await daoService.canUnlockVotes(
+        daoAddress,
+        proposalId,
+        ownerAddress
+      )
+      //  console.log('unlock: ', unlock)
+      //console.log('proposalId: ', proposalId)
+      setActive(unlock)
+    } catch (e) {
+      console.log(e)
+      setActive(false)
+    }
+  }
+
+  //console.log(column.key)
+  useEffect(() => {
+    const checkWallet = async () => {
+      if (column.key === 'unlockTokens') {
+        try {
+          canUnlock(item.id)
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    }
+    checkWallet()
+  }, [])
+  //console.log('item: ', item)
+  //console.log('isActive: ', isActive)
 
   return (
     <div style={{ width: column.width }}>
@@ -61,14 +101,42 @@ const TableRowCell = ({ item, column, isLoading }) => {
           <p className={styles.action}>{actionBefore}</p>
         </div>
       ) : column.key === 'unlockTokens' ? (
-        <Button style={'primaryBtn'} text={'Unlock'} />
+        <Button
+          style={isActive ? 'primaryBtn' : 'disabledBtn'}
+          text={'Unlock'}
+          disabled={!isActive}
+          onClick={async (e) => {
+            // console.log('deployedActions: ', deployedActions)
+            await daoService
+              .unlockVotes(daoAddress, item.id, ownerAddress)
+              .catch((e) => {
+                return
+              })
+          }}
+        />
       ) : column.key === 'myvote' ? (
-        <div className={styles.rangeWrapper}>
-          <div className={styles.dateWrapper}>
-            <p className={styles.action}>For</p>
-            <p className={styles.date}>{item.myVote}</p>
+        item.forVotes > 0 ? (
+          <div className={styles.rangeWrapper}>
+            <div className={styles.dateWrapper}>
+              <p className={styles.action}>For</p>
+              <p className={styles.date}>{item.forVotes /*item.myVote*/}</p>
+            </div>
           </div>
-        </div>
+        ) : item.againstVotes > 0 ? (
+          <div className={styles.rangeWrapper}>
+            <div className={styles.dateWrapper}>
+              <p className={styles.action}>Against</p>
+              <p className={styles.date}>{item.againstVotes /*item.myVote*/}</p>
+            </div>
+          </div>
+        ) : (
+          <div className={styles.rangeWrapper}>
+            <div className={styles.dateWrapper}>
+              <p className={styles.action}>-</p>
+              <p className={styles.date}>{'-' /*item.myVote*/}</p>
+            </div>
+          </div>
+        )
       ) : column.key === 'addresses' ? (
         <div className={styles.addressWrapper}>
           <img src={walletAvatar} alt={'address'} />
@@ -78,6 +146,16 @@ const TableRowCell = ({ item, column, isLoading }) => {
         <p className={value < 0 ? styles.negative : styles.positive}>
           {item.amount}
         </p>
+      ) : column.key === 'summary' ? (
+        <Link
+          to={`proposal/${item.id}` /*`/dao/${item.slug}/proposal/${item.id}`*/}
+        >
+          <p className={styles.tableCell}>{item.summary}</p>
+        </Link>
+      ) : column.key === 'voter' ? (
+        <div className={styles.addressWrapper}>
+          <p className={styles.address}>{addressFormat(item.voter)}</p>
+        </div>
       ) : (
         <p
           className={

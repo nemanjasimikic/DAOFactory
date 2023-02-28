@@ -1,0 +1,171 @@
+@import 'src/sass/theme'
+
+.container
+  +container
+
+  .proposalStatus
+    display: flex
+    align-items: center
+    align-self: flex-start
+
+    .red
+      background: rgba(235, 67, 97, 0.16)
+      color: #EB4361
+      padding: 8px
+      border-radius: 27px
+      font-size: 14px
+    .yellow
+      background: rgba(230, 172, 0, 0.16)
+      color: #E6AC00
+      padding: 8px
+      border-radius: 27px
+      font-size: 14px
+    .green
+      background: rgba(74, 180, 74, 0.16)
+      color: #4AB44A
+      padding: 8px
+      border-radius: 27px
+      font-size: 14px
+
+    .time
+      +small-white-text
+      font-size: 14px
+      margin-left: 16px
+
+
+  .proposal
+    display: flex
+    justify-content: space-between
+    align-items: flex-start
+    width: 100%
+
+    .contentWrapper
+      display: flex
+      width: 100%
+
+      .subheading
+        +medium-white-text
+        display: flex
+        align-items: flex-start
+        width: 100%
+
+      .content
+        display: flex
+        align-items: flex-start
+        flex-direction: column
+        width: 100%
+        .votingCardContainer
+          display: flex
+          align-items: center
+          flex: 1
+          justify-content: space-around
+          width: 100%
+
+  .infoRow
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    margin-bottom: 16px
+
+    .parameter
+      +small-grey-text
+
+    .value
+      +small-white-text
+      font-size: 14px
+
+  .notice
+    +small-grey-text
+    font-size: 12px
+    margin-top: 16px
+
+
+  .buttonsWrapper
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    button
+      width: 49%
+
+.timelineContainer
+  background-color: rgba(255, 255, 255, 0.08)
+  padding: 24px
+  width: 97%
+
+.aboutProposalContainer
+  display: flex
+  flex-direction: column
+  background-color: rgba(255, 255, 255, 0.08)
+  width: 97%
+  padding: 0 24px 24px 24px
+  margin-bottom: 138px
+
+  .subheadingText
+    +medium-white-text
+    margin-top: 24px
+    margin-bottom: 16px
+
+  .aboutSectionSubheading
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    .linkWrapper
+      display: flex
+      align-items: flex-start
+      height: 100%
+      padding-top: 24px
+
+      .discussion
+        +small-grey-text
+        margin-right: 10px
+
+  .row
+    display: flex
+    align-items: center
+    padding: 8px 0
+
+    .info
+      +small-grey-text
+      width: 226px
+
+    .value
+      +small-white-text
+      font-size: 14px
+      line-height: 20px
+
+  .descriptionContent
+    +small-white-text
+    font-size: 14px
+    line-height: 20px
+    margin-bottom: 16px
+
+.walletWrapper
+  display: flex
+  align-items: center
+
+  .walletAvatar
+    margin-right: 10px
+
+  .addressInfo
+    margin-right: 10px
+    .name
+      +small-white-text
+      margin: 0
+    .value
+      +small-grey-text
+
+.balanceProposalInfoWrapper
+  display: flex
+  flex-direction: column
+  align-items: center
+
+
+
+
+
+
+
+
