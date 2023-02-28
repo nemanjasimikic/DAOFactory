@@ -269,13 +269,9 @@ const Proposal = () => {
                   }}
                 />
               </BalanceProposalInfo>
-<<<<<<< HEAD
-            ) : isOwner && data?.proposals[id - 1].status === 'Queued' ? (
-=======
             ) : isOwner &&
               data?.proposals[id - 1].status === 'Queued' &&
               data?.proposals[id - 1].canExecuteProposal ? (
->>>>>>> feature-bug-fixes
               <BalanceProposalInfo heading={'Proposal management'}>
                 <Button
                   style={'lightBlueBtn'}
