@@ -887,7 +887,7 @@ const getDaoInfo = async (id, address) => {
         ? await getDaoByAddress(id)
         : await findDaoBySlug(daoFactoryContract, id)
 
-    console.log('daoRootContract: ', daoRootContract)
+    //console.log('daoRootContract: ', daoRootContract)
     const name = await daoRootContract.methods.name({}).call()
     const slug = await daoRootContract.methods.slug({}).call()
     const description = await daoRootContract.methods.description({}).call()
@@ -968,7 +968,7 @@ const getDaoInfo = async (id, address) => {
     let stakers
     try {
       stakers = await getAllStakers(daoRootContract.address)
-      console.log('stakers: ', stakers)
+      //console.log('stakers: ', stakers)
     } catch (e) {
       stakers = null
     }
@@ -1082,10 +1082,10 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
     const executeTime =
       (data.endTime_ * 1 + proposalConfig.proposalConfiguration.timeLock * 1) *
       1000
-    console.log('execute time: ', executeTime)
-    console.log('time now: ', new Date().getTime())
+    //console.log('execute time: ', executeTime)
+    //console.log('time now: ', new Date().getTime())
     const canExecute = new Date().getTime() >= executeTime ? true : false
-    console.log('canExecute: ', canExecute)
+    //console.log('canExecute: ', canExecute)
     //console.log('time to Date: ', timeToDate)
     const date = dayjs.unix(data.startTime_).format('D.M')
     // console.log('date short: ', date)
@@ -1675,9 +1675,9 @@ const getUnlockArray = async (daoRoot, ownerAddress) => {
 const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
   try {
     let success = false
-    console.log('proposalId: ', proposalId)
+    //console.log('proposalId: ', proposalId)
     if (proposalId != 0) {
-      console.log('nisam 0')
+      //console.log('nisam 0')
       const userData = await createUserDataContract(daoRoot, ownerAddress)
       const castedVotes = await userData.methods.casted_votes({}).call()
       const isCasted = castedVotes.casted_votes.find(
@@ -1695,10 +1695,10 @@ const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
     } else {
       const userData = await createUserDataContract(daoRoot, ownerAddress)
       const castedVotes = await userData.methods.casted_votes({}).call()
-      console.log('ovde sam')
+      //console.log('ovde sam')
       let flag = 0
       if (castedVotes.casted_votes.length > 0) {
-        console.log('ima voteova')
+        //console.log('ima voteova')
         for (let i = 0; i < castedVotes.casted_votes.length; i++) {
           const proposal = await createProposalContract(
             daoRoot,
@@ -2162,7 +2162,7 @@ const getAllStakers = async (daoRootAddress) => {
         if (!duplicate) {
           votesData.push(trx)
         }
-        console.log(trx)
+        //console.log(trx)
         //votesData.push(trx)
       }
     }
