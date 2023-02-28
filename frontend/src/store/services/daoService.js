@@ -965,6 +965,13 @@ const getDaoInfo = async (id, address) => {
     try {
       await getVotes(daoRootContract.address, address)
     } catch (e) {}
+    let stakers
+    try {
+      stakers = await getAllStakers(daoRootContract.address)
+      console.log('stakers: ', stakers)
+    } catch (e) {
+      stakers = null
+    }
 
     // console.log('prop: ', prop)
     rootData = {
@@ -987,6 +994,7 @@ const getDaoInfo = async (id, address) => {
       decimals: tokenSymbol ? tokenSymbol.decimals : null,
       tokenRootAddress: tokenRootAddress,
       tokenName: tokenSymbol ? tokenSymbol.name : null,
+      stakers: stakers,
     }
   }
 
@@ -2112,6 +2120,76 @@ const queue = async (daoRootAddress, proposalId) => {
     return Promise.resolve(queue)
   } catch (e) {
     return Promise.reject(e)
+  }
+}
+
+const getAllStakers = async (daoRootAddress) => {
+  try {
+    const stakingRoot = await createStakingContract(daoRootAddress)
+    // console.log('stakingRoot: ', stakingRoot)
+    let successStream
+    successStream = await ever.getTransactions({
+      address: stakingRoot.address,
+      continuation: undefined,
+      limit: 50,
+    })
+
+    //console.log(successStream)
+    let votesData = []
+    let duplicate
+    for (let i = 0; i < successStream.transactions.length; i++) {
+      const trx = await stakingRoot.decodeTransaction({
+        transaction: successStream.transactions[i],
+        methods: ['onAcceptTokensTransfer'],
+      })
+      if (trx) {
+        if (votesData) {
+          duplicate = votesData.find(
+            (voter) => voter.input.sender._address === trx.input.sender._address
+          )
+        }
+        if (!duplicate) {
+          votesData.push(trx)
+        }
+        console.log(trx)
+        //votesData.push(trx)
+      }
+    }
+
+    while (successStream.transactions.length == 50) {
+      const last =
+        successStream.transactions[successStream.transactions.length - 1]
+      //console.log('last: ', last)
+      successStream = await ever.getTransactions({
+        address: stakingRoot.address,
+        continuation: last.id,
+        limit: 50,
+      })
+
+      //console.log('successStream 2: ', successStream)
+      for (let i = 0; i < successStream.transactions.length; i++) {
+        const trx = await stakingRoot.decodeTransaction({
+          transaction: successStream.transactions[i],
+          methods: ['onAcceptTokensTransfer'],
+        })
+        if (trx) {
+          if (votesData) {
+            duplicate = votesData.find(
+              (voter) =>
+                voter.input.sender._address === trx.input.sender._address
+            )
+          }
+          if (!duplicate) {
+            votesData.push(trx)
+          }
+        }
+      }
+    }
+    // console.log('votes data: ', votesData)
+
+    return Promise.resolve(votesData)
+  } catch (e) {
+    //console.log(e)
   }
 }
 

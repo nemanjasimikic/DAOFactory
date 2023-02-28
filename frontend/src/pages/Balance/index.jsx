@@ -111,7 +111,13 @@ const Balance = () => {
           value={data.token ? data.token.value0 : '-'}
           className={styles.bic1}
         />
-        <BalanceInfoCard name={'Members'} value={'-'} className={styles.bic2} />
+        <BalanceInfoCard
+          name={'Members'}
+          value={
+            data.stakers && data.stakers.length > 0 ? data.stakers.length : '-'
+          }
+          className={styles.bic2}
+        />
         <BalanceInfoCard
           name={'Quorum'}
           value={`${

@@ -45,8 +45,7 @@ const TableRowCell = ({
 
   const actionBefore = daoService.parseMillisecondsIntoReadableTime(
     item.dateStaking
-  ) //`${item.dateStaking} minutes ago`
-  // console.log('item.dateStaking: ', item.dateStaking)
+  )
 
   const [isActive, setActive] = useState(false)
 
@@ -57,8 +56,8 @@ const TableRowCell = ({
         proposalId,
         ownerAddress
       )
-      console.log('unlock: ', unlock)
-      console.log('proposalId: ', proposalId)
+      //  console.log('unlock: ', unlock)
+      //console.log('proposalId: ', proposalId)
       setActive(unlock)
     } catch (e) {
       console.log(e)
@@ -79,7 +78,7 @@ const TableRowCell = ({
     }
     checkWallet()
   }, [])
-  console.log('item: ', item)
+  //console.log('item: ', item)
   //console.log('isActive: ', isActive)
 
   return (
