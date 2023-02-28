@@ -94,7 +94,12 @@ const CreateProposal = () => {
               placeholder={'Input text'}
             />
             <label>Description(optional)</label>
-            <textarea id={'description'} rows={6} onChange={onChangeDesc} />
+            <textarea
+              className={styles.textarea}
+              id={'description'}
+              rows={6}
+              onChange={onChangeDesc}
+            />
           </div>
           <div className={`${styles.wrapper} ${styles.right}`}>
             <h3>Actions</h3>
