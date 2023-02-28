@@ -98,19 +98,23 @@ const BalanceManagement = () => {
       address: 'address4',
     },
   ]
+
+  console.log('DATA:', data)
+
   return data ? (
     <div className={styles.container}>
-      <RouteBreadcrumbs text={'Your account'} daoName={data.name} />
+      <RouteBreadcrumbs
+        text={'Your account'}
+        daoName={data.name}
+        route={`dao/${data.slug}`}
+      />
       <ContentHeader title={'Your account'} />
       <div className={styles.balanceManagement}>
         <div className={styles.balanceContent}>
           <div className={styles.cardRow}>
             <YourAccountCard
               text={'Your voting weight'}
-              data={
-                data.userBalance /*proposalsWithLockedTokens[0].lockedTokens*/
-              }
-              symbol={data.token}
+              data={'0%' /*proposalsWithLockedTokens[0].lockedTokens*/}
             />
             <YourAccountCard
               text={`Your ${data.token.value0} locked`}

@@ -80,6 +80,8 @@ const Balance = () => {
     },
   ]
 
+  console.log(data?.proposalConfiguration ? data : 'MEMBERS NO UNDEF')
+
   return data ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
@@ -109,7 +111,11 @@ const Balance = () => {
           value={data.token ? data.token.value0 : '-'}
           className={styles.bic1}
         />
-        <BalanceInfoCard name={'Members'} value={'-'} className={styles.bic2} />
+        <BalanceInfoCard
+          name={'Members'}
+          value={!data?.members ? '1' : data.members}
+          className={styles.bic2}
+        />
         <BalanceInfoCard
           name={'Quorum'}
           value={`${
