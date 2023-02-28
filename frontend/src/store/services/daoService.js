@@ -1038,6 +1038,9 @@ let dateNow = new Date().getTime()
 const getProposals = async (daoRootAddress, ownerAddress) => {
   const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
   //const slug = await daoRoot.methods.slug({}).call()
+
+  const proposalConfig = await daoRoot.methods.proposalConfiguration({}).call()
+
   const counter = await daoRoot.methods.getProposalCount({ answerId: 0 }).call()
   let proposalDataArray = []
   for (let i = 0; i < counter.value0; i++) {
@@ -1076,6 +1079,13 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       'en-US',
       options
     )
+    const executeTime =
+      (data.endTime_ * 1 + proposalConfig.proposalConfiguration.timeLock * 1) *
+      1000
+    console.log('execute time: ', executeTime)
+    console.log('time now: ', new Date().getTime())
+    const canExecute = new Date().getTime() >= executeTime ? true : false
+    console.log('canExecute: ', canExecute)
     //console.log('time to Date: ', timeToDate)
     const date = dayjs.unix(data.startTime_).format('D.M')
     // console.log('date short: ', date)
@@ -1196,6 +1206,7 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       proposalVoteWeigth: proposalVoteWeigth,
       actionIn: actionIn,
       canUnlock: canUnlock,
+      canExecuteProposal: canExecute,
     })
   }
 
