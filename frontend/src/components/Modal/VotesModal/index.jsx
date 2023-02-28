@@ -42,9 +42,9 @@ const VotesModal = ({ open, setOpen, data, id }) => {
     return `linear-gradient(to right, ${
       forVotes ? '#4AB44A' : ' #EB4361'
     } 0%, ${forVotes ? '#4AB44A' : ' #EB4361'} ${votesPercentage(
-      data?.forVotes
+      data?.proposals[id - 1].forVotes
     )}%, rgba(255, 255, 255, 0.08) ${votesPercentage(
-      data?.forVotes
+      data?.proposals[id - 1].forVotes
     )}%, rgba(255, 255, 255, 0.08) 100%)`
   }
 
