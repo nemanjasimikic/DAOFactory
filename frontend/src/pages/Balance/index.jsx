@@ -82,6 +82,8 @@ const Balance = () => {
     },
   ]
 
+  console.log(data?.proposalConfiguration ? data : 'MEMBERS NO UNDEF')
+
   return data ? (
     <div className={styles.container}>
       <div className={styles.balanceHeading}>
