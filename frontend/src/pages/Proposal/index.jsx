@@ -62,10 +62,10 @@ const Proposal = () => {
       setCounter(1)
     }
   })
-  console.log('queue: ', queue)
-  console.log('isOwner: ', isOwner)
-  console.log('data: ', data)
-  console.log('data date: ', data?.proposals[id - 1].startTime)
+  //console.log('queue: ', queue)
+  //console.log('isOwner: ', isOwner)
+  //console.log('data: ', data)
+  //console.log('data date: ', data?.proposals[id - 1].startTime)
   const gracePeriodInHrs =
     (data?.proposalConfiguration.gracePeriod * 1) / (60 * 60)
   const votingDelayInHrs =
@@ -84,9 +84,9 @@ const Proposal = () => {
   const timelineInDays =
     (gracePeriodInHrs + votingDelayInHrs + votingPeriodInHrs + timeLockInHrs) /
     24
-  console.log('timelineInDays: ', timelineInDays)
+  //console.log('timelineInDays: ', timelineInDays)
   //console.log('data in hours: ', dataInHrs)
-  console.log('proposal actions: ', data?.proposals[id - 1].proposalActions)
+  //console.log('proposal actions: ', data?.proposals[id - 1].proposalActions)
   let proposalActions = []
   //if (data != null && data.length > 0) {
   data?.proposals[id - 1].proposalActions.forEach((item, index) => {
@@ -95,7 +95,7 @@ const Proposal = () => {
     )
   })
   //}
-  console.log('proposalActions: ', proposalActions)
+  //console.log('proposalActions: ', proposalActions)
   const [open, setOpen] = useState(false)
   const columns = [
     {

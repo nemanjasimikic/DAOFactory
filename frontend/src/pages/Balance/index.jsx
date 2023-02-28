@@ -30,7 +30,7 @@ const Balance = () => {
     }
   )
 
-  console.log('data: ', data)
+  //console.log('data: ', data)
 
   const columns = [
     {
@@ -82,7 +82,7 @@ const Balance = () => {
     },
   ]
 
-  console.log(data?.proposalConfiguration ? data : 'MEMBERS NO UNDEF')
+  //console.log(data?.proposalConfiguration ? data : 'MEMBERS NO UNDEF')
 
   return data ? (
     <div className={styles.container}>

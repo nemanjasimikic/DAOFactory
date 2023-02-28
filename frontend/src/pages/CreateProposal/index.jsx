@@ -64,7 +64,7 @@ const CreateProposal = () => {
     }
     deployedActions.push(action)
   }
-  console.log('formData: ', formData)
+  //console.log('formData: ', formData)
   // console.log('deployedActions: ', deployedActions)
   return (
     <>
