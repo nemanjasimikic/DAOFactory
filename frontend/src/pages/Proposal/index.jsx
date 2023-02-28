@@ -148,7 +148,11 @@ const Proposal = () => {
   ]
   return data ? (
     <div className={styles.container}>
-      <RouteBreadcrumbs text={id} daoName={data?.name} />
+      <RouteBreadcrumbs
+        text={id}
+        daoName={data?.name}
+        route={`dao/${data.slug}`}
+      />
       <ContentHeader title={`#${id} ${data?.proposals[id - 1].summary}`}>
         <div className={styles.walletWrapper}>
           <img
