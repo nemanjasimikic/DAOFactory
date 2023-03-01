@@ -10,7 +10,7 @@ const TableHeader = ({ columns, token }) => {
           key={`tableHeadCell${columnIndex}`}
           style={{ width: column.width }}
         >
-          {column.title === 'Amount' && token != null ? column.title + ` ${token}` : column.title}
+          {column.title === 'Amount' && token != null ? column.title + `, ${token}` : column.title}
         </div>
       ))}
     </div>
