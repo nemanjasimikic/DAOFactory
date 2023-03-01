@@ -158,7 +158,7 @@ const Balance = () => {
             </h3>
             <p className={styles.voting}>0% voting weight</p>
           </div>
-          <Link to={'balance-management'}>
+          <Link style={{color: 'transparent'}} to={'balance-management'}>
             <Button style={'primaryBtn'} text={'Balance management'} />
           </Link>
         </div>
