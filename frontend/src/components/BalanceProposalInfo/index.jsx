@@ -11,7 +11,7 @@ const BalanceProposalInfo = ({
   return (
     <div className={styles.balanceProposalInfo} style={customStyle}>
       <div className={styles.heading}>
-        <p className={styles.title} style={{ margin: customStyle ? 0 : null}}>{heading}</p>
+        <p className={styles.title} style={{ margin: 0 }}>{heading}</p>
         {status ? (
           support ? (
             <p className={styles.green}>For</p>

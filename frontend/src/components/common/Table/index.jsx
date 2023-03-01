@@ -2,11 +2,11 @@ import TableHeader from './TableHeader'
 import TableRow from './TableRow'
 import styles from './styles.module.sass'
 
-const Table = ({ data, columns, isLoading, ownerAddress, daoAddress }) => {
+const Table = ({ data, columns, isLoading, ownerAddress, daoAddress, token }) => {
   return data ? (
     <div className={styles.tableWrapper}>
       <div>
-        <TableHeader columns={columns} />
+        <TableHeader columns={columns} token={token ? token : null} />
       </div>
       <div>
         <TableRow
