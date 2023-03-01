@@ -28,7 +28,7 @@ const Proposal = () => {
   const { addressContext } = ContextState
   // console.log('params: ', id, id1)
   const { data, isLoading } = useQuery(
-    ['daoBalance', id],
+    ['daoProposal', id + id1],
     () => daoService.getDaoInfo(id1, addressContext),
     {
       enabled: !!addressContext,

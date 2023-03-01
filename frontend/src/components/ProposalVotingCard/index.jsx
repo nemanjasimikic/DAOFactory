@@ -1,6 +1,7 @@
 import { addressFormat } from '../../helpers/addressFormat'
 import styles from './styles.module.sass'
 import walletAvatar from 'static/svg/walletAvatar.svg'
+import { fromNano } from 'helpers/decimalParser'
 
 const VoteListItem = ({ item }) => {
   return (
@@ -45,7 +46,7 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
           </h3>
           of
           <h3 className={styles.maxValue}>
-            {data?.proposalConfiguration.threshold}
+            {fromNano(data?.proposalConfiguration.threshold, 9)}
           </h3>
         </div>
       </div>
@@ -71,7 +72,7 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
           </h3>
           of
           <h3 className={styles.maxValue}>
-            {data?.proposalConfiguration.threshold}
+            {fromNano(data?.proposalConfiguration.threshold, 9)}
           </h3>
         </div>
       </div>
