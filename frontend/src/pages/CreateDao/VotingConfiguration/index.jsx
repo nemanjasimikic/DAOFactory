@@ -52,6 +52,11 @@ const VotingConfiguration = ({ formData, setFormData }) => {
         </div>
       </div>
       <input
+        style={{ background: `linear-gradient(to right, 
+          rgba(255, 255, 255, 0.86) 0%, 
+          rgba(255, 255, 255, 0.86) ${formData.quorum}%, 
+          rgba(255, 255, 255, 0.26) ${formData.quorum}%,
+          rgba(255, 255, 255, 0.26) 100%)` }}
         name="quorum"
         type={'range'}
         min={1}

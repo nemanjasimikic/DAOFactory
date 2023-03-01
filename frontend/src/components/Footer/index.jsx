@@ -1,10 +1,21 @@
+import { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Socials from 'components/Footer/Socials'
 import Button from 'components/common/Button'
 import Logo from 'components/Header/Logo'
 import styles from './styles.module.sass'
+import { WalletContext } from 'context/walletContext'
+import { NavLink } from 'react-router-dom'
 
 const Footer = () => {
+
+  const { state: ContextState, login, logout } = useContext(WalletContext)
+  const {
+    isLoginPending,
+    isLoggedIn,
+    loginError,
+  } = ContextState
+
   return (
     <div className={styles.container}>
       <footer className={styles.footer}>
@@ -14,12 +25,32 @@ const Footer = () => {
             <div className={styles.topFooterLinks}>
               <p className={styles.heading}>DAO Builder</p>
 
-              <a href={'#'} className={styles.footerLink}>
-                Create new DAO
-              </a>
-              <a href={'#'} className={styles.footerLink}>
-                My DAOs
-              </a>              
+              {isLoggedIn ? (
+                  <NavLink
+                    to={'/create-dao'}
+                    className={({ isActive }) =>
+                      isActive ? styles.active : styles.navLink
+                    }
+                  >
+                    Create new DAO
+                  </NavLink>
+                ) : (
+                  <p className={styles.navLink}> Create new DAO</p>
+                )
+              }
+              {isLoggedIn ? (
+                  <NavLink
+                    to={'/'}
+                    className={({ isActive }) =>
+                      isActive ? styles.active : styles.navLink
+                    }
+                  >
+                    My DAOs
+                  </NavLink>
+                ) : (
+                  <p className={styles.navLink}> My DAOs</p>
+                )
+              }       
             </div>
             <div className={styles.topFooterLinks}>
               <p className={styles.heading}>DeFi Products</p>
@@ -44,12 +75,12 @@ const Footer = () => {
             </div>
           </div>
           <div className={styles.buttonWrapper}>
-            <Link>
+            <a style={{color: 'transparent'}} target="_blank" href='https://everwallet.net/'>
               <Button style={'primaryBtn'} text={'Install EVER Wallet'} />
-            </Link>
-            <Link>
+            </a>
+            <a style={{color: 'transparent'}} target="_blank" href='https://github.com/nemanjasimikic/DAOFactory'>
               <Button style={'secondaryBtn'} text={'Source code on Github'} />
-            </Link>
+            </a>
           </div>
         </div>
         <div className={styles.bottomFooter}>

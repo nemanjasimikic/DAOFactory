@@ -99,8 +99,12 @@ const BalanceManagement = () => {
     },
   ]
 
-  console.log('DATA:', data)
+  // console.log('DATA:', data)
 
+  let customStyle = {
+    marginTop: 0, 
+    maxHeight: '345px'
+  }
   return data ? (
     <div className={styles.container}>
       <RouteBreadcrumbs
@@ -128,10 +132,10 @@ const BalanceManagement = () => {
           {!data.history.length > 0 ? (
             <NoResults />
           ) : (
-            <Table columns={columnsTransactionHistory} data={data.history} />
+            <Table columns={columnsTransactionHistory} data={data.history} token={data.token.value0} />
           )}
         </div>
-        <AccountBalance id={id} data={data} address={addressContext} />
+        <AccountBalance id={id} data={data} address={addressContext} customStyle={customStyle}/>
       </div>
     </div>
   ) : (

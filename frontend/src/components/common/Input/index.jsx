@@ -100,7 +100,7 @@ const Input = ({
             <a
               className={styles.labelInnerWrap2}
               target="_blank"
-              href="https://app.flatqube.io/builder/"
+              href="https://app.flatqube.io/builder/create"
             >
               <div>Create token</div>
               <img src={linkIcon} alt={'link icon'} />
