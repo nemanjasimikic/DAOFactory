@@ -15,6 +15,7 @@ import {
 } from './mocks'
 import { WalletContext } from 'context/walletContext'
 import { useQuery } from 'react-query'
+import { fromNano } from 'helpers/decimalParser'
 
 const Balance = () => {
   const { id } = useParams()
@@ -143,7 +144,7 @@ const Balance = () => {
           name={`Threshold ${data.token ? data.token.value0 : ''}`}
           value={
             data.proposalConfiguration
-              ? data.proposalConfiguration.threshold
+              ? fromNano(data.proposalConfiguration.threshold, 9)
               : 0
           }
           className={styles.bic6}

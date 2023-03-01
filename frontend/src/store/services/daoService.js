@@ -334,7 +334,7 @@ const deployDAOFromFactory = async (
           votingPeriod: voting,
           quorumVotes: quorum,
           timeLock: queued,
-          threshold: threshold,
+          threshold: toNano(threshold, 9),
           gracePeriod: execution,
         },
         name_: name,
@@ -923,6 +923,7 @@ const getDaoInfo = async (id, address) => {
     const proposalConfiguration = await daoRootContract.methods
       .proposalConfiguration({})
       .call()
+
     const nrOfProposals = await daoRootContract.methods.proposalCount({}).call()
     const proposals = await getProposals(daoRootContract.address, address)
     // console.log('proposals data: ', proposals)

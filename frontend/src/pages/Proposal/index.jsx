@@ -179,6 +179,10 @@ const Proposal = () => {
       <div className={styles.proposalStatus}>
         {data?.proposals[id - 1].status === 'Failed' ? (
           <div className={styles.red}>{data?.proposals[id - 1].status}</div>
+        ) : data?.proposals[id - 1].status === 'Pending' ? (
+          <div className={styles.green}>{data?.proposals[id - 1].status}</div>
+        ) : data?.proposals[id - 1].status === 'Queued' ? (
+          <div className={styles.yellow}>{data?.proposals[id - 1].status}</div>
         ) : (
           <div className={styles.green}>{data?.proposals[id - 1].status}</div>
         )}
