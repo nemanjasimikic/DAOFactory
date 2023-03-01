@@ -26,7 +26,7 @@ const Proposal = () => {
   const { id, id1 } = useParams()
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
-  console.log('params: ', id, id1)
+  // console.log('params: ', id, id1)
   const { data, isLoading } = useQuery(
     ['daoBalance', id],
     () => daoService.getDaoInfo(id1, addressContext),
