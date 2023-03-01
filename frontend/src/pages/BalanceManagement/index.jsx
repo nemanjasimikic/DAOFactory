@@ -105,8 +105,6 @@ const BalanceManagement = () => {
     marginTop: 0, 
     maxHeight: '345px'
   }
-  console.log('DATA: ', data)
-
   return data ? (
     <div className={styles.container}>
       <RouteBreadcrumbs

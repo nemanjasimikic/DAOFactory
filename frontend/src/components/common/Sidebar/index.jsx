@@ -25,7 +25,6 @@ const RenderDaoSettings = ({ id }) => (
 
 const Sidebar = ({ page, setPage, id }) => {
   const location = useLocation()
-  console.log(page, id, setPage)
   return (
     <div className={styles.sidebar}>
       <Link to={'/'} className={styles.backButton}>
