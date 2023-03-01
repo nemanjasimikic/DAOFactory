@@ -1735,6 +1735,7 @@ const unlockVotes = async (daoRootAddress, proposalId, ownerAddress) => {
       proposalId,
       ownerAddress
     )
+    // console.log(success)
     let proposalIds = []
     let unlock
     if (success) {

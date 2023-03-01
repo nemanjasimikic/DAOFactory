@@ -1,8 +1,6 @@
 import styles from './styles.module.sass'
 
 const TableHeader = ({ columns, token }) => {
-  console.log('DATA: ', token)
-
   return (
     <div className={styles.tableHeader}>
       {columns.map((column, columnIndex) => (
