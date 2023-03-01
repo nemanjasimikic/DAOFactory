@@ -6,7 +6,7 @@ export const columnsTransactionHistory = [
   },
   {
     key: 'amount',
-    title: 'Amount, LOL',
+    title: 'Amount',
     width: 237,
   },
   {
