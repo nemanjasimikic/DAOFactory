@@ -6,10 +6,11 @@ const BalanceProposalInfo = ({
   children,
   disabled,
   support,
+  customStyle
 }) => {
   return (
-    <div className={styles.balanceProposalInfo}>
-      <div className={styles.heading}>
+    <div className={styles.balanceProposalInfo} style={customStyle}>
+      <div className={styles.heading} style={{ margin: customStyle ? 0 : null}}>
         <p className={styles.title}>{heading}</p>
         {status ? (
           support ? (
