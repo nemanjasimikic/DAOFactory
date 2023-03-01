@@ -12,7 +12,9 @@ import axios from 'axios'
 import tokensList from 'utils/tokens-list'
 import dayjs from 'dayjs'
 
-const API_URL = 'https://tokens.everscan.io/v1/balances'
+//1. Srediti proposals with your locked tokens - iz user data - votes izvuci koji proposal i ostale info preko toga
+//2. Srediti ako threshold nije ispunjen failovala je proposal
+
 const ever = new ProviderRpcClient()
 
 // STAKING ROOT ADDRESS TEST
@@ -332,7 +334,7 @@ const deployDAOFromFactory = async (
           votingPeriod: voting,
           quorumVotes: quorum,
           timeLock: queued,
-          threshold: threshold,
+          threshold: toNano(threshold, 9),
           gracePeriod: execution,
         },
         name_: name,
@@ -921,6 +923,7 @@ const getDaoInfo = async (id, address) => {
     const proposalConfiguration = await daoRootContract.methods
       .proposalConfiguration({})
       .call()
+
     const nrOfProposals = await daoRootContract.methods.proposalCount({}).call()
     const proposals = await getProposals(daoRootContract.address, address)
     // console.log('proposals data: ', proposals)
@@ -1334,6 +1337,7 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
     // const daoRoot = createDaoRootContract(daoRootAddress)
     // const slug = await daoRoot.methods.slug({}).call()
     const userData = await createUserDataContract(daoRootAddress, ownerAddress)
+    const castedVotes = await userData.methods.casted_votes({}).call()
     const lockedTokens = await userData.methods
       .lockedTokens({ answerId: 0 })
       .call()
@@ -1342,9 +1346,12 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
     })
     let proposalContractArray = []
     if (contractState.state.isDeployed) {
-      const count = await userData.methods.created_proposals({}).call()
-      for (let i = 0; i < count.created_proposals.length; i++) {
-        const proposal = await createProposalContract(daoRootAddress, i + 1)
+      const count = castedVotes.casted_votes //await userData.methods.created_proposals({}).call()
+      for (let i = 0; i < count.length; i++) {
+        const proposal = await createProposalContract(
+          daoRootAddress,
+          count[i][0] * 1
+        )
         proposalContractArray.push(proposal)
       }
     }
@@ -1365,11 +1372,12 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
       else if (data.state_ == 6) state = 'Queued'
       else if (data.state_ == 7) state = 'Executed'
       else state = 'Unknown'
-
+      const proposalId = await proposalContractArray[i].methods.id({}).call()
       const summ = data.description_.split('%')
 
       proposals.push({
         id: i + 1,
+        proposalId: proposalId.id * 1,
         summary: summ[0],
         status: state,
         voting: 'voting1',

@@ -1,4 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import { useQuery } from 'react-query'
+import { WalletContext } from 'context/walletContext'
+import daoService from 'store/services/daoService'
 import RouteBreadcrumbs from 'components/RouteBreadcrumbs'
 import ContentHeader from 'components/common/ContentHeader'
 import ProposalVotingCard from 'components/ProposalVotingCard'
@@ -6,17 +10,12 @@ import BalanceProposalInfo from 'components/BalanceProposalInfo'
 import Button from 'components/common/Button'
 import Accordion from 'components/common/Accordion'
 import Timeline from 'components/Timeline'
+import VotesModal from 'components/Modal/VotesModal'
+import Table from 'components/common/Table'
+import { addressFormat } from 'helpers/addressFormat'
 import styles from './styles.module.sass'
-import daoService from 'store/services/daoService'
-import { useParams } from 'react-router-dom'
-import { useContext } from 'react'
-import { WalletContext } from 'context/walletContext'
-import { useQuery } from 'react-query'
 import linkIcon from 'static/svg/linkIcon.svg'
-import VotesModal from '../../components/Modal/VotesModal'
 import walletAvatar from 'static/svg/walletAvatar.svg'
-import { addressFormat } from '../../helpers/addressFormat'
-import Table from '../../components/common/Table'
 
 const Subheading = ({ text }) => {
   return <h3 className={styles.subheading}>{text}</h3>
@@ -26,7 +25,6 @@ const Proposal = () => {
   const { id, id1 } = useParams()
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
-  // console.log('params: ', id, id1)
   const { data, isLoading } = useQuery(
     ['daoBalance', id],
     () => daoService.getDaoInfo(id1, addressContext),
@@ -177,8 +175,21 @@ const Proposal = () => {
       </ContentHeader>
 
       <div className={styles.proposalStatus}>
-        {data?.proposals[id - 1].status === 'Failed' ? (
+        {data?.proposals[id - 1].status === 'Failed' ||
+        data?.proposals[id - 1].status === 'Expired' ? (
           <div className={styles.red}>{data?.proposals[id - 1].status}</div>
+        ) : data?.proposals[id - 1].status === 'Pending' ||
+          data?.proposals[id - 1].status === 'Active' ? (
+          <div className={styles.darkBlueActive}>
+            {data?.proposals[id - 1].status}
+          </div>
+        ) : data?.proposals[id - 1].status === 'Queued' ||
+          data?.proposals[id - 1].status === 'Succeeded' ? (
+          <div className={styles.yellow}>{data?.proposals[id - 1].status}</div>
+        ) : data?.proposals[id - 1].status === 'Canceled' ? (
+          <div className={styles.darkBlueInactive}>
+            {data?.proposals[id - 1].status}
+          </div>
         ) : (
           <div className={styles.green}>{data?.proposals[id - 1].status}</div>
         )}
@@ -236,8 +247,6 @@ const Proposal = () => {
               </p>
               <h4 className={styles.subheadingText}>Actions</h4>
               {proposalActions}
-              {/* <Accordion title={'Title 1'} /> */}
-              {/* <Accordion title={'Title 2'} /> */}
               <h4 className={styles.subheadingText}>Periods</h4>
               <div className={styles.row}>
                 <p className={styles.info}>Voting delay</p>

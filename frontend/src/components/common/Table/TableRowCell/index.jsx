@@ -57,7 +57,7 @@ const TableRowCell = ({
         ownerAddress
       )
       //  console.log('unlock: ', unlock)
-      //console.log('proposalId: ', proposalId)
+      //  console.log('proposalId: ', proposalId)
       setActive(unlock)
     } catch (e) {
       console.log(e)
@@ -70,7 +70,7 @@ const TableRowCell = ({
     const checkWallet = async () => {
       if (column.key === 'unlockTokens') {
         try {
-          canUnlock(item.id)
+          canUnlock(item.proposalId)
         } catch (e) {
           console.log(e)
         }

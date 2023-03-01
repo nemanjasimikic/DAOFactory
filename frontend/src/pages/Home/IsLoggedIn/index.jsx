@@ -8,10 +8,13 @@ import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
+import { useContext } from 'react'
+import { WalletContext } from 'context/walletContext'
 
 const IsLoggedIn = ({ address }) => {
   const [renderTable, setRenderTable] = useState(true)
-
+  const { state: ContextState } = useContext(WalletContext)
+  const { addressContext } = ContextState
   const onLoadEffect = () => {
     setTimeout(() => {
       setRenderTable(false)
@@ -19,9 +22,9 @@ const IsLoggedIn = ({ address }) => {
   }
   useEffect(onLoadEffect, [])
   const { data, error, isError, isLoading } = useQuery(
-    ['allDAOs'],
-    () => daoService.getAllDAOs(address),
-    { enabled: !!address, cacheTime: 1000 * 60 * 1 }
+    ['allDAOs', addressContext],
+    () => daoService.getAllDAOs(addressContext),
+    { enabled: !!addressContext, refetchInterval: 10 }
   )
 
   const getDaoList = data
@@ -101,7 +104,7 @@ const IsLoggedIn = ({ address }) => {
           <Button style={'primaryBtn'} text={'Add existing DAO'} />
         </div>
       </ContentHeader>
-      {!getDaoList ? (
+      {!getDaoList && isLoading ? (
         <Table columns={columns} data={dataTable} onLoadEffect={onLoadEffect} />
       ) : itemsList.length < 1 ? (
         <NoResults />
