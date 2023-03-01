@@ -44,10 +44,10 @@ const Footer = () => {
             </div>
           </div>
           <div className={styles.buttonWrapper}>
-            <Link>
+            <Link style={{color: 'transparent'}}>
               <Button style={'primaryBtn'} text={'Install EVER Wallet'} />
             </Link>
-            <Link>
+            <Link style={{color: 'transparent'}}>
               <Button style={'secondaryBtn'} text={'Source code on Github'} />
             </Link>
           </div>
