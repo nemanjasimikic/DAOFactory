@@ -8,6 +8,7 @@ import ImageButton from 'components/common/ImageButton'
 import daoService from 'store/services/daoService'
 
 const GeneralInformation = ({
+  validated,
   formId,
   formData,
   setFormData,
@@ -87,6 +88,7 @@ const GeneralInformation = ({
         value={daoAddress !== '' ? daoAddress : rootAddress}
       />
       <Input
+        validated={validated}
         id="name"
         label={'Project name'}
         placeholder={'Name'}
@@ -97,6 +99,7 @@ const GeneralInformation = ({
         required={true}
       />
       <Input
+        validated={validated}
         id="daoSlug"
         label={'DAO slug'}
         placeholder={'slug'}
@@ -107,6 +110,7 @@ const GeneralInformation = ({
         required={true}
       />
       <Input
+        validated={validated}
         id="governanceToken"
         label={'Governance token root address'}
         placeholder={'Token address'}
@@ -118,6 +122,7 @@ const GeneralInformation = ({
         required={true}
       />
       <Input
+        validated={validated}
         id="minStake"
         label={'Min stake for creating a proposal'}
         placeholder={'0'}

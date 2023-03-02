@@ -43,12 +43,12 @@ const Input = ({
     } else if (id === 'daoSlug') {
       return validator(value, page, registerInput, false)
     } else {
-      // console.log('Is validating page ?', page, hourOrDay)
       return validator(value, page, registerInput, false)
     }
   }
 
   function didValidate() {
+    console.log('DID VALIDATE: ', validated)
     let page = whatPage(registerInput)
     if (validated != null) {
       if (page == 0 && validated[page] === true) {
@@ -66,38 +66,6 @@ const Input = ({
   }
 
   let shouldShow = didValidate()
-
-  let domainRoot = 'daobuilder.nswebdevelopment.com/dao/'
-  function nonRepeat(value1) {
-    // slug settings
-    if (id === 'daoSlugSettings') {
-      if (!value1) {
-        value1 = defaultValue
-      }
-      if (value1.includes(' ')) {
-        return value1.replace(/\s/, '')
-      }
-      console.log(value1)
-      return value1
-    }
-    // slug create
-    if (id === 'daoSlug') {
-      if (!value1) {
-        value1 = defaultValue
-      }
-      if (!value1 || value1 === '') {
-        return domainRoot
-      }
-      if (value1.includes(domainRoot)) {
-        return value1.replace(/\s/, '')
-      }
-      return domainRoot
-    }
-  }
-
-  const validateInputTest = (registerInput) => {
-    return !registerInput ? false : true
-  }
 
   let hint =
     registerInput === 'governanceToken'
@@ -154,31 +122,17 @@ const Input = ({
         }}
         id={registerInput}
         form={formId}
-        // required={required}
         className={styles.input}
-        defaultValue={defaultValue}
-        value={registerInput === 'daoSlug' ? nonRepeat(value) : value}
-        // value={value}
+        value={
+          // registerInput === 'daoSlug' ? nonRepeat(value) :
+          value
+        }
         type={type}
         placeholder={placeholder}
-        {...register(registerInput, {
-          required: 'Input field required',
-          validate: validateInputTest(registerInput),
-        })}
-        // {...register(registerInput, { required: 'This is required' })}
+        {...register(registerInput)}
         onChange={onChange}
         disabled={disabled}
       />
-      {/* <img
-        src={firstImage}
-        onError={(event) => (event.target.src = '')}
-        className={styles.inputIconOne}
-      />
-      <img
-        src={secondImage}
-        onError={(event) => (event.target.src = '')}
-        className={styles.inputIconTwo}
-      /> */}
       {buttons}
       <span
         style={{

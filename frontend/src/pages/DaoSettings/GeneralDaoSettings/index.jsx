@@ -12,16 +12,16 @@ import Button from 'components/common/Button'
 import NotificationPopup from 'components/Popup/NotificationPopup'
 import Spinner from 'components/common/Spinner'
 import copy from 'static/svg/copy.svg'
-
+import { checkValidity, validator } from 'helpers/formValidator'
 import styles from '../styles.module.sass'
 
 const GeneralDaoSettings = () => {
   const { register } = useForm()
   let { id } = useParams()
-
   const { handleSubmit } = useForm()
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
+  let [pageChecked, setPageChecked] = useState(false)
 
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
@@ -90,10 +90,11 @@ const GeneralDaoSettings = () => {
                 />
                 <Input
                   id="name"
+                  validated={pageChecked}
                   label={'Project name'}
                   placeholder={'Name'}
                   registerInput={'name'}
-                  defaultValue={name}
+                  value={name}
                   onChange={onChange}
                 />
                 <Input
@@ -101,7 +102,7 @@ const GeneralDaoSettings = () => {
                   label={'DAO slug'}
                   placeholder={'slug'}
                   registerInput={'daoSlug'}
-                  defaultValue={slug}
+                  value={slug}
                   onChange={onChange}
                 />
 
@@ -117,7 +118,12 @@ const GeneralDaoSettings = () => {
                   style={'bigLightBlueBtn'}
                   text={'Save changes'}
                   onClick={async (e) => {
+                    let pageValidity = [
+                      validator(formData.name, 0, 'name', false, null),
+                    ]
+
                     setLoading(true)
+                    setPageChecked(true)
                     let canNavigate = true
                     function navigateOff(canNavigate) {
                       setLoading(false)
@@ -125,23 +131,26 @@ const GeneralDaoSettings = () => {
                         setOpen(true)
                       }
                     }
-                    await daoService
-                      .setSettingsChanges(
-                        formData.name !== '' ? formData.name : data.name,
-                        slugChange,
-                        formData.description !== ''
-                          ? formData.description
-                          : data.description,
-                        data.daoAddress
-                      )
-                      .catch((e) => {
-                        // console.log(e)
-                        setLoading(false)
-                        canNavigate = false
-                        return
-                      })
-                    e.preventDefault()
-                    navigateOff(canNavigate)
+                    if (checkValidity(pageValidity) === true) {
+                      await daoService
+                        .setSettingsChanges(
+                          formData.name !== '' ? formData.name : data.name,
+                          slugChange,
+                          formData.description !== ''
+                            ? formData.description
+                            : data.description,
+                          data.daoAddress
+                        )
+                        .catch((e) => {
+                          // console.log(e)
+                          setLoading(false)
+                          canNavigate = false
+                          return
+                        })
+                      e.preventDefault()
+                      navigateOff(canNavigate)
+                    }
+                    setLoading(false)
                   }}
                   disabled={loading}
                 />

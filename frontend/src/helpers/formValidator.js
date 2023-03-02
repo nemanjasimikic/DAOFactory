@@ -16,16 +16,21 @@ export const validator = (data, page, what, toAlert, isVoting) => {
       if (!(data.split('/')[3] === undefined)) {
         return "Error: Slug can't contain forslash"
       }
-      if (isEmptyOrSpaces(data.split('/')[2])) {
+      if (isEmptyOrSpaces(data)) {
         error = true
         console.log('MISSING SLUG?', data)
         return 'Error: Slug missing'
-      } else if (data.split('/')[2].includes('/')) {
+      } else if (data.includes('/')) {
         error = true
         // console.log('ILLEGAL CHAR IN SLUG!')
         return 'Error: Slug contains illegal characters'
       }
     } else if (what === 'governanceToken' || what === 'ownerAddress') {
+      console.log('DATA ADDR: ', data)
+      if (data === '' || data === null || data === undefined) {
+        error = true
+        return 'Error: Address field is empty'
+      }
       if (data.length < 66) {
         error = true
         if (toAlert) {
