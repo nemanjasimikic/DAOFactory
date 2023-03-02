@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { WalletContext } from 'context/walletContext'
 import { useForm } from 'react-hook-form'
 import daoService from 'store/services/daoService'
-import { validator, checkValidity } from 'helpers/formValidator'
+import {
+  validator,
+  checkValidity,
+  isEmptyOrSpaces,
+} from 'helpers/formValidator'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
 import VotingConfiguration from 'pages/CreateDao/VotingConfiguration'
 import ProposalTimeline from 'pages/CreateDao/ProposalTimeline'
@@ -27,6 +31,7 @@ const CreateDao = () => {
   } = useForm()
 
   const [page, setPage] = useState(0)
+  let [pageChecked, setPageChecked] = useState([false, false, false, false])
   let [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     daoAddress: '',
@@ -70,6 +75,7 @@ const CreateDao = () => {
     if (page === 0) {
       return (
         <GeneralInformation
+          validated={pageChecked}
           formId={'myForm'}
           formData={formData}
           rootAddress={daoAddress}
@@ -79,12 +85,28 @@ const CreateDao = () => {
       )
     } else if (page === 1) {
       return (
-        <VotingConfiguration formData={formData} setFormData={setFormData} />
+        <VotingConfiguration
+          validated={pageChecked}
+          formData={formData}
+          setFormData={setFormData}
+        />
       )
     } else if (page === 2) {
-      return <ProposalTimeline formData={formData} setFormData={setFormData} />
+      return (
+        <ProposalTimeline
+          validated={pageChecked}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     } else {
-      return <Treasury formData={formData} setFormData={setFormData} />
+      return (
+        <Treasury
+          validated={pageChecked}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     }
   }
   const pendingTime =
@@ -146,11 +168,19 @@ const CreateDao = () => {
           disabled={page > 3}
           onClick={async (e) => {
             // try and validate form
-            handleSubmit(e)
+            // handleSubmit(e)
             // scroll to top
             window.scrollTo(0, 0)
 
             let pageValidity = []
+
+            page === 0
+              ? setPageChecked([true, false, false, false])
+              : page === 1
+              ? setPageChecked([true, true, false, false])
+              : page === 2
+              ? setPageChecked([true, true, true, false])
+              : setPageChecked([true, true, true, true])
 
             if (page === 0) {
               pageValidity = [
@@ -201,6 +231,8 @@ const CreateDao = () => {
               ]
             }
 
+            console.log('PAGE VALIDITY:', checkValidity(pageValidity))
+
             if (checkValidity(pageValidity) === true) {
               if (page < 3) {
                 setPage((currentPage) => currentPage + 1)
@@ -234,6 +266,7 @@ const CreateDao = () => {
                     addressContext
                   )
                   .catch((e) => {
+                    console.log(e)
                     setLoading(false)
                     canNavigate = false
                     return

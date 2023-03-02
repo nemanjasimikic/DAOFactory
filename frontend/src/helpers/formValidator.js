@@ -1,8 +1,3 @@
-// Parameters: Data is input value,
-// the page the user is on,
-// which input is expected / hour or day in case of page 3,
-// should you alert the user (not enabled when validating inside input)
-// and isVoting is for determining the min amount on page 3 of create dao page
 export const validator = (data, page, what, toAlert, isVoting) => {
   let error = false
   // Page 1
@@ -16,7 +11,21 @@ export const validator = (data, page, what, toAlert, isVoting) => {
       } else {
         error = false
       }
-    } else if (what === 'governanceToken') {
+    } else if (what === 'daoSlug') {
+      // unwanted_chars = ['0-9', 'a-z']
+      if (!(data.split('/')[3] === undefined)) {
+        return "Error: Slug can't contain forslash"
+      }
+      if (isEmptyOrSpaces(data.split('/')[2])) {
+        error = true
+        console.log('MISSING SLUG?', data)
+        return 'Error: Slug missing'
+      } else if (data.split('/')[2].includes('/')) {
+        error = true
+        // console.log('ILLEGAL CHAR IN SLUG!')
+        return 'Error: Slug contains illegal characters'
+      }
+    } else if (what === 'governanceToken' || what === 'ownerAddress') {
       if (data.length < 66) {
         error = true
         if (toAlert) {
@@ -62,6 +71,9 @@ export const validator = (data, page, what, toAlert, isVoting) => {
         return data[0] === '-'
           ? 'Error: Only positive numbers allowed'
           : 'Error: Only numbers allowed'
+      } else if (!data) {
+        error = true
+        return 'Error: Cannot be empty'
       } else {
         error = false
       }
@@ -70,7 +82,7 @@ export const validator = (data, page, what, toAlert, isVoting) => {
     // Page 3
   } else if (page == 2) {
     let multiplier = what == 'Hours' ? 1 : 24
-    let min = 0.1
+    let min = 24
     if (isNaN(data)) {
       error = true
       if (toAlert) {
@@ -86,6 +98,7 @@ export const validator = (data, page, what, toAlert, isVoting) => {
       }
       return `Error: Value can't be lower than ${min}h or over 720h`
     }
+    // console.log('ERROR IN PAGE 2? : ', data)
   }
 
   if (!error) {
@@ -97,12 +110,19 @@ export const whatPage = (registerInput) => {
   if (
     registerInput === 'name' ||
     registerInput === 'governanceToken' ||
-    registerInput === 'minStake'
+    registerInput === 'minStake' ||
+    registerInput === 'ownerAddress' ||
+    registerInput === 'daoSlug'
   ) {
     return 0
   } else if (registerInput === 'threshold') {
     return 1
-  } else {
+  } else if (
+    registerInput === 'queued' ||
+    registerInput === 'voting' ||
+    registerInput === 'execution' ||
+    registerInput === 'pending'
+  ) {
     return 2
   }
 }
@@ -111,8 +131,42 @@ export const checkValidity = (checks) => {
   let pass = true
   for (var i = 0; i < checks.length; i++) {
     if (checks[i] !== true) {
+      // console.log('PASSES', false)
       pass = false
     }
   }
+  // console.log('PASS', pass)
   return pass
+}
+
+/// To be removed later
+export const styling = (what, param) => {
+  if (
+    what === 'queued' ||
+    what === 'pending' ||
+    what === 'voting' ||
+    what === 'execution'
+  ) {
+    if (param === 'position') {
+      return 'absolute'
+    } else {
+      return '0'
+    }
+  } else {
+    if (param === 'position') {
+      return 'relative'
+    } else if (param === 'bottom') {
+      return null
+    } else if (param === 'marginT') {
+      return '-0.80rem'
+    } else if (param === 'marginB') {
+      return '0.80rem'
+    }
+    return 'relative'
+  }
+}
+
+export const isEmptyOrSpaces = (str) => {
+  // console.log('IS EMPTY OR NO?', str)
+  return str === null || str === undefined || str.match(/^ *$/) !== null
 }
