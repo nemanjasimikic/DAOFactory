@@ -1,7 +1,7 @@
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
 import linkIcon from 'static/svg/linkIcon.svg'
-import { validator, whatPage } from 'helpers/formValidator'
+import { validator, whatPage, styling } from 'helpers/formValidator'
 import Tooltip from 'components/common/Tooltip'
 
 const Input = ({
@@ -18,56 +18,85 @@ const Input = ({
   disabled,
   required,
   hourOrDay,
+  validated,
+  id,
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    shouldUseNativeValidation: true,
+    // shouldUseNativeValidation: true,
   })
 
   function validateInput() {
     let page = whatPage(registerInput)
-    if (registerInput === 'daoAddress' || registerInput === 'daoSlug') {
+    if (registerInput === 'daoAddress') {
       return
-    } else if (!value) {
-      // return 'This is a required field *'
-      return
+    } else if (!value && registerInput !== 'ownerAddress') {
+      return 'This is a required field *'
+    } else if (registerInput === 'ownerAddress') {
+      return validator(value, 0, registerInput, false, null)
     } else if (page === 2) {
       let voting = registerInput === 'voting' ? true : false
       return validator(value, page, hourOrDay, false, voting)
+    } else if (id === 'daoSlug') {
+      return validator(value, page, registerInput, false)
     } else {
+      // console.log('Is validating page ?', page, hourOrDay)
       return validator(value, page, registerInput, false)
     }
   }
 
-  // To be moved to new file, and edited
-  let color = 'red'
-  function styling(what, param) {
-    if (
-      what === 'queued' ||
-      what === 'pending' ||
-      what === 'voting' ||
-      what === 'execution'
-    ) {
-      if (param === 'position') {
-        return 'absolute'
-      } else {
-        return '0'
+  function didValidate() {
+    let page = whatPage(registerInput)
+    if (validated != null) {
+      if (page == 0 && validated[page] === true) {
+        return true
+      } else if (page == 1 && validated[page] === true) {
+        return true
+      } else if (page == 2 && validated[page] === true) {
+        return true
+      } else if (page == 0 && validated === true) {
+        return true
       }
-    } else {
-      if (param === 'position') {
-        return 'relative'
-      } else if (param === 'bottom') {
-        return null
-      } else if (param === 'marginT') {
-        return '-0.80rem'
-      } else if (param === 'marginB') {
-        return '0.80rem'
-      }
-      return 'relative'
+      return false
     }
+    return false
+  }
+
+  let shouldShow = didValidate()
+
+  let domainRoot = 'daobuilder.nswebdevelopment.com/dao/'
+  function nonRepeat(value1) {
+    // slug settings
+    if (id === 'daoSlugSettings') {
+      if (!value1) {
+        value1 = defaultValue
+      }
+      if (value1.includes(' ')) {
+        return value1.replace(/\s/, '')
+      }
+      console.log(value1)
+      return value1
+    }
+    // slug create
+    if (id === 'daoSlug') {
+      if (!value1) {
+        value1 = defaultValue
+      }
+      if (!value1 || value1 === '') {
+        return domainRoot
+      }
+      if (value1.includes(domainRoot)) {
+        return value1.replace(/\s/, '')
+      }
+      return domainRoot
+    }
+  }
+
+  const validateInputTest = (registerInput) => {
+    return !registerInput ? false : true
   }
 
   let hint =
@@ -125,13 +154,18 @@ const Input = ({
         }}
         id={registerInput}
         form={formId}
-        required={required}
+        // required={required}
         className={styles.input}
         defaultValue={defaultValue}
-        value={value}
+        value={registerInput === 'daoSlug' ? nonRepeat(value) : value}
+        // value={value}
         type={type}
         placeholder={placeholder}
-        {...register(registerInput, { required: 'This is required' })}
+        {...register(registerInput, {
+          required: 'Input field required',
+          validate: validateInputTest(registerInput),
+        })}
+        // {...register(registerInput, { required: 'This is required' })}
         onChange={onChange}
         disabled={disabled}
       />
@@ -152,11 +186,11 @@ const Input = ({
           bottom: styling(registerInput, 'bottom'),
           marginTop: styling(registerInput, 'marginT'),
           marginBottom: styling(registerInput, 'marginB'),
-          color: color,
+          color: 'red',
           fontSize: '14px',
         }}
       >
-        {/*validateInput()*/}
+        {shouldShow ? validateInput() : ''}
       </span>
     </div>
   )
