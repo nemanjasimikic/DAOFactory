@@ -2,7 +2,7 @@ import Input from 'components/common/Input'
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
 
-const ProposalTimeline = ({ formData, setFormData }) => {
+const ProposalTimeline = ({ validated, formData, setFormData }) => {
   const { register } = useForm()
 
   const onChange = (e) => {
@@ -31,6 +31,7 @@ const ProposalTimeline = ({ formData, setFormData }) => {
     <div className={styles.container}>
       <div className={styles.selectWrapper}>
         <Input
+          validated={validated}
           id="pending"
           label={'Pending'}
           registerInput={'pending'}
@@ -50,6 +51,7 @@ const ProposalTimeline = ({ formData, setFormData }) => {
       </div>
       <div className={styles.selectWrapper}>
         <Input
+          validated={validated}
           id="queued"
           label={'Queued'}
           registerInput={'queued'}
@@ -69,6 +71,7 @@ const ProposalTimeline = ({ formData, setFormData }) => {
       </div>
       <div className={styles.selectWrapper}>
         <Input
+          validated={validated}
           id="voting"
           label={'Voting'}
           registerInput={'voting'}
@@ -88,6 +91,7 @@ const ProposalTimeline = ({ formData, setFormData }) => {
       </div>
       <div className={styles.selectWrapper}>
         <Input
+          validated={validated}
           id="execution"
           label={'Execution'}
           registerInput={'execution'}

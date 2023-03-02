@@ -3,7 +3,7 @@ import infoIcon from 'static/svg/infoIcon.svg'
 import Input from 'components/common/Input'
 import Tooltip from 'components/common/Tooltip'
 
-const VotingConfiguration = ({ formData, setFormData }) => {
+const VotingConfiguration = ({ validated, formData, setFormData }) => {
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -11,23 +11,9 @@ const VotingConfiguration = ({ formData, setFormData }) => {
     }))
   }
 
-  let icon1 = (
-    <img
-      src={infoIcon}
-      alt={'info'}
-      // title={
-      //   'Minimum level of participation required for a proposal to be valid'
-      // }
-    />
-  )
+  let icon1 = <img src={infoIcon} alt={'info'} />
 
-  let icon2 = (
-    <img
-      src={infoIcon}
-      alt={'info'}
-      // title={'Minimum number of "yes" votes for a proposal to be accepted'}
-    />
-  )
+  let icon2 = <img src={infoIcon} alt={'info'} />
 
   return (
     <div className={styles.container}>
@@ -52,11 +38,13 @@ const VotingConfiguration = ({ formData, setFormData }) => {
         </div>
       </div>
       <input
-        style={{ background: `linear-gradient(to right, 
+        style={{
+          background: `linear-gradient(to right, 
           rgba(255, 255, 255, 0.86) 0%, 
           rgba(255, 255, 255, 0.86) ${formData.quorum}%, 
           rgba(255, 255, 255, 0.26) ${formData.quorum}%,
-          rgba(255, 255, 255, 0.26) 100%)` }}
+          rgba(255, 255, 255, 0.26) 100%)`,
+        }}
         name="quorum"
         type={'range'}
         min={1}
@@ -76,6 +64,7 @@ const VotingConfiguration = ({ formData, setFormData }) => {
         ></Tooltip>
       </div>
       <Input
+        validated={validated}
         id="threshold"
         defaultValue={0}
         registerInput={'threshold'}
