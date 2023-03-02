@@ -4,8 +4,8 @@ import { WalletContext } from 'context/walletContext'
 import { useForm } from 'react-hook-form'
 import daoService from 'store/services/daoService'
 import {
-  validator,
-  checkValidity,
+  inputValidator,
+  pageInfoValidator,
   isEmptyOrSpaces,
 } from 'helpers/formValidator'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
@@ -184,44 +184,57 @@ const CreateDao = () => {
 
             if (page === 0) {
               pageValidity = [
-                validator(formData.name, page, 'name', false, null),
-                validator(
+                inputValidator(formData.name, page, 'name', false, null),
+                inputValidator(formData.daoSlug, page, 'daoSlug', false, null),
+                inputValidator(
                   formData.governanceToken,
                   page,
                   'governanceToken',
                   false,
                   null
                 ),
-                validator(formData.minStake, page, 'minStake', false, null),
+                inputValidator(
+                  formData.minStake,
+                  page,
+                  'minStake',
+                  false,
+                  null
+                ),
               ]
             } else if (page === 1) {
               pageValidity = [
-                validator(formData.threshold, page, 'threshold', false, null),
+                inputValidator(
+                  formData.threshold,
+                  page,
+                  'threshold',
+                  false,
+                  null
+                ),
               ]
             } else if (page === 2) {
               pageValidity = [
-                validator(
+                inputValidator(
                   formData.pending,
                   page,
                   formData.pendingTime,
                   false,
                   null
                 ),
-                validator(
+                inputValidator(
                   formData.queued,
                   page,
                   formData.queuedTime,
                   false,
                   null
                 ),
-                validator(
+                inputValidator(
                   formData.voting,
                   page,
                   formData.votingTime,
                   false,
                   true
                 ),
-                validator(
+                inputValidator(
                   formData.execution,
                   page,
                   formData.executionTime,
@@ -231,9 +244,9 @@ const CreateDao = () => {
               ]
             }
 
-            console.log('PAGE VALIDITY:', checkValidity(pageValidity))
+            console.log('PAGE VALIDITY:', pageInfoValidator(pageValidity))
 
-            if (checkValidity(pageValidity) === true) {
+            if (pageInfoValidator(pageValidity) === true) {
               if (page < 3) {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {

@@ -1,4 +1,4 @@
-export const validator = (data, page, what, toAlert, isVoting) => {
+export const inputValidator = (data, page, what, toAlert, isVoting) => {
   let error = false
   // Page 1
   if (page == 0) {
@@ -132,20 +132,18 @@ export const whatPage = (registerInput) => {
   }
 }
 
-export const checkValidity = (checks) => {
+export const pageInfoValidator = (checks) => {
   let pass = true
   for (var i = 0; i < checks.length; i++) {
     if (checks[i] !== true) {
-      // console.log('PASSES', false)
       pass = false
     }
   }
-  // console.log('PASS', pass)
   return pass
 }
 
 /// To be removed later
-export const styling = (what, param) => {
+export const inputErrorSwitchStyle = (what, param) => {
   if (
     what === 'queued' ||
     what === 'pending' ||

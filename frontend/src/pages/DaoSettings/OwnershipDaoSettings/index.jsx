@@ -11,7 +11,7 @@ import Form from 'components/common/Form'
 import { useForm } from 'react-hook-form'
 import Spinner from 'components/common/Spinner'
 import { WalletContext } from 'context/walletContext'
-import { validator, checkValidity } from 'helpers/formValidator'
+import { inputValidator, pageInfoValidator } from 'helpers/formValidator'
 
 const OwnershipDaoSettings = () => {
   const { state: ContextState } = useContext(WalletContext)
@@ -78,7 +78,7 @@ const OwnershipDaoSettings = () => {
                     }
                   }
 
-                  let pageValidity0 = validator(
+                  let pageValidity0 = inputValidator(
                     formData.ownerAddress,
                     0,
                     'ownerAddress',
@@ -86,7 +86,7 @@ const OwnershipDaoSettings = () => {
                     null
                   )
 
-                  if (checkValidity(pageValidity0) === true) {
+                  if (pageInfoValidator(pageValidity0) === true) {
                     console.log('DID PASS CHECK!')
                     await daoService
                       .transferOwnership(

@@ -12,7 +12,7 @@ import Button from 'components/common/Button'
 import NotificationPopup from 'components/Popup/NotificationPopup'
 import Spinner from 'components/common/Spinner'
 import copy from 'static/svg/copy.svg'
-import { checkValidity, validator } from 'helpers/formValidator'
+import { pageInfoValidator, inputValidator } from 'helpers/formValidator'
 import styles from '../styles.module.sass'
 
 const GeneralDaoSettings = () => {
@@ -35,9 +35,11 @@ const GeneralDaoSettings = () => {
   const [formData, setFormData] = useState({
     daoAddress: '',
     name: '',
-    daoSlug: 'daobuilder.nswebdevelopment.com/',
+    daoSlug: '',
     description: '',
   })
+
+  const [trueInitially, setTrueInitially] = useState(false)
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -63,6 +65,13 @@ const GeneralDaoSettings = () => {
         : formData.daoSlug
 
     slugChange = slugArray && slug !== '' ? slugArray : data.slug
+
+    // setFormData()
+    if (!trueInitially) {
+      formData.daoSlug = slug
+      formData.name = name
+      setTrueInitially(true)
+    }
   }
 
   return name ? (
@@ -92,17 +101,18 @@ const GeneralDaoSettings = () => {
                   id="name"
                   validated={pageChecked}
                   label={'Project name'}
-                  placeholder={'Name'}
+                  placeholder={'name'}
                   registerInput={'name'}
-                  value={name}
+                  value={formData.name}
                   onChange={onChange}
                 />
                 <Input
                   id="daoSlug"
+                  validated={pageChecked}
                   label={'DAO slug'}
                   placeholder={'slug'}
                   registerInput={'daoSlug'}
-                  value={slug}
+                  value={formData.daoSlug}
                   onChange={onChange}
                 />
 
@@ -119,9 +129,15 @@ const GeneralDaoSettings = () => {
                   text={'Save changes'}
                   onClick={async (e) => {
                     let pageValidity = [
-                      validator(formData.name, 0, 'name', false, null),
+                      inputValidator(formData.name, 0, 'name', false, null),
+                      inputValidator(
+                        formData.daoSlug,
+                        0,
+                        'daoSlug',
+                        false,
+                        null
+                      ),
                     ]
-
                     setLoading(true)
                     setPageChecked(true)
                     let canNavigate = true
@@ -131,7 +147,7 @@ const GeneralDaoSettings = () => {
                         setOpen(true)
                       }
                     }
-                    if (checkValidity(pageValidity) === true) {
+                    if (pageInfoValidator(pageValidity) === true) {
                       await daoService
                         .setSettingsChanges(
                           formData.name !== '' ? formData.name : data.name,
@@ -142,7 +158,6 @@ const GeneralDaoSettings = () => {
                           data.daoAddress
                         )
                         .catch((e) => {
-                          // console.log(e)
                           setLoading(false)
                           canNavigate = false
                           return
