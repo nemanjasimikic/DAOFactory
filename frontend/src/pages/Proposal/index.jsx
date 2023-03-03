@@ -29,7 +29,7 @@ const Proposal = () => {
   // console.log('params: ', id, id1)
   const { data, isLoading } = useQuery(
     ['daoProposal', id + id1],
-    () => daoService.getDaoInfo(id1, addressContext),
+    () => daoService.findDAOIfNotOwner(id1, addressContext),
     {
       enabled: !!addressContext,
       refetchInterval: 1000,
@@ -44,6 +44,8 @@ const Proposal = () => {
         .then((data) => setOwner(data))
     }
   }, [])
+
+  console.log('isOwner: ', isOwner)
 
   /*const [isActive, setActive] = useState({})
   useEffect(() => {

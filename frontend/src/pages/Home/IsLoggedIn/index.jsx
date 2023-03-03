@@ -21,6 +21,7 @@ const IsLoggedIn = ({ address }) => {
     }, 6000)
   }
   useEffect(onLoadEffect, [])
+  // console.log('addressContext: ', addressContext)
   const { data, error, isError, isLoading } = useQuery(
     ['allDAOs', addressContext],
     () => daoService.getAllDAOs(addressContext),
