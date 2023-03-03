@@ -1,4 +1,4 @@
-export const inputValidator = (data, page, what, toAlert, isVoting) => {
+export const inputValidator = (data, page, what, toAlert, extraData) => {
   let error = false
   // Page 1
   if (page == 0) {
@@ -12,21 +12,20 @@ export const inputValidator = (data, page, what, toAlert, isVoting) => {
         error = false
       }
     } else if (what === 'daoSlug') {
-      // unwanted_chars = ['0-9', 'a-z']
       if (!(data.split('/')[3] === undefined)) {
         return "Error: Slug can't contain forslash"
       }
       if (isEmptyOrSpaces(data)) {
         error = true
-        console.log('MISSING SLUG?', data)
         return 'Error: Slug missing'
+      } else if (extraData == false) {
+        error = true
+        return 'Error: Slug already taken'
       } else if (data.includes('/')) {
         error = true
-        // console.log('ILLEGAL CHAR IN SLUG!')
         return 'Error: Slug contains illegal characters'
       }
     } else if (what === 'governanceToken' || what === 'ownerAddress') {
-      console.log('DATA ADDR: ', data)
       if (data === '' || data === null || data === undefined) {
         error = true
         return 'Error: Address field is empty'
@@ -68,13 +67,13 @@ export const inputValidator = (data, page, what, toAlert, isVoting) => {
     // Page 2
   } else if (page == 1) {
     if (what === 'threshold') {
-      console.log(
-        'VALIATING Threshold ',
-        data,
-        isVoting,
-        typeof isVoting,
-        typeof data
-      )
+      // console.log(
+      //   'VALIATING Threshold ',
+      //   data,
+      //   extraData,
+      //   typeof extraData,
+      //   typeof data
+      // )
       if (isNaN(data)) {
         error = true
         if (toAlert) {
@@ -86,7 +85,7 @@ export const inputValidator = (data, page, what, toAlert, isVoting) => {
       } else if (!data) {
         error = true
         return 'Error: Cannot be empty'
-      } else if (parseInt(data) < parseInt(isVoting)) {
+      } else if (parseInt(data) < parseInt(extraData)) {
         error = true
         return 'Error: Value cannot be lower than Min Stake'
       } else {
@@ -148,6 +147,7 @@ export const pageInfoValidator = (checks) => {
     if (checks[i] !== true) {
       pass = false
     }
+    console.log(checks)
   }
   return pass
 }

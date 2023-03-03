@@ -183,9 +183,19 @@ const CreateDao = () => {
               : setPageChecked([true, true, true, true])
 
             if (page === 0) {
+              setLoading(true)
+              const slugCheck = await daoService.checkSlug(formData.daoSlug)
+              // console.log('IS SLUG VALID: ', slugCheck.isSlugOk)
+              setLoading(false)
               pageValidity = [
                 inputValidator(formData.name, page, 'name', false, null),
-                inputValidator(formData.daoSlug, page, 'daoSlug', false, null),
+                inputValidator(
+                  formData.daoSlug,
+                  page,
+                  'daoSlug',
+                  false,
+                  slugCheck.isSlugOk
+                ),
                 inputValidator(
                   formData.governanceToken,
                   page,
@@ -245,7 +255,7 @@ const CreateDao = () => {
               ]
             }
 
-            console.log('PAGE VALIDITY:', pageInfoValidator(pageValidity))
+            // console.log('PAGE VALIDITY:', pageInfoValidator(pageValidity))
 
             if (pageInfoValidator(pageValidity) === true) {
               if (page < 3) {
