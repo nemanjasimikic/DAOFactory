@@ -68,6 +68,13 @@ export const inputValidator = (data, page, what, toAlert, isVoting) => {
     // Page 2
   } else if (page == 1) {
     if (what === 'threshold') {
+      console.log(
+        'VALIATING Threshold ',
+        data,
+        isVoting,
+        typeof isVoting,
+        typeof data
+      )
       if (isNaN(data)) {
         error = true
         if (toAlert) {
@@ -79,6 +86,9 @@ export const inputValidator = (data, page, what, toAlert, isVoting) => {
       } else if (!data) {
         error = true
         return 'Error: Cannot be empty'
+      } else if (parseInt(data) < parseInt(isVoting)) {
+        error = true
+        return 'Error: Value cannot be lower than Min Stake'
       } else {
         error = false
       }

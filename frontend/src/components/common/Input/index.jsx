@@ -9,6 +9,7 @@ import {
 import Tooltip from 'components/common/Tooltip'
 
 const Input = ({
+  formData,
   formId,
   buttons,
   label,
@@ -41,6 +42,15 @@ const Input = ({
       return 'This is a required field *'
     } else if (registerInput === 'ownerAddress') {
       return inputValidator(value, 0, registerInput, false, null)
+    } else if (registerInput === 'threshold') {
+      console.log('DID VALIDATE THRESHOLD: ', formData.minStake)
+      return inputValidator(
+        value,
+        page,
+        registerInput,
+        false,
+        formData.minStake
+      )
     } else if (page === 2) {
       let voting = registerInput === 'voting' ? true : false
       return inputValidator(value, page, hourOrDay, false, voting)
@@ -52,7 +62,7 @@ const Input = ({
   }
 
   function didValidate() {
-    console.log('DID VALIDATE: ', validated)
+    // console.log('DID VALIDATE: ', validated)
     let page = whatPage(registerInput)
     if (validated != null) {
       if (page == 0 && validated[page] === true) {
