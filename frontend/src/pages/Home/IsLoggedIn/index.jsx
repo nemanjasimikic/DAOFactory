@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-query'
+import { WalletContext } from 'context/walletContext'
 import ContentHeader from 'components/common/ContentHeader'
 import Button from 'components/common/Button'
 import NoResults from 'components/NoResults'
@@ -8,8 +9,6 @@ import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
-import { useContext } from 'react'
-import { WalletContext } from 'context/walletContext'
 
 const IsLoggedIn = ({ address }) => {
   const [renderTable, setRenderTable] = useState(true)
