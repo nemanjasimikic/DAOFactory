@@ -1232,7 +1232,7 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
 
 const getAllStakeholders = async (daoRootAddress) => {
   const stakingRoot = await createStakingContract(daoRootAddress)
-
+  let sumAllVotes = 0
   const successStream = await ever.getTransactions({
     address: stakingRoot.address,
     continuation: undefined,
@@ -1240,6 +1240,7 @@ const getAllStakeholders = async (daoRootAddress) => {
   })
   let voters = []
   let proposalsVoted = 0
+  let userVotesCount = []
   for (let i = 0; i < successStream.transactions.length; i++) {
     const trx = await stakingRoot.decodeTransaction({
       transaction: successStream.transactions[i],
@@ -1247,8 +1248,72 @@ const getAllStakeholders = async (daoRootAddress) => {
     })
     let duplicate
     if (trx) {
-      //console.log('trx stakeholder: ', trx)
-      if (voters) {
+      duplicate = voters?.forEach(
+        (voter) =>
+          voter.user === successStream.transactions[i].inMessage.src._address
+      )
+      console.log('duplicate: ', duplicate)
+      if (duplicate) {
+        voters
+          .find((voter) => voter.user == duplicate.user)
+          .id.push(trx.input.proposal_id * 1)
+        console.log('voters: ', voters)
+      }
+
+      if (!duplicate) {
+        voters.push({
+          id: [trx.input.proposal_id * 1],
+          user: successStream.transactions[i].inMessage.src._address,
+        })
+        console.log('voters !duplicate: ', voters)
+      }
+    }
+  }
+  // console.log('trx: ', trx)
+
+  for (let i = 0; i < voters.length; i++) {
+    let count = 0
+    for (let j = 0; j < voters[i].id.length; j++) {
+      const proposal = await createProposalContract(
+        daoRootAddress,
+        voters[i].id[j]
+      )
+      if (proposal) {
+        const successStream = await ever.getTransactions({
+          address: proposal.address,
+          continuation: undefined,
+          limit: 50,
+        })
+        for (let t = 0; t < successStream.transactions.length; t++) {
+          const trx = await proposal.decodeTransaction({
+            transaction: successStream.transactions[t],
+            methods: ['castVote'],
+          })
+          if (trx && trx.input.voter._address == voters[i].user) {
+            count += fromNano(trx.input.votes, 9)
+            console.log('trx proposal: ', trx)
+            console.log('count: ', count)
+            sumAllVotes += fromNano(trx.input.votes, 9)
+          }
+        }
+      }
+    }
+
+    userVotesCount.push({
+      id: i + 1,
+      userAddress: voters[i].user,
+      voteWeight: 0,
+      votes: count,
+      proposalsVoted: voters[i].id.length,
+    })
+  }
+  for (let i = 0; i < userVotesCount.length; i++) {
+    const voteWeigth = Math.round((userVotesCount[i].votes / sumAllVotes) * 100)
+    userVotesCount[i].voteWeight = voteWeigth + '%'
+  }
+  console.log('userVotesCount: ', userVotesCount)
+  //console.log('trx stakeholder: ', trx)
+  /*if (voters) {
         duplicate = voters.find(
           (voter) =>
             voter === successStream.transactions[i].inMessage.src._address
@@ -1258,9 +1323,9 @@ const getAllStakeholders = async (daoRootAddress) => {
         voters.push(successStream.transactions[i].inMessage.src._address)
       }
       proposalsVoted++
-    }
-  }
-  let votesData = []
+    }*/
+
+  /*let votesData = []
   for (let i = 0; i < voters.length; i++) {
     const userData = await createUserDataContract(daoRootAddress, voters[0])
     const votes = await userData.methods.lockedTokens({ answerId: 0 }).call()
@@ -1273,9 +1338,9 @@ const getAllStakeholders = async (daoRootAddress) => {
       votes: votes.value0,
       proposalsVoted: proposalsVoted,
     })
-  }
+  }*/
 
-  return votesData
+  return userVotesCount
 }
 
 const createProposal = async (
