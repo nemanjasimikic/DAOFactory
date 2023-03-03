@@ -64,6 +64,7 @@ const VotingConfiguration = ({ validated, formData, setFormData }) => {
         ></Tooltip>
       </div>
       <Input
+        formData={formData}
         validated={validated}
         id="threshold"
         defaultValue={0}
