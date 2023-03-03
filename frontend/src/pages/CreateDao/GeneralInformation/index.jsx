@@ -40,14 +40,6 @@ const GeneralInformation = ({
 
   const [slugOk, isSlugOk] = useState({})
 
-  /*useEffect(() => {
-    //if (data) {
-      daoService
-        .isOwner(data.daoAddress, addressContext, id)
-        .then((data) => setOwner(data))
-    //}
-  }, [])*/
-
   const onSlugChange = async (e) => {
     setFormData((prevState) => ({
       ...prevState,
