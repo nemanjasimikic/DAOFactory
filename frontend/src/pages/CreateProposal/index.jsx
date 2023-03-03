@@ -22,7 +22,7 @@ const CreateProposal = () => {
   const { id } = useParams()
   const { data } = useQuery(
     ['daoRoot', id],
-    () => daoService.getDaoInfo(id, addressContext),
+    () => daoService.findDAOIfNotOwner(id, addressContext),
     {
       enabled: !!addressContext,
     }

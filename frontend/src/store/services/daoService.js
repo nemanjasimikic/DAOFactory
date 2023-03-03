@@ -11,6 +11,7 @@ import tokenWalletAbi from '../../helpers/TokenWallet.abi.json'
 import axios from 'axios'
 import tokensList from 'utils/tokens-list'
 import dayjs from 'dayjs'
+import { forEach } from 'lodash'
 
 //1. Srediti proposals with your locked tokens - iz user data - votes izvuci koji proposal i ostale info preko toga
 //2. Srediti ako threshold nije ispunjen failovala je proposal
@@ -525,6 +526,18 @@ const getFactory = async (address) => {
     codeHash: bocHashEver,
     limit: 10,
   })
+  // console.log('accounts: ', accounts)
+  // console.log('code: ', code)
+  /* const unpacked = await ever.unpackFromCell({
+    allowPartial: true,
+    boc: code.code,
+    structure: [
+      { name: '_nonce', type: 'uint32' },
+      { name: 'randomNonce', type: 'uint32' },
+      { name: 'deployedAccounts', type: 'map(uint32,address[])' },
+    ],
+  })
+  console.log('unpacked: ', unpacked)*/
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(accounts)
@@ -556,7 +569,8 @@ const addDaoRootToFactory = async (
 const getAllDAOs = async (address) => {
   const factory = await getFactory(address)
   const state = await ever.getProviderState()
-  // console.log('provider: ', state)
+  //const isSlugOK = await checkSlug('dms')
+  // const dao = await findDAOIfNotOwner('dms')
   let rootData = []
   try {
     if (factory.accounts && factory.accounts.length > 0) {
@@ -592,6 +606,7 @@ const getAllDAOs = async (address) => {
         codeHash: bocHashEver,
         limit: 50,
       })
+      //console.log('accounts: ', accounts)
       daoAddresses = await getDeployedDaos(daoFactoryContract)
       if (rootData.length < daoAddresses.daoAddr.length) {
         const idx = daoAddresses.daoAddr.length - 1
@@ -2212,6 +2227,173 @@ const getAllStakers = async (daoRootAddress) => {
   }
 }
 
+const checkSlug = async (userSlug) => {
+  const code = await ever.splitTvc(daoRootTvc)
+  let addresses = []
+  let daoRoots = []
+  let accounts
+  const bocHashEver = await ever.getBocHash(code.code)
+  accounts = await ever.getAccountsByCodeHash({
+    codeHash: bocHashEver,
+    limit: 50,
+  })
+  let last
+  last = accounts.accounts[accounts.accounts.length - 1]
+  accounts.accounts.forEach((i) => addresses.push(i._address))
+  while (accounts.length == 50) {
+    accounts = await ever.getAccountsByCodeHash({
+      codeHash: bocHashEver,
+      limit: 50,
+      continuation: last,
+    })
+    last = accounts.accounts[accounts.accounts.length - 1]
+    accounts.accounts.forEach((i) => addresses.push(i._address))
+  }
+  addresses.forEach((i) => daoRoots.push(createDaoRootContract(i)))
+  //console.log('daoRoots: ', daoRoots)
+  let count
+
+  for (let i = 0; i < daoRoots.length; i++) {
+    const slug = await daoRoots[i].methods.slug({}).call()
+    if (slug.slug === userSlug) {
+      count = i
+    }
+  }
+
+  let slugObject
+  //console.log('count: ', count)
+  if (count) {
+    slugObject = {
+      isSlugOk: false,
+      contract: daoRoots[count],
+    }
+  } else {
+    slugObject = {
+      isSlugOk: true,
+      contract: null,
+    }
+  }
+  return slugObject
+}
+
+const findDAOIfNotOwner = async (slug, address) => {
+  const daoRoot =
+    slug.length > 60
+      ? await getDaoByAddress(slug)
+      : await (
+          await checkSlug(slug)
+        ).contract
+  //console.log('daoRoot: ', daoRoot)
+  let rootData = []
+  if (daoRoot) {
+    const name = await daoRoot.methods.name({}).call()
+    const slug = await daoRoot.methods.slug({}).call()
+    const description = await daoRoot.methods.description({}).call()
+    const tokenAddress = await daoRoot.methods.governanceToken({}).call()
+
+    const stakingRootContract = await createStakingContract(daoRoot.address)
+
+    const details = await stakingRootContract.methods
+      .getDetails({ answerId: 0 })
+      .call()
+    const balance = fromNano(details.value0.tokenBalance * 1, 9)
+    const tokenRootAddress = details.value0.tokenRoot
+    const userData = await createUserDataContract(daoRoot.address, address)
+    const contractState = await ever.getFullContractState({
+      address: userData.address,
+    })
+    let userBalance
+    if (contractState?.state?.isDeployed) {
+      const details = await userData.methods.getDetails({ answerId: 0 }).call()
+      userBalance = fromNano(details.value0.token_balance * 1, 9)
+    }
+    const tokenSymbol = await getToken(tokenAddress.governanceToken._address)
+
+    const proposalConfiguration = await daoRoot.methods
+      .proposalConfiguration({})
+      .call()
+
+    const nrOfProposals = await daoRoot.methods.proposalCount({}).call()
+    const proposals = await getProposals(daoRoot.address, address)
+    // console.log('proposals data: ', proposals)
+    let prop
+    try {
+      prop = await proposalsWithYourLockedTokens(address, daoRoot.address)
+    } catch (e) {
+      prop = null
+    }
+    let voters
+    try {
+      voters = await getAllStakeholders(daoRoot.address)
+    } catch (e) {
+      voters = null
+    }
+    const tokenBalance = await calculateBalance(
+      address,
+      tokenAddress.governanceToken._address
+    )
+    let history
+    try {
+      history = await getTransactionHistory(daoRoot.address)
+    } catch (e) {
+      history = null
+    }
+    let canWithdraw
+    try {
+      canWithdraw = await canWithdrawVotes(daoRoot.address, address)
+    } catch (e) {
+      canWithdraw = null
+    }
+    let canUnlock
+    try {
+      canUnlock = await getUnlockArray(daoRoot, address)
+      //console.log('canUnlock: ', canUnlock)
+    } catch (e) {
+      canUnlock = null
+    }
+    try {
+      await getVotes(daoRoot.address, address)
+    } catch (e) {}
+    let stakers
+    try {
+      stakers = await getAllStakers(daoRoot.address)
+      //console.log('stakers: ', stakers)
+    } catch (e) {
+      stakers = null
+    }
+
+    // console.log('prop: ', prop)
+    rootData = {
+      name: name.name,
+      slug: slug.slug,
+      description: description.description,
+      token: tokenSymbol ? tokenSymbol.label : null,
+      proposalConfiguration: proposalConfiguration.proposalConfiguration,
+      nrOfProposals: nrOfProposals.proposalCount,
+      daoBalance: balance,
+      userBalance: userBalance,
+      daoAddress: daoRoot.address,
+      proposals: proposals,
+      proposalsWithLockedTokens: prop ?? null,
+      voters: voters,
+      tokenBalance: tokenBalance,
+      history: history,
+      withdraw: canWithdraw,
+      unlockArray: canUnlock,
+      decimals: tokenSymbol ? tokenSymbol.decimals : null,
+      tokenRootAddress: tokenRootAddress,
+      tokenName: tokenSymbol ? tokenSymbol.name : null,
+      stakers: stakers,
+    }
+  }
+
+  return new Promise((resolve) => {
+    resolve(rootData)
+  })
+
+  //return daoRoot
+}
+
 const daoService = {
   getExpectedAddress,
   topup,
@@ -2242,6 +2424,8 @@ const daoService = {
   isOwner,
   executeProposal,
   queue,
+  findDAOIfNotOwner,
+  checkSlug,
 }
 
 export default daoService

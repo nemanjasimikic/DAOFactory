@@ -24,7 +24,7 @@ const Balance = () => {
 
   const { data, isLoading } = useQuery(
     ['daoBalance', id],
-    () => daoService.getDaoInfo(id, addressContext),
+    () => daoService.findDAOIfNotOwner(id, addressContext),
     {
       enabled: !!addressContext,
       refetchInterval: 1000,

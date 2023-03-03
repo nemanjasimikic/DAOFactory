@@ -6,6 +6,7 @@ import infoIcon from 'static/svg/infoIcon.svg'
 import { useForm } from 'react-hook-form'
 import ImageButton from 'components/common/ImageButton'
 import daoService from 'store/services/daoService'
+import { useState } from 'react'
 
 const GeneralInformation = ({
   validated,
@@ -38,6 +39,17 @@ const GeneralInformation = ({
     }))
   }
 
+  const [slugOk, isSlugOk] = useState({})
+
+  const onSlugChange = async (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+    const slugCheck = await daoService.checkSlug(e.target.value)
+    isSlugOk(slugCheck.isSlugOk)
+  }
+  //console.log('slugOk: ', slugOk)
   const { daoAddress, name, daoSlug, governanceToken, minStake, description } =
     formData
 
@@ -104,7 +116,7 @@ const GeneralInformation = ({
         label={'DAO slug'}
         placeholder={'slug'}
         registerInput={'daoSlug'}
-        onChange={onChange}
+        onChange={onSlugChange}
         defaultValue={''}
         value={daoSlug}
         required={true}
