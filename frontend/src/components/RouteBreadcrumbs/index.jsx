@@ -6,7 +6,7 @@ const RouteBreadcrumbs = ({ text, daoName, route }) => {
   let daoNameF = !daoName ? '...loading' : daoName
   return (
     <div className={styles.routeBreadcrumbs}>
-      <Link to={`/${route ? route : ''}`}>
+      <Link to={`/${route ? route : ''}`} style={{color: 'transparent'}}>
         <p className={styles.inactive}>{daoNameF}</p>
       </Link>
 

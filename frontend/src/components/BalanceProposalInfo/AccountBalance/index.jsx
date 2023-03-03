@@ -10,7 +10,7 @@ import styles from './styles.module.sass'
 
 const titles = ['Deposit', 'Withdraw']
 
-const AccountBalance = ({ id, data, address }) => {
+const AccountBalance = ({ id, data, address, customStyle }) => {
   const [active, setActive] = useState(titles[0])
   const navigate = useNavigate()
 
@@ -53,7 +53,7 @@ const AccountBalance = ({ id, data, address }) => {
   const { max } = formData
 
   return (
-    <BalanceProposalInfo heading={'Account balance'}>
+    <BalanceProposalInfo customStyle={customStyle} heading={'Account balance'}>
       {loading && <Spinner />}
 
       <Tabs

@@ -25,11 +25,12 @@ const RenderDaoSettings = ({ id }) => (
 
 const Sidebar = ({ page, setPage, id }) => {
   const location = useLocation()
-
   return (
     <div className={styles.sidebar}>
       <Link to={'/'} className={styles.backButton}>
-        <Button style={'transparentBtn'} text={'Back'} leftArrow={leftArrow} />
+        <div className={ id !== undefined ? styles.minusLeftMargin : null}>
+          <Button className={styles.backBtn} style={'transparentBtn'} text={'Back'} leftArrow={leftArrow} />
+        </div>
       </Link>
       {location.pathname === '/create-dao' ? (
         <Breadcrumbs page={page} setPage={setPage} />
