@@ -49,7 +49,7 @@ const GeneralInformation = ({
     const slugCheck = await daoService.checkSlug(e.target.value)
     isSlugOk(slugCheck.isSlugOk)
   }
-  //console.log('slugOk: ', slugOk)
+
   const { daoAddress, name, daoSlug, governanceToken, minStake, description } =
     formData
 
@@ -111,6 +111,7 @@ const GeneralInformation = ({
         required={true}
       />
       <Input
+        formData={slugOk}
         validated={validated}
         id="daoSlug"
         label={'DAO slug'}

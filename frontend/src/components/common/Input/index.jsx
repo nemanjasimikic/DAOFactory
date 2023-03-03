@@ -55,7 +55,7 @@ const Input = ({
       let voting = registerInput === 'voting' ? true : false
       return inputValidator(value, page, hourOrDay, false, voting)
     } else if (id === 'daoSlug') {
-      return inputValidator(value, page, registerInput, false)
+      return inputValidator(value, page, registerInput, false, formData)
     } else {
       return inputValidator(value, page, registerInput, false)
     }
