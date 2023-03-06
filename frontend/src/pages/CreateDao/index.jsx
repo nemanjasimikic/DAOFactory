@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { WalletContext } from 'context/walletContext'
 import { useForm } from 'react-hook-form'
 import daoService from 'store/services/daoService'
-import { validator, checkValidity } from 'helpers/formValidator'
+import {
+  inputValidator,
+  pageInfoValidator,
+  isEmptyOrSpaces,
+} from 'helpers/formValidator'
 import GeneralInformation from 'pages/CreateDao/GeneralInformation'
 import VotingConfiguration from 'pages/CreateDao/VotingConfiguration'
 import ProposalTimeline from 'pages/CreateDao/ProposalTimeline'
@@ -27,6 +31,7 @@ const CreateDao = () => {
   } = useForm()
 
   const [page, setPage] = useState(0)
+  let [pageChecked, setPageChecked] = useState([false, false, false, false])
   let [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     daoAddress: '',
@@ -70,6 +75,7 @@ const CreateDao = () => {
     if (page === 0) {
       return (
         <GeneralInformation
+          validated={pageChecked}
           formId={'myForm'}
           formData={formData}
           rootAddress={daoAddress}
@@ -79,12 +85,28 @@ const CreateDao = () => {
       )
     } else if (page === 1) {
       return (
-        <VotingConfiguration formData={formData} setFormData={setFormData} />
+        <VotingConfiguration
+          validated={pageChecked}
+          formData={formData}
+          setFormData={setFormData}
+        />
       )
     } else if (page === 2) {
-      return <ProposalTimeline formData={formData} setFormData={setFormData} />
+      return (
+        <ProposalTimeline
+          validated={pageChecked}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     } else {
-      return <Treasury formData={formData} setFormData={setFormData} />
+      return (
+        <Treasury
+          validated={pageChecked}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      )
     }
   }
   const pendingTime =
@@ -146,52 +168,84 @@ const CreateDao = () => {
           disabled={page > 3}
           onClick={async (e) => {
             // try and validate form
-            handleSubmit(e)
+            // handleSubmit(e)
             // scroll to top
             window.scrollTo(0, 0)
 
             let pageValidity = []
 
+            page === 0
+              ? setPageChecked([true, false, false, false])
+              : page === 1
+              ? setPageChecked([true, true, false, false])
+              : page === 2
+              ? setPageChecked([true, true, true, false])
+              : setPageChecked([true, true, true, true])
+
             if (page === 0) {
+              setLoading(true)
+              const slugCheck = await daoService.checkSlug(formData.daoSlug)
+              // console.log('IS SLUG VALID: ', slugCheck.isSlugOk)
+              setLoading(false)
               pageValidity = [
-                validator(formData.name, page, 'name', false, null),
-                validator(
+                inputValidator(formData.name, page, 'name', false, null),
+                inputValidator(
+                  formData.daoSlug,
+                  page,
+                  'daoSlug',
+                  false,
+                  slugCheck.isSlugOk
+                ),
+                inputValidator(
                   formData.governanceToken,
                   page,
                   'governanceToken',
                   false,
                   null
                 ),
-                validator(formData.minStake, page, 'minStake', false, null),
+                inputValidator(
+                  formData.minStake,
+                  page,
+                  'minStake',
+                  false,
+                  null
+                ),
               ]
             } else if (page === 1) {
               pageValidity = [
-                validator(formData.threshold, page, 'threshold', false, null),
+                inputValidator(
+                  formData.threshold,
+                  page,
+                  'threshold',
+                  false,
+                  null
+                ),
+                formData.minStake <= formData.threshold,
               ]
             } else if (page === 2) {
               pageValidity = [
-                validator(
+                inputValidator(
                   formData.pending,
                   page,
                   formData.pendingTime,
                   false,
                   null
                 ),
-                validator(
+                inputValidator(
                   formData.queued,
                   page,
                   formData.queuedTime,
                   false,
                   null
                 ),
-                validator(
+                inputValidator(
                   formData.voting,
                   page,
                   formData.votingTime,
                   false,
                   true
                 ),
-                validator(
+                inputValidator(
                   formData.execution,
                   page,
                   formData.executionTime,
@@ -201,7 +255,9 @@ const CreateDao = () => {
               ]
             }
 
-            if (checkValidity(pageValidity) === true) {
+            // console.log('PAGE VALIDITY:', pageInfoValidator(pageValidity))
+
+            if (pageInfoValidator(pageValidity) === true) {
               if (page < 3) {
                 setPage((currentPage) => currentPage + 1)
               } else if (page === 3) {
@@ -234,6 +290,7 @@ const CreateDao = () => {
                     addressContext
                   )
                   .catch((e) => {
+                    console.log(e)
                     setLoading(false)
                     canNavigate = false
                     return
