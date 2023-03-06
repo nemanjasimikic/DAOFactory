@@ -99,7 +99,7 @@ export const inputValidator = (
         return 'Error: Cannot be empty'
       } else if (parseInt(data) >= parseInt(extraData)) {
         error = true
-        return 'Error: Value cannot be lower than Min Stake'
+        return 'Error: Value cannot be higher than Min Stake'
       } else {
         error = false
       }
