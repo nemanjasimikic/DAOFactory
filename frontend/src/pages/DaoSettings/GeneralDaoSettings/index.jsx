@@ -74,6 +74,17 @@ const GeneralDaoSettings = () => {
     }
   }
 
+  const [slugOk, isSlugOk] = useState({})
+
+  const onSlugChange = async (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }))
+    const slugCheck = await daoService.checkSlug(e.target.value)
+    isSlugOk(slugCheck.isSlugOk)
+  }
+
   return name ? (
     <>
       <div>
@@ -107,13 +118,14 @@ const GeneralDaoSettings = () => {
                   onChange={onChange}
                 />
                 <Input
+                  formData={slugOk}
                   id="daoSlug"
                   validated={pageChecked}
                   label={'DAO slug'}
                   placeholder={'slug'}
                   registerInput={'daoSlug'}
                   value={formData.daoSlug}
-                  onChange={onChange}
+                  onChange={onSlugChange}
                 />
 
                 <label>Description(optional)</label>
@@ -128,6 +140,12 @@ const GeneralDaoSettings = () => {
                   style={'bigLightBlueBtn'}
                   text={'Save changes'}
                   onClick={async (e) => {
+                    setLoading(true)
+                    const slugCheck = await daoService.checkSlug(
+                      formData.daoSlug
+                    )
+                    setLoading(false)
+
                     let pageValidity = [
                       inputValidator(formData.name, 0, 'name', false, null),
                       inputValidator(
@@ -135,7 +153,7 @@ const GeneralDaoSettings = () => {
                         0,
                         'daoSlug',
                         false,
-                        null
+                        slugCheck.isSlugOk
                       ),
                     ]
                     setLoading(true)
