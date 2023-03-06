@@ -1440,6 +1440,21 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
 
     let proposals = []
     for (let i = 0; i < proposalContractArray.length; i++) {
+      const successStream = await ever.getTransactions({
+        address: proposalContractArray[i]._address,
+        continuation: undefined,
+        limit: 50,
+      })
+      let nrOfVotes
+      for (let j = 0; j < successStream.transactions.length; j++) {
+        const trx = await proposalContractArray[i].decodeTransaction({
+          transaction: successStream.transactions[j],
+          methods: ['castVote'],
+        })
+        if (trx?.input.voter == ownerAddress) {
+          nrOfVotes = fromNano(trx.input.votes * 1, 9)
+        }
+      }
       const data = await proposalContractArray[i].methods
         .getOverview({ answerId: 0 })
         .call()
@@ -1480,11 +1495,10 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
             (1000 * 3600 * 24)
         ),
         queuedTime: dayjs.unix(data.executionTime_).format('DD MMM YYYY HH:mm'),
-        lockedTokens: lockedTokens.value0,
+        lockedTokens: nrOfVotes, //lockedTokens.value0,
         //   slug: slug.slug,
       })
     }
-
     return Promise.resolve(proposals)
   } catch (e) {
     return null
