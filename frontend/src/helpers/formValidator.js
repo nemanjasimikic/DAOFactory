@@ -6,7 +6,6 @@ export const inputValidator = (
   extraData,
   extraData2
 ) => {
-
   let originalSlug
   if (extraData2 != undefined) {
     originalSlug = extraData2.toUpperCase()
@@ -98,7 +97,7 @@ export const inputValidator = (
       } else if (!data) {
         error = true
         return 'Error: Cannot be empty'
-      } else if (parseInt(data) < parseInt(extraData)) {
+      } else if (parseInt(data) >= parseInt(extraData)) {
         error = true
         return 'Error: Value cannot be lower than Min Stake'
       } else {
