@@ -11,9 +11,9 @@ import Input from 'components/common/Input'
 import Button from 'components/common/Button'
 import NotificationPopup from 'components/Popup/NotificationPopup'
 import Spinner from 'components/common/Spinner'
-import copy from 'static/svg/copy.svg'
 import { pageInfoValidator, inputValidator } from 'helpers/formValidator'
 import styles from '../styles.module.sass'
+import copy from 'static/svg/copy.svg'
 
 const GeneralDaoSettings = () => {
   const { register } = useForm()

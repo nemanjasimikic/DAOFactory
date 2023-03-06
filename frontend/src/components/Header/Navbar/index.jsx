@@ -52,7 +52,8 @@ const Navbar = () => {
       >
         My DAOs
       </NavLink>
-      {isLoggedIn === false && isLoginPending === false ? (
+      {addressContext === '' ||
+      (isLoggedIn === false && isLoginPending === false) ? (
         <Button
           text={'Connect wallet'}
           style={'primaryBtn'}

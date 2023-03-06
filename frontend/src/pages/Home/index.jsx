@@ -67,7 +67,9 @@ const Home = ({ client }) => {
   ]
   return (
     <div className={styles.container}>
-      {!isLoginPending ? (
+      {addressContext === '' ? (
+        <IsLoggedOut />
+      ) : !isLoginPending ? (
         isLoggedInStore ? (
           <IsLoggedIn address={addressContext} />
         ) : (
