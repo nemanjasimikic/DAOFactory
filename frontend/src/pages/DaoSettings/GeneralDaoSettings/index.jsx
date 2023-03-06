@@ -126,6 +126,7 @@ const GeneralDaoSettings = () => {
                   registerInput={'daoSlug'}
                   value={formData.daoSlug}
                   onChange={onSlugChange}
+                  originalSlug={slug}
                 />
 
                 <label>Description(optional)</label>
@@ -153,7 +154,8 @@ const GeneralDaoSettings = () => {
                         0,
                         'daoSlug',
                         false,
-                        slugCheck.isSlugOk
+                        slugCheck.isSlugOk,
+                        slug
                       ),
                     ]
                     setLoading(true)

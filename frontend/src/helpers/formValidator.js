@@ -1,4 +1,18 @@
-export const inputValidator = (data, page, what, toAlert, extraData) => {
+export const inputValidator = (
+  data,
+  page,
+  what,
+  toAlert,
+  extraData,
+  extraData2
+) => {
+  console.log('Extra data', extraData2, data)
+
+  let originalSlug
+  if (extraData2 != undefined) {
+    originalSlug = extraData2.toUpperCase()
+  }
+
   let error = false
   // Page 1
   if (page == 0) {
@@ -18,7 +32,7 @@ export const inputValidator = (data, page, what, toAlert, extraData) => {
       if (isEmptyOrSpaces(data)) {
         error = true
         return 'Error: Slug missing'
-      } else if (extraData == false) {
+      } else if (extraData == false && data.toUpperCase() != originalSlug) {
         error = true
         return 'Error: Slug already taken'
       } else if (data.includes('/')) {

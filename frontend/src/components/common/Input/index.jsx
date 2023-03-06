@@ -9,6 +9,7 @@ import {
 import Tooltip from 'components/common/Tooltip'
 
 const Input = ({
+  originalSlug,
   formData,
   formId,
   buttons,
@@ -55,7 +56,14 @@ const Input = ({
       let voting = registerInput === 'voting' ? true : false
       return inputValidator(value, page, hourOrDay, false, voting)
     } else if (id === 'daoSlug') {
-      return inputValidator(value, page, registerInput, false, formData)
+      return inputValidator(
+        value,
+        page,
+        registerInput,
+        false,
+        formData,
+        originalSlug
+      )
     } else {
       return inputValidator(value, page, registerInput, false)
     }
