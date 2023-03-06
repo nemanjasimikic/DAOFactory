@@ -2255,7 +2255,7 @@ const checkSlug = async (userSlug) => {
 
   for (let i = 0; i < daoRoots.length; i++) {
     const slug = await daoRoots[i].methods.slug({}).call()
-    if (slug.slug === userSlug) {
+    if (slug.slug.toUpperCase() === userSlug.toUpperCase()) {
       count = i
     }
   }
