@@ -5,7 +5,7 @@ export const WalletContext = createContext(null)
 const initialState = {
   isLoggedIn: false,
   isLoginPending: false,
-  loginError: null,
+  loginError: false,
   addressContext: '',
   balanceContext: 0,
 }
@@ -29,16 +29,16 @@ export const ContextProvider = (props) => {
     })
 
   const login = async (email, password) => {
-    setLoginPending(true, false, null, '', 0)
+    setLoginPending(true, false, false, '', 0)
 
     const response = await walletService.walletConnect(() => {})
 
-    setLoginPending(false, true, null, response.address, response.balance * 1)
+    setLoginPending(false, true, false, response.address, response.balance * 1)
   }
 
   const logout = async () => {
     const response = await walletService.logout(() => {})
-    setLoginPending(false, false, null, '', 0)
+    setLoginPending(false, false, false, '', 0)
   }
 
   return (

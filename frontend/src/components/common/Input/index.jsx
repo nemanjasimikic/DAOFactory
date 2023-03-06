@@ -1,10 +1,16 @@
 import styles from './styles.module.sass'
 import { useForm } from 'react-hook-form'
 import linkIcon from 'static/svg/linkIcon.svg'
-import { validator, whatPage } from 'helpers/formValidator'
+import {
+  inputValidator,
+  whatPage,
+  inputErrorSwitchStyle,
+} from 'helpers/formValidator'
 import Tooltip from 'components/common/Tooltip'
 
 const Input = ({
+  originalSlug,
+  formData,
   formId,
   buttons,
   label,
@@ -18,57 +24,72 @@ const Input = ({
   disabled,
   required,
   hourOrDay,
+  validated,
+  id,
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    shouldUseNativeValidation: true,
+    // shouldUseNativeValidation: true,
   })
 
   function validateInput() {
     let page = whatPage(registerInput)
-    if (registerInput === 'daoAddress' || registerInput === 'daoSlug') {
+    if (registerInput === 'daoAddress') {
       return
-    } else if (!value) {
-      // return 'This is a required field *'
-      return
+    } else if (!value && registerInput !== 'ownerAddress') {
+      return 'This is a required field *'
+    } else if (registerInput === 'ownerAddress') {
+      return inputValidator(value, 0, registerInput, false, null)
+    } else if (registerInput === 'threshold') {
+      // console.log('DID VALIDATE THRESHOLD: ', formData.minStake)
+      return inputValidator(
+        value,
+        page,
+        registerInput,
+        false,
+        formData.minStake
+      )
     } else if (page === 2) {
       let voting = registerInput === 'voting' ? true : false
-      return validator(value, page, hourOrDay, false, voting)
+      return inputValidator(value, page, hourOrDay, false, voting)
+    } else if (id === 'daoSlug') {
+      return inputValidator(
+        value,
+        page,
+        registerInput,
+        false,
+        formData,
+        originalSlug
+      )
+    } else if (registerInput == 'governanceToken') {
+      return inputValidator(value, page, registerInput, false, formData)
     } else {
-      return validator(value, page, registerInput, false)
+      return inputValidator(value, page, registerInput, false)
     }
   }
 
-  // To be moved to new file, and edited
-  let color = 'red'
-  function styling(what, param) {
-    if (
-      what === 'queued' ||
-      what === 'pending' ||
-      what === 'voting' ||
-      what === 'execution'
-    ) {
-      if (param === 'position') {
-        return 'absolute'
-      } else {
-        return '0'
+  function didValidate() {
+    // console.log('DID VALIDATE: ', validated)
+    let page = whatPage(registerInput)
+    if (validated != null) {
+      if (page == 0 && validated[page] === true) {
+        return true
+      } else if (page == 1 && validated[page] === true) {
+        return true
+      } else if (page == 2 && validated[page] === true) {
+        return true
+      } else if (page == 0 && validated === true) {
+        return true
       }
-    } else {
-      if (param === 'position') {
-        return 'relative'
-      } else if (param === 'bottom') {
-        return null
-      } else if (param === 'marginT') {
-        return '-0.80rem'
-      } else if (param === 'marginB') {
-        return '0.80rem'
-      }
-      return 'relative'
+      return false
     }
+    return false
   }
+
+  let shouldShow = didValidate()
 
   let hint =
     registerInput === 'governanceToken'
@@ -125,38 +146,29 @@ const Input = ({
         }}
         id={registerInput}
         form={formId}
-        required={required}
         className={styles.input}
-        defaultValue={defaultValue}
-        value={value}
+        value={
+          // registerInput === 'daoSlug' ? nonRepeat(value) :
+          value
+        }
         type={type}
         placeholder={placeholder}
-        {...register(registerInput, { required: 'This is required' })}
+        {...register(registerInput)}
         onChange={onChange}
         disabled={disabled}
       />
-      {/* <img
-        src={firstImage}
-        onError={(event) => (event.target.src = '')}
-        className={styles.inputIconOne}
-      />
-      <img
-        src={secondImage}
-        onError={(event) => (event.target.src = '')}
-        className={styles.inputIconTwo}
-      /> */}
       {buttons}
       <span
         style={{
-          position: styling(registerInput, 'position'),
-          bottom: styling(registerInput, 'bottom'),
-          marginTop: styling(registerInput, 'marginT'),
-          marginBottom: styling(registerInput, 'marginB'),
-          color: color,
+          position: inputErrorSwitchStyle(registerInput, 'position'),
+          bottom: inputErrorSwitchStyle(registerInput, 'bottom'),
+          marginTop: inputErrorSwitchStyle(registerInput, 'marginT'),
+          marginBottom: inputErrorSwitchStyle(registerInput, 'marginB'),
+          color: 'red',
           fontSize: '14px',
         }}
       >
-        {/*validateInput()*/}
+        {shouldShow ? validateInput() : ''}
       </span>
     </div>
   )

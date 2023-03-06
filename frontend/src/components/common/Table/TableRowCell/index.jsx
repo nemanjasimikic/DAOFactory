@@ -60,7 +60,7 @@ const TableRowCell = ({
       //  console.log('proposalId: ', proposalId)
       setActive(unlock)
     } catch (e) {
-      console.log(e)
+      // console.log(e)s
       setActive(false)
     }
   }
@@ -72,7 +72,7 @@ const TableRowCell = ({
         try {
           canUnlock(item.proposalId)
         } catch (e) {
-          console.log(e)
+          // console.log(e)
         }
       }
     }
@@ -148,7 +148,7 @@ const TableRowCell = ({
         </p>
       ) : column.key === 'summary' ? (
         <Link
-          style={{color: 'transparent'}}
+          style={{ color: 'transparent' }}
           to={`proposal/${item.id}` /*`/dao/${item.slug}/proposal/${item.id}`*/}
         >
           <p className={styles.tableCell}>{item.summary}</p>

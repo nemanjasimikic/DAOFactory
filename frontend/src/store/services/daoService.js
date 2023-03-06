@@ -2296,7 +2296,7 @@ const getAllStakers = async (daoRootAddress) => {
 }
 
 const checkSlug = async (userSlug) => {
-  console.log('user slug: ', userSlug)
+  //console.log('user slug: ', userSlug)
   const code = await ever.splitTvc(daoRootTvc)
   let addresses = []
   let daoRoots = []
@@ -2306,7 +2306,7 @@ const checkSlug = async (userSlug) => {
     codeHash: bocHashEver,
     limit: 50,
   })
-  console.log('accounts: ', accounts)
+  //console.log('accounts: ', accounts)
   let last
   last = accounts.accounts[accounts.accounts.length - 1]
   accounts.accounts.forEach((i) => addresses.push(i._address))
@@ -2325,14 +2325,13 @@ const checkSlug = async (userSlug) => {
 
   for (let i = 0; i < daoRoots.length; i++) {
     const slug = await daoRoots[i].methods.slug({}).call()
-    console.log('slug: ', slug.slug)
-    if (slug.slug === userSlug) {
+    if (slug.slug.toUpperCase() === userSlug.toUpperCase()) {
       count = i
     }
   }
 
   let slugObject
-  console.log('count: ', count)
+  //console.log('count: ', count)
   if (count >= 0) {
     slugObject = {
       isSlugOk: false,
@@ -2348,7 +2347,7 @@ const checkSlug = async (userSlug) => {
       codeHash: bocHashEver,
       limit: 50,
     })
-    console.log('accounts: ', accounts2)
+    //console.log('accounts: ', accounts2)
     let last
     last = accounts2.accounts[accounts2.accounts.length - 1]
     accounts2.accounts.forEach((i) => addresses2.push(i._address))
@@ -2364,7 +2363,7 @@ const checkSlug = async (userSlug) => {
     addresses2.forEach((i) => daoRoots2.push(createDaoRootContract(i)))
     for (let i = 0; i < daoRoots2.length; i++) {
       const slug = await daoRoots2[i].methods.slug({}).call()
-      console.log('slug: ', slug.slug)
+      //console.log('slug: ', slug.slug)
       if (slug.slug === userSlug) {
         count = i
       }
