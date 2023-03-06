@@ -88,12 +88,9 @@ export const inputValidator = (
       // )
       if (isNaN(data)) {
         error = true
-        if (toAlert) {
-          alert('Thershold value must be a positive number')
-        }
-        return data[0] === '-'
-          ? 'Error: Only positive numbers allowed'
-          : 'Error: Only numbers allowed'
+        return 'Error: Only numbers allowed'
+      } else if (parseInt(data) <= 0) {
+        return 'Error: Only positive numbers allowed'
       } else if (!data) {
         error = true
         return 'Error: Cannot be empty'
