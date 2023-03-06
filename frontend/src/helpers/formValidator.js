@@ -60,6 +60,9 @@ export const inputValidator = (
           alert('Governance token is not valid. Address missing colon!')
         }
         return 'Error: Address missing colon'
+      } else if (extraData == null && what != 'ownerAddress') {
+        error = true
+        return "Error: Token doesn't exist"
       }
     } else if (what === 'minStake') {
       if (!data || data <= 0) {

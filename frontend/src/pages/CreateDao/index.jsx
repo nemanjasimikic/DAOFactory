@@ -185,6 +185,9 @@ const CreateDao = () => {
             if (page === 0) {
               setLoading(true)
               const slugCheck = await daoService.checkSlug(formData.daoSlug)
+              const govToken = await daoService.getToken(
+                formData.governanceToken
+              )
               // console.log('IS SLUG VALID: ', slugCheck.isSlugOk)
               setLoading(false)
               pageValidity = [
@@ -201,7 +204,7 @@ const CreateDao = () => {
                   page,
                   'governanceToken',
                   false,
-                  null
+                  govToken
                 ),
                 inputValidator(
                   formData.minStake,

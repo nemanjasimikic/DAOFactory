@@ -24,6 +24,8 @@ const GeneralInformation = ({
     }))
   }
 
+  const [tokenOk, isTokenOk] = useState({})
+
   const onAddressChange = async (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -37,6 +39,7 @@ const GeneralInformation = ({
       token: token ? token.label.value0 : '',
       icon: token ? token.icon : '',
     }))
+    isTokenOk(token)
   }
 
   const [slugOk, isSlugOk] = useState({})
@@ -123,6 +126,7 @@ const GeneralInformation = ({
         required={true}
       />
       <Input
+        formData={tokenOk}
         validated={validated}
         id="governanceToken"
         label={'Governance token root address'}

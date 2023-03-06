@@ -64,6 +64,8 @@ const Input = ({
         formData,
         originalSlug
       )
+    } else if (registerInput == 'governanceToken') {
+      return inputValidator(value, page, registerInput, false, formData)
     } else {
       return inputValidator(value, page, registerInput, false)
     }
