@@ -223,7 +223,6 @@ const CreateDao = () => {
                   false,
                   null
                 ),
-                parseInt(formData.minStake) >= parseInt(formData.threshold),
               ]
             } else if (page === 2) {
               pageValidity = [

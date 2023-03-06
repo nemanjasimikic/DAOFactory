@@ -65,7 +65,7 @@ export const inputValidator = (
         return "Error: Token doesn't exist"
       }
     } else if (what === 'minStake') {
-      if (!data) {
+      if (!data || data <= 0) {
         error = true
         if (toAlert) {
           alert('The min amount for stake must be 1')
@@ -97,9 +97,6 @@ export const inputValidator = (
       } else if (!data) {
         error = true
         return 'Error: Cannot be empty'
-      } else if (parseInt(data) > parseInt(extraData)) {
-        error = true
-        return 'Error: Value cannot be greater than Min Stake'
       } else {
         error = false
       }
