@@ -2,6 +2,7 @@ import Modal from 'components/Modal'
 import styles from './styles.module.sass'
 import walletAvatar from 'static/svg/walletAvatar.svg'
 import { addressFormat } from 'helpers/addressFormat'
+import { fromNano } from 'helpers/decimalParser'
 
 const VotesListItem = ({ data, id }) => {
   let supportVotes = []
@@ -61,9 +62,10 @@ const VotesModal = ({ open, setOpen, data, id }) => {
             <p className={styles.voteCurrentResult}>
               {data?.proposals[id - 1].forVotes}
             </p>
-            <p
-              className={styles.voteMax}
-            >{`of ${data?.proposalConfiguration.threshold}`}</p>
+            <p className={styles.voteMax}>{`of ${fromNano(
+              data?.proposalConfiguration.threshold,
+              9
+            )}`}</p>
           </div>
         </div>
         <div

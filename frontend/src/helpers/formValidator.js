@@ -6,7 +6,6 @@ export const inputValidator = (
   extraData,
   extraData2
 ) => {
-  console.log('Extra data', extraData2, data)
 
   let originalSlug
   if (extraData2 != undefined) {
@@ -64,7 +63,7 @@ export const inputValidator = (
         return 'Error: Address missing colon'
       }
     } else if (what === 'minStake') {
-      if (!data && data <= 0) {
+      if (!data || data <= 0) {
         error = true
         if (toAlert) {
           alert('The min amount for stake must be 1')
