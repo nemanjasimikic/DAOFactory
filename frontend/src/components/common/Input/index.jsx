@@ -44,7 +44,7 @@ const Input = ({
     } else if (registerInput === 'ownerAddress') {
       return inputValidator(value, 0, registerInput, false, null)
     } else if (registerInput === 'threshold') {
-      console.log('DID VALIDATE THRESHOLD: ', formData.minStake)
+      // console.log('DID VALIDATE THRESHOLD: ', formData.minStake)
       return inputValidator(
         value,
         page,

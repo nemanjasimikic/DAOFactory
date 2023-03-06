@@ -156,7 +156,7 @@ export const pageInfoValidator = (checks) => {
     if (checks[i] !== true) {
       pass = false
     }
-    console.log(checks)
+    // console.log(checks)
   }
   return pass
 }

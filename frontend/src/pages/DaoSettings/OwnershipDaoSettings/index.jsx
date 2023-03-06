@@ -87,7 +87,7 @@ const OwnershipDaoSettings = () => {
                   )
 
                   if (pageInfoValidator(pageValidity0) === true) {
-                    console.log('DID PASS CHECK!')
+                    // console.log('DID PASS CHECK!')
                     await daoService
                       .transferOwnership(
                         formData.ownerAddress,
