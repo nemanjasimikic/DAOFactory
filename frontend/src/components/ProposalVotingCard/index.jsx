@@ -70,10 +70,10 @@ const ProposalVotingCard = ({ heading, data, id, open, setOpen }) => {
           <h3 className={styles.currentValue}>
             {data?.proposals[id - 1].againstVotes}
           </h3>
-          of
+          {/* of
           <h3 className={styles.maxValue}>
             {fromNano(data?.proposalConfiguration.threshold, 9)}
-          </h3>
+          </h3> */}
         </div>
       </div>
       <div className={styles.line} style={{ background: background(false) }} />

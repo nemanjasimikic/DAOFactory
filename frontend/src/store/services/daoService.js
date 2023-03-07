@@ -732,26 +732,25 @@ const getDeployedDaos = async (daoFactoryContract) => {
 
 const transferOwnership = async (newOwnerAddress, id, address) => {
   const factory = await getFactory(address)
+  //console.log('factory: ', factory)
   const daoFactoryContract = new ever.Contract(
     daoFactoryAbi,
     factory.accounts[0]._address
   )
+
   const daoRootContract =
     id.length > 60
       ? await getDaoByAddress(id)
       : await findDaoBySlug(daoFactoryContract, id)
   const daoAddresses = await getDeployedDaos(daoFactoryContract)
-
   const nonce = daoAddresses.daoAddr.find(
     (address) => address[1][0]._address == daoRootContract.address
   )
 
   try {
-    const walletAddress = addressConverter(localStorage.getItem('wallet'))
-
     const trx = await daoRootContract.methods
       .transferAdmin({ newAdmin: newOwnerAddress })
-      .send({ from: walletAddress, amount: toNano(1, 9), bounce: false })
+      .send({ from: address, amount: toNano(1, 9), bounce: false })
     const providerState = await ever.getProviderState()
     const publicKey = providerState.permissions.accountInteraction.publicKey
     const deleteOld = await daoFactoryContract.methods
@@ -783,11 +782,10 @@ const destroy = async (id, address) => {
     (address) => address[1][0]._address == daoRootContract.address
   )
 
-  const walletAddress = addressConverter(localStorage.getItem('wallet'))
   try {
     const trx = await daoRootContract.methods
       .destroy({})
-      .send({ from: walletAddress, amount: toNano(1, 9), bounce: false })
+      .send({ from: address, amount: toNano(1, 9), bounce: false })
     const providerState = await ever.getProviderState()
     const publicKey = providerState.permissions.accountInteraction.publicKey
 
@@ -1181,11 +1179,12 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       )
       // console.log('proposalVoteWeigth: ', proposalVoteWeigth)
     }
+    const dateCurrent = new Date().getTime()
     const canUnlock = await canUnlockVotes(daoRootAddress, i + 1, ownerAddress)
     const actionIn = parseMsToActionTime(
       new Date(
         dayjs.unix(data.endTime_).format('DD MMM YYYY HH:mm')
-      ).getTime() - dateNow
+      ).getTime() - dateCurrent
     )
     proposals.push({
       id: i + 1,
@@ -1255,12 +1254,12 @@ const getAllStakeholders = async (daoRootAddress) => {
         (voter) =>
           voter.user === successStream.transactions[i].inMessage.src._address
       )
-      console.log('duplicate: ', duplicate)
+      // console.log('duplicate: ', duplicate)
       if (duplicate) {
         voters
           .find((voter) => voter.user == duplicate.user)
           .id.push(trx.input.proposal_id * 1)
-        console.log('voters: ', voters)
+        //console.log('voters: ', voters)
       }
 
       if (!duplicate) {
@@ -1268,7 +1267,7 @@ const getAllStakeholders = async (daoRootAddress) => {
           id: [trx.input.proposal_id * 1],
           user: successStream.transactions[i].inMessage.src._address,
         })
-        console.log('voters !duplicate: ', voters)
+        // console.log('voters !duplicate: ', voters)
       }
     }
   }
@@ -1294,8 +1293,8 @@ const getAllStakeholders = async (daoRootAddress) => {
           })
           if (trx && trx.input.voter._address == voters[i].user) {
             count += fromNano(trx.input.votes, 9)
-            console.log('trx proposal: ', trx)
-            console.log('count: ', count)
+            //console.log('trx proposal: ', trx)
+            // console.log('count: ', count)
             sumAllVotes += fromNano(trx.input.votes, 9)
           }
         }
@@ -1314,7 +1313,7 @@ const getAllStakeholders = async (daoRootAddress) => {
     const voteWeigth = Math.round((userVotesCount[i].votes / sumAllVotes) * 100)
     userVotesCount[i].voteWeight = voteWeigth + '%'
   }
-  console.log('userVotesCount: ', userVotesCount)
+  //console.log('userVotesCount: ', userVotesCount)
   //console.log('trx stakeholder: ', trx)
   /*if (voters) {
         duplicate = voters.find(
@@ -1599,16 +1598,47 @@ function parseMsToActionTime(milliseconds) {
   let result = ''
   const days = milliseconds / (1000 * 60 * 60 * 24)
   var absoluteDays = Math.floor(days)
+  //console.log('absoluteDays: ', absoluteDays)
+  let hours
+  let absoluteHours
   let daysLeft
+  let minutes
+  let absoluteMinutes
   if (absoluteDays > 0) {
     daysLeft = absoluteDays
-    const hours = days - absoluteDays
-    const absoluteHours = Math.floor(hours)
     result = `${daysLeft} days `
-    if (absoluteHours > 0) {
+    hours = days - absoluteDays
+    //console.log('hours: ', hours)
+    absoluteHours = Math.floor(hours)
+    //console.log('absoluteHours: ', absoluteHours)
+  } else if (absoluteDays == 0) {
+    hours = milliseconds / (1000 * 60 * 60)
+    absoluteHours = Math.floor(hours)
+  }
+
+  if (absoluteHours > 0) {
+    result += `${absoluteHours} hrs `
+    minutes = hours - absoluteHours
+    //console.log('minutes: ', minutes)
+    absoluteMinutes = Math.floor(minutes)
+    //console.log('absolute mins: ', absoluteMinutes)
+  } else if (absoluteHours == 0 && absoluteDays > 0) {
+    minutes = (days - absoluteDays) * 60
+    // console.log('minutes: ', minutes)
+    absoluteMinutes = Math.floor(minutes)
+    result += `${absoluteMinutes} mins`
+  } else if (absoluteHours == 0 && absoluteDays == 0) {
+    minutes = milliseconds / (1000 * 60)
+    absoluteMinutes = Math.floor(minutes)
+    result += `${absoluteMinutes} mins`
+  }
+
+  /* if (absoluteHours > 0) {
       result += `${absoluteHours} hrs `
       const minutes = hours - absoluteHours
+      console.log('minutes: ', minutes)
       const absoluteMinutes = Math.floor(minutes)
+      console.log('absolute mins: ', absoluteMinutes)
       if (absoluteMinutes > 0) {
         result += `${absoluteMinutes} mins`
       }
@@ -1630,7 +1660,7 @@ function parseMsToActionTime(milliseconds) {
   const absoluteMinutes = Math.floor(minutes)
   if (absoluteMinutes > 0) {
     result += `${absoluteMinutes} mins`
-  }
+  }*/
 
   return result
 }
@@ -2404,7 +2434,6 @@ const findDAOIfNotOwner = async (slug, address) => {
       : await (
           await checkSlug(slug)
         ).contract
-  console.log('daoRoot: ', daoRoot)
   let rootData = []
   if (daoRoot) {
     const name = await daoRoot.methods.name({}).call()
