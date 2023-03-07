@@ -119,7 +119,7 @@ const TableRowCell = ({
           <div className={styles.rangeWrapper}>
             <div className={styles.dateWrapper}>
               <p className={styles.action}>For</p>
-              <p className={styles.date}>{item.forVotes /*item.myVote*/}</p>
+              <p className={styles.date}>{item.lockedTokens /*item.myVote*/}</p>
             </div>
           </div>
         ) : item.againstVotes > 0 ? (

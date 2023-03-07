@@ -348,14 +348,17 @@ const Proposal = () => {
                   />
                 </div>
               ) : null}
-              <div className={styles.infoRow}>
-                <p className={styles.parameter}>Vote weight</p>
-                <p className={styles.value}>
-                  {data?.proposals[id - 1].isVoted.isVoted
-                    ? `${data?.proposals[id - 1].proposalVoteWeigth}%`
-                    : '0%'}
-                </p>
-              </div>
+              {data?.proposals[id - 1].status === 'Active' &&
+              !data?.proposals[id - 1].isVoted.isVoted ? null : (
+                <div className={styles.infoRow}>
+                  <p className={styles.parameter}>Vote weight</p>
+                  <p className={styles.value}>
+                    {data?.proposals[id - 1].isVoted.isVoted
+                      ? `${data?.proposals[id - 1].proposalVoteWeigth}%`
+                      : '0%'}
+                  </p>
+                </div>
+              )}
               <Button
                 disabled={!data?.proposals[id - 1].canUnlock}
                 style={
