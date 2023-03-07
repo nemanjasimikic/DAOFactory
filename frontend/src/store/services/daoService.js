@@ -1267,7 +1267,6 @@ const getAllStakeholders = async (daoRootAddress) => {
           id: [trx.input.proposal_id * 1],
           user: successStream.transactions[i].inMessage.src._address,
         })
-        // console.log('voters !duplicate: ', voters)
       }
     }
   }
@@ -1294,7 +1293,6 @@ const getAllStakeholders = async (daoRootAddress) => {
           if (trx && trx.input.voter._address == voters[i].user) {
             count += fromNano(trx.input.votes, 9)
             //console.log('trx proposal: ', trx)
-            // console.log('count: ', count)
             sumAllVotes += fromNano(trx.input.votes, 9)
           }
         }
@@ -2434,6 +2432,7 @@ const findDAOIfNotOwner = async (slug, address) => {
       : await (
           await checkSlug(slug)
         ).contract
+
   let rootData = []
   if (daoRoot) {
     const name = await daoRoot.methods.name({}).call()

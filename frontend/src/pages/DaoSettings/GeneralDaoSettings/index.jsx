@@ -14,6 +14,7 @@ import Spinner from 'components/common/Spinner'
 import { pageInfoValidator, inputValidator } from 'helpers/formValidator'
 import styles from '../styles.module.sass'
 import copy from 'static/svg/copy.svg'
+import ImageButton from 'components/common/ImageButton'
 
 const GeneralDaoSettings = () => {
   const { register } = useForm()
@@ -85,6 +86,21 @@ const GeneralDaoSettings = () => {
     isSlugOk(slugCheck.isSlugOk)
   }
 
+  function onClickFunctionInImage(e) {
+    e.preventDefault()
+    navigator.clipboard.writeText(
+      document.getElementsByName('daoAddress')[0].value
+    )
+  }
+
+  const imageButtons = [
+    <ImageButton
+      image={copy}
+      onClickFunction={(e) => onClickFunctionInImage(e)}
+      style={'image1'}
+    />,
+  ]
+
   return name ? (
     <>
       <div>
@@ -107,6 +123,7 @@ const GeneralDaoSettings = () => {
                   value={data.daoAddress ? data.daoAddress : ''}
                   firstImage={copy}
                   disabled={true}
+                  buttons={imageButtons}
                 />
                 <Input
                   id="name"
