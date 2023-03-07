@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form'
 import Spinner from 'components/common/Spinner'
 import { WalletContext } from 'context/walletContext'
 import { inputValidator, pageInfoValidator } from 'helpers/formValidator'
+import NotificationPopup from 'components/Popup/NotificationPopup'
 
 const OwnershipDaoSettings = () => {
   const { state: ContextState } = useContext(WalletContext)
@@ -23,6 +24,9 @@ const OwnershipDaoSettings = () => {
     ownerAddress: '',
   })
   let [pageChecked, setPageChecked] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  const [customTitle, setCustomTitle] = useState(null)
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -70,11 +74,13 @@ const OwnershipDaoSettings = () => {
                   setLoading(true)
                   setPageChecked(true)
                   let canNavigate = true
+                  setCustomTitle('Ownership is transferred!')
                   function navigateOff(canNavigate) {
                     setLoading(false)
                     if (canNavigate) {
-                      alert('Ownership is transferred!')
-                      navigate('/')
+                      // alert('Ownership is transferred!')
+                      setOpen(true)
+                      // navigate('/')
                     }
                   }
 
@@ -111,11 +117,13 @@ const OwnershipDaoSettings = () => {
                 onClick={async (e) => {
                   setLoading(true)
                   let canNavigate = true
+                  setCustomTitle('Contract is destroyed!')
                   function navigateOff(canNavigate) {
                     setLoading(false)
                     if (canNavigate) {
-                      alert('Contract is destroyed!')
-                      navigate('/')
+                      // alert('Contract is destroyed!')
+                      setOpen(true)
+                      // navigate('/')
                     }
                   }
                   e.preventDefault()
@@ -131,6 +139,7 @@ const OwnershipDaoSettings = () => {
           </div>
         </div>
       </div>
+      {<NotificationPopup title={customTitle} open={open} setOpen={setOpen} />}
     </div>
   )
 }

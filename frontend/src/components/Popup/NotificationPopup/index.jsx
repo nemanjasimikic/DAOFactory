@@ -3,10 +3,11 @@ import Popup from 'components/Popup'
 import Button from 'components/common/Button'
 import styles from './styles.module.sass'
 
-const NotificationPopup = ({ open, setOpen }) => {
+const NotificationPopup = ({ title, open, setOpen }) => {
   const navigate = useNavigate()
+  let title1 = title ? title : 'Changes are saved'
   return (
-    <Popup title={'Changes are saved'} open={open} setOpen={setOpen}>
+    <Popup title={title1} open={open} setOpen={setOpen}>
       <div className={styles.buttonRow}>
         <Button
           style={'lightBlueBtn'}
