@@ -209,7 +209,9 @@ const Balance = () => {
       <Table columns={columnsVoters} data={data.voters} />
     </div>
   ) : (
-    <Table columns={columns} data={dataTable} isLoading={true} />
+    <div className={styles.container}>
+      <Table columns={columns} data={dataTable} isLoading={true} />
+    </div>
   )
 }
 

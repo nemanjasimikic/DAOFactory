@@ -1,10 +1,9 @@
-import IsLoggedOut from 'pages/Home/IsLoggedOut'
-import IsLoggedIn from 'pages/Home/IsLoggedIn'
-
-import styles from './style.module.sass'
 import { useContext } from 'react'
 import { WalletContext } from 'context/walletContext'
+import IsLoggedOut from 'pages/Home/IsLoggedOut'
+import IsLoggedIn from 'pages/Home/IsLoggedIn'
 import Table from 'components/common/Table'
+import styles from './style.module.sass'
 const Home = ({ client }) => {
   const { state: ContextState, login } = useContext(WalletContext)
   const {
@@ -67,16 +66,27 @@ const Home = ({ client }) => {
   ]
   return (
     <div className={styles.container}>
-      {addressContext === '' ? (
-        <IsLoggedOut />
-      ) : !isLoginPending ? (
+      {/*{!isLoggedIn ? (*/}
+      {/*  <IsLoggedOut />*/}
+      {/*) : !isLoginPending ? (*/}
+      {/*  isLoggedInStore ? (*/}
+      {/*    <IsLoggedIn address={addressContext} />*/}
+      {/*  ) : (*/}
+      {/*    <IsLoggedOut />*/}
+      {/*  )*/}
+      {/*) : (*/}
+      {/*  <Table columns={columns} data={dataTable} />*/}
+      {/*)}*/}
+      {!isLoginPending ? (
         isLoggedInStore ? (
           <IsLoggedIn address={addressContext} />
         ) : (
           <IsLoggedOut />
         )
+      ) : !isLoggedInStore ? (
+        <IsLoggedOut />
       ) : (
-        <Table columns={columns} data={dataTable} />
+        <div className={styles.blankPage}></div>
       )}
     </div>
   )
