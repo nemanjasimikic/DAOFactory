@@ -7,6 +7,7 @@ import Button from 'components/common/Button'
 import NoResults from 'components/NoResults'
 import DaoCard from 'components/DaoCard'
 import Table from 'components/common/Table'
+import AddExistingDaoModal from 'components/Modal/AddExistingDaoModal'
 import daoService from 'store/services/daoService'
 import styles from './styles.module.sass'
 
@@ -14,6 +15,7 @@ const IsLoggedIn = ({ address }) => {
   const [renderTable, setRenderTable] = useState(true)
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
+  const [open, setOpen] = useState(false)
   const onLoadEffect = () => {
     setTimeout(() => {
       setRenderTable(false)
@@ -101,7 +103,11 @@ const IsLoggedIn = ({ address }) => {
           <Link to={'/create-dao'}>
             <Button style={'lightBlueBtn'} text={'Create new DAO'} />
           </Link>
-          <Button style={'primaryBtn'} text={'Add existing DAO'} />
+          <Button
+            style={'primaryBtn'}
+            text={'Add existing DAO'}
+            onClick={() => setOpen(true)}
+          />
         </div>
       </ContentHeader>
       {!getDaoList && isLoading ? (
@@ -111,6 +117,7 @@ const IsLoggedIn = ({ address }) => {
       ) : (
         <div className={styles.daoCardsWrapper}>{itemsList}</div>
       )}
+      <AddExistingDaoModal open={open} setOpen={setOpen} />
     </div>
   )
 }
