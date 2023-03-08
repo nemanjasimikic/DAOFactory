@@ -127,7 +127,9 @@ const BalanceManagement = () => {
             <YourAccountCard
               text={`Your ${data.token.value0} locked`}
               data={
-                data.userBalance /*proposalsWithLockedTokens[0].lockedTokens*/
+                data.userBalance
+                  ? data.userBalance
+                  : 0 /*proposalsWithLockedTokens[0].lockedTokens*/
               }
               symbol={data.token}
             />
