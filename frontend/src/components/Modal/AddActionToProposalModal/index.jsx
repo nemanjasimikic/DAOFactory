@@ -13,6 +13,7 @@ const AddActionToProposalModal = ({
   formData,
   setFormData,
   addAction,
+  onReset,
 }) => {
   const type = ['Custom action', 'Simple proposal']
   const network = ['Everscale']
@@ -25,7 +26,7 @@ const AddActionToProposalModal = ({
 
   const [selectedOptions, setSelectedOption] = useState(formData.typeValue)
   const [selectedNetwork, setSelectedNetwork] = useState(formData.networkValue)
-  
+
   return (
     <Modal title={'Add action to proposal'} open={open} setOpen={setOpen}>
       <Select
@@ -93,7 +94,10 @@ const AddActionToProposalModal = ({
         <Button
           text={'Cancel'}
           style={'primaryBtn'}
-          onClick={() => setOpen(!open)}
+          onClick={() => {
+            setOpen(!open)
+            onReset()
+          }}
         />
         <Button
           text={'Submit'}
@@ -101,6 +105,7 @@ const AddActionToProposalModal = ({
           onClick={() => {
             addAction(formData.typeValue)
             setOpen(false)
+            onReset()
           }}
         />
       </div>

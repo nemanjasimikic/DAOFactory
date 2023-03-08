@@ -55,6 +55,17 @@ const CreateProposal = () => {
     description: '',
   })
 
+  const onReset = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      target_contract_address: '',
+      payload: '',
+      attached_value: 0,
+      typeValue: 'Custom action',
+      networkValue: 'Everscale',
+    }))
+  }
+
   const addAction = (type) => {
     let action = {
       type: type,
@@ -161,6 +172,7 @@ const CreateProposal = () => {
           formData={formData}
           setFormData={setFormData}
           addAction={addAction}
+          onReset={onReset}
         />
       }
     </>
