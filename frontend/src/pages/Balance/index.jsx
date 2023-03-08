@@ -31,8 +31,6 @@ const Balance = () => {
     }
   )
 
-  console.log('data: ', data)
-
   const columns = [
     {
       key: 'id',

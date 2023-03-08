@@ -74,7 +74,7 @@ const MobileFooter = () => {
           </div>
         </div>
         <div className={styles.bottomFooter}>
-          <p className={styles.copy}>&copy; Broxus, 2021</p>
+          <p className={styles.copy}>&copy; Broxus, 2023</p>
           <div className={styles.links}>
             <Link to="/terms-of-use" className={styles.footerLink}>
               Terms of use
