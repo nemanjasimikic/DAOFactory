@@ -15,6 +15,7 @@ import { pageInfoValidator, inputValidator } from 'helpers/formValidator'
 import styles from '../styles.module.sass'
 import copy from 'static/svg/copy.svg'
 import ImageButton from 'components/common/ImageButton'
+import Table from '../../../components/common/Table'
 
 const GeneralDaoSettings = () => {
   const { register } = useForm()
@@ -43,29 +44,57 @@ const GeneralDaoSettings = () => {
   })
 
   const [trueInitially, setTrueInitially] = useState(false)
-  // const [newName, setName] = useState(data?.name)
-  // const [newDescription, setDescription] = useState(data?.description)
-  // console.log('newName: ', newName)
-  // console.log('newDescription: ', newDescription)
-  // console.log('slug: ', data?.slug)
-  // console.log('address: ', data?.daoAddress)
 
-  /* const { isLoading, isError, error, mutate } = useMutation(() =>
-    daoService.setSettingsChanges(
-      newName,
-      data?.slug,
-      newDescription,
-      data?.daoAddress
-    )
-  )
-  console.log('error: ', error)
-  const setSettings = () => {
-    mutate(['daoInfo', id])
-  }
+  const columns = [
+    {
+      key: 'id',
+      title: '#',
+      width: 100,
+    },
+    {
+      key: 'dao',
+      title: 'DAO',
+      width: 400,
+    },
+    {
+      key: 'members',
+      title: 'Members',
+      width: 400,
+    },
+    {
+      key: 'address',
+      title: 'Address',
+      width: 400,
+    },
+  ]
 
-  console.log('isLoading: ', isLoading)
-  console.log('isError: ', isError)
-*/
+  const dataTable = [
+    {
+      id: '1',
+      dao: 'dao1',
+      members: 'members1',
+      address: 'address1',
+    },
+    {
+      id: '2',
+      dao: 'dao2',
+      members: 'members2',
+      address: 'address2',
+    },
+    {
+      id: '3',
+      dao: 'dao3',
+      members: 'members3',
+      address: 'address3',
+    },
+    {
+      id: '4',
+      dao: 'dao4',
+      members: 'members4',
+      address: 'address4',
+    },
+  ]
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -239,7 +268,9 @@ const GeneralDaoSettings = () => {
       </div>
     </>
   ) : (
-    <div>{<Spinner />}</div>
+    <div className={styles.container}>
+      <Table columns={columns} data={dataTable} isLoading={true} />
+    </div>
   )
 }
 

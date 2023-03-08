@@ -15,21 +15,9 @@ import { useState, useEffect } from 'react'
 
 const BalanceManagement = () => {
   const { id } = useParams()
-  // console.log('id: ', id)
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
-  // const queryClient = useQueryClient()
 
-  /*const mutation = useMutation(daoService.getDaoInfo(id, addressContext), {
-    onSuccess: (data) => {
-      queryClient.setQueryData(['daoRoot', id], data)
-    },
-  })
-
-  mutation.mutate({
-    id: 5,
-    name: 'Do the laundry',
-  })*/
   const { data } = useQuery(
     ['daoRoot', id],
     () => daoService.findDAOIfNotOwner(id, addressContext),
@@ -48,7 +36,6 @@ const BalanceManagement = () => {
     }
   }, [])
 
-  // console.log('staking info: ', stakingInfo)
   const columns = [
     {
       key: 'id',
@@ -154,7 +141,9 @@ const BalanceManagement = () => {
       </div>
     </div>
   ) : (
-    <Table columns={columns} data={dataTable} isLoading={true} />
+    <div className={styles.container}>
+      <Table columns={columns} data={dataTable} isLoading={true} />
+    </div>
   )
 }
 

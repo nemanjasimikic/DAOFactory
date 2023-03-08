@@ -9,12 +9,24 @@ import medium from 'static/svg/medium.svg'
 const Socials = () => {
   return (
     <div className={styles.socials}>
-      <img src={telegram} alt={'facebook'} />
-      <img src={facebook} alt={'facebook'} />
-      <img src={twitter} alt={'twitter'} />
-      <img src={github} alt={'github'} />
-      <img src={reddit} alt={'reddit'} />
-      <img src={medium} alt={'medium'} />
+      <a href={'https://t.me/broxus_chat'} target={'_blank'}>
+        <img src={telegram} alt={'telegram'} />
+      </a>
+      <a href={'https://www.facebook.com/BroxusOfficial/'} target={'_blank'}>
+        <img src={facebook} alt={'facebook'} />
+      </a>
+      <a href={'https://twitter.com/Broxus'} target={'_blank'}>
+        <img src={twitter} alt={'twitter'} />
+      </a>
+      <a href={'https://github.com/broxus'} target={'_blank'}>
+        <img src={github} alt={'github'} />
+      </a>
+      <a href={'https://www.reddit.com/r/crypto_is_easy'} target={'_blank'}>
+        <img src={reddit} alt={'reddit'} />
+      </a>
+      <a href={'https://medium.com/broxus'} target={'_blank'}>
+        <img src={medium} alt={'medium'} />
+      </a>
     </div>
   )
 }

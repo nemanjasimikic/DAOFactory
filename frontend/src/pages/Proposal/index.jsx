@@ -43,17 +43,6 @@ const Proposal = () => {
     }
   }, [])
 
-  console.log('isOwner: ', isOwner)
-
-  /*const [isActive, setActive] = useState({})
-  useEffect(() => {
-    if (data) {
-      daoService
-        .canUnlockVotes(data.daoAddress, id, addressContext)
-        .then((data) => setActive(data))
-    }
-  }, [])*/
-
   const [counter, setCounter] = useState(0)
   const [queue, setQueue] = useState({})
   useEffect(() => {
@@ -62,10 +51,7 @@ const Proposal = () => {
       setCounter(1)
     }
   })
-  //console.log('queue: ', queue)
-  //console.log('isOwner: ', isOwner)
-  //console.log('data: ', data)
-  //console.log('data date: ', data?.proposals[id - 1].startTime)
+
   const gracePeriodInHrs =
     (data?.proposalConfiguration.gracePeriod * 1) / (60 * 60)
   const votingDelayInHrs =
@@ -387,7 +373,9 @@ const Proposal = () => {
       <VotesModal open={open} setOpen={setOpen} data={data} id={id} />
     </div>
   ) : (
-    <Table columns={columns} data={dataTable} isLoading={true} />
+    <div className={styles.container}>
+      <Table columns={columns} data={dataTable} isLoading={true} />
+    </div>
   )
 }
 

@@ -1310,9 +1310,7 @@ function parseMsToActionTime(milliseconds) {
     daysLeft = absoluteDays
     result = `${daysLeft} days `
     hours = days - absoluteDays
-    //console.log('hours: ', hours)
     absoluteHours = Math.floor(hours)
-    //console.log('absoluteHours: ', absoluteHours)
   } else if (absoluteDays == 0) {
     hours = milliseconds / (1000 * 60 * 60)
     absoluteHours = Math.floor(hours)
