@@ -18,7 +18,16 @@ import { WalletContext } from '../context/walletContext'
 
 const Navigation = ({ client }) => {
   const { state: ContextState } = useContext(WalletContext)
-  const { isLoggedIn } = ContextState
+  const {
+    isLoginPending,
+    isLoggedIn,
+    loginError,
+    addressContext,
+    balanceContext,
+  } = ContextState
+
+  const isLoggedInStore = localStorage?.getItem('isLoggedIn')
+
   return (
     <Router>
       <ScrollToTop />
@@ -28,7 +37,7 @@ const Navigation = ({ client }) => {
         <Route
           path="dao-settings/general/:id"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <ProtectedRoute isLoggedIn={isLoggedInStore}>
               <GeneralDaoSettings />
             </ProtectedRoute>
           }
@@ -36,7 +45,7 @@ const Navigation = ({ client }) => {
         <Route
           path="dao-settings/ownership/:id"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <ProtectedRoute isLoggedIn={isLoggedInStore}>
               <OwnershipDaoSettings />
             </ProtectedRoute>
           }
@@ -44,7 +53,7 @@ const Navigation = ({ client }) => {
         <Route
           path="create-dao"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <ProtectedRoute isLoggedIn={isLoggedInStore}>
               <CreateDao />{' '}
             </ProtectedRoute>
           }
@@ -52,7 +61,7 @@ const Navigation = ({ client }) => {
         <Route
           path="dao/:id"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <ProtectedRoute isLoggedIn={isLoggedInStore}>
               <Balance />
             </ProtectedRoute>
           }
@@ -60,7 +69,7 @@ const Navigation = ({ client }) => {
         <Route
           path="create-proposal/:id"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <ProtectedRoute isLoggedIn={isLoggedInStore}>
               <CreateProposal />
             </ProtectedRoute>
           }
@@ -68,7 +77,7 @@ const Navigation = ({ client }) => {
         <Route
           path="dao/:id/balance-management"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <ProtectedRoute isLoggedIn={isLoggedInStore}>
               <BalanceManagement />
             </ProtectedRoute>
           }
@@ -76,7 +85,7 @@ const Navigation = ({ client }) => {
         <Route
           path="dao/:id1/proposal/:id"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <ProtectedRoute isLoggedIn={isLoggedInStore}>
               <Proposal />
             </ProtectedRoute>
           }

@@ -66,16 +66,27 @@ const Home = ({ client }) => {
   ]
   return (
     <div className={styles.container}>
-      {!isLoggedIn ? (
-        <IsLoggedOut />
-      ) : !isLoginPending ? (
+      {/*{!isLoggedIn ? (*/}
+      {/*  <IsLoggedOut />*/}
+      {/*) : !isLoginPending ? (*/}
+      {/*  isLoggedInStore ? (*/}
+      {/*    <IsLoggedIn address={addressContext} />*/}
+      {/*  ) : (*/}
+      {/*    <IsLoggedOut />*/}
+      {/*  )*/}
+      {/*) : (*/}
+      {/*  <Table columns={columns} data={dataTable} />*/}
+      {/*)}*/}
+      {!isLoginPending ? (
         isLoggedInStore ? (
           <IsLoggedIn address={addressContext} />
         ) : (
           <IsLoggedOut />
         )
+      ) : !isLoggedInStore ? (
+        <IsLoggedOut />
       ) : (
-        <Table columns={columns} data={dataTable} />
+        <div className={styles.blankPage}></div>
       )}
     </div>
   )
