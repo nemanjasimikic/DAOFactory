@@ -119,7 +119,9 @@ const BalanceManagement = () => {
             <YourAccountCard
               text={'Your voting weight'}
               data={
-                `${data.userVoteWeigth}%` /*proposalsWithLockedTokens[0].lockedTokens*/
+                `${
+                  data.userVoteWeigth ? data.userVoteWeigth : 0
+                }%` /*proposalsWithLockedTokens[0].lockedTokens*/
               }
             />
             <YourAccountCard

@@ -109,12 +109,14 @@ const AccountBalance = ({ id, data, address, customStyle }) => {
       {active === titles[0] ? (
         <Button
           style={
-            data?.tokenBalance < formData.max * 1
+            data?.tokenBalance < formData.max * 1 || formData.max * 1 <= 0
               ? 'disabledBtn'
               : 'lightBlueBtn'
           }
           text={'Deposit tokens'}
-          disabled={data?.tokenBalance < formData.max * 1}
+          disabled={
+            data?.tokenBalance < formData.max * 1 || formData.max * 1 <= 0
+          }
           onClick={async (e) => {
             setLoading(true)
 
