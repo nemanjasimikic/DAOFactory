@@ -257,8 +257,6 @@ const CreateDao = () => {
               ]
             }
 
-            // console.log('PAGE VALIDITY:', pageInfoValidator(pageValidity))
-
             if (pageInfoValidator(pageValidity) === true) {
               if (page < 3) {
                 setPage((currentPage) => currentPage + 1)
