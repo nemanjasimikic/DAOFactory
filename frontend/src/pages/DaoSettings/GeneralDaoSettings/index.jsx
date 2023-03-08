@@ -28,7 +28,7 @@ const GeneralDaoSettings = () => {
   const { addressContext } = ContextState
   const { data } = useQuery(
     ['daoInfo', id],
-    () => daoService.getDaoInfo(id, addressContext),
+    () => daoService.findDAOIfNotOwner(id, addressContext),
     {
       enabled: !!addressContext,
     }

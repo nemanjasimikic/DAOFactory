@@ -31,7 +31,7 @@ const Balance = () => {
     }
   )
 
-  //console.log('data: ', data)
+  console.log('data: ', data)
 
   const columns = [
     {
@@ -157,7 +157,11 @@ const Balance = () => {
               {data.userBalance ? data.userBalance : '-'}{' '}
               {data.token ? data.token.value0 : ''}
             </h3>
-            <p className={styles.voting}>0% voting weight</p>
+            <p className={styles.voting}>
+              {`${
+                data.userVoteWeigth ? data.userVoteWeigth : 0
+              }% voting weigth`}
+            </p>
           </div>
           <Link style={{ color: 'transparent' }} to={'balance-management'}>
             <Button style={'primaryBtn'} text={'Balance management'} />

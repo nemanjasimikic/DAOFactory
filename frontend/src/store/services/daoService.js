@@ -11,10 +11,6 @@ import tokenWalletAbi from '../../helpers/TokenWallet.abi.json'
 import axios from 'axios'
 import tokensList from 'utils/tokens-list'
 import dayjs from 'dayjs'
-import { forEach } from 'lodash'
-
-//1. Srediti proposals with your locked tokens - iz user data - votes izvuci koji proposal i ostale info preko toga
-//2. Srediti ako threshold nije ispunjen failovala je proposal
 
 const ever = new ProviderRpcClient()
 
@@ -571,9 +567,6 @@ const addDaoRootToFactory = async (
 
 const getAllDAOs = async (address) => {
   const factory = await getFactory(address)
-  const state = await ever.getProviderState()
-  //const isSlugOK = await checkSlug('dms')
-  // const dao = await findDAOIfNotOwner('dms')
   let rootData = []
   try {
     if (factory.accounts && factory.accounts.length > 0) {
@@ -589,32 +582,15 @@ const getAllDAOs = async (address) => {
           daoRootAbi,
           daoAddresses.daoAddr[i][1][0]._address
         )
-
-        const name = await daoRootContract.methods.name({}).call()
-        const description = await daoRootContract.methods.description({}).call()
-        const slug = await daoRootContract.methods.slug({}).call()
-        rootData.push({
-          name: name.name,
-          description: description.description,
-          slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
-          address: daoAddresses.daoAddr[i][1][0]._address,
-        })
+        await pushDaoDataToAllDaosArray(
+          daoRootContract,
+          rootData,
+          daoAddresses.daoAddr[i][1][0]._address
+        )
       }
+      const accounts = await getAccounts(daoRootTvc)
 
-      const code = await ever.splitTvc(daoRootTvc)
-      const code2 = await ever.splitTvc(daoRootTvc2)
-
-      const bocHashEver = await ever.getBocHash(code.code)
-      const bocHashEver2 = await ever.getBocHash(code2.code)
-      const accounts = await ever.getAccountsByCodeHash({
-        codeHash: bocHashEver,
-        limit: 50,
-      })
-
-      const accounts2 = await ever.getAccountsByCodeHash({
-        codeHash: bocHashEver2,
-        limit: 50,
-      })
+      const accounts2 = await getAccounts(daoRootTvc2)
       daoAddresses = await getDeployedDaos(daoFactoryContract)
       if (rootData.length < daoAddresses.daoAddr.length) {
         const idx = daoAddresses.daoAddr.length - 1
@@ -622,181 +598,41 @@ const getAllDAOs = async (address) => {
           daoRootAbi,
           daoAddresses.daoAddr[idx][1][0]._address
         )
-        const name = await daoRootContract.methods.name({}).call()
-        const description = await daoRootContract.methods.description({}).call()
-        const slug = await daoRootContract.methods.slug({}).call()
-        rootData.push({
-          name: name.name,
-          description: description.description,
-          slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
-          address: daoAddresses.daoAddr[idx][1][0]._address,
-        })
+        await pushDaoDataToAllDaosArray(
+          daoRootContract,
+          rootData,
+          daoAddresses.daoAddr[idx][1][0]._address
+        )
       }
-      if (accounts.accounts.length > 0) {
-        for (let i = 0; i < accounts.accounts.length; i++) {
-          let flag = 0
-          for (let j = 0; j < daoAddresses.daoAddr.length; j++) {
-            if (
-              accounts.accounts[i]._address ===
-              daoAddresses.daoAddr[j][1][0]._address
-            ) {
-              flag = 1
-            }
-          }
-          if (flag === 0) {
-            const daoRootContract = new ever.Contract(
-              daoRootAbi,
-              accounts.accounts[i]._address
-            )
-            const admin = await daoRootContract.methods
-              .getAdmin({ answerId: 0 })
-              .call()
-            let counter = 0
-            if (admin.value0._address === address) {
-              const name = await daoRootContract.methods.name({}).call()
-              const description = await daoRootContract.methods
-                .description({})
-                .call()
-              const slug = await daoRootContract.methods.slug({}).call()
-              const providerState = await ever.getProviderState()
-              const publicKey =
-                providerState.permissions.accountInteraction.publicKey
-              counter = counter + 1
-              if (counter == 1) {
-                const novi = await addDaoRootToFactory(
-                  daoFactoryContract,
-                  accounts.accounts[i]._address,
-                  publicKey
-                )
-              }
-              daoAddresses = await getDeployedDaos(daoFactoryContract)
-              rootData.push({
-                name: name.name,
-                description: description.description,
-                slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
-                address: accounts.accounts[i]._address,
-              })
-            }
-          }
-        }
-      }
-      if (accounts2.accounts.length > 0) {
-        for (let i = 0; i < accounts2.accounts.length; i++) {
-          let flag = 0
-          for (let j = 0; j < daoAddresses.daoAddr.length; j++) {
-            if (
-              accounts2.accounts[i]._address ===
-              daoAddresses.daoAddr[j][1][0]._address
-            ) {
-              flag = 1
-            }
-          }
-          if (flag === 0) {
-            const daoRootContract = new ever.Contract(
-              daoRootAbi,
-              accounts2.accounts[i]._address
-            )
-            const admin = await daoRootContract.methods
-              .getAdmin({ answerId: 0 })
-              .call()
-            let counter = 0
-            if (admin.value0._address === address) {
-              const name = await daoRootContract.methods.name({}).call()
-              const description = await daoRootContract.methods
-                .description({})
-                .call()
-              const slug = await daoRootContract.methods.slug({}).call()
-              const providerState = await ever.getProviderState()
-              const publicKey =
-                providerState.permissions.accountInteraction.publicKey
-              counter = counter + 1
-              if (counter == 1) {
-                const novi = await addDaoRootToFactory(
-                  daoFactoryContract,
-                  accounts2.accounts[i]._address,
-                  publicKey
-                )
-              }
-              daoAddresses = await getDeployedDaos(daoFactoryContract)
-              rootData.push({
-                name: name.name,
-                description: description.description,
-                slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
-                address: accounts2.accounts[i]._address,
-              })
-            }
-          }
-        }
-      }
-      // console.log('root data: ', rootData)
+      await searchDaosToAdd(
+        daoAddresses,
+        daoFactoryContract,
+        accounts,
+        address,
+        rootData
+      )
+
+      await searchDaosToAdd(
+        daoAddresses,
+        daoFactoryContract,
+        accounts2,
+        address,
+        rootData
+      )
+
       return Promise.resolve(rootData)
     } else {
-      const code = await ever.splitTvc(daoRootTvc)
-      const code2 = await ever.splitTvc(daoRootTvc2)
+      const accounts = await getAccounts(daoRootTvc)
+      const accounts2 = await getAccounts(daoRootTvc2)
 
-      const bocHashEver = await ever.getBocHash(code.code)
-      const bocHashEver2 = await ever.getBocHash(code2.code)
-      const accounts = await ever.getAccountsByCodeHash({
-        codeHash: bocHashEver,
-        limit: 50,
-      })
-      const accounts2 = await ever.getAccountsByCodeHash({
-        codeHash: bocHashEver2,
-        limit: 50,
-      })
+      // if (accounts.accounts.length > 0 || accounts2.accounts.length > 0) {
+      if (accounts.accounts.length > 0)
+        await addDaosWithoutFactory(accounts, rootData, address)
 
-      if (accounts.accounts.length > 0 || accounts2.accounts.length > 0) {
-        if (accounts.accounts.length > 0) {
-          for (let i = 0; i < accounts.accounts.length; i++) {
-            const daoRootContract = new ever.Contract(
-              daoRootAbi,
-              accounts.accounts[i]._address
-            )
-            const admin = await daoRootContract.methods
-              .getAdmin({ answerId: 0 })
-              .call()
-            if (admin.value0._address === address) {
-              const name = await daoRootContract.methods.name({}).call()
-              const description = await daoRootContract.methods
-                .description({})
-                .call()
-              const slug = await daoRootContract.methods.slug({}).call()
-              rootData.push({
-                name: name.name,
-                description: description.description,
-                slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
-                address: accounts.accounts[i]._address,
-              })
-            }
-          }
-        }
-        if (accounts2.accounts.length > 0) {
-          for (let i = 0; i < accounts2.accounts.length; i++) {
-            const daoRootContract = new ever.Contract(
-              daoRootAbi,
-              accounts2.accounts[i]._address
-            )
-            const admin = await daoRootContract.methods
-              .getAdmin({ answerId: 0 })
-              .call()
-            if (admin.value0._address === address) {
-              const name = await daoRootContract.methods.name({}).call()
-              const description = await daoRootContract.methods
-                .description({})
-                .call()
-              const slug = await daoRootContract.methods.slug({}).call()
-              rootData.push({
-                name: name.name,
-                description: description.description,
-                slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
-                address: accounts.accounts[i]._address,
-              })
-            }
-          }
-        }
+      if (accounts2.accounts.length > 0)
+        await addDaosWithoutFactory(accounts2, rootData, address)
 
-        return Promise.resolve(rootData)
-      }
+      return Promise.resolve(rootData)
     }
   } catch (e) {
     return Promise.reject(e)
@@ -975,136 +811,6 @@ const findDaoBySlug = async (factory, slug) => {
     // console.log('error: ', e)
     return null
   }
-}
-
-const getDaoInfo = async (id, address) => {
-  const factory = await getFactory(address)
-  let rootData = {}
-  if (factory.accounts && factory.accounts.length > 0) {
-    const daoFactoryContract = new ever.Contract(
-      daoFactoryAbi,
-      factory.accounts[0]._address
-    )
-    const daoRootContract =
-      id.length > 60
-        ? await getDaoByAddress(id)
-        : await findDaoBySlug(daoFactoryContract, id)
-
-    //console.log('daoRootContract: ', daoRootContract)
-    const name = await daoRootContract.methods.name({}).call()
-    const slug = await daoRootContract.methods.slug({}).call()
-    const description = await daoRootContract.methods.description({}).call()
-    const tokenAddress = await daoRootContract.methods
-      .governanceToken({})
-      .call()
-
-    const stakingRootContract = await createStakingContract(
-      daoRootContract.address
-    )
-
-    const details = await stakingRootContract.methods
-      .getDetails({ answerId: 0 })
-      .call()
-    const balance = fromNano(details.value0.tokenBalance * 1, 9)
-    const tokenRootAddress = details.value0.tokenRoot
-    const userData = await createUserDataContract(
-      daoRootContract.address,
-      address
-    )
-    const contractState = await ever.getFullContractState({
-      address: userData.address,
-    })
-    let userBalance
-    if (contractState?.state?.isDeployed) {
-      const details = await userData.methods.getDetails({ answerId: 0 }).call()
-      userBalance = fromNano(details.value0.token_balance * 1, 9)
-    }
-    const tokenSymbol = await getToken(tokenAddress.governanceToken._address)
-
-    const proposalConfiguration = await daoRootContract.methods
-      .proposalConfiguration({})
-      .call()
-
-    const nrOfProposals = await daoRootContract.methods.proposalCount({}).call()
-    const proposals = await getProposals(daoRootContract.address, address)
-    // console.log('proposals data: ', proposals)
-    let prop
-    try {
-      prop = await proposalsWithYourLockedTokens(
-        address,
-        daoRootContract.address
-      )
-    } catch (e) {
-      prop = null
-    }
-    let voters
-    try {
-      voters = await getAllStakeholders(daoRootContract.address)
-    } catch (e) {
-      voters = null
-    }
-    const tokenBalance = await calculateBalance(
-      address,
-      tokenAddress.governanceToken._address
-    )
-    let history
-    try {
-      history = await getTransactionHistory(daoRootContract.address)
-    } catch (e) {
-      history = null
-    }
-    let canWithdraw
-    try {
-      canWithdraw = await canWithdrawVotes(daoRootContract.address, address)
-    } catch (e) {
-      canWithdraw = null
-    }
-    let canUnlock
-    try {
-      canUnlock = await getUnlockArray(daoRootContract, address)
-      //console.log('canUnlock: ', canUnlock)
-    } catch (e) {
-      canUnlock = null
-    }
-    try {
-      await getVotes(daoRootContract.address, address)
-    } catch (e) {}
-    let stakers
-    try {
-      stakers = await getAllStakers(daoRootContract.address)
-      //console.log('stakers: ', stakers)
-    } catch (e) {
-      stakers = null
-    }
-
-    // console.log('prop: ', prop)
-    rootData = {
-      name: name.name,
-      slug: slug.slug,
-      description: description.description,
-      token: tokenSymbol ? tokenSymbol.label : null,
-      proposalConfiguration: proposalConfiguration.proposalConfiguration,
-      nrOfProposals: nrOfProposals.proposalCount,
-      daoBalance: balance,
-      userBalance: userBalance,
-      daoAddress: daoRootContract.address,
-      proposals: proposals,
-      proposalsWithLockedTokens: prop ?? null,
-      voters: voters,
-      tokenBalance: tokenBalance,
-      history: history,
-      withdraw: canWithdraw,
-      unlockArray: canUnlock,
-      decimals: tokenSymbol ? tokenSymbol.decimals : null,
-      tokenRootAddress: tokenRootAddress,
-      tokenName: tokenSymbol ? tokenSymbol.name : null,
-      stakers: stakers,
-    }
-  }
-
-  return new Promise((resolve) => {
-    resolve(rootData)
-  })
 }
 
 async function setSettingsChanges(name, slug, description, daoAddress) {
@@ -1397,34 +1103,6 @@ const getAllStakeholders = async (daoRootAddress) => {
     const voteWeigth = Math.round((userVotesCount[i].votes / sumAllVotes) * 100)
     userVotesCount[i].voteWeight = voteWeigth + '%'
   }
-  //console.log('userVotesCount: ', userVotesCount)
-  //console.log('trx stakeholder: ', trx)
-  /*if (voters) {
-        duplicate = voters.find(
-          (voter) =>
-            voter === successStream.transactions[i].inMessage.src._address
-        )
-      }
-      if (!duplicate) {
-        voters.push(successStream.transactions[i].inMessage.src._address)
-      }
-      proposalsVoted++
-    }*/
-
-  /*let votesData = []
-  for (let i = 0; i < voters.length; i++) {
-    const userData = await createUserDataContract(daoRootAddress, voters[0])
-    const votes = await userData.methods.lockedTokens({ answerId: 0 }).call()
-    const castedVotes = await userData.methods.casted_votes({}).call()
-
-    votesData.push({
-      id: i + 1,
-      userAddress: voters[i],
-      voteWeight: 100,
-      votes: votes.value0,
-      proposalsVoted: proposalsVoted,
-    })
-  }*/
 
   return userVotesCount
 }
@@ -1716,35 +1394,6 @@ function parseMsToActionTime(milliseconds) {
     absoluteMinutes = Math.floor(minutes)
     result += `${absoluteMinutes} mins`
   }
-
-  /* if (absoluteHours > 0) {
-      result += `${absoluteHours} hrs `
-      const minutes = hours - absoluteHours
-      console.log('minutes: ', minutes)
-      const absoluteMinutes = Math.floor(minutes)
-      console.log('absolute mins: ', absoluteMinutes)
-      if (absoluteMinutes > 0) {
-        result += `${absoluteMinutes} mins`
-      }
-    }
-    //return `${absoluteDays} days ago`
-  }
-  const hours = milliseconds / (1000 * 60 * 60)
-  const absoluteHours = Math.floor(hours)
-  if (absoluteHours > 0) {
-    result += `${absoluteHours} hrs `
-    const minutes = hours - absoluteHours
-    const absoluteMinutes = Math.floor(minutes)
-    if (absoluteMinutes > 0) {
-      result += `${absoluteMinutes} mins`
-    }
-  }
-
-  const minutes = milliseconds / (1000 * 60)
-  const absoluteMinutes = Math.floor(minutes)
-  if (absoluteMinutes > 0) {
-    result += `${absoluteMinutes} mins`
-  }*/
 
   return result
 }
@@ -2323,14 +1972,23 @@ const executeProposal = async (daoRootAddress, proposalId, ownerAddress) => {
   }
 }
 
-const calculateVoteWeigth = async (daoRootAddress, proposalId, userVotes) => {
+const calculateVoteWeigth = async (
+  daoRootAddress,
+  proposalId,
+  userVotes,
+  allVotes
+) => {
   try {
-    const proposal = await createProposalContract(daoRootAddress, proposalId)
-    const details = await proposal.methods.getOverview({ answerId: 0 }).call()
-    const forVotes = details.forVotes_ * 1
-    //console.log('userVotes: ', userVotes)
-    //console.log('forVotes: ', forVotes)
-    const voteWeigth = Math.round((userVotes / fromNano(forVotes, 9)) * 100)
+    let voteWeigth
+    if (proposalId != 0) {
+      const proposal = await createProposalContract(daoRootAddress, proposalId)
+      const details = await proposal.methods.getOverview({ answerId: 0 }).call()
+      const forVotes = details.forVotes_ * 1
+      voteWeigth = Math.round((userVotes / fromNano(forVotes, 9)) * 100)
+    } else {
+      voteWeigth = Math.round((userVotes / allVotes) * 100)
+    }
+
     return Promise.resolve(voteWeigth)
   } catch (e) {
     return Promise.reject(e)
@@ -2597,6 +2255,16 @@ const findDAOIfNotOwner = async (slug, address) => {
       stakers = null
     }
 
+    const userVoteWeigth = await calculateVoteWeigth(
+      daoRoot.address,
+      0,
+      userBalance,
+      balance
+    )
+    console.log('userBalance: ', userBalance)
+    console.log('balance: ', balance)
+    console.log('userVoteWeigth: ', userVoteWeigth)
+
     // console.log('prop: ', prop)
     rootData = {
       name: name.name,
@@ -2619,6 +2287,7 @@ const findDAOIfNotOwner = async (slug, address) => {
       tokenRootAddress: tokenRootAddress,
       tokenName: tokenSymbol ? tokenSymbol.name : null,
       stakers: stakers,
+      userVoteWeigth: userVoteWeigth,
     }
   }
 
@@ -2627,6 +2296,98 @@ const findDAOIfNotOwner = async (slug, address) => {
   })
 
   //return daoRoot
+}
+
+const getAccounts = async (tvc) => {
+  const code = await ever.splitTvc(tvc)
+
+  const bocHashEver = await ever.getBocHash(code.code)
+  const accounts = await ever.getAccountsByCodeHash({
+    codeHash: bocHashEver,
+    limit: 50,
+  })
+  return accounts
+}
+
+const searchDaosToAdd = async (
+  daoAddresses,
+  daoFactoryContract,
+  accounts,
+  address,
+  rootData
+) => {
+  console.log('accounts: ', accounts)
+  for (let i = 0; i < accounts.accounts.length; i++) {
+    let flag = 0
+    for (let j = 0; j < daoAddresses.daoAddr.length; j++) {
+      if (
+        accounts.accounts[i]._address === daoAddresses.daoAddr[j][1][0]._address
+      ) {
+        flag = 1
+      }
+    }
+    console.log('flag: ', flag)
+    if (flag === 0) {
+      const daoRootContract = new ever.Contract(
+        daoRootAbi,
+        accounts.accounts[i]._address
+      )
+      const admin = await daoRootContract.methods
+        .getAdmin({ answerId: 0 })
+        .call()
+      let counter = 0
+      if (admin.value0._address === address) {
+        const providerState = await ever.getProviderState()
+        const publicKey = providerState.permissions.accountInteraction.publicKey
+        counter = counter + 1
+        if (counter == 1) {
+          const novi = await addDaoRootToFactory(
+            daoFactoryContract,
+            accounts.accounts[i]._address,
+            publicKey
+          )
+        }
+
+        await pushDaoDataToAllDaosArray(
+          daoRootContract,
+          rootData,
+          accounts.accounts[i]._address
+        )
+      }
+    }
+  }
+}
+
+const addDaosWithoutFactory = async (accounts, rootData, address) => {
+  for (let i = 0; i < accounts.accounts.length; i++) {
+    const daoRootContract = new ever.Contract(
+      daoRootAbi,
+      accounts.accounts[i]._address
+    )
+    const admin = await daoRootContract.methods.getAdmin({ answerId: 0 }).call()
+    if (admin.value0._address === address) {
+      await pushDaoDataToAllDaosArray(
+        daoRootContract,
+        rootData,
+        accounts.accounts[i]._address
+      )
+    }
+  }
+}
+const pushDaoDataToAllDaosArray = async (
+  daoRootContract,
+  rootData,
+  accounts
+) => {
+  const name = await daoRootContract.methods.name({}).call()
+  const description = await daoRootContract.methods.description({}).call()
+  const slug = await daoRootContract.methods.slug({}).call()
+  rootData.push({
+    name: name.name,
+    description: description.description,
+    slug: 'daobuilder.nswebdevelopment.com/dao/' + slug.slug,
+    address: accounts /*.accounts[i]._address*/,
+  })
 }
 
 const daoService = {
@@ -2640,7 +2401,6 @@ const daoService = {
   transferOwnership,
   destroy,
   getToken,
-  getDaoInfo,
   findDaoBySlug,
   setSettingsChanges,
   getDaoByAddress,

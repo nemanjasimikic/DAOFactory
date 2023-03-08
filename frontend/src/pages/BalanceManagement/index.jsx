@@ -32,7 +32,7 @@ const BalanceManagement = () => {
   })*/
   const { data } = useQuery(
     ['daoRoot', id],
-    () => daoService.getDaoInfo(id, addressContext),
+    () => daoService.findDAOIfNotOwner(id, addressContext),
     {
       enabled: !!addressContext,
       refetchInterval: 1000,
@@ -102,8 +102,8 @@ const BalanceManagement = () => {
   // console.log('DATA:', data)
 
   let customStyle = {
-    marginTop: 0, 
-    maxHeight: '345px'
+    marginTop: 0,
+    maxHeight: '345px',
   }
   return data ? (
     <div className={styles.container}>
@@ -118,7 +118,9 @@ const BalanceManagement = () => {
           <div className={styles.cardRow}>
             <YourAccountCard
               text={'Your voting weight'}
-              data={'0%' /*proposalsWithLockedTokens[0].lockedTokens*/}
+              data={
+                `${data.userVoteWeigth}%` /*proposalsWithLockedTokens[0].lockedTokens*/
+              }
             />
             <YourAccountCard
               text={`Your ${data.token.value0} locked`}
@@ -132,10 +134,19 @@ const BalanceManagement = () => {
           {!data.history.length > 0 ? (
             <NoResults />
           ) : (
-            <Table columns={columnsTransactionHistory} data={data.history} token={data.token.value0} />
+            <Table
+              columns={columnsTransactionHistory}
+              data={data.history}
+              token={data.token.value0}
+            />
           )}
         </div>
-        <AccountBalance id={id} data={data} address={addressContext} customStyle={customStyle}/>
+        <AccountBalance
+          id={id}
+          data={data}
+          address={addressContext}
+          customStyle={customStyle}
+        />
       </div>
     </div>
   ) : (
