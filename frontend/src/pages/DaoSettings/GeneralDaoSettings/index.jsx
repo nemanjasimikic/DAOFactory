@@ -2,7 +2,7 @@ import { useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { WalletContext } from 'context/walletContext'
 import daoService from 'store/services/daoService'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient, useMutation } from 'react-query'
 import { useForm } from 'react-hook-form'
 import Sidebar from 'components/common/Sidebar'
 import ContentHeader from 'components/common/ContentHeader'
@@ -26,11 +26,13 @@ const GeneralDaoSettings = () => {
 
   const { state: ContextState } = useContext(WalletContext)
   const { addressContext } = ContextState
+
   const { data } = useQuery(
     ['daoInfo', id],
     () => daoService.findDAOIfNotOwner(id, addressContext),
     {
       enabled: !!addressContext,
+      refetchInterval: 10,
     }
   )
   const [formData, setFormData] = useState({
@@ -41,12 +43,35 @@ const GeneralDaoSettings = () => {
   })
 
   const [trueInitially, setTrueInitially] = useState(false)
+  // const [newName, setName] = useState(data?.name)
+  // const [newDescription, setDescription] = useState(data?.description)
+  // console.log('newName: ', newName)
+  // console.log('newDescription: ', newDescription)
+  // console.log('slug: ', data?.slug)
+  // console.log('address: ', data?.daoAddress)
 
+  /* const { isLoading, isError, error, mutate } = useMutation(() =>
+    daoService.setSettingsChanges(
+      newName,
+      data?.slug,
+      newDescription,
+      data?.daoAddress
+    )
+  )
+  console.log('error: ', error)
+  const setSettings = () => {
+    mutate(['daoInfo', id])
+  }
+
+  console.log('isLoading: ', isLoading)
+  console.log('isError: ', isError)
+*/
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
+    //  setName(e.target.value)
   }
 
   let name

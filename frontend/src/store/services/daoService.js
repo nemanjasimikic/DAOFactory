@@ -1,6 +1,7 @@
 import { ProviderRpcClient, Address } from 'everscale-inpage-provider'
 import { toNano, fromNano } from '../../helpers/decimalParser'
 import { addressConverter } from '../../helpers/addressParser'
+import { getState } from 'helpers/state'
 import daoRootAbi from '../../helpers/DaoRoot.abi.json'
 import daoFactoryAbi from '../../helpers/DaoFactory.abi.json'
 import stakingRootDeployerAbi from '../../helpers/StakingRootDeployer.abi.json'
@@ -462,12 +463,6 @@ const deployStakingContract = async (
       transaction: trx.transactions[0],
       methods: [stakingRootDeployerAbi['deploy']],
     })
-    // console.log('p: ', p)
-
-    // console.log(
-    //   'stakingContract: ',
-    //   trx.transactions[0].outMessages[0].dst._address
-    // )
 
     const staking = new ever.Contract(
       stakingAbi,
@@ -525,18 +520,7 @@ const getFactory = async (address) => {
     codeHash: bocHashEver,
     limit: 10,
   })
-  // console.log('accounts: ', accounts)
-  // console.log('code: ', code)
-  /* const unpacked = await ever.unpackFromCell({
-    allowPartial: true,
-    boc: code.code,
-    structure: [
-      { name: '_nonce', type: 'uint32' },
-      { name: 'randomNonce', type: 'uint32' },
-      { name: 'deployedAccounts', type: 'map(uint32,address[])' },
-    ],
-  })
-  console.log('unpacked: ', unpacked)*/
+
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(accounts)
@@ -625,7 +609,6 @@ const getAllDAOs = async (address) => {
       const accounts = await getAccounts(daoRootTvc)
       const accounts2 = await getAccounts(daoRootTvc2)
 
-      // if (accounts.accounts.length > 0 || accounts2.accounts.length > 0) {
       if (accounts.accounts.length > 0)
         await addDaosWithoutFactory(accounts, rootData, address)
 
@@ -815,13 +798,13 @@ const findDaoBySlug = async (factory, slug) => {
 
 async function setSettingsChanges(name, slug, description, daoAddress) {
   let daoRootAddress = daoAddress
-
   try {
     const providerState = await ever.getProviderState()
     const publicKey = providerState.permissions.accountInteraction.publicKey
     const daoRoot = new ever.Contract(daoRootAbi, daoRootAddress)
+    const desc = description ? description : ''
     const trx = await daoRoot.methods
-      .updateDetails({ name_: name, slug_: slug, description_: description })
+      .updateDetails({ name_: name, slug_: slug, description_: desc })
       .sendExternal({
         publicKey: publicKey,
         withoutSignature: true,
@@ -829,7 +812,6 @@ async function setSettingsChanges(name, slug, description, daoAddress) {
 
     return Promise.resolve(trx)
   } catch (e) {
-    // console.log('error: ', e)
     return Promise.reject(e)
   }
 }
@@ -866,24 +848,8 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
     const proposalActions = await proposalDataArray[i].methods
       .getActions({ answerId: 0 })
       .call()
-    let state
-    if (data.state_ == 0) {
-      state = 'Pending'
-    } else if (data.state_ == 1) state = 'Active'
-    else if (data.state_ == 2) state = 'Canceled'
-    else if (data.state_ == 3) state = 'Failed'
-    else if (data.state_ == 4) state = 'Succeeded'
-    else if (data.state_ == 5) state = 'Expired'
-    else if (data.state_ == 6) state = 'Queued'
-    else if (data.state_ == 7) state = 'Executed'
-    else state = 'Unknown'
-    const time = Math.ceil(
-      (new Date(
-        dayjs.unix(data.endTime_).format('DD MMM YYYY HH:mm')
-      ).getTime() -
-        dateNow) /
-        (1000 * 3600 * 24)
-    )
+    const state = getState(data)
+
     const options = { weekday: 'short' }
     const timeToDate = new Date(data.startTime_ * 1000).toLocaleString(
       'en-US',
@@ -892,13 +858,8 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
     const executeTime =
       (data.endTime_ * 1 + proposalConfig.proposalConfiguration.timeLock * 1) *
       1000
-    //console.log('execute time: ', executeTime)
-    //console.log('time now: ', new Date().getTime())
     const canExecute = new Date().getTime() >= executeTime ? true : false
-    //console.log('canExecute: ', canExecute)
-    //console.log('time to Date: ', timeToDate)
     const date = dayjs.unix(data.startTime_).format('D.M')
-    // console.log('date short: ', date)
     const startEndDifference = Math.ceil(
       new Date(
         dayjs.unix(data.startTime_).format('DD MMM YYYY HH:mm')
@@ -907,7 +868,6 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
           dayjs.unix(data.endTime_).format('DD MMM YYYY HH:mm')
         ).getTime()
     )
-    //console.log('start end difference: ', startEndDifference)
     const proposer = data.proposer_
     const monthNames = [
       'January',
@@ -932,20 +892,16 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
     const daysDifference = parseMillisecondsIntoReadableTime(
       startEndDifference * -1
     )
-    // console.log('days difference: ', daysDifference)
     let numberOfDifference
     if (
       daysDifference.split(' ')[1] == 'minutes' ||
       daysDifference.split(' ')[1] == 'hours'
     ) {
       numberOfDifference = 0
-      //  console.log('numberDifference: ', numberOfDifference)
     } else {
       numberOfDifference = daysDifference.split(' ')[0]
-      //  console.log('numberDifference: ', numberOfDifference)
     }
     const summ = data.description_.split('%')
-    // console.log('summary: ', summ)
     let description
     if (summ.length > 1) {
       description = summ[1]
@@ -954,7 +910,6 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
     const timelineData = await timelineCalculation(daoRootAddress, i + 1)
     const isVoted = await didVote(daoRootAddress, i + 1, ownerAddress)
     const supportVotes = await returnForVotes(daoRootAddress, i + 1)
-    // console.log('supportVotes: ', supportVotes)
     const unsupportVotes = await returnAgainstVotes(daoRootAddress, i + 1)
     const userVoteSupport = await userSupport(
       daoRootAddress,
@@ -962,14 +917,12 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
       ownerAddress
     )
     let proposalVoteWeigth = 0
-    //console.log('isVoted: ', isVoted.isVoted)
     if (isVoted.isVoted) {
       proposalVoteWeigth = await calculateVoteWeigth(
         daoRootAddress,
         i + 1,
         isVoted.data.vote * 1
       )
-      // console.log('proposalVoteWeigth: ', proposalVoteWeigth)
     }
     const dateCurrent = new Date().getTime()
     const canUnlock = await canUnlockVotes(daoRootAddress, i + 1, ownerAddress)
@@ -1000,7 +953,6 @@ const getProposals = async (daoRootAddress, ownerAddress) => {
           (1000 * 3600 * 24)
       ),
       queuedTime: dayjs.unix(data.executionTime_).format('DD MMM YYYY HH:mm'),
-      //slug: slug.slug,
       proposalActions: proposalActions.value0,
       dayForTimeline: timeToDate,
       dayDifference: numberOfDifference * 1,
@@ -1033,7 +985,6 @@ const getAllStakeholders = async (daoRootAddress) => {
     limit: 20,
   })
   let voters = []
-  let proposalsVoted = 0
   let userVotesCount = []
   for (let i = 0; i < successStream.transactions.length; i++) {
     const trx = await stakingRoot.decodeTransaction({
@@ -1177,8 +1128,6 @@ const createProposal = async (
 
 const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
   try {
-    // const daoRoot = createDaoRootContract(daoRootAddress)
-    // const slug = await daoRoot.methods.slug({}).call()
     const userData = await createUserDataContract(daoRootAddress, ownerAddress)
     const castedVotes = await userData.methods.casted_votes({}).call()
     const lockedTokens = await userData.methods
@@ -1189,7 +1138,7 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
     })
     let proposalContractArray = []
     if (contractState.state.isDeployed) {
-      const count = castedVotes.casted_votes //await userData.methods.created_proposals({}).call()
+      const count = castedVotes.casted_votes
       for (let i = 0; i < count.length; i++) {
         const proposal = await createProposalContract(
           daoRootAddress,
@@ -1219,17 +1168,8 @@ const proposalsWithYourLockedTokens = async (ownerAddress, daoRootAddress) => {
       const data = await proposalContractArray[i].methods
         .getOverview({ answerId: 0 })
         .call()
-      let state
-      if (data.state_ == 0) {
-        state = 'Pending'
-      } else if (data.state_ == 1) state = 'Active'
-      else if (data.state_ == 2) state = 'Canceled'
-      else if (data.state_ == 3) state = 'Failed'
-      else if (data.state_ == 4) state = 'Succeeded'
-      else if (data.state_ == 5) state = 'Expired'
-      else if (data.state_ == 6) state = 'Queued'
-      else if (data.state_ == 7) state = 'Executed'
-      else state = 'Unknown'
+      const state = getState(data)
+
       const proposalId = await proposalContractArray[i].methods.id({}).call()
       const summ = data.description_.split('%')
 
