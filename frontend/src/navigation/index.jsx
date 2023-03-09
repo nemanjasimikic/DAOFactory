@@ -59,6 +59,14 @@ const Navigation = ({ client }) => {
           }
         />
         <Route
+          path="add-existing-dao"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedInStore}>
+              <CreateDao />{' '}
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="dao/:id"
           element={
             <ProtectedRoute isLoggedIn={isLoggedInStore}>
