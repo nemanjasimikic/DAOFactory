@@ -376,14 +376,11 @@ const deployDAOFromFactory = async (
         stakingDeployerAddress = stakingDeployerAddressMain
       }
 
-      // console.log('stakingDeployerAddress: ', stakingDeployerAddress)
-
       deployStaking = await deployStakingContract(
         ownerAddress,
         daos.daoAddr[daos.daoAddr.length - 1][1][0]._address,
         stakingDeployerAddress
       )
-      // console.log('deployStaking: ', deployStaking)
 
       const daoRootContract = new ever.Contract(
         daoRootAbi,
@@ -449,7 +446,6 @@ const deployStakingContract = async (
       limit: 1,
     })
 
-    // console.log('trx: ', trx)
     while (trx.transactions[0].outMessages.length < 1) {
       trx = await ever.getTransactions({
         address: stakingDeployer._address,
@@ -472,10 +468,8 @@ const deployStakingContract = async (
     const contractState = await ever.getFullContractState({
       address: trx.transactions[0].outMessages[0].dst._address,
     })
-    // console.log('contract state: ', contractState)
     return Promise.resolve(staking)
   } catch (e) {
-    // console.log(e)
     return Promise.reject(e)
   }
 }
@@ -494,14 +488,11 @@ const setStakingActive = async (stakingContractAddress, ownerAddress) => {
         publicKey: publicKey,
         withoutSignature: true,
       })
-    // console.log(setUserData)
     const event = await stakingRoot.getPastEvents({
       range: { fromLt: setUserData.transaction.id.lt * 1 - 1 },
     })
-    // console.log('event: ', event)
     return Promise.resolve(setUserData)
   } catch (e) {
-    // console.log(e)
     return Promise.reject(e)
   }
 }
@@ -544,7 +535,6 @@ const addDaoRootToFactory = async (
       })
     return Promise.resolve(novi)
   } catch (e) {
-    // console.log('error: ', e)
     return Promise.reject(e)
   }
 }
@@ -630,14 +620,12 @@ const getDeployedDaos = async (daoFactoryContract) => {
 
     return Promise.resolve(daoAddresses)
   } catch (e) {
-    // console.log('error: ', e)
     return Promise.reject(e)
   }
 }
 
 const transferOwnership = async (newOwnerAddress, id, address) => {
   const factory = await getFactory(address)
-  //console.log('factory: ', factory)
   const daoFactoryContract = new ever.Contract(
     daoFactoryAbi,
     factory.accounts[0]._address
@@ -666,7 +654,6 @@ const transferOwnership = async (newOwnerAddress, id, address) => {
       })
     return Promise.resolve(deleteOld)
   } catch (e) {
-    // console.log('error: ', e)
     return Promise.reject(e)
   }
 }
@@ -729,9 +716,7 @@ const getBalances = async (address) => {
     .then(function (response) {
       tokenAddr = response.data
     })
-    .catch(function (error) {
-      // console.log(error)
-    })
+    .catch(function (error) {})
 }
 
 const getToken = async (address) => {
@@ -1035,7 +1020,6 @@ const getAllStakeholders = async (daoRootAddress) => {
           })
           if (trx && trx.input.voter._address == voters[i].user) {
             count += fromNano(trx.input.votes, 9)
-            //console.log('trx proposal: ', trx)
             sumAllVotes += fromNano(trx.input.votes, 9)
           }
         }
@@ -1454,7 +1438,6 @@ const getUnlockArray = async (daoRoot, ownerAddress) => {
   try {
     const userData = await createUserDataContract(daoRoot.address, ownerAddress)
     const castedVotes = await userData.methods.casted_votes({}).call()
-    //console.log('casted votes: ', castedVotes)
     let unlockArray = []
     if (castedVotes.casted_votes.length > 0) {
       for (let i = 0; i < castedVotes.casted_votes.length; i++) {
@@ -1480,9 +1463,7 @@ const getUnlockArray = async (daoRoot, ownerAddress) => {
 const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
   try {
     let success = false
-    //console.log('proposalId: ', proposalId)
     if (proposalId != 0) {
-      //console.log('nisam 0')
       const userData = await createUserDataContract(daoRoot, ownerAddress)
       const castedVotes = await userData.methods.casted_votes({}).call()
       const isCasted = castedVotes.casted_votes.find(
@@ -1492,7 +1473,6 @@ const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
       if (isCasted) {
         const proposal = await createProposalContract(daoRoot, proposalId)
         const state = await proposal.methods.getState({ answerId: 0 }).call()
-        // console.log('state.value: ', state.value0)
         if (state.value0 != 0 && state.value0 != 1) {
           success = true
         }
@@ -1500,10 +1480,8 @@ const canUnlockVotes = async (daoRoot, proposalId, ownerAddress) => {
     } else {
       const userData = await createUserDataContract(daoRoot, ownerAddress)
       const castedVotes = await userData.methods.casted_votes({}).call()
-      //console.log('ovde sam')
       let flag = 0
       if (castedVotes.casted_votes.length > 0) {
-        //console.log('ima voteova')
         for (let i = 0; i < castedVotes.casted_votes.length; i++) {
           const proposal = await createProposalContract(
             daoRoot,
@@ -1533,7 +1511,6 @@ const unlockVotes = async (daoRootAddress, proposalId, ownerAddress) => {
       proposalId,
       ownerAddress
     )
-    // console.log(success)
     let proposalIds = []
     let unlock
     if (success) {
@@ -1636,11 +1613,9 @@ const getVotes = async (daoRootAddress, ownerAddress) => {
       })
 
       if (trx) {
-        //console.log('trx: ', trx)
         const event = await userData.decodeTransactionEvents({
           transaction: successStream.transactions[i],
         })
-        // console.log('event: ', event)
         votesData.push({
           id: event[0].data.proposal_id,
           support: event[0].data.support,
@@ -1648,7 +1623,6 @@ const getVotes = async (daoRootAddress, ownerAddress) => {
         })
       }
     }
-    // console.log('votes data: ', votesData)
     return Promise.resolve(votesData)
   } catch (e) {
     return null
@@ -1669,8 +1643,6 @@ const isOwner = async (daoRootAddress, ownerAddress, proposalId) => {
         owner = true
       }
     }
-
-    //console.log('isOwner servis: ', owner)
     return Promise.resolve(owner)
   } catch (e) {
     return false
@@ -1724,7 +1696,6 @@ const getVoters = async (daoRootAddress, proposalId) => {
         methods: ['castVote'],
       })
       if (trx) {
-        //console.log('trx: ', trx)
         votesData.push({
           voter: trx.input.voter._address,
           vote: fromNano(trx.input.votes, 9),
@@ -1749,7 +1720,6 @@ const timelineCalculation = async (daoRootAddress, proposalId) => {
         proposalConfiguration.proposalConfiguration.timeLock * 1 +
         proposalConfiguration.proposalConfiguration.gracePeriod * 1) /
       (60 * 60 * 24)
-    //console.log('days: ', days)
     const proposal = await createProposalContract(daoRootAddress, proposalId)
     const data = await proposal.methods.getOverview({ answerId: 0 }).call()
     const options = { weekday: 'short' }
@@ -1758,14 +1728,9 @@ const timelineCalculation = async (daoRootAddress, proposalId) => {
       const timeToDate = new Date(
         data.startTime_ * 1000 + 24 * 60 * 60 * i * 1000
       ).toLocaleString('en-US', options)
-      //console.log('time to Date: ', timeToDate)
       const adition = data.startTime_ * 1 + 24 * 60 * 60 * i
-      //console.log('adition: ', adition)
       const date = dayjs.unix(adition).format('D.M')
-      //console.log('date short: ', date)
       const dateNow = dayjs.unix(data.startTime_).format('D.M')
-      //console.log('dateNow: ', dateNow)
-      //console.log('data.start: ', data.startTime_)
       const monthNames = [
         'January',
         'February',
@@ -1790,7 +1755,6 @@ const timelineCalculation = async (daoRootAddress, proposalId) => {
         month: month,
       })
     }
-    //console.log('timelineArray: ', timelineArray)
     return Promise.resolve(timelineArray)
   } catch (e) {
     return null
@@ -1835,7 +1799,6 @@ const returnForVotes = async (daoRootAddress, proposalId) => {
         methods: ['castVote'],
       })
       if (trx) {
-        //console.log('trx: ', trx)
         if (trx.input.support == true) {
           votesData.push({
             voter: trx.input.voter._address,
@@ -1866,7 +1829,6 @@ const returnAgainstVotes = async (daoRootAddress, proposalId) => {
         methods: ['castVote'],
       })
       if (trx) {
-        // console.log('trx: ', trx)
         if (trx.input.support == false) {
           votesData.push({
             voter: trx.input.voter._address,
@@ -1884,10 +1846,7 @@ const returnAgainstVotes = async (daoRootAddress, proposalId) => {
 
 const userSupport = async (daoRootAddress, proposalId, ownerAddress) => {
   const forVotes = await returnForVotes(daoRootAddress, proposalId)
-  //console.log('forVotes: ', forVotes)
   const support = forVotes.find((vote) => vote.voter == ownerAddress)
-  //console.log('ownerAddress: ', ownerAddress)
-  //console.log('support: ', support)
   if (support) {
     return Promise.resolve(true)
   } else {
@@ -1952,7 +1911,6 @@ const queue = async (daoRootAddress, proposalId) => {
 const getAllStakers = async (daoRootAddress) => {
   try {
     const stakingRoot = await createStakingContract(daoRootAddress)
-    // console.log('stakingRoot: ', stakingRoot)
     let successStream
     successStream = await ever.getTransactions({
       address: stakingRoot.address,
@@ -1960,7 +1918,6 @@ const getAllStakers = async (daoRootAddress) => {
       limit: 50,
     })
 
-    //console.log(successStream)
     let votesData = []
     let duplicate
     for (let i = 0; i < successStream.transactions.length; i++) {
@@ -1977,22 +1934,18 @@ const getAllStakers = async (daoRootAddress) => {
         if (!duplicate) {
           votesData.push(trx)
         }
-        //console.log(trx)
-        //votesData.push(trx)
       }
     }
 
     while (successStream.transactions.length == 50) {
       const last =
         successStream.transactions[successStream.transactions.length - 1]
-      //console.log('last: ', last)
       successStream = await ever.getTransactions({
         address: stakingRoot.address,
         continuation: last.id,
         limit: 50,
       })
 
-      //console.log('successStream 2: ', successStream)
       for (let i = 0; i < successStream.transactions.length; i++) {
         const trx = await stakingRoot.decodeTransaction({
           transaction: successStream.transactions[i],
@@ -2011,16 +1964,12 @@ const getAllStakers = async (daoRootAddress) => {
         }
       }
     }
-    // console.log('votes data: ', votesData)
 
     return Promise.resolve(votesData)
-  } catch (e) {
-    //console.log(e)
-  }
+  } catch (e) {}
 }
 
 const checkSlug = async (userSlug) => {
-  //console.log('user slug: ', userSlug)
   const code = await ever.splitTvc(daoRootTvc)
   let addresses = []
   let daoRoots = []
@@ -2030,7 +1979,6 @@ const checkSlug = async (userSlug) => {
     codeHash: bocHashEver,
     limit: 50,
   })
-  //console.log('accounts: ', accounts)
   let last
   last = accounts.accounts[accounts.accounts.length - 1]
   accounts.accounts.forEach((i) => addresses.push(i._address))
@@ -2044,7 +1992,6 @@ const checkSlug = async (userSlug) => {
     accounts.accounts.forEach((i) => addresses.push(i._address))
   }
   addresses.forEach((i) => daoRoots.push(createDaoRootContract(i)))
-  //console.log('daoRoots: ', daoRoots)
   let count = -1
 
   for (let i = 0; i < daoRoots.length; i++) {
@@ -2055,7 +2002,6 @@ const checkSlug = async (userSlug) => {
   }
 
   let slugObject
-  //console.log('count: ', count)
   if (count >= 0) {
     slugObject = {
       isSlugOk: false,
@@ -2071,7 +2017,6 @@ const checkSlug = async (userSlug) => {
       codeHash: bocHashEver,
       limit: 50,
     })
-    //console.log('accounts: ', accounts2)
     let last
     last = accounts2.accounts[accounts2.accounts.length - 1]
     accounts2.accounts.forEach((i) => addresses2.push(i._address))
@@ -2087,7 +2032,6 @@ const checkSlug = async (userSlug) => {
     addresses2.forEach((i) => daoRoots2.push(createDaoRootContract(i)))
     for (let i = 0; i < daoRoots2.length; i++) {
       const slug = await daoRoots2[i].methods.slug({}).call()
-      //console.log('slug: ', slug.slug)
       if (slug.slug === userSlug) {
         count = i
       }
@@ -2188,7 +2132,6 @@ const findDAOIfNotOwner = async (slug, address) => {
     let stakers
     try {
       stakers = await getAllStakers(daoRoot.address)
-      //console.log('stakers: ', stakers)
     } catch (e) {
       stakers = null
     }
@@ -2203,7 +2146,6 @@ const findDAOIfNotOwner = async (slug, address) => {
     console.log('balance: ', balance)
     console.log('userVoteWeigth: ', userVoteWeigth)
 
-    // console.log('prop: ', prop)
     rootData = {
       name: name.name,
       slug: slug.slug,
@@ -2232,8 +2174,6 @@ const findDAOIfNotOwner = async (slug, address) => {
   return new Promise((resolve) => {
     resolve(rootData)
   })
-
-  //return daoRoot
 }
 
 const getAccounts = async (tvc) => {
